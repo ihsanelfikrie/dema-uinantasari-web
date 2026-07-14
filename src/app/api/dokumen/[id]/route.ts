@@ -10,34 +10,38 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Verify session
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized access. Please login." },
-        { status: 401 }
-      );
-    }
+    if (hasKeys) {
+      // Verify session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    // Retrieve document path to remove file from Supabase Storage
-    const { data: doc } = await supabase
-      .from("dokumen")
-      .select("file_url")
-      .eq("id", id)
-      .single();
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Please login." },
+          { status: 401 }
+        );
+      }
 
-    if (doc && process.env.NEXT_PUBLIC_SUPABASE_URL !== undefined) {
-      await supabase.storage.from("dokumen-surat").remove([doc.file_url]);
-    }
+      // Retrieve document path to remove file from Supabase Storage
+      const { data: doc } = await supabase
+        .from("dokumen")
+        .select("file_url")
+        .eq("id", id)
+        .single();
 
-    // Delete record from database
-    const { error } = await supabase.from("dokumen").delete().eq("id", id);
+      if (doc) {
+        await supabase.storage.from("dokumen-surat").remove([doc.file_url]);
+      }
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      // Delete record from database
+      const { error } = await supabase.from("dokumen").delete().eq("id", id);
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ success: true });

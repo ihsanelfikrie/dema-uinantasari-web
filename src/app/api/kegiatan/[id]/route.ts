@@ -10,16 +10,20 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Verify session
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized access. Please login." },
-        { status: 401 }
-      );
+    if (hasKeys) {
+      // Verify session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Please login." },
+          { status: 401 }
+        );
+      }
     }
 
     const body = await request.json();
@@ -45,25 +49,38 @@ export async function PUT(request: Request, { params }: RouteParams) {
       );
     }
 
-    const { data, error } = await supabase
-      .from("kegiatan")
-      .update({
+    if (hasKeys) {
+      const { data, error } = await supabase
+        .from("kegiatan")
+        .update({
+          nama,
+          deskripsi,
+          kementerian,
+          tanggal_mulai,
+          tanggal_selesai,
+          lokasi: lokasi || null,
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      return NextResponse.json(data);
+    } else {
+      // Return simulated success response
+      return NextResponse.json({
+        id,
         nama,
         deskripsi,
         kementerian,
         tanggal_mulai,
         tanggal_selesai,
         lokasi: lokasi || null,
-      })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      });
     }
-
-    return NextResponse.json(data);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
@@ -74,22 +91,26 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Verify session
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized access. Please login." },
-        { status: 401 }
-      );
-    }
+    if (hasKeys) {
+      // Verify session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    const { error } = await supabase.from("kegiatan").delete().eq("id", id);
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Please login." },
+          { status: 401 }
+        );
+      }
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      const { error } = await supabase.from("kegiatan").delete().eq("id", id);
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ success: true });

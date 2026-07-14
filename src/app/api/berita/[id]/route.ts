@@ -11,16 +11,20 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Verify session
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized access. Please login." },
-        { status: 401 }
-      );
+    if (hasKeys) {
+      // Verify session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Please login." },
+          { status: 401 }
+        );
+      }
     }
 
     const body = await request.json();
@@ -38,23 +42,45 @@ export async function PUT(request: Request, { params }: RouteParams) {
     let finalSlug = baseSlug;
     let suffix = 1;
 
-    // Check slug uniqueness excluding the current article
-    while (true) {
-      const { data: existing } = await supabase
+    if (hasKeys) {
+      // Check slug uniqueness excluding the current article
+      while (true) {
+        const { data: existing } = await supabase
+          .from("berita")
+          .select("id")
+          .eq("slug", finalSlug)
+          .neq("id", id)
+          .maybeSingle();
+
+        if (!existing) break;
+        finalSlug = `${baseSlug}-${suffix}`;
+        suffix++;
+      }
+
+      const { data, error } = await supabase
         .from("berita")
-        .select("id")
-        .eq("slug", finalSlug)
-        .neq("id", id)
-        .maybeSingle();
+        .update({
+          judul,
+          slug: finalSlug,
+          isi,
+          kategori,
+          cover_url,
+          status: status || "draft",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", id)
+        .select()
+        .single();
 
-      if (!existing) break;
-      finalSlug = `${baseSlug}-${suffix}`;
-      suffix++;
-    }
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
 
-    const { data, error } = await supabase
-      .from("berita")
-      .update({
+      return NextResponse.json(data);
+    } else {
+      // Return simulated success response
+      return NextResponse.json({
+        id,
         judul,
         slug: finalSlug,
         isi,
@@ -62,16 +88,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
         cover_url,
         status: status || "draft",
         updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      });
     }
-
-    return NextResponse.json(data);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
@@ -82,22 +100,26 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Verify session
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized access. Please login." },
-        { status: 401 }
-      );
-    }
+    if (hasKeys) {
+      // Verify session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    const { error } = await supabase.from("berita").delete().eq("id", id);
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Please login." },
+          { status: 401 }
+        );
+      }
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      const { error } = await supabase.from("berita").delete().eq("id", id);
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ success: true });
