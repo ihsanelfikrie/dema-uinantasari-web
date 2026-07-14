@@ -83,11 +83,11 @@ export default function HeroSection() {
         <span className="animate-hero-item opacity-0 text-xs font-semibold tracking-wider text-brand-secondary uppercase bg-brand-primary/10 px-3 py-1 rounded-full text-brand-primary mb-6">
           Dewan Eksekutif Mahasiswa 2026
         </span>
-        <h1 className="animate-hero-item opacity-0 text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl font-poppins select-none">
+        <h1 className="animate-hero-item opacity-0 text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl font-poppins select-none leading-[1.15]">
           {part1.map((char, idx) => (
             <span
               key={`p1-${idx}`}
-              className="char-glitch inline-block transition-all duration-100"
+              className="char-glitch inline-block h-[1.15em] align-bottom transition-all duration-100"
             >
               {char === " " ? "\u00A0" : char}
             </span>
@@ -96,7 +96,7 @@ export default function HeroSection() {
             {part2.map((char, idx) => (
               <span
                 key={`p2-${idx}`}
-                className="char-glitch inline-block transition-all duration-100"
+                className="char-glitch inline-block h-[1.15em] align-bottom transition-all duration-100"
               >
                 {char === " " ? "\u00A0" : char}
               </span>
