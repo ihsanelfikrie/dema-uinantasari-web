@@ -35,50 +35,40 @@ export default function HeroSection() {
         }
       );
 
-      // Glitch text loop
+      // Glitch text wave animation
       const elements = containerRef.current?.querySelectorAll(".char-glitch");
       if (!elements || elements.length === 0) return;
 
       const jerseyClass = jersey10.className;
 
-      const triggerGlitch = () => {
-        // Choose 1 to 3 random characters
-        const count = Math.floor(Math.random() * 3) + 1;
-        const targets: Element[] = [];
+      const triggerWave = () => {
+        elements.forEach((el, index) => {
+          // Propagate the wave with a 40ms delay per character
+          gsap.delayedCall(index * 0.04, () => {
+            const textVal = el.textContent;
+            if (textVal && textVal !== "\u00A0" && textVal !== " ") {
+              el.classList.add(jerseyClass);
+              el.classList.add("text-brand-accent");
 
-        for (let i = 0; i < count; i++) {
-          const randomIndex = Math.floor(Math.random() * elements.length);
-          const target = elements[randomIndex];
-          const textVal = target.textContent;
-          if (textVal && textVal !== "\u00A0" && textVal !== " ") {
-            targets.push(target);
-          }
-        }
-
-        // Apply glitch styles
-        targets.forEach((el) => {
-          el.classList.add(jerseyClass);
-          el.classList.add("text-brand-accent");
+              // Revert character back to Poppins after 250ms
+              gsap.delayedCall(0.25, () => {
+                el.classList.remove(jerseyClass);
+                el.classList.remove("text-brand-accent");
+              });
+            }
+          });
         });
 
-        // Revert back after 350ms
-        setTimeout(() => {
-          targets.forEach((el) => {
-            el.classList.remove(jerseyClass);
-            el.classList.remove("text-brand-accent");
-          });
-        }, 350);
-
-        // Schedule next glitch between 1s and 2.5s
-        const nextDelay = Math.random() * 1500 + 1000;
-        glitchTimeout = setTimeout(triggerGlitch, nextDelay);
+        // Loop the wave every 5 seconds
+        gsap.delayedCall(5.0, triggerWave);
       };
 
-      // Start loop after entrance animation completes
-      let glitchTimeout = setTimeout(triggerGlitch, 1800);
+      // Start the first wave after entrance finishes
+      const initialDelay = gsap.delayedCall(1.8, triggerWave);
 
       return () => {
-        clearTimeout(glitchTimeout);
+        initialDelay.kill();
+        gsap.killTweensOf(triggerWave);
       };
     },
     { scope: containerRef }
