@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { Shield } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Pos Pelayanan Pengaduan (P3) - DEMA UIN Antasari",
+  description:
+    "Layanan pelaporan kekerasan seksual, perundungan, dan tindakan kekerasan fisik. DEMA UIN Antasari menjamin 100% keamanan privasi pelapor.",
+};
 
 export default function P3LayananPage() {
   return (

@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldAlert, AlertCircle, FileText } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Portal Layanan Mahasiswa - DEMA UIN Antasari",
+  description:
+    "Layanan administrasi persuratan, pengaduan advokasi kemahasiswaan, dan pelaporan pos P3 DEMA UIN Antasari.",
+};
 
 export default function LayananLandingPage() {
   const services = [

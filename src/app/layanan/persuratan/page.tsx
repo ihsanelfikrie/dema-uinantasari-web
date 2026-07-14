@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { FileText } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Persuratan & Kerja Sama - DEMA UIN Antasari",
+  description:
+    "Layanan pengajuan surat resmi kemahasiswaan, rekomendasi kegiatan, serta kerja sama publikasi Media Partner DEMA UIN Antasari.",
+};
 
 export default function PersuratanLayananPage() {
   return (

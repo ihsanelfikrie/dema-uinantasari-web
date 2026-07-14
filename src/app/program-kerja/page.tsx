@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Kegiatan } from "@/types";
 import KalenderProker from "@/components/program-kerja/KalenderProker";
@@ -5,6 +6,12 @@ import { formatTanggal } from "@/lib/utils";
 import { Calendar, MapPin } from "lucide-react";
 
 export const revalidate = 0; // Always fetch latest activities list
+
+export const metadata: Metadata = {
+  title: "Program Kerja & Agenda - DEMA UIN Antasari",
+  description:
+    "Daftar program kerja kementerian dan kalender agenda kegiatan bulanan Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin.",
+};
 
 export default async function ProgramKerjaPage() {
   let kegiatanList: Kegiatan[] = [];

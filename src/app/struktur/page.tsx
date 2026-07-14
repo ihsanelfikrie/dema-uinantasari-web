@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import BaganOrganisasi from "@/components/struktur/BaganOrganisasi";
 import { bph, kementerianList } from "@/data/struktur";
+
+export const metadata: Metadata = {
+  title: "Struktur Organisasi - DEMA UIN Antasari",
+  description:
+    "Jajaran pengurus harian, kementerian, dan badan fungsionaris Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin.",
+};
 
 export default function StrukturPage() {
   const renderAvatarPlaceholder = () => {

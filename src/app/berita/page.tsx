@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Berita } from "@/types";
 import BeritaListClient from "./BeritaListClient";
 
 export const revalidate = 0; // Always fetch fresh news articles
+
+export const metadata: Metadata = {
+  title: "Berita & Media - DEMA UIN Antasari",
+  description:
+    "Rilis pers resmi, publikasi kegiatan kementerian, dan kabar terkini seputar civitas akademika UIN Antasari Banjarmasin.",
+};
 
 export default async function BeritaPage() {
   let beritaList: Berita[] = [];

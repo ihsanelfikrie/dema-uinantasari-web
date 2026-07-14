@@ -1,7 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { useRef } from "react";
 import { User, Users, FileText, Newspaper, Calendar } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function PilarSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const pilars = [
     {
       href: "/profil",
@@ -35,14 +47,43 @@ export default function PilarSection() {
     },
   ];
 
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".animate-pilar-card",
+        {
+          opacity: 0,
+          y: 25,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section className="bg-brand-background py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100">
+    <section
+      ref={containerRef}
+      className="bg-brand-background py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100"
+    >
       <div className="text-center mb-16">
         <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl font-poppins">
           Pilar Navigasi
         </h2>
         <p className="mt-4 text-sm text-neutral-500 max-w-md mx-auto">
-          Akses informasi dan layanan utama Dewan Eksekutif Mahasiswa melalui pilar navigasi resmi kami.
+          Akses informasi dan layanan utama Dewan Eksekutif Mahasiswa melalui
+          pilar navigasi resmi kami.
         </p>
       </div>
 
@@ -53,7 +94,7 @@ export default function PilarSection() {
             <Link
               key={pilar.href}
               href={pilar.href}
-              className="group flex flex-col justify-between p-6 bg-white border border-neutral-100 rounded-xl hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200"
+              className="animate-pilar-card opacity-0 group flex flex-col justify-between p-6 bg-white border border-neutral-100 rounded-xl hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200"
             >
               <div>
                 <div className="inline-flex p-3 rounded-lg bg-[#F4F2EF] text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors duration-200 mb-5">

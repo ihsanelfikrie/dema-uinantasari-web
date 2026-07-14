@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { Heart, Compass, Shield, HelpCircle, Calendar } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Profil Kabinet - DEMA UIN Antasari",
+  description:
+    "Pelajari visi, misi, sejarah DEMA UIN Antasari, serta makna filosofi kabinet Laskar Purnama Antasari.",
+};
 
 export default function ProfilPage() {
   const visi =

@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { AlertCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Advokasi Mahasiswa - DEMA UIN Antasari",
+  description:
+    "Layanan pengaduan kendala akademik, keringanan UKT, fasilitas kampus yang rusak, serta isu kesejahteraan mahasiswa UIN Antasari.",
+};
 
 export default function AdvokasiLayananPage() {
   return (
