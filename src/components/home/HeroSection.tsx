@@ -60,7 +60,9 @@ export default function HeroSection() {
         const relX = (e.clientX - rect.left) / rect.width - 0.5;
         const relY = (e.clientY - rect.top) / rect.height - 0.5;
 
-        const containers = containerRef.current.querySelectorAll(".floating-star-container");
+        const containers = containerRef.current.querySelectorAll(
+          ".floating-star-container"
+        );
         containers.forEach((star) => {
           const factor = parseFloat(star.getAttribute("data-factor") || "0.1");
           const moveX = relX * rect.width * factor;
@@ -107,11 +109,28 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative overflow-hidden bg-brand-background dark:bg-brand-darkBg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh]"
     >
-      {/* Full Background Group Photo with faded overlay */}
-      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-[0.05] pointer-events-none select-none transition-opacity duration-300 z-0"></div>
+      {/* Full Background Group Photo with faded overlay for Light Mode */}
+      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-0 pointer-events-none select-none transition-all duration-300 z-0"></div>
+      
+      {/* Full Background Group Photo with crimson tint overlay for Dark Mode */}
+      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0"></div>
       
       {/* Faint overlay grid on top of background */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-background/40 via-transparent to-brand-background/60 dark:from-brand-darkBg/60 dark:via-transparent dark:to-brand-darkBg/60 z-0"></div>
+
+      {/* Left Leader Portrait (Ketua) */}
+      <img
+        src="/images/kabinet/ketua.png"
+        alt="Ahmad Munawir Sazali - Ketua Umum"
+        className="absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[60vh] sm:h-[75vh] max-h-[620px] object-contain hidden lg:block animate-hero-item opacity-0"
+      />
+
+      {/* Right Leader Portrait (Wakil) */}
+      <img
+        src="/images/kabinet/wakil.png"
+        alt="Khairul Fikri - Wakil Ketua Umum"
+        className="absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[60vh] sm:h-[75vh] max-h-[620px] object-contain hidden lg:block animate-hero-item opacity-0"
+      />
 
       {/* Floating Stars Elements */}
       {floatingStars.map((star) => (
