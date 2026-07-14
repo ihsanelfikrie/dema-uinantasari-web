@@ -5,8 +5,12 @@
   --color-brand-primary: #990808;
   --color-brand-accent: #F44027;
   --color-brand-secondary: #EDC537;
+  --color-brand-dark-bg: #1A0202;
+  --color-brand-dark-card: #2D0505;
   --font-poppins: var(--font-poppins), sans-serif;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #F4F2EF;
@@ -14,7 +18,122 @@
 }
 
 body {
-  background-color: var(--color-brand-background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Global Overrides for Dark Mode */
+.dark {
+  --background: #1A0202;
+  --foreground: #f4f2ef;
+
+  /* Force background changes on containers */
+  .bg-white, 
+  [class*="bg-white"] {
+    background-color: #2D0505 !important;
+  }
+
+  .bg-brand-background,
+  .bg-\[\#F4F2EF\] {
+    background-color: #1A0202 !important;
+  }
+
+  header, 
+  footer,
+  .bg-brand-background\/40 {
+    background-color: #1A0202 !important;
+    border-color: rgba(237, 197, 55, 0.15) !important; /* Gold tint border */
+  }
+
+  /* Force borders to a subtle red/gold color */
+  .border-neutral-100, 
+  .border-neutral-200,
+  .border-neutral-300 {
+    border-color: rgba(237, 197, 55, 0.15) !important;
+  }
+
+  /* Text color corrections for readability */
+  .text-neutral-900,
+  h1, h2, h3, h4, h5, h6 {
+    color: #f4f2ef !important;
+  }
+
+  .text-neutral-800,
+  .text-neutral-700 {
+    color: #e5e7eb !important;
+  }
+
+  .text-neutral-600, 
+  .text-neutral-500,
+  p {
+    color: #d1d5db !important;
+  }
+
+  .text-neutral-400 {
+    color: #9ca3af !important;
+  }
+
+  /* Aksen Primary text needs to stand out in dark mode (use accent or lighter primary) */
+  .text-brand-primary {
+    color: #F44027 !important;
+  }
+
+  /* Active text classes */
+  .text-neutral-600.text-brand-primary {
+    color: #EDC537 !important;
+  }
+
+  /* Buttons & badges customization */
+  .bg-brand-primary\/10 {
+    background-color: rgba(244, 64, 39, 0.15) !important;
+    color: #F44027 !important;
+  }
+
+  /* Table styles inside Admin panel */
+  th {
+    background-color: #1A0202 !important;
+    color: #f4f2ef !important;
+  }
+
+  tr:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  /* Form Inputs and Interactive Controls */
+  input, 
+  textarea, 
+  select {
+    background-color: #1A0202 !important;
+    border-color: rgba(237, 197, 55, 0.2) !important;
+    color: #f4f2ef !important;
+  }
+
+  input::placeholder, 
+  textarea::placeholder {
+    color: #6b7280 !important;
+  }
+
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    border-color: #EDC537 !important;
+    outline: none !important;
+  }
+
+  /* SVG icon visibility */
+  .text-neutral-400 svg {
+    color: #d1d5db !important;
+  }
+
+  .bg-neutral-100 {
+    background-color: #1A0202 !important;
+  }
+
+  /* Google Form iframe responsiveness cover */
+  iframe {
+    filter: invert(0.9) hue-rotate(180deg); /* Optional: inverts iframe colors to dark mode automatically */
+    opacity: 0.85;
+  }
 }
