@@ -26,7 +26,7 @@ export default function RootLayout({
       className={`${poppins.variable} font-poppins h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-brand-background text-neutral-900 font-poppins">
+      <body className="min-h-full flex flex-col bg-brand-background text-neutral-900 font-poppins" suppressHydrationWarning>
         <Navbar />
         {children}
         <Footer />
