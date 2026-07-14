@@ -107,12 +107,11 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative overflow-hidden bg-brand-background dark:bg-brand-darkBg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh]"
     >
-      {/* Background World Map Vector Grid Faint (gsap.com map style) */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.015] pointer-events-none select-none flex items-center justify-center">
-        <svg className="w-full h-full" viewBox="0 0 1000 500" fill="currentColor">
-          <path d="M150,150 L200,120 L250,130 L300,100 L350,120 L400,110 L450,150 L500,140 L550,180 L600,150 L650,170 L700,140 L750,160 L800,130 L850,150 L900,120 L950,160 L900,200 L850,190 L800,220 L750,210 L700,240 L650,220 L600,260 L550,250 L500,270 L450,240 L400,260 L350,240 L300,270 L250,250 L200,280 L150,260 Z" />
-        </svg>
-      </div>
+      {/* Full Background Group Photo with faded overlay */}
+      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-[0.05] pointer-events-none select-none transition-opacity duration-300 z-0"></div>
+      
+      {/* Faint overlay grid on top of background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-background/40 via-transparent to-brand-background/60 dark:from-brand-darkBg/60 dark:via-transparent dark:to-brand-darkBg/60 z-0"></div>
 
       {/* Floating Stars Elements */}
       {floatingStars.map((star) => (
