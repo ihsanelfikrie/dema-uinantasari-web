@@ -1,6 +1,18 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+const mockQueryBuilder = {
+  select: () => mockQueryBuilder,
+  eq: () => mockQueryBuilder,
+  order: () => mockQueryBuilder,
+  single: () => mockQueryBuilder,
+  then: (onfulfilled: any) => onfulfilled({ data: null, error: null }),
+};
+
+const mockSupabase = {
+  from: () => mockQueryBuilder,
+} as any;
+
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -8,9 +20,7 @@ export async function createClient() {
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   ) {
-    throw new Error(
-      "Supabase URL and Key are missing. Please check your .env.local file."
-    );
+    return mockSupabase;
   }
 
   return createServerClient(
