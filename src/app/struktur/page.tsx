@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BaganOrganisasi from "@/components/struktur/BaganOrganisasi";
 import { bph, kementerianList } from "@/data/struktur";
+import FadeInSection from "@/components/animations/FadeInSection";
 
 export const metadata: Metadata = {
   title: "Struktur Organisasi - DEMA UIN Antasari",
@@ -45,38 +46,43 @@ export default function StrukturPage() {
         </div>
 
         {/* Bagan Organisasi */}
-        <BaganOrganisasi />
+        <FadeInSection>
+          <BaganOrganisasi />
+        </FadeInSection>
 
         {/* BPH Section */}
-        <section className="mb-20">
-          <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-10 text-center">
-            Badan Pengurus Harian
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {bphMembers.map((member) => (
-              <div
-                key={member.id}
-                className="bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:border-brand-primary/10 transition-colors"
-              >
-                {renderAvatarPlaceholder()}
-                <div className="p-5">
-                  <h3 className="text-sm font-semibold text-neutral-900 font-poppins line-clamp-1">
-                    {member.nama}
-                  </h3>
-                  <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-wider block mt-1">
-                    {member.jabatan}
-                  </span>
-                  <p className="mt-3 text-xs leading-relaxed text-neutral-500 line-clamp-3">
-                    {member.tupoksi}
-                  </p>
+        <FadeInSection>
+          <section className="mb-20">
+            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-10 text-center">
+              Badan Pengurus Harian
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {bphMembers.map((member) => (
+                <div
+                  key={member.id}
+                  className="bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:border-brand-primary/10 transition-colors"
+                >
+                  {renderAvatarPlaceholder()}
+                  <div className="p-5">
+                    <h3 className="text-sm font-semibold text-neutral-900 font-poppins line-clamp-1">
+                      {member.nama}
+                    </h3>
+                    <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-wider block mt-1">
+                      {member.jabatan}
+                    </span>
+                    <p className="mt-3 text-xs leading-relaxed text-neutral-500 line-clamp-3">
+                      {member.tupoksi}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        </FadeInSection>
 
         {/* Jajaran Kementerian Section */}
-        <section>
+        <FadeInSection>
+          <section>
           <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-10 text-center">
             Jajaran Kementerian
           </h2>
@@ -168,7 +174,8 @@ export default function StrukturPage() {
             ))}
           </div>
         </section>
-      </div>
-    </main>
-  );
+      </FadeInSection>
+    </div>
+  </main>
+);
 }

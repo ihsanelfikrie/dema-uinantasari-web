@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldAlert, AlertCircle, FileText } from "lucide-react";
+import FadeInSection from "@/components/animations/FadeInSection";
 
 export const metadata: Metadata = {
   title: "Portal Layanan Mahasiswa - DEMA UIN Antasari",
@@ -52,33 +53,32 @@ export default function LayananLandingPage() {
           {services.map((svc) => {
             const Icon = svc.icon;
             return (
-              <div
-                key={svc.href}
-                className="bg-white border border-neutral-100 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row gap-6 items-start hover:border-brand-primary/10 transition-colors"
-              >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-background text-brand-primary">
-                  <Icon className="h-6 w-6 stroke-[1.5]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="inline-flex items-center rounded-full bg-brand-secondary/10 px-2.5 py-0.5 text-[10px] font-semibold text-neutral-600 mb-2">
-                    {svc.tag}
-                  </span>
-                  <h2 className="text-lg font-bold text-neutral-900 font-poppins mb-2">
-                    {svc.title}
-                  </h2>
-                  <p className="text-sm leading-relaxed text-neutral-500 font-normal">
-                    {svc.desc}
-                  </p>
-                  <div className="mt-6">
-                    <Link
-                      href={svc.href}
-                      className="inline-flex items-center text-xs font-semibold text-brand-primary hover:text-brand-accent transition-colors"
-                    >
-                      Buka Portal Layanan &rarr;
-                    </Link>
+              <FadeInSection key={svc.href}>
+                <div className="bg-white border border-neutral-100 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row gap-6 items-start hover:border-brand-primary/10 transition-colors">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-background text-brand-primary">
+                    <Icon className="h-6 w-6 stroke-[1.5]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="inline-flex items-center rounded-full bg-brand-secondary/10 px-2.5 py-0.5 text-[10px] font-semibold text-neutral-600 mb-2">
+                      {svc.tag}
+                    </span>
+                    <h2 className="text-lg font-bold text-neutral-900 font-poppins mb-2">
+                      {svc.title}
+                    </h2>
+                    <p className="text-sm leading-relaxed text-neutral-500 font-normal">
+                      {svc.desc}
+                    </p>
+                    <div className="mt-6">
+                      <Link
+                        href={svc.href}
+                        className="inline-flex items-center text-xs font-semibold text-brand-primary hover:text-brand-accent transition-colors"
+                      >
+                        Buka Portal Layanan &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </FadeInSection>
             );
           })}
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Berita } from "@/types";
 import FilterKategori from "@/components/berita/FilterKategori";
 import BeritaCard from "@/components/berita/BeritaCard";
+import FadeInSection from "@/components/animations/FadeInSection";
 
 interface BeritaListClientProps {
   initialBerita: Berita[];
@@ -35,7 +36,9 @@ export default function BeritaListClient({
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredBerita.map((item) => (
-            <BeritaCard key={item.id} berita={item} />
+            <FadeInSection key={item.id}>
+              <BeritaCard berita={item} />
+            </FadeInSection>
           ))}
         </div>
       )}

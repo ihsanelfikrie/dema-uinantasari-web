@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Heart, Compass, Shield, HelpCircle, Calendar } from "lucide-react";
+import FadeInSection from "@/components/animations/FadeInSection";
 
 export const metadata: Metadata = {
   title: "Profil Kabinet - DEMA UIN Antasari",
@@ -72,100 +73,107 @@ export default function ProfilPage() {
         </div>
 
         {/* Tentang DEMA Section */}
-        <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 mb-12 shadow-sm">
-          <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 border-l-4 border-brand-primary pl-4">
-            Tentang Organisasi
-          </h2>
-          <div className="text-sm leading-relaxed text-neutral-600 space-y-4">
-            <p>
-              Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari Banjarmasin
-              merupakan lembaga eksekutif tertinggi di tingkat universitas yang
-              berfungsi sebagai wadah representasi resmi mahasiswa. DEMA
-              mengemban amanah untuk mengoordinasikan kegiatan kemahasiswaan,
-              menyalurkan aspirasi, serta melakukan advokasi hak-hak mahasiswa.
-            </p>
-            <p>
-              Di bawah bendera **Kabinet Laskar Purnama Antasari**, kami membawa
-              spirit kolaborasi dan dedikasi penuh. Kami percaya bahwa mahasiswa
-              bukan sekadar objek pendidikan, melainkan subjek perubahan yang
-              memiliki peran vital dalam menentukan arah perkembangan akademik
-              dan pengabdian masyarakat.
-            </p>
-          </div>
-        </section>
+        <FadeInSection>
+          <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 mb-12 shadow-sm">
+            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 border-l-4 border-brand-primary pl-4">
+              Tentang Organisasi
+            </h2>
+            <div className="text-sm leading-relaxed text-neutral-600 space-y-4">
+              <p>
+                Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari Banjarmasin
+                merupakan lembaga eksekutif tertinggi di tingkat universitas
+                yang berfungsi sebagai wadah representasi resmi mahasiswa. DEMA
+                mengemban amanah untuk mengoordinasikan kegiatan
+                kemahasiswaan, menyalurkan aspirasi, serta melakukan advokasi
+                hak-hak mahasiswa.
+              </p>
+              <p>
+                Di bawah bendera **Kabinet Laskar Purnama Antasari**, kami
+                membawa spirit kolaborasi dan dedikasi penuh. Kami percaya
+                bahwa mahasiswa bukan sekadar objek pendidikan, melainkan
+                subjek perubahan yang memiliki peran vital dalam menentukan
+                arah perkembangan akademik dan pengabdian masyarakat.
+              </p>
+            </div>
+          </section>
+        </FadeInSection>
 
         {/* Filosofi Kabinet Section */}
-        <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 mb-12 shadow-sm">
-          <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-4 border-l-4 border-brand-primary pl-4">
-            Filosofi Kabinet
-          </h2>
-          <p className="text-sm text-neutral-500 mb-8">
-            Nama kabinet kami membawa arti penting yang melandasi setiap gerak
-            langkah kepengurusan.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {filosofi.map((item) => (
-              <div
-                key={item.title}
-                className="p-5 bg-brand-background rounded-xl border border-neutral-100/50"
-              >
-                <span className="text-xs font-semibold text-brand-primary uppercase tracking-wider">
-                  {item.meaning}
-                </span>
-                <h3 className="text-lg font-bold text-neutral-900 mt-1 font-poppins">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-xs leading-relaxed text-neutral-500">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <FadeInSection>
+          <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 mb-12 shadow-sm">
+            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-4 border-l-4 border-brand-primary pl-4">
+              Filosofi Kabinet
+            </h2>
+            <p className="text-sm text-neutral-500 mb-8">
+              Nama kabinet kami membawa arti penting yang melandasi setiap
+              gerak langkah kepengurusan.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {filosofi.map((item) => (
+                <div
+                  key={item.title}
+                  className="p-5 bg-brand-background rounded-xl border border-neutral-100/50"
+                >
+                  <span className="text-xs font-semibold text-brand-primary uppercase tracking-wider">
+                    {item.meaning}
+                  </span>
+                  <h3 className="text-lg font-bold text-neutral-900 mt-1 font-poppins">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-relaxed text-neutral-500">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </FadeInSection>
 
         {/* Visi & Misi Section */}
-        <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 shadow-sm">
-          <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 border-l-4 border-brand-primary pl-4">
-            Visi & Misi
-          </h2>
+        <FadeInSection>
+          <section className="bg-white border border-neutral-100 rounded-2xl p-8 sm:p-12 shadow-sm">
+            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 border-l-4 border-brand-primary pl-4">
+              Visi & Misi
+            </h2>
 
-          {/* Visi */}
-          <div className="mb-10 p-6 bg-brand-background rounded-xl border border-neutral-100/50 text-center">
-            <h3 className="text-sm font-semibold text-brand-primary uppercase tracking-wider mb-2">
-              Visi Besar
-            </h3>
-            <p className="text-base font-medium leading-relaxed text-neutral-800 font-poppins max-w-2xl mx-auto">
-              &ldquo;{visi}&rdquo;
-            </p>
-          </div>
-
-          {/* Misi */}
-          <div>
-            <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-6">
-              Misi Strategis
-            </h3>
-            <div className="space-y-6">
-              {misi.map((item, index) => {
-                const IconComponent = item.icon;
-                return (
-                  <div key={item.title} className="flex gap-4 sm:gap-6">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F2EF] text-brand-primary">
-                      <IconComponent className="h-5 w-5 stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm sm:text-base font-semibold text-neutral-900">
-                        {index + 1}. {item.title}
-                      </h4>
-                      <p className="mt-1 text-xs sm:text-sm leading-relaxed text-neutral-500">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+            {/* Visi */}
+            <div className="mb-10 p-6 bg-brand-background rounded-xl border border-neutral-100/50 text-center">
+              <h3 className="text-sm font-semibold text-brand-primary uppercase tracking-wider mb-2">
+                Visi Besar
+              </h3>
+              <p className="text-base font-medium leading-relaxed text-neutral-800 font-poppins max-w-2xl mx-auto">
+                &ldquo;{visi}&rdquo;
+              </p>
             </div>
-          </div>
-        </section>
+
+            {/* Misi */}
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-6">
+                Misi Strategis
+              </h3>
+              <div className="space-y-6">
+                {misi.map((item, index) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <div key={item.title} className="flex gap-4 sm:gap-6">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F2EF] text-brand-primary">
+                        <IconComponent className="h-5 w-5 stroke-[1.5]" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm sm:text-base font-semibold text-neutral-900">
+                          {index + 1}. {item.title}
+                        </h4>
+                        <p className="mt-1 text-xs sm:text-sm leading-relaxed text-neutral-500">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        </FadeInSection>
       </div>
     </main>
   );
