@@ -15,7 +15,7 @@ export default function LeadersProfiles() {
   ];
 
   return (
-    <section className="bg-brand-background dark:bg-brand-darkBg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
+    <section className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
       <div className="text-center mb-16">
         <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2">
           Fungsionaris Inti Organisasi

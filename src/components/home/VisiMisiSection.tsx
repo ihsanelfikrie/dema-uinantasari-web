@@ -50,7 +50,7 @@ export default function VisiMisiSection() {
   };
 
   return (
-    <section className="bg-brand-background dark:bg-brand-darkBg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
+    <section className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column (Visi & Controls) */}
         <div className="lg:col-span-4 flex flex-col justify-between h-full">

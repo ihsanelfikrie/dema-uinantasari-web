@@ -7,7 +7,7 @@ import FadeInSection from "@/components/animations/FadeInSection";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-brand-background dark:bg-brand-darkBg transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-brand-background dark:bg-brand-dark-bg transition-colors duration-300">
       <HeroSection />
       
       <FadeInSection>

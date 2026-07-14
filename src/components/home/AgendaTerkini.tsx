@@ -32,7 +32,7 @@ export default function AgendaTerkini() {
   ];
 
   return (
-    <section className="bg-brand-background dark:bg-brand-darkBg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
+    <section className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
       {/* Curved Container with Crimson gradient */}
       <div className="bg-gradient-to-r from-red-950 via-brand-primary to-red-900 rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden shadow-xl border border-white/5">
         

@@ -44,7 +44,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-[#F4F2EF]/90 dark:bg-brand-darkBg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm"
+          ? "bg-[#F4F2EF]/90 dark:bg-brand-dark-bg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm"
           : "bg-transparent border-transparent"
       }`}
     >
@@ -70,13 +70,17 @@ export default function Navbar() {
 
         {/* Center Logo (aminajadulu style) */}
         <div className="flex justify-center items-center md:w-1/3">
-          <Link href="/" className="flex flex-col items-center text-center group">
-            <span className="font-bold text-sm sm:text-base leading-tight text-neutral-900 dark:text-neutral-100 group-hover:text-brand-primary dark:group-hover:text-brand-secondary transition-colors uppercase tracking-widest font-poppins">
-              DEMA UIN Antasari
-            </span>
-            <span className="text-[8px] text-neutral-500 dark:text-neutral-400 font-semibold tracking-widest uppercase">
-              Laskar Purnama
-            </span>
+          <Link href="/" className="flex flex-col items-center justify-center text-center group py-1">
+            <img
+              src="/images/logo/logo-light.png"
+              alt="DEMA UIN Antasari - Laskar Purnama Antasari Logo"
+              className="h-[30px] sm:h-[35px] w-auto object-contain block dark:hidden transition-all duration-300"
+            />
+            <img
+              src="/images/logo/logo-dark.png"
+              alt="DEMA UIN Antasari - Laskar Purnama Antasari Logo"
+              className="h-[30px] sm:h-[35px] w-auto object-contain hidden dark:block transition-all duration-300"
+            />
           </Link>
         </div>
 

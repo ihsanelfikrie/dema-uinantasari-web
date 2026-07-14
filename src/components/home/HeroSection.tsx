@@ -36,6 +36,42 @@ export default function HeroSection() {
         }
       );
 
+      // Custom GSAP per-word bounce & rotation animation for heading words
+      gsap.fromTo(
+        ".animate-word",
+        {
+          y: -100,
+          opacity: 0,
+          rotation: "random(-60, 60)",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          rotation: 0,
+          duration: 0.8,
+          ease: "back.out(1.5)",
+          stagger: 0.12,
+          delay: 0.15,
+        }
+      );
+
+      // Paragraph line-by-line slide-up animation
+      gsap.fromTo(
+        ".animate-paragraph-line",
+        {
+          yPercent: 100,
+          opacity: 0,
+        },
+        {
+          yPercent: 0,
+          opacity: 1,
+          duration: 1.1,
+          ease: "power3.out",
+          stagger: 0.08,
+          delay: 0.45,
+        }
+      );
+
       // Idle floating animation for stars
       const inners = containerRef.current?.querySelectorAll(".floating-star-inner");
       if (inners) {
@@ -107,7 +143,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-brand-background dark:bg-brand-darkBg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh]"
+      className="relative overflow-hidden bg-brand-background dark:bg-brand-dark-bg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh]"
     >
       {/* Full Background Group Photo with faded overlay for Light Mode */}
       <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-0 pointer-events-none select-none transition-all duration-300 z-0"></div>
@@ -116,20 +152,20 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0"></div>
       
       {/* Faint overlay grid on top of background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-background/40 via-transparent to-brand-background/60 dark:from-brand-darkBg/60 dark:via-transparent dark:to-brand-darkBg/60 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-background/40 via-transparent to-brand-background/60 dark:from-brand-dark-bg/60 dark:via-transparent dark:to-brand-dark-bg/60 z-0"></div>
 
       {/* Left Leader Portrait (Ketua) */}
       <img
         src="/images/kabinet/ketua.png"
         alt="Ahmad Munawir Sazali - Ketua Umum"
-        className="absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[60vh] sm:h-[75vh] max-h-[620px] object-contain hidden lg:block animate-hero-item opacity-0"
+        className="absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block animate-hero-item opacity-0"
       />
 
       {/* Right Leader Portrait (Wakil) */}
       <img
         src="/images/kabinet/wakil.png"
         alt="Khairul Fikri - Wakil Ketua Umum"
-        className="absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[60vh] sm:h-[75vh] max-h-[620px] object-contain hidden lg:block animate-hero-item opacity-0"
+        className="absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block animate-hero-item opacity-0"
       />
 
       {/* Floating Stars Elements */}
@@ -162,14 +198,47 @@ export default function HeroSection() {
       ))}
 
       {/* Hero Content Column */}
-      <div className="max-w-3xl flex flex-col items-center relative z-20">
-        <span className="animate-hero-item opacity-0 text-xs font-semibold tracking-wider text-brand-primary dark:text-brand-secondary uppercase bg-brand-primary/10 dark:bg-brand-secondary/10 px-3 py-1 rounded-full mb-6">
-          Dewan Eksekutif Mahasiswa 2026/2027
+      <div className="max-w-4xl flex flex-col items-center relative z-20">
+        <span className="animate-hero-item opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary dark:text-brand-secondary uppercase bg-brand-primary/10 dark:bg-brand-secondary/10 px-4 py-1.5 rounded-full mb-6">
+          Kabinet Laskar Purnama Antasari
         </span>
-        <h1 className="animate-hero-item opacity-0 text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-6xl font-poppins select-none leading-[1.15]">
-          Kabinet <span className="text-brand-primary dark:text-brand-secondary">Laskar Purnama Antasari</span>
+        <h1 className="text-5xl font-extrabold tracking-tighter text-neutral-900 dark:text-white sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-wrap justify-center gap-x-4 gap-y-1">
+          {["DEMA", "UIN", "Antasari"].map((word, idx) => (
+            <span
+              key={idx}
+              className="animate-word inline-block opacity-0 origin-center"
+            >
+              {word}
+            </span>
+          ))}
+          <span className="text-brand-primary dark:text-brand-secondary">
+            <span className="animate-word inline-block opacity-0 origin-center">
+              2026/2027
+            </span>
+          </span>
         </h1>
-        <p className="animate-hero-item opacity-0 mt-6 text-sm sm:text-base leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-2xl font-normal">
+        
+        {/* Paragraph for Desktop/Tablet (Line Masking Anim) */}
+        <p className="mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
+          <span className="inline-block overflow-hidden py-0.5">
+            <span className="animate-paragraph-line inline-block opacity-0">
+              Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
+            </span>
+          </span>
+          <span className="inline-block overflow-hidden py-0.5">
+            <span className="animate-paragraph-line inline-block opacity-0">
+              sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
+            </span>
+          </span>
+          <span className="inline-block overflow-hidden py-0.5">
+            <span className="animate-paragraph-line inline-block opacity-0">
+              berdampak bagi civitas akademika dan masyarakat luas.
+            </span>
+          </span>
+        </p>
+
+        {/* Paragraph for Mobile View (Simple entrance) */}
+        <p className="animate-hero-item opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-2xl font-normal block sm:hidden">
           Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
           sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
           berdampak bagi civitas akademika dan masyarakat luas.

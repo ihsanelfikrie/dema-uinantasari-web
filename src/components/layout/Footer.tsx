@@ -74,7 +74,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-brand-background dark:bg-brand-darkBg pt-16 transition-colors duration-300">
+    <footer className="w-full bg-brand-background dark:bg-brand-dark-bg pt-16 transition-colors duration-300">
       {/* Overlapping Rounded White/Dark Card */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-brand-darkCard border border-neutral-100 dark:border-red-950/20 rounded-t-[2.5rem] p-8 sm:p-12 lg:p-16 shadow-lg">
