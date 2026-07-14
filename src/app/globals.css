@@ -24,6 +24,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Compensate inner pages for the fixed transparent-to-sticky navbar */
+main.min-h-screen.bg-brand-background {
+  padding-top: 7.5rem !important; /* ~120px offset to allow breathing room under fixed navbar */
+}
+
 /* Global Overrides for Dark Mode */
 .dark {
   --background: #1A0202;
