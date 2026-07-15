@@ -260,10 +260,10 @@ export default function HeroSection() {
       };
 
       const container = containerRef.current;
-      if (container) {
-        container.addEventListener("mousemove", handleMouseMove);
-        container.addEventListener("mouseleave", handleMouseLeave);
-      }
+      if (!container) return;
+
+      container.addEventListener("mousemove", handleMouseMove);
+      container.addEventListener("mouseleave", handleMouseLeave);
 
       // ── 15. Dynamic Loop Character Rotation & Hover ────────────────────────
       const titleRotationLoop = gsap.to(".animate-char", {
@@ -315,10 +315,8 @@ export default function HeroSection() {
       });
 
       return () => {
-        if (container) {
-          container.removeEventListener("mousemove", handleMouseMove);
-          container.removeEventListener("mouseleave", handleMouseLeave);
-        }
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("mouseleave", handleMouseLeave);
         hoverHandlers.forEach(({ el, enterHandler, leaveHandler }) => {
           el.removeEventListener("mouseenter", enterHandler);
           el.removeEventListener("mouseleave", leaveHandler);
