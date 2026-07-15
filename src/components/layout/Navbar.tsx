@@ -79,14 +79,14 @@ export default function Navbar() {
         }`}
       >
         {/* Desktop Left Nav Links */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-8 w-1/3 justify-end pr-8">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-end pr-10 lg:pr-14">
           {leftLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
@@ -98,7 +98,7 @@ export default function Navbar() {
           {/* Tentang Kami Dropdown Trigger */}
           <div className="relative group py-2">
             <button
-              className={`flex items-center gap-1 text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
+              className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
                 isTentangKamiActive
                   ? "text-brand-primary dark:text-brand-secondary"
                   : "text-neutral-700 dark:text-neutral-300"
@@ -131,7 +131,7 @@ export default function Navbar() {
         </nav>
 
         {/* Center Logo */}
-        <div className="flex justify-center items-center md:w-1/3">
+        <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2">
           <Link href="/" className="flex flex-col items-center justify-center text-center group py-1">
             <img
               src="/images/logo/logo-light.png"
@@ -147,11 +147,11 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Right Nav Links */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-8 w-1/3 justify-start pl-8">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-start pl-10 lg:pl-14">
           {/* Layanan Dropdown Trigger */}
           <div className="relative group py-2">
             <button
-              className={`flex items-center gap-1 text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
+              className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
                 isLayananActive
                   ? "text-brand-primary dark:text-brand-secondary"
                   : "text-neutral-700 dark:text-neutral-300"
@@ -188,7 +188,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent shrink-0 ${
+                className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent shrink-0 ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
