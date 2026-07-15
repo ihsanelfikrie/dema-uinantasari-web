@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import BeritaCard from "@/components/berita/BeritaCard";
+import BeritaListAnimated from "@/components/home/BeritaListAnimated";
 import Link from "next/link";
 import { Berita } from "@/types";
 
@@ -49,11 +49,7 @@ export default async function BeritaTerbaru() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {beritaList.map((berita) => (
-            <BeritaCard key={berita.id} berita={berita} />
-          ))}
-        </div>
+        <BeritaListAnimated beritaList={beritaList} />
       )}
     </section>
   );

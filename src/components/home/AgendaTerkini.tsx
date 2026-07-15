@@ -1,9 +1,20 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { AlertCircle, FileText, HeartHandshake, ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function AgendaTerkini() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+
   const portals = [
     {
       id: "p3",
@@ -31,22 +42,77 @@ export default function AgendaTerkini() {
     },
   ];
 
+  useGSAP(
+    () => {
+      // ── Animate heading on scroll ──────────────────────────────────────────
+      gsap.fromTo(
+        ".agenda-heading",
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // ── Animate portals cards staggered on scroll ─────────────────────────
+      gsap.fromTo(
+        ".agenda-portal-card",
+        {
+          opacity: 0,
+          y: 40,
+          scale: 0.96,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: cardsContainerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
+    <section
+      ref={sectionRef}
+      className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 overflow-hidden"
+    >
       {/* Curved Container with flat brand color */}
       <div className="bg-brand-primary rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden shadow-xl border border-white/5">
-        
         {/* Background grid texture */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none select-none flex items-center justify-center">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="currentColor">
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5" />
             </pattern>
             <rect width="100" height="100" fill="url(#grid)" />
           </svg>
         </div>
 
-        <div className="relative z-10 max-w-2xl">
+        {/* Floating Minimalist Coordinates / Accent lines */}
+        <div className="absolute top-6 right-8 text-white/10 text-xs font-mono font-light select-none pointer-events-none hidden sm:block">
+          SYS.PORTAL // LAT: -3.32 // LONG: 114.59
+        </div>
+
+        <div className="agenda-heading opacity-0 relative z-10 max-w-2xl">
           <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-wider block mb-2">
             Aspirasi & Advokasi Digital
           </span>
@@ -54,24 +120,30 @@ export default function AgendaTerkini() {
             Agenda Layanan Mahasiswa
           </h2>
           <p className="mt-4 text-sm text-neutral-200 leading-relaxed font-poppins font-light max-w-xl">
-            DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan, penanganan kekerasan, dan permohonan persuratan secara digital.
+            DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
+            penanganan kekerasan, dan permohonan persuratan secara digital.
           </p>
         </div>
 
         {/* 3-Column sub-grid for portals */}
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        <div
+          ref={cardsContainerRef}
+          className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+        >
           {portals.map((portal) => {
             const Icon = portal.icon;
             return (
               <div
                 key={portal.id}
-                className="bg-black/20 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-white/20 transition-all duration-200"
+                className="agenda-portal-card opacity-0 bg-black/20 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-white/30 hover:bg-black/35 hover:-translate-y-1.5 transition-all duration-300 shadow-lg group"
               >
                 <div>
-                  <div className={`inline-flex p-3 rounded-xl border ${portal.color} transition-all duration-300 mb-6`}>
-                    <Icon className="h-6 w-6" />
+                  <div
+                    className={`inline-flex p-3 rounded-xl border ${portal.color} transition-all duration-300 mb-6`}
+                  >
+                    <Icon className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white font-poppins">
+                  <h3 className="text-base sm:text-lg font-bold text-white font-poppins group-hover:text-brand-secondary transition-colors duration-200">
                     {portal.title}
                   </h3>
                   <p className="mt-2 text-xs sm:text-sm text-neutral-300 leading-relaxed font-poppins font-light">
@@ -79,10 +151,10 @@ export default function AgendaTerkini() {
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4">
+                <div className="mt-6 pt-4 border-t border-white/5">
                   <Link
                     href={portal.href}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-secondary hover:text-white transition-colors duration-200 group-hover:translate-x-1 transition-transform"
                   >
                     Kunjungi Portal
                     <ArrowRight className="h-3.5 w-3.5" />

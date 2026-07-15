@@ -2,8 +2,16 @@
 
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function VisiMisiSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const missions = [
@@ -49,11 +57,70 @@ export default function VisiMisiSection() {
     }
   };
 
+  useGSAP(
+    () => {
+      // ── Animate mission cards on scroll ────────────────────────────────────
+      gsap.fromTo(
+        ".mission-card",
+        {
+          opacity: 0,
+          y: 40,
+          scale: 0.95,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: scrollRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // ── Animate left side content on scroll ───────────────────────────────
+      gsap.fromTo(
+        ".visi-misi-text",
+        {
+          opacity: 0,
+          x: -30,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <section
+      ref={containerRef}
+      className="relative bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 overflow-hidden"
+    >
+      {/* Decorative background grid and cross */}
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.015] pointer-events-none select-none">
+        <div className="absolute top-4 left-4 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute bottom-4 right-4 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute top-10 right-1/3 w-px h-24 bg-brand-primary" />
+        <div className="absolute bottom-10 left-1/3 w-32 h-px bg-brand-primary" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Column (Heading) */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-4 space-y-6 visi-misi-text opacity-0">
           <div className="space-y-2">
             <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block font-poppins">
               Arah Gerak Organisasi
@@ -62,14 +129,18 @@ export default function VisiMisiSection() {
               Visi & Misi DEMA
             </h2>
           </div>
-          
+
           <div className="space-y-4 text-xs sm:text-sm text-neutral-500 font-poppins leading-relaxed">
             <p>
-              <strong className="text-neutral-800 dark:text-neutral-200 block mb-1">VISI KABINET:</strong>
-              Terwujudnya DEMA UIN Antasari Banjarmasin yang responsif, kolaboratif, progresif, dan berintegritas demi terciptanya sinergi mahasiswa yang unggul dan berdampak sosial.
+              <strong className="text-neutral-800 dark:text-neutral-200 block mb-1">
+                VISI KABINET:
+              </strong>
+              Terwujudnya DEMA UIN Antasari Banjarmasin yang responsif, kolaboratif, progresif, dan
+              berintegritas demi terciptanya sinergi mahasiswa yang unggul dan berdampak sosial.
             </p>
             <p>
-              Guna merealisasikan visi besar tersebut, Kabinet Laskar Purnama Antasari berkomitmen menjalankan lima pilar misi strategis di samping.
+              Guna merealisasikan visi besar tersebut, Kabinet Laskar Purnama Antasari berkomitmen
+              menjalankan lima pilar misi strategis di samping.
             </p>
           </div>
 
@@ -99,22 +170,25 @@ export default function VisiMisiSection() {
             {missions.map((mission) => (
               <div
                 key={mission.no}
-                className={`snap-start shrink-0 w-[280px] sm:w-[320px] ${mission.bg} rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px] border border-white/5 shadow-lg relative overflow-hidden group`}
+                className="mission-card snap-start shrink-0 w-[280px] sm:w-[320px] bg-white dark:bg-brand-darkCard rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px] border border-neutral-100 dark:border-red-950/20 shadow-md relative overflow-hidden group hover:-translate-y-2 hover:shadow-xl hover:border-brand-primary/20 dark:hover:border-red-950/40 transition-all duration-300 opacity-0"
               >
-                {/* Decorative glow inside card */}
-                <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-white/5 blur-2xl group-hover:bg-white/10 transition-all duration-300"></div>
+                {/* Visual Accent Corner Shape */}
+                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-brand-primary/5 dark:to-brand-secondary/5 rounded-bl-full pointer-events-none`} />
 
                 <div className="relative z-10 flex justify-between items-start">
-                  <span className="text-3xl font-extrabold text-brand-secondary opacity-60">
-                    Misi {mission.no}
+                  <span className="text-3xl font-extrabold text-brand-primary/20 dark:text-brand-secondary/20 font-poppins">
+                    {mission.no}
+                  </span>
+                  <span className="text-[9px] text-neutral-400 font-medium font-poppins border border-neutral-200 dark:border-red-950/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    Misi
                   </span>
                 </div>
 
                 <div className="relative z-10 mt-12">
-                  <h3 className="text-lg font-bold text-white font-poppins uppercase">
+                  <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white font-poppins uppercase tracking-wide group-hover:text-brand-primary dark:group-hover:text-brand-secondary transition-colors duration-200">
                     {mission.title}
                   </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-neutral-200 leading-relaxed font-poppins font-light">
+                  <p className="mt-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-300 leading-relaxed font-poppins">
                     {mission.desc}
                   </p>
                 </div>

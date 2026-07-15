@@ -186,8 +186,17 @@ export default function LeadersProfiles() {
     <section
       ref={containerRef}
       id="bph-gallery-section"
-      className="bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 w-full overflow-hidden flex flex-col justify-between items-center transition-colors duration-300 min-h-[620px]"
+      className="relative bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 w-full overflow-hidden flex flex-col justify-between items-center transition-colors duration-300 min-h-[620px]"
     >
+      {/* Decorative background grid and crosses */}
+      <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none select-none">
+        <div className="absolute top-10 left-10 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute top-10 right-10 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute bottom-10 left-10 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute bottom-10 right-10 text-brand-primary font-poppins text-xs">+</div>
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-px h-32 bg-brand-primary" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-px h-32 bg-brand-primary" />
+      </div>
       {/* Section Heading */}
       <div className="text-center mb-6 z-30 relative select-none">
         <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 font-poppins">

@@ -18,107 +18,242 @@ export default function HeroSection() {
     { id: 6, src: "/images/star-sparkle8.png", size: 38, bottom: "45%", right: "14%", factor: 0.15 },
   ];
 
+  const splitText = (text: string) => {
+    return text.split("").map((char, index) => (
+      <span
+        key={index}
+        className="animate-char inline-block opacity-0"
+        style={{ transformOrigin: "center center" }}
+      >
+        {char === " " ? "\u00A0" : char}
+      </span>
+    ));
+  };
+
   useGSAP(
     () => {
-      // Stagger entrance animation
-      gsap.fromTo(
-        ".animate-hero-item",
-        {
-          opacity: 0,
-          y: 25,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: "power2.out",
-        }
+      // ── Master timeline ──────────────────────────────────────────────────────
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+      });
+
+      // ── 1. Background fade-in ──────────────────────────────────────────────
+      tl.fromTo(
+        ".hero-bg",
+        { scale: 1.06, autoAlpha: 0 },
+        { scale: 1, autoAlpha: 0.65, duration: 1.6, ease: "power2.out" },
+        0
       );
 
-      // Custom GSAP per-word bounce & rotation animation for heading words
-      gsap.fromTo(
-        ".animate-word",
-        {
-          y: -100,
-          opacity: 0,
-          rotation: "random(-60, 60)",
-        },
+      // ── 2. Entrance for geometric shapes ───────────────────────────────────
+      tl.fromTo(
+        ".hero-geo-shape",
+        { scale: 0.8, autoAlpha: 0, rotation: "random(-20, 20)" },
+        { scale: 1, autoAlpha: 0.3, rotation: 0, duration: 1.4, ease: "power3.out", stagger: 0.1 },
+        0.1
+      );
+
+      // ── 3. Badge: clip-path reveal (wipe from left) ────────────────────────
+      tl.fromTo(
+        ".hero-badge",
+        { clipPath: "inset(0 100% 0 0)", autoAlpha: 0 },
+        { clipPath: "inset(0 0% 0 0)", autoAlpha: 1, duration: 0.7, ease: "power2.inOut" },
+        0.3
+      );
+
+      // ── 4. Character-by-character headline entry ───────────────────────────
+      tl.fromTo(
+        ".animate-char",
+        { y: 40, rotationX: -80, autoAlpha: 0, scale: 0.8 },
         {
           y: 0,
-          opacity: 1,
-          rotation: 0,
-          duration: 0.8,
+          rotationX: 0,
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.02,
           ease: "back.out(1.5)",
-          stagger: 0.12,
-          delay: 0.15,
-        }
+        },
+        0.4
       );
 
-      // Paragraph line-by-line slide-up animation
-      gsap.fromTo(
+      // ── 5. Line under headline: horizontal draw ───────────────────────────
+      tl.fromTo(
+        ".hero-headline-line",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.8, ease: "power3.inOut" },
+        "-=0.1"
+      );
+
+      // ── 6. Paragraph lines: clip-path wipe up (line masking) ──────────────
+      tl.fromTo(
         ".animate-paragraph-line",
-        {
-          yPercent: 100,
-          opacity: 0,
-        },
+        { yPercent: 110, autoAlpha: 0 },
         {
           yPercent: 0,
-          opacity: 1,
-          duration: 1.1,
+          autoAlpha: 1,
+          duration: 0.9,
+          stagger: 0.09,
           ease: "power3.out",
-          stagger: 0.08,
-          delay: 0.45,
-        }
+        },
+        "-=0.4"
       );
 
-      // Idle floating animation for stars
+      // ── 7. Mobile paragraph ────────────────────────────────────────────────
+      tl.fromTo(
+        ".hero-mobile-para",
+        { y: 20, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.7 },
+        "<"
+      );
+
+      // ── 8. CTA buttons: scale-in staggered ────────────────────────────────
+      tl.fromTo(
+        ".hero-cta-btn",
+        { scale: 0.82, autoAlpha: 0, y: 12 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0.12,
+          ease: "back.out(1.5)",
+        },
+        "-=0.3"
+      );
+
+      // ── 9. Scroll indicator: fade + bounce-in ─────────────────────────────
+      tl.fromTo(
+        ".hero-scroll-indicator",
+        { autoAlpha: 0, y: 16 },
+        { autoAlpha: 1, y: 0, duration: 0.5 },
+        "-=0.1"
+      );
+
+      // ── 10. Leader portraits: slide-in from sides + scale ─────────────────
+      tl.fromTo(
+        ".hero-portrait-left",
+        { x: -80, autoAlpha: 0, scale: 0.92 },
+        { x: 0, autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" },
+        0.2
+      );
+      tl.fromTo(
+        ".hero-portrait-right",
+        { x: 80, autoAlpha: 0, scale: 0.92 },
+        { x: 0, autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" },
+        "<"
+      );
+
+      // ── 11. Floating stars: fade in staggered ──────────────────────────────
+      tl.fromTo(
+        ".floating-star-container",
+        { autoAlpha: 0, scale: 0.6 },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: { each: 0.08, from: "random" },
+          ease: "back.out(1.4)",
+        },
+        0.7
+      );
+
+      // ── 12. Idle float for stars ───────────────────────────────────────────
       const inners = containerRef.current?.querySelectorAll(".floating-star-inner");
       if (inners) {
         inners.forEach((inner, idx) => {
           gsap.to(inner, {
-            y: "random(-12, 12)",
-            rotation: "random(-15, 15)",
-            duration: gsap.utils.random(3.0, 4.5),
+            y: "random(-14, 14)",
+            rotation: "random(-18, 18)",
+            duration: gsap.utils.random(3.2, 5.0),
             repeat: -1,
             yoyo: true,
             ease: "sine.inOut",
-            delay: idx * 0.2,
+            delay: idx * 0.25,
           });
         });
       }
 
-      // Mousemove parallax effect
+      // ── 13. Subtle slow breathe on portraits ──────────────────────────────
+      gsap.to(".hero-portrait-left", {
+        y: -10,
+        duration: 4.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1.5,
+      });
+      gsap.to(".hero-portrait-right", {
+        y: -10,
+        duration: 4.0,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 2.0,
+      });
+
+      // ── 14. Mousemove parallax ─────────────────────────────────────────────
       const handleMouseMove = (e: MouseEvent) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        
         const relX = (e.clientX - rect.left) / rect.width - 0.5;
         const relY = (e.clientY - rect.top) / rect.height - 0.5;
 
-        const containers = containerRef.current.querySelectorAll(
-          ".floating-star-container"
-        );
-        containers.forEach((star) => {
+        // Stars parallax
+        const starContainers = containerRef.current.querySelectorAll(".floating-star-container");
+        starContainers.forEach((star) => {
           const factor = parseFloat(star.getAttribute("data-factor") || "0.1");
-          const moveX = relX * rect.width * factor;
-          const moveY = relY * rect.height * factor;
-
           gsap.to(star, {
-            x: moveX,
-            y: moveY,
+            x: relX * rect.width * factor,
+            y: relY * rect.height * factor,
             duration: 1.0,
             ease: "power3.out",
             overwrite: "auto",
           });
         });
+
+        // Geometric shapes parallax
+        const geoShapes = containerRef.current.querySelectorAll(".hero-geo-shape");
+        geoShapes.forEach((shape) => {
+          const factor = parseFloat(shape.getAttribute("data-factor") || "0.05");
+          gsap.to(shape, {
+            x: relX * rect.width * factor,
+            y: relY * rect.height * factor,
+            duration: 1.2,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        });
+
+        // Subtle tilt on portraits
+        gsap.to(".hero-portrait-left", {
+          x: relX * -18,
+          duration: 1.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        gsap.to(".hero-portrait-right", {
+          x: relX * 18,
+          duration: 1.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+
+        // Subtle title float
+        gsap.to(".hero-title", {
+          x: relX * -6,
+          y: relY * -4,
+          duration: 1.0,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
       };
 
       const handleMouseLeave = () => {
-        gsap.to(".floating-star-container", {
+        gsap.to(".floating-star-container, .hero-portrait-left, .hero-portrait-right, .hero-title, .hero-geo-shape", {
           x: 0,
           y: 0,
-          duration: 1.2,
+          duration: 1.4,
           ease: "power3.out",
           overwrite: "auto",
         });
@@ -130,11 +265,65 @@ export default function HeroSection() {
         container.addEventListener("mouseleave", handleMouseLeave);
       }
 
+      // ── 15. Dynamic Loop Character Rotation & Hover ────────────────────────
+      const titleRotationLoop = gsap.to(".animate-char", {
+        rotationX: "+=360",
+        duration: 1.2,
+        ease: "power2.inOut",
+        stagger: {
+          each: 0.04,
+          repeat: -1,
+          repeatDelay: 5.0,
+        },
+        delay: 2.0,
+      });
+
+      const charElements = container.querySelectorAll(".animate-char");
+      const hoverHandlers: Array<{ el: Element; enterHandler: () => void; leaveHandler: () => void }> = [];
+
+      charElements.forEach((el) => {
+        let timeoutId: NodeJS.Timeout | null = null;
+
+        const enterHandler = () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+          gsap.to(el, {
+            rotationX: "+=360",
+            duration: 0.8,
+            ease: "back.out(1.2)",
+            overwrite: "auto",
+          });
+        };
+
+        const leaveHandler = () => {
+          if (timeoutId) clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            gsap.to(el, {
+              rotationX: 0,
+              duration: 1.0,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          }, 3000);
+        };
+
+        el.addEventListener("mouseenter", enterHandler);
+        el.addEventListener("mouseleave", leaveHandler);
+        hoverHandlers.push({ el, enterHandler, leaveHandler });
+      });
+
       return () => {
         if (container) {
           container.removeEventListener("mousemove", handleMouseMove);
           container.removeEventListener("mouseleave", handleMouseLeave);
         }
+        hoverHandlers.forEach(({ el, enterHandler, leaveHandler }) => {
+          el.removeEventListener("mouseenter", enterHandler);
+          el.removeEventListener("mouseleave", leaveHandler);
+        });
+        titleRotationLoop.kill();
       };
     },
     { scope: containerRef }
@@ -143,33 +332,55 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-brand-background dark:bg-brand-dark-bg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh]"
+      className="relative overflow-hidden bg-brand-background dark:bg-brand-dark-bg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh] perspective-1000"
     >
-      {/* Full Background Group Photo with faded overlay for Light Mode */}
-      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-0 pointer-events-none select-none transition-all duration-300 z-0"></div>
-      
-      {/* Full Background Group Photo with crimson tint overlay for Dark Mode */}
-      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0"></div>
+      {/* Background grid texture */}
+      <div className="absolute inset-0 z-[1] opacity-[0.05] dark:opacity-[0.02] pointer-events-none select-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#990808_1px,transparent_1px),linear-gradient(to_bottom,#990808_1px,transparent_1px)] bg-[size:4.5rem_4.5rem]" />
+        {/* Intersection crosses */}
+        <div className="absolute top-20 left-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+        <div className="absolute top-20 right-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+        <div className="absolute bottom-20 left-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+        <div className="absolute bottom-20 right-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+        <div className="absolute top-1/2 right-10 -translate-y-1/2 text-brand-primary/40 font-light text-sm font-poppins">+</div>
+      </div>
 
-      {/* Left Leader Portrait (Ketua) */}
+      {/* Decorative Minimal Geometric Outlines */}
+      <div className="absolute inset-0 z-[2] pointer-events-none select-none opacity-40 dark:opacity-20">
+        {/* Large Outer Thin Circle */}
+        <div className="hero-geo-shape opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-dashed border-brand-primary/40 dark:border-brand-secondary/40" data-factor="0.04" />
+        {/* Medium Inner Thin Circle */}
+        <div className="hero-geo-shape opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-brand-primary/20 dark:border-brand-secondary/20" data-factor="-0.02" />
+        {/* Subtle decorative boxes */}
+        <div className="hero-geo-shape opacity-0 absolute top-[25%] left-[15%] w-16 h-16 border border-brand-primary/20 dark:border-brand-secondary/20 rounded-lg rotate-12" data-factor="0.06" />
+        <div className="hero-geo-shape opacity-0 absolute bottom-[25%] right-[15%] w-24 h-24 border border-brand-primary/10 dark:border-brand-secondary/10 rounded-full" data-factor="-0.08" />
+        <div className="hero-geo-shape opacity-0 absolute top-[40%] right-[10%] w-10 h-10 border border-brand-primary/30 dark:border-brand-secondary/30 rounded-md rotate-45" data-factor="0.03" />
+      </div>
+
+      {/* Background images */}
+      <div className="hero-bg absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-0 pointer-events-none select-none transition-all duration-300 z-0" />
+      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0" />
+
+      {/* Left Leader Portrait */}
       <img
         src="/images/kabinet/ketua.png"
         alt="Ahmad Munawir Sazali - Ketua Umum"
-        className="absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block animate-hero-item opacity-0"
+        className="hero-portrait-left absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block opacity-0"
       />
 
-      {/* Right Leader Portrait (Wakil) */}
+      {/* Right Leader Portrait */}
       <img
         src="/images/kabinet/wakil.png"
         alt="Khairul Fikri - Wakil Ketua Umum"
-        className="absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block animate-hero-item opacity-0"
+        className="hero-portrait-right absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block opacity-0"
       />
 
-      {/* Floating Stars Elements */}
+      {/* Floating Stars */}
       {floatingStars.map((star) => (
         <div
           key={star.id}
-          className="floating-star-container absolute pointer-events-none select-none hidden sm:block animate-hero-item opacity-0"
+          className="floating-star-container absolute pointer-events-none select-none hidden sm:block opacity-0"
           style={{
             top: star.top,
             bottom: star.bottom,
@@ -194,29 +405,30 @@ export default function HeroSection() {
         </div>
       ))}
 
-      {/* Hero Content Column */}
+      {/* Hero Content */}
       <div className="max-w-4xl flex flex-col items-center relative z-20">
-        <span className="animate-hero-item opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary dark:text-brand-secondary uppercase bg-brand-primary/10 dark:bg-brand-secondary/10 px-4 py-1.5 rounded-full mb-6">
+        {/* Badge */}
+        <span className="hero-badge opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary dark:text-brand-secondary uppercase bg-brand-primary/10 dark:bg-brand-secondary/10 px-4 py-1.5 rounded-full mb-6">
           Kabinet Laskar Purnama Antasari
         </span>
-        <h1 className="text-5xl font-extrabold tracking-tighter text-neutral-900 dark:text-white sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-wrap justify-center gap-x-4 gap-y-1">
-          {["DEMA", "UIN", "Antasari"].map((word, idx) => (
-            <span
-              key={idx}
-              className="animate-word inline-block opacity-0 origin-center"
-            >
-              {word}
-            </span>
-          ))}
-          <span className="text-brand-primary dark:text-brand-secondary">
-            <span className="animate-word inline-block opacity-0 origin-center">
-              2026/2027
-            </span>
+
+        {/* Headline with dynamic split character reveal */}
+        <h1 className="hero-title text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-col items-center gap-2">
+          <div className="flex flex-wrap justify-center gap-x-3 sm:gap-x-4">
+            <span className="inline-block">{splitText("DEMA")}</span>
+            <span className="inline-block">{splitText("UIN")}</span>
+            <span className="inline-block">{splitText("Antasari")}</span>
+          </div>
+          <span className="text-brand-primary dark:text-brand-secondary inline-block">
+            {splitText("2026/2027")}
           </span>
         </h1>
-        
-        {/* Paragraph for Desktop/Tablet (Line Masking Anim) */}
-        <p className="mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
+
+        {/* Clean minimal separator line under header */}
+        <div className="hero-headline-line w-24 h-[3px] bg-brand-primary dark:bg-brand-secondary rounded-full mt-6 origin-center" />
+
+        {/* Paragraph Desktop */}
+        <p className="mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
           <span className="inline-block overflow-hidden py-0.5">
             <span className="animate-paragraph-line inline-block opacity-0">
               Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
@@ -234,30 +446,31 @@ export default function HeroSection() {
           </span>
         </p>
 
-        {/* Paragraph for Mobile View (Simple entrance) */}
-        <p className="animate-hero-item opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-2xl font-normal block sm:hidden">
+        {/* Paragraph Mobile */}
+        <p className="hero-mobile-para opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-2xl font-normal block sm:hidden">
           Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
           sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
           berdampak bagi civitas akademika dan masyarakat luas.
         </p>
-        
-        <div className="animate-hero-item opacity-0 mt-10 flex items-center justify-center gap-4">
+
+        {/* CTA Buttons */}
+        <div className="mt-10 flex items-center justify-center gap-4">
           <Link
             href="/profil"
-            className="rounded-lg bg-brand-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-accent transition-colors duration-200"
+            className="hero-cta-btn opacity-0 rounded-lg bg-brand-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-accent transition-colors duration-200 animate-pulse-subtle"
           >
             Tentang Kabinet
           </Link>
           <Link
             href="/layanan"
-            className="rounded-lg border border-neutral-300 dark:border-red-950/50 bg-white/5 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200 shadow-sm hover:bg-neutral-100 dark:hover:bg-brand-darkCard transition-all duration-200"
+            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 dark:border-red-950/50 bg-white/5 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200 shadow-sm hover:bg-neutral-100 dark:hover:bg-brand-darkCard transition-all duration-200"
           >
             Layanan Portal
           </Link>
         </div>
 
-        {/* Scroll down indicator button */}
-        <div className="animate-hero-item opacity-0 mt-16 flex justify-center">
+        {/* Scroll indicator */}
+        <div className="hero-scroll-indicator opacity-0 mt-16 flex justify-center">
           <button
             onClick={() => {
               window.scrollTo({
