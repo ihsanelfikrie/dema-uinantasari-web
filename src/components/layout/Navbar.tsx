@@ -44,7 +44,7 @@ export default function Navbar() {
 
   const rightLinks = [
     { href: "/program-unggulan", label: "Program Unggulan" },
-    { href: "/berita", label: "Informasi & Kajian" },
+    { href: "/berita", label: "Informasi" },
   ];
 
   // Mobile menu links list (flat list of all links)
