@@ -546,7 +546,7 @@ export default function ProfilPage() {
 
           {/* Visi */}
           <div className="mt-8 mb-20">
-            <div className="visi-line h-px bg-brand-primary mb-8" style={{ scaleX: 0 }} />
+            <div className="visi-line h-px bg-brand-primary mb-8" style={{ transform: "scaleX(0)", transformOrigin: "left center" }} />
             <blockquote className="visi-text">
               <span className="block text-4xl sm:text-5xl font-black text-brand-primary/10 leading-none -mb-4 select-none">&ldquo;</span>
               <p className="text-lg sm:text-2xl font-semibold text-neutral-800 leading-relaxed max-w-3xl">
