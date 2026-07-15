@@ -18,6 +18,8 @@ const config: Config = {
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],
+        times: ['"Times New Roman"', "Times", "serif"],
+        akzidenz: ['"Akzidenz-Grotesk"', '"Helvetica Neue"', "Arial", "sans-serif"],
       },
     },
   },

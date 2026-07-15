@@ -87,12 +87,11 @@ export default function ProgramUnggulanPage() {
 
   return (
     <main className="bg-brand-background dark:bg-brand-dark-bg min-h-screen text-neutral-900 dark:text-neutral-100 transition-colors duration-300 font-poppins pb-24">
-      {/* Hero Header Section */}
       <section className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center border-b border-neutral-200/50 dark:border-red-950/20">
-        <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2">
+        <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 font-akzidenz">
           Program Prioritas Kerja
         </span>
-        <h1 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-neutral-900 dark:text-white leading-none">
+        <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-neutral-900 dark:text-white leading-none font-times">
           Program Unggulan
         </h1>
         <p className="mt-4 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto font-normal leading-relaxed">
@@ -108,7 +107,7 @@ export default function ProgramUnggulanPage() {
             <button
               key={p.id}
               onClick={() => scrollToSection(p.id)}
-              className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer font-akzidenz ${
                 isActive
                   ? "bg-brand-primary dark:bg-brand-secondary text-white dark:text-neutral-950 shadow-md"
                   : "bg-white dark:bg-brand-darkCard text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-red-950/15 hover:bg-neutral-100 dark:hover:bg-neutral-800"
@@ -141,13 +140,13 @@ export default function ProgramUnggulanPage() {
                 {/* Ministry Badge */}
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/20 bg-brand-primary/5">
                   <Icon className="h-3.5 w-3.5 text-brand-primary" />
-                  <span className="text-[9px] sm:text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                  <span className="text-[9px] sm:text-[10px] font-bold text-brand-primary uppercase tracking-wider font-akzidenz">
                     {p.dept}
                   </span>
                 </div>
 
                 {/* Program Title */}
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 leading-snug uppercase">
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 leading-snug uppercase font-times">
                   {p.title}
                 </h2>
 
@@ -155,17 +154,17 @@ export default function ProgramUnggulanPage() {
                 <div className="space-y-4 font-poppins">
                   {/* Latar Belakang (Keresahan) */}
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest block">
+                    <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest block font-akzidenz">
                       Latar Belakang
                     </span>
-                    <p className="text-xs sm:text-sm leading-relaxed text-neutral-550 dark:text-neutral-400 font-normal italic border-l-2 border-neutral-300 dark:border-neutral-700 pl-3">
+                    <p className="text-xs sm:text-sm leading-relaxed text-neutral-555 dark:text-neutral-400 font-normal italic border-l-2 border-neutral-300 dark:border-neutral-700 pl-3">
                       &ldquo;{p.kegelisahan}&rdquo;
                     </p>
                   </div>
 
                   {/* Rencana Gerakan */}
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block">
+                    <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block font-akzidenz">
                       Rencana Gerakan
                     </span>
                     <p className="text-xs sm:text-sm leading-relaxed text-neutral-700 dark:text-neutral-300 font-normal">

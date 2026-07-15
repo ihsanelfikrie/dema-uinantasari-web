@@ -346,14 +346,14 @@ export default function ProfilPage() {
         </div>
 
         <div className="hero-content-wrapper relative z-10 text-center px-4">
-          <span className="inline-block text-brand-primary text-xs font-bold uppercase tracking-[0.4em] mb-6 font-mono">
+          <span className="inline-block text-brand-primary text-xs font-bold uppercase tracking-[0.4em] mb-6 font-akzidenz">
             Dewan Eksekutif Mahasiswa
           </span>
           
           <h1 className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-6 overflow-hidden py-2">
             {["Profil", "DEMA", "UIN", "Antasari"].map((word, i) => (
               <span key={i} className="inline-block overflow-hidden py-1">
-                <span className="hero-title-word block text-4xl sm:text-6xl md:text-8xl font-black text-neutral-900 leading-none uppercase tracking-tight">
+                <span className="hero-title-word block text-4xl sm:text-6xl md:text-8xl font-bold text-neutral-900 leading-none uppercase tracking-tight font-times">
                   {word}
                 </span>
               </span>
@@ -377,10 +377,10 @@ export default function ProfilPage() {
       <section className="bg-white border-b border-neutral-100 py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <div className="tentang-section grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-mono">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
               01 — Tentang Kami
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 leading-snug uppercase">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 leading-snug uppercase font-times">
               Tentang Organisasi
             </h2>
             <div className="mt-6 space-y-4">
@@ -447,10 +447,10 @@ export default function ProfilPage() {
       <section className="filosofi-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
           <div className="filosofi-label text-center mb-16">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-mono">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
               02 — Filosofi Kabinet
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
               Laskar Purnama Antasari
             </h2>
             <p className="mt-3 text-sm text-neutral-500 max-w-md mx-auto">
@@ -465,13 +465,13 @@ export default function ProfilPage() {
                 className="filosofi-card relative overflow-hidden rounded-none bg-white border border-neutral-200 p-8 group hover:border-brand-primary/30 transition-colors duration-300"
               >
                 {/* Big background numeral */}
-                <span className="absolute top-4 right-6 text-7xl font-black text-neutral-100 select-none group-hover:text-brand-primary/10 transition-colors duration-500 font-mono">
+                <span className="absolute top-4 right-6 text-7xl font-bold text-neutral-100 select-none group-hover:text-brand-primary/10 transition-colors duration-500 font-times">
                   {item.num}
                 </span>
-                <span className="relative z-10 text-[10px] font-bold text-brand-primary uppercase tracking-widest font-mono">
+                <span className="relative z-10 text-[10px] font-bold text-brand-primary uppercase tracking-widest font-akzidenz">
                   {item.meaning}
                 </span>
-                <h3 className="relative z-10 mt-2 text-xl font-bold text-neutral-900 uppercase">
+                <h3 className="relative z-10 mt-2 text-xl font-bold text-neutral-900 uppercase font-times">
                   {item.title}
                 </h3>
                 <div className="relative z-10 mt-4 w-8 h-0.5 bg-brand-secondary group-hover:w-16 transition-all duration-500" />
@@ -484,10 +484,9 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      {/* ── VISI & MISI ──────────────────────────────────────────────────── */}
       <section className="visi-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
-          <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-mono">
+          <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
             03 — Visi &amp; Misi
           </span>
 
@@ -496,7 +495,7 @@ export default function ProfilPage() {
             <div className="visi-line h-px bg-brand-primary mb-8" style={{ width: "0%" }} />
             <blockquote className="visi-text">
               <span className="block text-4xl sm:text-5xl font-black text-brand-primary/10 leading-none -mb-4 select-none">&ldquo;</span>
-              <p className="text-lg sm:text-2xl font-semibold text-neutral-800 leading-relaxed max-w-3xl">
+              <p className="text-lg sm:text-2xl font-bold text-neutral-800 leading-relaxed max-w-3xl font-times">
                 {visi}
               </p>
               <span className="block text-4xl sm:text-5xl font-black text-brand-primary/10 leading-none mt-0 text-right max-w-3xl select-none">&rdquo;</span>
@@ -505,7 +504,7 @@ export default function ProfilPage() {
 
           {/* Misi */}
           <div className="misi-container space-y-4">
-            <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-8 font-mono">
+            <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-8 font-akzidenz">
               Misi Strategis
             </h3>
             {misi.map((item, index) => {
@@ -515,7 +514,7 @@ export default function ProfilPage() {
                   key={item.title}
                   className="misi-item group flex items-center gap-6 rounded-none bg-white border border-neutral-200 px-6 py-5 hover:bg-neutral-50 hover:border-brand-primary/30 transition-all duration-300"
                 >
-                  <span className="text-3xl font-black text-neutral-200 group-hover:text-brand-primary/20 transition-colors duration-300 w-10 shrink-0 font-mono">
+                  <span className="text-3xl font-bold text-neutral-200 group-hover:text-brand-primary/20 transition-colors duration-300 w-10 shrink-0 font-times">
                     {item.no}
                   </span>
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
@@ -537,14 +536,13 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      {/* ── NILAI DASAR ──────────────────────────────────────────────────── */}
       <section className="nilai-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
           <div className="nilai-label text-center mb-16">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-mono">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
               04 — Nilai Dasar
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
               Nilai Dasar Organisasi
             </h2>
             <p className="mt-3 text-sm text-neutral-500 max-w-md mx-auto">
@@ -565,7 +563,7 @@ export default function ProfilPage() {
                       <IconComponent className="h-6 w-6 stroke-[1.2]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200">{nilai.title}</h3>
+                      <h3 className="text-lg font-bold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200 font-times">{nilai.title}</h3>
                       <p className="mt-2 text-xs leading-relaxed text-neutral-500">{nilai.desc}</p>
                     </div>
                   </div>
@@ -576,21 +574,20 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      {/* ── BUDAYA ORGANISASI ────────────────────────────────────────────── */}
       <section className="budaya-section py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="budaya-label text-center mb-12">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-mono">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
               05 — Budaya Organisasi
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
               Falsafah Gerak Bersama
             </h2>
           </div>
 
           {/* Pinned quote */}
           <div className="budaya-quote mb-16 rounded-none border-l-4 border-brand-primary bg-neutral-50 p-10 text-left">
-            <p className="text-lg sm:text-2xl font-semibold text-neutral-900 italic leading-relaxed font-poppins">
+            <p className="text-lg sm:text-2xl font-bold text-neutral-900 italic leading-relaxed font-times">
               &ldquo;Ing ngarso sung tulodo, ing madya mangun karso, tut wuri handayani&rdquo;
             </p>
             <p className="mt-3 text-xs text-neutral-500 font-mono">— Falsafah Ki Hajar Dewantara</p>
@@ -609,12 +606,12 @@ export default function ProfilPage() {
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
                       <IconComponent className="h-5 w-5 stroke-[1.2]" />
                     </div>
-                    <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider font-mono">
+                    <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider font-akzidenz">
                       Prinsip {i + 1}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-neutral-900 mb-1">{item.label}</h3>
-                  <p className="text-xs font-semibold text-brand-primary mb-3">{item.sub}</p>
+                  <h3 className="text-base font-bold text-neutral-900 mb-1 font-times">{item.label}</h3>
+                  <p className="text-xs font-semibold text-brand-primary mb-3 font-akzidenz">{item.sub}</p>
                   <p className="text-xs leading-relaxed text-neutral-500">{item.desc}</p>
                 </div>
               );
