@@ -17,32 +17,32 @@ export default function VisiMisiSection() {
   const missions = [
     {
       no: "01",
-      title: "Advokasi Responsif",
-      desc: "Membangun ruang advokasi yang responsif dan solutif terhadap permasalahan akademik maupun kesejahteraan mahasiswa.",
+      title: "Kinerja Profesional",
+      desc: "Menghadirkan kinerja yang profesional, adaptif terhadap perubahan, dan proaktif dalam merespons kebutuhan mahasiswa.",
       bg: "bg-[#7a0606]",
     },
     {
       no: "02",
-      title: "Sinergi Ormawa",
-      desc: "Meningkatkan sinergisitas dan kolaborasi aktif antar Organisasi Kemahasiswaan (ORMAWA) di lingkungan UIN Antasari.",
+      title: "Sinergi & Kolaborasi",
+      desc: "Membangun sinergitas dan kolaborasi dengan segala elemen demi terwujudnya hubungan yang harmonis antar lembaga.",
       bg: "bg-brand-primary",
     },
     {
       no: "03",
-      title: "Minat & Bakat",
-      desc: "Menyelenggarakan program kerja berbasis minat, bakat, keilmuan, dan pengembangan kepemimpinan mahasiswa.",
+      title: "Pelayanan Inklusif",
+      desc: "Mewujudkan eskalasi pelayanan yang inklusif dan transparan untuk kesejahteraan mahasiswa UIN Antasari.",
       bg: "bg-[#8b0606]",
     },
     {
       no: "04",
-      title: "Informasi Transparan",
-      desc: "Mengoptimalkan penyebaran informasi yang transparan, komunikatif, dan edukatif melalui media informasi resmi DEMA.",
+      title: "Minat & Bakat Unggul",
+      desc: "Memfasilitasi pengembangan minat dan bakat yang supportif dan apresiatif untuk Antasari yang unggul.",
       bg: "bg-[#7a0606]",
     },
     {
       no: "05",
-      title: "Sosial Keagamaan",
-      desc: "Menumbuhkan kesadaran sosial-keagamaan melalui aksi nyata pengabdian kepada masyarakat luas.",
+      title: "Gerakan Sosial",
+      desc: "Menciptakan peran mahasiswa dalam menjaga nilai gerakan sosial untuk kedaulatan masyarakat dan Indonesia.",
       bg: "bg-brand-primary",
     },
   ];
@@ -132,11 +132,8 @@ export default function VisiMisiSection() {
 
           <div className="space-y-4 text-xs sm:text-sm text-neutral-500 font-poppins leading-relaxed">
             <p>
-              <strong className="text-neutral-800 dark:text-neutral-200 block mb-1">
-                VISI KABINET:
-              </strong>
-              Terwujudnya DEMA UIN Antasari Banjarmasin yang responsif, kolaboratif, progresif, dan
-              berintegritas demi terciptanya sinergi mahasiswa yang unggul dan berdampak sosial.
+              <strong className="text-neutral-800 dark:text-neutral-200 block mb-1">VISI KABINET:</strong>
+              Optimalisasi DEMA UIN Antasari Sebagai Platform Aktualisasi Mahasiswa yang Berdampak dalam Kemajuan Antasari dan Indonesia.
             </p>
             <p>
               Guna merealisasikan visi besar tersebut, Kabinet Laskar Purnama Antasari berkomitmen
