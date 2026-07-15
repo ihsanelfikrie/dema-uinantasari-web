@@ -8,6 +8,7 @@ import {
   Newspaper,
   Calendar,
   FileText,
+  Inbox,
   LogOut,
 } from "lucide-react";
 
@@ -29,6 +30,7 @@ export default function Sidebar() {
     { name: "Kelola Berita", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },
+    { name: "Surat Masuk", href: "/admin/permohonan", icon: Inbox },
   ];
 
   return (

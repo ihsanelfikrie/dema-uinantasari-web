@@ -7,6 +7,7 @@ import {
   ArrowRight,
   PlusCircle,
   UploadCloud,
+  Inbox,
 } from "lucide-react";
 
 export const revalidate = 0; // Always load latest statistics
@@ -17,6 +18,7 @@ export default async function AdminDashboardPage() {
     beritaDraft: 0,
     kegiatanCount: 0,
     dokumenCount: 0,
+    permohonanBaru: 0,
   };
 
   try {
@@ -44,6 +46,13 @@ export default async function AdminDashboardPage() {
       .from("dokumen")
       .select("*", { count: "exact", head: true });
     stats.dokumenCount = dokumenCount || 0;
+
+    // Query permohonan (surat masuk) count
+    const { count: permohonanBaru } = await supabase
+      .from("permohonan")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "baru");
+    stats.permohonanBaru = permohonanBaru || 0;
   } catch (err) {
     console.error("Gagal memuat statistik dashboard admin:", err);
   }
@@ -69,6 +78,13 @@ export default async function AdminDashboardPage() {
       subtext: "Surat & arsip tersimpan",
       icon: FileText,
       color: "bg-amber-50 text-amber-600",
+    },
+    {
+      title: "Surat Masuk Baru",
+      value: stats.permohonanBaru,
+      subtext: "Permohonan belum diproses",
+      icon: Inbox,
+      color: "bg-red-50 text-brand-primary",
     },
   ];
 
@@ -151,6 +167,17 @@ export default async function AdminDashboardPage() {
             <div className="flex items-center gap-3">
               <UploadCloud className="h-5 w-5 text-brand-primary stroke-[1.5]" />
               Kelola Dokumen / Surat
+            </div>
+            <ArrowRight className="h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+          </Link>
+
+          <Link
+            href="/admin/permohonan"
+            className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 hover:border-brand-primary/20 hover:bg-neutral-50 transition-all text-xs font-semibold text-neutral-750 font-poppins group"
+          >
+            <div className="flex items-center gap-3">
+              <Inbox className="h-5 w-5 text-brand-primary stroke-[1.5]" />
+              Lihat Surat Masuk
             </div>
             <ArrowRight className="h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
           </Link>

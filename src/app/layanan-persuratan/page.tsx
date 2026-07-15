@@ -102,10 +102,33 @@ export default function LayananPersuratanPage() {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
-    // Simulate async processing (future: integrate Supabase insert)
-    await new Promise((res) => setTimeout(res, 1200));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/permohonan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nama_lengkap: formData.namaLengkap,
+          organisasi: formData.organisasi,
+          email: formData.email,
+          no_whatsapp: formData.noWhatsapp,
+          jenis_permohonan: formData.jenisPermohonan,
+          keterangan: formData.keterangan,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Gagal mengirim permohonan.");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
