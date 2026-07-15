@@ -150,9 +150,6 @@ export default function HeroSection() {
       
       {/* Full Background Group Photo with crimson tint overlay for Dark Mode */}
       <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0"></div>
-      
-      {/* Faint overlay grid on top of background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-background/40 via-transparent to-brand-background/60 dark:from-brand-dark-bg/60 dark:via-transparent dark:to-brand-dark-bg/60 z-0"></div>
 
       {/* Left Leader Portrait (Ketua) */}
       <img
