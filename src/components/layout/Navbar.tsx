@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import ThemeToggle from "../ui/ThemeToggle";
 
@@ -28,17 +28,34 @@ export default function Navbar() {
 
   const leftLinks = [
     { href: "/", label: "Beranda" },
+    { href: "/event", label: "Event" },
+  ];
+
+  const tentangKamiLinks = [
     { href: "/profil", label: "Profil" },
     { href: "/struktur", label: "Struktur" },
+    { href: "/program-kerja", label: "Program Kerja" },
   ];
 
   const rightLinks = [
     { href: "/layanan", label: "Layanan" },
+    { href: "/program-unggulan", label: "Program Unggulan" },
+    { href: "/berita", label: "Berita" },
+  ];
+
+  // Mobile menu links list (flat list of all links)
+  const mobileLinks = [
+    { href: "/", label: "Beranda" },
+    { href: "/profil", label: "Profil" },
+    { href: "/struktur", label: "Struktur" },
+    { href: "/layanan", label: "Layanan" },
+    { href: "/program-unggulan", label: "Program Unggulan" },
+    { href: "/event", label: "Event" },
     { href: "/berita", label: "Berita" },
     { href: "/program-kerja", label: "Program Kerja" },
   ];
 
-  const allLinks = [...leftLinks, ...rightLinks];
+  const isTentangKamiActive = tentangKamiLinks.some((link) => pathname === link.href);
 
   return (
     <header
@@ -56,14 +73,14 @@ export default function Navbar() {
         }`}
       >
         {/* Desktop Left Nav Links */}
-        <nav className="hidden md:flex items-center gap-8 lg:gap-12 w-1/3 justify-end pr-8">
+        <nav className="hidden md:flex items-center gap-4 lg:gap-8 w-1/3 justify-end pr-8">
           {leftLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                className={`text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
@@ -71,6 +88,40 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          {/* Tentang Kami Dropdown Trigger */}
+          <div className="relative group py-2">
+            <button
+              className={`flex items-center gap-1 text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
+                isTentangKamiActive
+                  ? "text-brand-primary dark:text-brand-secondary"
+                  : "text-neutral-700 dark:text-neutral-300"
+              }`}
+            >
+              Tentang Kami
+              <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
+            </button>
+
+            {/* Dropdown Menu Panel */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md">
+              {tentangKamiLinks.map((subLink) => {
+                const isSubActive = pathname === subLink.href;
+                return (
+                  <Link
+                    key={subLink.href}
+                    href={subLink.href}
+                    className={`block px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 hover:text-brand-accent ${
+                      isSubActive
+                        ? "text-brand-primary dark:text-brand-secondary bg-brand-primary/5 dark:bg-brand-secondary/5"
+                        : "text-neutral-700 dark:text-neutral-300"
+                    }`}
+                  >
+                    {subLink.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
         </nav>
 
         {/* Center Logo */}
@@ -90,14 +141,14 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Right Nav Links */}
-        <nav className="hidden md:flex items-center gap-8 lg:gap-12 w-1/3 justify-start pl-8">
+        <nav className="hidden md:flex items-center gap-4 lg:gap-8 w-1/3 justify-start pl-8">
           {rightLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                className={`text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent shrink-0 ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
@@ -128,7 +179,7 @@ export default function Navbar() {
       <MobileMenu
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        navLinks={allLinks}
+        navLinks={mobileLinks}
         pathname={pathname}
       />
     </header>
