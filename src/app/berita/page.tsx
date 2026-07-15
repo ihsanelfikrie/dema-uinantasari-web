@@ -6,9 +6,9 @@ import BeritaListClient from "./BeritaListClient";
 export const revalidate = 0; // Always fetch fresh news articles
 
 export const metadata: Metadata = {
-  title: "Berita & Media - DEMA UIN Antasari",
+  title: "Informasi & Kajian - DEMA UIN Antasari",
   description:
-    "Rilis pers resmi, publikasi kegiatan kementerian, dan kabar terkini seputar civitas akademika UIN Antasari Banjarmasin.",
+    "Dapatkan rilis pers resmi, informasi terupdate, kajian isu, dan dokumentasi kegiatan dari Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari.",
 };
 
 export default async function BeritaPage() {
@@ -35,10 +35,10 @@ export default async function BeritaPage() {
         {/* Title */}
         <div className="text-center mb-16">
           <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-5xl font-poppins">
-            Berita & Media
+            Informasi & Kajian
           </h1>
           <p className="mt-4 text-sm sm:text-base text-neutral-500 max-w-md mx-auto">
-            Dapatkan informasi terupdate, rilis pers resmi, dan artikel
+            Dapatkan rilis pers resmi, informasi terupdate, kajian isu, dan dokumentasi
             kegiatan dari Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari.
           </p>
         </div>

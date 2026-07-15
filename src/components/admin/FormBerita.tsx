@@ -226,6 +226,7 @@ export default function FormBerita({ beritaId, initialData }: FormBeritaProps) {
             >
               <option value="Berita Kampus">Berita Kampus</option>
               <option value="Berita Nasional">Berita Nasional</option>
+              <option value="Kegiatan DEMA UIN Antasari Banjarmasin">Kegiatan DEMA UIN Antasari Banjarmasin</option>
               <option value="Pengumuman">Pengumuman</option>
             </select>
           </div>

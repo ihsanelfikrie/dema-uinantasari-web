@@ -27,7 +27,7 @@ export default function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { name: "Kelola Berita", href: "/admin/berita", icon: Newspaper },
+    { name: "Info & Kajian", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },
     { name: "Surat Masuk", href: "/admin/permohonan", icon: Inbox },

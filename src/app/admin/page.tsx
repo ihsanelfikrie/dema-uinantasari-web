@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
 
   const statCards = [
     {
-      title: "Rilis Berita",
+      title: "Informasi & Kajian",
       value: stats.beritaPublished + stats.beritaDraft,
       subtext: `${stats.beritaPublished} diterbitkan · ${stats.beritaDraft} draf`,
       icon: Newspaper,
@@ -144,7 +144,7 @@ export default async function AdminDashboardPage() {
           >
             <div className="flex items-center gap-3">
               <PlusCircle className="h-5 w-5 text-brand-primary stroke-[1.5]" />
-              Tambah Rilis Berita
+              Tambah Informasi & Kajian
             </div>
             <ArrowRight className="h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
           </Link>

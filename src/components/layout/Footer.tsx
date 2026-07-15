@@ -54,7 +54,7 @@ export default function Footer() {
     { href: "/profil", label: "Profil Kabinet" },
     { href: "/struktur", label: "Struktur Organisasi" },
     { href: "/layanan", label: "Layanan Digital" },
-    { href: "/berita", label: "Berita & Media" },
+    { href: "/berita", label: "Informasi & Kajian" },
     { href: "/program-kerja", label: "Program Kerja" },
   ];
 

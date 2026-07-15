@@ -59,10 +59,10 @@ export default function AdminBeritaPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h1 className="text-xl font-bold font-poppins text-neutral-900">
-            Kelola Berita & Media
+            Kelola Informasi & Kajian
           </h1>
           <p className="text-xs text-neutral-400 mt-1">
-            Daftar seluruh berita, pengumuman, dan rilis pers resmi kabinet.
+            Daftar seluruh rilis berita, kajian isu strategis, dan pengumuman resmi kabinet.
           </p>
         </div>
         <Link
@@ -70,7 +70,7 @@ export default function AdminBeritaPage() {
           className="inline-flex items-center gap-2 rounded-xl bg-brand-primary hover:bg-brand-accent text-white px-4 py-2.5 text-xs font-semibold tracking-wide transition-colors cursor-pointer"
         >
           <PlusCircle className="h-4.5 w-4.5 stroke-[1.8]" />
-          Tambah Berita
+          Tambah Informasi & Kajian
         </Link>
       </div>
 
