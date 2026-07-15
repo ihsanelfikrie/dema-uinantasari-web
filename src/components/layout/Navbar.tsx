@@ -44,12 +44,17 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-[#F4F2EF]/90 dark:bg-brand-dark-bg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm"
+          ? "bg-[#F4F2EF]/90 dark:bg-brand-dark-bg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm md:bg-transparent md:backdrop-blur-none md:border-b-0 md:shadow-none"
           : "bg-transparent border-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 relative">
-        
+      <div
+        className={`mx-auto flex w-full max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 relative transition-all duration-300 md:rounded-full md:px-10 md:bg-white/95 md:dark:bg-brand-darkCard/95 md:backdrop-blur-md md:border md:border-neutral-200/50 md:dark:border-red-950/20 md:shadow-md ${
+          isScrolled
+            ? "md:max-w-5xl md:shadow-lg md:mt-2"
+            : "md:max-w-6xl md:mt-4"
+        }`}
+      >
         {/* Desktop Left Nav Links */}
         <nav className="hidden md:flex items-center gap-8 lg:gap-12 w-1/3 justify-end pr-8">
           {leftLinks.map((link) => {
@@ -58,7 +63,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xs font-semibold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                className={`text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
@@ -68,18 +73,18 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Center Logo (aminajadulu style) */}
+        {/* Center Logo */}
         <div className="flex justify-center items-center md:w-1/3">
           <Link href="/" className="flex flex-col items-center justify-center text-center group py-1">
             <img
               src="/images/logo/logo-light.png"
-              alt="DEMA UIN Antasari - Laskar Purnama Antasari Logo"
-              className="h-[30px] sm:h-[35px] w-auto object-contain block dark:hidden transition-all duration-300"
+              alt="DEMA UIN Antasari Logo"
+              className="h-[28px] sm:h-[32px] w-auto object-contain block dark:hidden transition-all duration-300"
             />
             <img
               src="/images/logo/logo-dark.png"
-              alt="DEMA UIN Antasari - Laskar Purnama Antasari Logo"
-              className="h-[30px] sm:h-[35px] w-auto object-contain hidden dark:block transition-all duration-300"
+              alt="DEMA UIN Antasari Logo"
+              className="h-[28px] sm:h-[32px] w-auto object-contain hidden dark:block transition-all duration-300"
             />
           </Link>
         </div>
@@ -92,7 +97,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xs font-semibold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                className={`text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
                   isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
@@ -100,12 +105,11 @@ export default function Navbar() {
               </Link>
             );
           })}
+          {/* Integrated ThemeToggle inside flow */}
+          <div className="ml-auto pl-2">
+            <ThemeToggle />
+          </div>
         </nav>
-
-        {/* Desktop ThemeToggle positioned on far right */}
-        <div className="hidden md:block absolute right-4 lg:right-8">
-          <ThemeToggle />
-        </div>
 
         {/* Mobile Action Area */}
         <div className="flex md:hidden items-center gap-2 ml-auto">
