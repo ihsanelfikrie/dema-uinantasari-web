@@ -173,6 +173,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".tentang-section",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -187,6 +189,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".tentang-section",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -204,6 +208,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".filosofi-section",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -219,6 +225,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".visi-section",
             start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -234,6 +242,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".visi-section",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -250,6 +260,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".misi-container",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -267,6 +279,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".nilai-section",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -283,6 +297,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".budaya-quote",
             start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -299,6 +315,8 @@ export default function ProfilPage() {
           scrollTrigger: {
             trigger: ".budaya-items-grid",
             start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );

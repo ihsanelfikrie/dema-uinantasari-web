@@ -94,7 +94,8 @@ export default function ProgramUnggulanPage() {
           scrollTrigger: {
             trigger: sec,
             start: "top 80%",
-            once: true,
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         });
 
@@ -148,7 +149,8 @@ export default function ProgramUnggulanPage() {
             scrollTrigger: {
               trigger: sec,
               start: "top 75%",
-              once: true,
+              end: "bottom 25%",
+              toggleActions: "play reverse play reverse",
             },
           }
         );
