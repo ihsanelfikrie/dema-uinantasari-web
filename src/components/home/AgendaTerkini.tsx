@@ -59,7 +59,8 @@ export default function AgendaTerkini() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
-            toggleActions: "play none none none",
+            end: "bottom 20%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -82,10 +83,112 @@ export default function AgendaTerkini() {
           scrollTrigger: {
             trigger: cardsContainerRef.current,
             start: "top 85%",
-            toggleActions: "play none none none",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
+
+      // ── 3D Hover Tilt & Parallax on Service Portal Cards ──────────────────
+      const cards = cardsContainerRef.current?.querySelectorAll(".agenda-portal-card");
+      const tiltHandlers: Array<{ el: Element; move: (e: Event) => void; leave: () => void }> = [];
+
+      if (cards) {
+        cards.forEach((card) => {
+          const iconWrapper = card.querySelector(".agenda-icon-wrapper");
+          const title = card.querySelector(".agenda-card-title");
+
+          const handleMove = (e: Event) => {
+            const mouseEvent = e as MouseEvent;
+            const rect = card.getBoundingClientRect();
+            const relX = (mouseEvent.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+            const relY = (mouseEvent.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
+
+            // Perform 3D rotation tilt
+            gsap.to(card, {
+              rotationY: relX * 18,
+              rotationX: relY * -18,
+              scale: 1.025,
+              borderColor: "rgba(255, 255, 255, 0.25)",
+              backgroundColor: "rgba(0, 0, 0, 0.28)",
+              boxShadow: "0 20px 30px -10px rgba(0, 0, 0, 0.25)",
+              duration: 0.35,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+
+            // Parallax shift on icon
+            if (iconWrapper) {
+              gsap.to(iconWrapper, {
+                x: relX * -12,
+                y: relY * -12,
+                scale: 1.08,
+                duration: 0.35,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+
+            // Parallax shift on title
+            if (title) {
+              gsap.to(title, {
+                x: relX * -6,
+                y: relY * -6,
+                duration: 0.35,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          };
+
+          const handleLeave = () => {
+            // Reset card rotation
+            gsap.to(card, {
+              rotationY: 0,
+              rotationX: 0,
+              scale: 1,
+              borderColor: "rgba(255, 255, 255, 0.1)",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+              duration: 0.7,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+
+            if (iconWrapper) {
+              gsap.to(iconWrapper, {
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration: 0.7,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+
+            if (title) {
+              gsap.to(title, {
+                x: 0,
+                y: 0,
+                duration: 0.7,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          };
+
+          card.addEventListener("mousemove", handleMove);
+          card.addEventListener("mouseleave", handleLeave);
+          tiltHandlers.push({ el: card, move: handleMove, leave: handleLeave });
+        });
+      }
+
+      return () => {
+        tiltHandlers.forEach(({ el, move, leave }) => {
+          el.removeEventListener("mousemove", move);
+          el.removeEventListener("mouseleave", leave);
+        });
+      };
     },
     { scope: sectionRef }
   );
@@ -128,30 +231,41 @@ export default function AgendaTerkini() {
         {/* 3-Column sub-grid for portals */}
         <div
           ref={cardsContainerRef}
-          className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+          className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 perspective-1000"
         >
           {portals.map((portal) => {
             const Icon = portal.icon;
             return (
               <div
                 key={portal.id}
-                className="agenda-portal-card opacity-0 bg-black/20 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-white/30 hover:bg-black/35 hover:-translate-y-1.5 transition-all duration-300 shadow-lg group"
+                className="agenda-portal-card opacity-0 bg-black/20 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-lg group cursor-pointer"
+                style={{ transformStyle: "preserve-3d" }}
               >
                 <div>
                   <div
-                    className={`inline-flex p-3 rounded-xl border ${portal.color} transition-all duration-300 mb-6`}
+                    className={`agenda-icon-wrapper inline-flex p-3 rounded-xl border ${portal.color} mb-6`}
+                    style={{ transform: "translateZ(25px)", transformStyle: "preserve-3d" }}
                   >
-                    <Icon className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+                    <Icon className="h-6 w-6 transition-transform duration-300" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white font-poppins group-hover:text-brand-secondary transition-colors duration-200">
+                  <h3 
+                    className="agenda-card-title text-base sm:text-lg font-bold text-white font-poppins transition-colors duration-200"
+                    style={{ transform: "translateZ(15px)" }}
+                  >
                     {portal.title}
                   </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-neutral-300 leading-relaxed font-poppins font-light">
+                  <p 
+                    className="mt-2 text-xs sm:text-sm text-neutral-300 leading-relaxed font-poppins font-light"
+                    style={{ transform: "translateZ(10px)" }}
+                  >
                     {portal.desc}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-white/5">
+                <div 
+                  className="mt-6 pt-4 border-t border-white/5"
+                  style={{ transform: "translateZ(10px)" }}
+                >
                   <Link
                     href={portal.href}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-secondary hover:text-white transition-colors duration-200 group-hover:translate-x-1 transition-transform"

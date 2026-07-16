@@ -77,7 +77,8 @@ export default function VisiMisiSection() {
           scrollTrigger: {
             trigger: scrollRef.current,
             start: "top 85%",
-            toggleActions: "play none none none",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
@@ -97,10 +98,80 @@ export default function VisiMisiSection() {
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 85%",
-            toggleActions: "play none none none",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
+
+      // ── GSAP Custom Hover Animations ──────────────────────────────────────
+      const missionCards = containerRef.current?.querySelectorAll(".mission-card");
+      if (missionCards) {
+        missionCards.forEach((card) => {
+          const accent = card.querySelector(".mission-accent-shape");
+          const title = card.querySelector(".mission-title");
+
+          card.addEventListener("mouseenter", () => {
+            gsap.to(card, {
+              y: -10,
+              scale: 1.025,
+              borderColor: "rgba(153, 8, 8, 0.2)",
+              boxShadow: "0 20px 30px -10px rgba(0,0,0,0.06)",
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+            if (accent) {
+              gsap.to(accent, {
+                scale: 1.6,
+                rotate: 15,
+                opacity: 0.8,
+                duration: 0.5,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+            if (title) {
+              gsap.to(title, {
+                x: 6,
+                duration: 0.35,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          });
+
+          card.addEventListener("mouseleave", () => {
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              borderColor: "rgba(229, 229, 229, 0.5)",
+              boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
+              duration: 0.6,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+            if (accent) {
+              gsap.to(accent, {
+                scale: 1,
+                rotate: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+            if (title) {
+              gsap.to(title, {
+                x: 0,
+                duration: 0.4,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          });
+        });
+      }
     },
     { scope: containerRef }
   );
@@ -167,10 +238,10 @@ export default function VisiMisiSection() {
             {missions.map((mission) => (
               <div
                 key={mission.no}
-                className="mission-card snap-start shrink-0 w-[280px] sm:w-[320px] bg-white dark:bg-brand-darkCard rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px] border border-neutral-100 dark:border-red-950/20 shadow-md relative overflow-hidden group hover:-translate-y-2 hover:shadow-xl hover:border-brand-primary/20 dark:hover:border-red-950/40 transition-all duration-300 opacity-0"
+                className="mission-card snap-start shrink-0 w-[280px] sm:w-[320px] bg-white dark:bg-brand-darkCard rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px] border border-neutral-100 dark:border-red-950/20 shadow-md relative overflow-hidden group opacity-0"
               >
                 {/* Visual Accent Corner Shape */}
-                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-brand-primary/5 dark:to-brand-secondary/5 rounded-bl-full pointer-events-none`} />
+                <div className="mission-accent-shape absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-brand-primary/5 dark:to-brand-secondary/5 rounded-bl-full pointer-events-none" />
 
                 <div className="relative z-10 flex justify-between items-start">
                   <span className="text-3xl font-extrabold text-brand-primary/20 dark:text-brand-secondary/20 font-poppins">
@@ -182,7 +253,7 @@ export default function VisiMisiSection() {
                 </div>
 
                 <div className="relative z-10 mt-12">
-                  <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white font-poppins uppercase tracking-wide group-hover:text-brand-primary dark:group-hover:text-brand-secondary transition-colors duration-200">
+                  <h3 className="mission-title text-base sm:text-lg font-bold text-neutral-900 dark:text-white font-poppins uppercase tracking-wide transition-colors duration-200">
                     {mission.title}
                   </h3>
                   <p className="mt-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-300 leading-relaxed font-poppins">

@@ -1,4 +1,5 @@
 import HeroSection from "@/components/home/HeroSection";
+import LaunchingVideoSection from "@/components/home/LaunchingVideoSection";
 import LeadersProfiles from "@/components/home/LeadersProfiles";
 import VisiMisiSection from "@/components/home/VisiMisiSection";
 import AgendaTerkini from "@/components/home/AgendaTerkini";
@@ -10,6 +11,10 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-brand-background dark:bg-brand-dark-bg transition-colors duration-300">
       <HeroSection />
       
+      <FadeInSection>
+        <LaunchingVideoSection />
+      </FadeInSection>
+
       <FadeInSection>
         <LeadersProfiles />
       </FadeInSection>

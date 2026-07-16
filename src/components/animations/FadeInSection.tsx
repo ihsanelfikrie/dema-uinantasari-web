@@ -54,7 +54,8 @@ export default function FadeInSection({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 85%",
-            toggleActions: "play none none none", // Only play once when entering viewport
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
           },
         }
       );
