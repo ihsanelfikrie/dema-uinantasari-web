@@ -53,6 +53,19 @@ export default function HeroSection() {
         0.1
       );
 
+      // ── 2.5. Stroke drawing animation for solid shapes ─────────────────────
+      tl.fromTo(
+        ".hero-stroke-solid, .hero-stroke-rect-1, .hero-stroke-circle-2, .hero-stroke-rect-2",
+        { strokeDashoffset: (i: number, el: any) => parseFloat(el.getAttribute("stroke-dasharray") || "0") },
+        {
+          strokeDashoffset: 0,
+          duration: 1.6,
+          ease: "power2.out",
+          stagger: 0.1,
+        },
+        0.15
+      );
+
       // ── 3. Badge: clip-path reveal (wipe from left) ────────────────────────
       tl.fromTo(
         ".hero-badge",
@@ -314,12 +327,67 @@ export default function HeroSection() {
         hoverHandlers.push({ el, enterHandler, leaveHandler });
       });
 
+      // ── 16. CTA Magnetic Button Hover Ala GSAP ─────────────────────────────
+      const buttons = container.querySelectorAll(".hero-cta-btn");
+      const btnHandlers: Array<{ el: Element; enter: () => void; move: (e: Event) => void; leave: () => void }> = [];
+
+      buttons.forEach((btn) => {
+        const enter = () => {
+          gsap.to(btn, {
+            scale: 1.08,
+            boxShadow: "0 10px 25px -5px rgba(153, 8, 8, 0.3)",
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        };
+
+        const move = (e: Event) => {
+          const mouseEvent = e as MouseEvent;
+          const rect = btn.getBoundingClientRect();
+          const relX = mouseEvent.clientX - (rect.left + rect.width / 2);
+          const relY = mouseEvent.clientY - (rect.top + rect.height / 2);
+
+          gsap.to(btn, {
+            x: relX * 0.35,
+            y: relY * 0.35,
+            rotation: relX * 0.05,
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        };
+
+        const leave = () => {
+          gsap.to(btn, {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotation: 0,
+            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
+            duration: 0.8,
+            ease: "elastic.out(1.1, 0.4)",
+            overwrite: "auto",
+          });
+        };
+
+        btn.addEventListener("mouseenter", enter);
+        btn.addEventListener("mousemove", move);
+        btn.addEventListener("mouseleave", leave);
+        btnHandlers.push({ el: btn, enter, move, leave });
+      });
+
       return () => {
         container.removeEventListener("mousemove", handleMouseMove);
         container.removeEventListener("mouseleave", handleMouseLeave);
         hoverHandlers.forEach(({ el, enterHandler, leaveHandler }) => {
           el.removeEventListener("mouseenter", enterHandler);
           el.removeEventListener("mouseleave", leaveHandler);
+        });
+        btnHandlers.forEach(({ el, enter, move, leave }) => {
+          el.removeEventListener("mouseenter", enter);
+          el.removeEventListener("mousemove", move);
+          el.removeEventListener("mouseleave", leave);
         });
         titleRotationLoop.kill();
       };
@@ -344,16 +412,84 @@ export default function HeroSection() {
         <div className="absolute top-1/2 right-10 -translate-y-1/2 text-brand-primary/40 font-light text-sm font-poppins">+</div>
       </div>
 
-      {/* Decorative Minimal Geometric Outlines */}
+      {/* Decorative Minimal Geometric Outlines with SVG Stroke Drawing */}
       <div className="absolute inset-0 z-[2] pointer-events-none select-none opacity-40 dark:opacity-20">
-        {/* Large Outer Thin Circle */}
-        <div className="hero-geo-shape opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-dashed border-brand-primary/40 dark:border-brand-secondary/40" data-factor="0.04" />
-        {/* Medium Inner Thin Circle */}
-        <div className="hero-geo-shape opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-brand-primary/20 dark:border-brand-secondary/20" data-factor="-0.02" />
-        {/* Subtle decorative boxes */}
-        <div className="hero-geo-shape opacity-0 absolute top-[25%] left-[15%] w-16 h-16 border border-brand-primary/20 dark:border-brand-secondary/20 rounded-lg rotate-12" data-factor="0.06" />
-        <div className="hero-geo-shape opacity-0 absolute bottom-[25%] right-[15%] w-24 h-24 border border-brand-primary/10 dark:border-brand-secondary/10 rounded-full" data-factor="-0.08" />
-        <div className="hero-geo-shape opacity-0 absolute top-[40%] right-[10%] w-10 h-10 border border-brand-primary/30 dark:border-brand-secondary/30 rounded-md rotate-45" data-factor="0.03" />
+        <svg
+          viewBox="0 0 1600 800"
+          className="absolute inset-0 w-full h-full"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          {/* Large Outer Thin Dashed Circle */}
+          <circle
+            className="hero-geo-shape text-brand-primary/30 dark:text-brand-secondary/30"
+            cx="800"
+            cy="400"
+            r="280"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="8 8"
+            data-factor="0.04"
+          />
+          {/* Medium Inner Thin Circle */}
+          <circle
+            className="hero-geo-shape hero-stroke-solid text-brand-primary/20 dark:text-brand-secondary/20"
+            cx="800"
+            cy="400"
+            r="180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="1131"
+            strokeDashoffset="1131"
+            data-factor="-0.02"
+          />
+          {/* Left decorative box */}
+          <rect
+            className="hero-geo-shape hero-stroke-rect-1 text-brand-primary/20 dark:text-brand-secondary/20"
+            x="250"
+            y="200"
+            width="60"
+            height="60"
+            rx="10"
+            transform="rotate(12 280 230)"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="240"
+            strokeDashoffset="240"
+            data-factor="0.06"
+          />
+          {/* Right decorative circle */}
+          <circle
+            className="hero-geo-shape hero-stroke-circle-2 text-brand-primary/10 dark:text-brand-secondary/10"
+            cx="1350"
+            cy="500"
+            r="40"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="252"
+            strokeDashoffset="252"
+            data-factor="-0.08"
+          />
+          {/* Upper right decorative small box */}
+          <rect
+            className="hero-geo-shape hero-stroke-rect-2 text-brand-primary/30 dark:text-brand-secondary/30"
+            x="1300"
+            y="300"
+            width="40"
+            height="40"
+            rx="6"
+            transform="rotate(45 1320 320)"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="160"
+            strokeDashoffset="160"
+            data-factor="0.03"
+          />
+        </svg>
       </div>
 
       {/* Background images */}
@@ -455,13 +591,13 @@ export default function HeroSection() {
         <div className="mt-10 flex items-center justify-center gap-4">
           <Link
             href="/profil"
-            className="hero-cta-btn opacity-0 rounded-lg bg-brand-primary px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-accent transition-colors duration-200 animate-pulse-subtle"
+            className="hero-cta-btn opacity-0 rounded-lg bg-brand-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200"
           >
             Tentang Kabinet
           </Link>
           <Link
             href="/layanan"
-            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 dark:border-red-950/50 bg-white/5 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200 shadow-sm hover:bg-neutral-100 dark:hover:bg-brand-darkCard transition-all duration-200"
+            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 dark:border-red-950/50 bg-white/5 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200 shadow-sm transition-colors duration-200"
           >
             Layanan Portal
           </Link>

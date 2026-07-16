@@ -70,6 +70,7 @@ export default function Navbar() {
           ? "bg-[#F4F2EF]/90 dark:bg-brand-dark-bg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm md:bg-transparent md:backdrop-blur-none md:border-b-0 md:shadow-none"
           : "bg-transparent border-transparent"
       }`}
+      suppressHydrationWarning
     >
       <div
         className={`mx-auto flex w-full max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 relative transition-all duration-300 md:rounded-full md:px-10 md:bg-white/95 md:dark:bg-brand-darkCard/95 md:backdrop-blur-md md:border md:border-neutral-200/50 md:dark:border-red-950/20 md:shadow-md ${
@@ -77,6 +78,7 @@ export default function Navbar() {
             ? "md:max-w-5xl md:shadow-lg md:mt-2"
             : "md:max-w-6xl md:mt-4"
         }`}
+        suppressHydrationWarning
       >
         {/* Desktop Left Nav Links */}
         <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-end pr-10 lg:pr-14">
@@ -96,7 +98,7 @@ export default function Navbar() {
           })}
 
           {/* Tentang Kami Dropdown Trigger */}
-          <div className="relative group py-2">
+          <div className="relative group py-2" suppressHydrationWarning>
             <button
               className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
                 isTentangKamiActive
@@ -109,7 +111,7 @@ export default function Navbar() {
             </button>
 
             {/* Dropdown Menu Panel */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
               {tentangKamiLinks.map((subLink) => {
                 const isSubActive = pathname === subLink.href;
                 return (
@@ -131,7 +133,7 @@ export default function Navbar() {
         </nav>
 
         {/* Center Logo */}
-        <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2">
+        <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2" suppressHydrationWarning>
           <Link href="/" className="flex flex-col items-center justify-center text-center group py-1">
             <img
               src="/images/logo/logo-light.png"
@@ -149,7 +151,7 @@ export default function Navbar() {
         {/* Desktop Right Nav Links */}
         <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-start pl-10 lg:pl-14">
           {/* Layanan Dropdown Trigger */}
-          <div className="relative group py-2">
+          <div className="relative group py-2" suppressHydrationWarning>
             <button
               className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
                 isLayananActive
@@ -162,7 +164,7 @@ export default function Navbar() {
             </button>
 
             {/* Dropdown Menu Panel */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
               {layananLinks.map((subLink) => {
                 const isSubActive = pathname === subLink.href;
                 return (
@@ -197,13 +199,13 @@ export default function Navbar() {
             );
           })}
           {/* Integrated ThemeToggle inside flow */}
-          <div className="ml-auto pl-2">
+          <div className="ml-auto pl-2" suppressHydrationWarning>
             <ThemeToggle />
           </div>
         </nav>
 
         {/* Mobile Action Area */}
-        <div className="flex md:hidden items-center gap-2 ml-auto">
+        <div className="flex md:hidden items-center gap-2 ml-auto" suppressHydrationWarning>
           <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
