@@ -34,3 +34,15 @@ CREATE TABLE IF NOT EXISTS dokumen (
     deskripsi TEXT,
     uploaded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 4. sambat: id, text_konten, warna_sticky_note, koordinat_x, koordinat_y, rotasi, status, created_at
+CREATE TABLE IF NOT EXISTS sambat (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    text_konten TEXT NOT NULL,
+    warna_sticky_note TEXT NOT NULL, -- Kode warna pastel hex (misal #FFF9A6)
+    koordinat_x INTEGER NOT NULL,    -- Koordinat X relatif (%)
+    koordinat_y INTEGER NOT NULL,    -- Koordinat Y relatif (%)
+    rotasi INTEGER NOT NULL,         -- Sudut rotasi acak (-15 s.d 15 derajat)
+    status TEXT NOT NULL DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

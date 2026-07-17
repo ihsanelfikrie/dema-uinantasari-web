@@ -29,3 +29,14 @@ export interface Dokumen {
   deskripsi?: string;
   uploaded_at: string;
 }
+
+export interface Sambat {
+  id: string;
+  text_konten: string;
+  warna_sticky_note: string;
+  koordinat_x: number;
+  koordinat_y: number;
+  rotasi: number;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+}

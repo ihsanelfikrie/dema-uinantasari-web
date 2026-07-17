@@ -10,6 +10,7 @@ import {
   FileText,
   Inbox,
   LogOut,
+  MessageSquare,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -31,6 +32,7 @@ export default function Sidebar() {
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },
     { name: "Surat Masuk", href: "/admin/permohonan", icon: Inbox },
+    { name: "Kelola Sambat", href: "/admin/sambat", icon: MessageSquare },
   ];
 
   return (
