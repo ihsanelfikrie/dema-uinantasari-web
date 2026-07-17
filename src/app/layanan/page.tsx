@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldAlert, AlertCircle, FileText } from "lucide-react";
+import { ShieldAlert, AlertCircle, FileText, MessageSquare, Sparkles } from "lucide-react";
 import FadeInSection from "@/components/animations/FadeInSection";
 
 export const metadata: Metadata = {
   title: "Portal Layanan Mahasiswa - DEMA UIN Antasari",
   description:
-    "Layanan administrasi persuratan, pengaduan advokasi kemahasiswaan, dan pelaporan pos P3 DEMA UIN Antasari.",
+    "Layanan administrasi persuratan, pengaduan advokasi kemahasiswaan, sambatan aspirasi anonim, kuis minat bakat Matchmaker, dan pelaporan pos P3 DEMA UIN Antasari.",
 };
 
 export default function LayananLandingPage() {
@@ -31,6 +31,20 @@ export default function LayananLandingPage() {
       desc: "Layanan pengajuan surat resmi, permohonan disposisi, rekomendasi kegiatan DEMA, serta pengajuan kerja sama media partner (publikasi kegiatan).",
       icon: FileText,
       tag: "Administrasi & Media",
+    },
+    {
+      href: "/layanan/sambat",
+      title: "Sambat DEMA (Dinding Aspirasi)",
+      desc: "Papan mading digital interaktif berbasis sticky notes anonim. Sampaikan keluh kesah, aspirasi, kritik, dan saran Anda secara bebas dan interaktif menggunakan GSAP Draggable.",
+      icon: MessageSquare,
+      tag: "Interaktif & Anonim",
+    },
+    {
+      href: "/layanan/matchmaker",
+      title: "UKM & UKK Matchmaker Quiz",
+      desc: "Kuis pencari bakat & minat mahasiswa baru untuk mencocokkan kepribadian Anda dengan rekomendasi organisasi UKM & UKK terbaik di UIN Antasari.",
+      icon: Sparkles,
+      tag: "Rekomendasi & Kuis",
     },
   ];
 
