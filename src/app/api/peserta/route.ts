@@ -105,7 +105,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createClient();
+    // Gunakan service role jika tersedia untuk menjamin keandalan 100% saat lonjakan traffic
+    let supabase = await createClient();
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      const { createClient: createAdminClient } = await import("@supabase/supabase-js");
+      supabase = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { persistSession: false } }
+      );
+    }
+
     let igScreenshotUrl = "";
     let tiktokScreenshotUrl = "";
 
@@ -114,14 +124,14 @@ export async function POST(request: Request) {
     // Upload IG file if exists
     if (igFile && typeof igFile !== "string" && igFile.size > 0) {
       try {
-        const ext = igFile.name.split(".").pop() || "png";
+        const ext = igFile.name.split(".").pop() || "jpg";
         const fileName = `${cleanNim}-ig-${Date.now()}.${ext}`;
         const buffer = Buffer.from(await igFile.arrayBuffer());
 
         const { data: upData, error: upErr } = await supabase.storage
           .from("bukti-follow")
           .upload(fileName, buffer, {
-            contentType: igFile.type || "image/png",
+            contentType: igFile.type || "image/jpeg",
             upsert: true,
           });
 
@@ -141,14 +151,14 @@ export async function POST(request: Request) {
     // Upload TikTok file if exists
     if (tiktokFile && typeof tiktokFile !== "string" && tiktokFile.size > 0) {
       try {
-        const ext = tiktokFile.name.split(".").pop() || "png";
+        const ext = tiktokFile.name.split(".").pop() || "jpg";
         const fileName = `${cleanNim}-tiktok-${Date.now()}.${ext}`;
         const buffer = Buffer.from(await tiktokFile.arrayBuffer());
 
         const { data: upData, error: upErr } = await supabase.storage
           .from("bukti-follow")
           .upload(fileName, buffer, {
-            contentType: tiktokFile.type || "image/png",
+            contentType: tiktokFile.type || "image/jpeg",
             upsert: true,
           });
 
@@ -165,33 +175,67 @@ export async function POST(request: Request) {
       }
     }
 
-    // Insert into event_registrasi
-    const finalTicketId = ticket_id || `AML-2026-${cleanNim.slice(-4) || "REG"}`;
-    const { data: insertedData, error: insertErr } = await supabase
+    // Mitigasi Data Ganda: Cek apakah NIM sudah terdaftar untuk event ini
+    const { data: existingUser } = await supabase
       .from("event_registrasi")
-      .insert({
-        event_slug,
-        nama: nama.trim(),
-        nim: cleanNim,
-        email: email.trim(),
-        delegasi: delegasi.trim(),
-        ticket_id: finalTicketId,
-        ig_screenshot_url: igScreenshotUrl || null,
-        tiktok_screenshot_url: tiktokScreenshotUrl || null,
-      })
-      .select()
-      .single();
+      .select("id, ticket_id, ig_screenshot_url, tiktok_screenshot_url")
+      .eq("event_slug", event_slug)
+      .eq("nim", cleanNim)
+      .maybeSingle();
 
-    if (insertErr) {
-      console.error("Insert error in /api/peserta:", insertErr);
-      return NextResponse.json({ error: insertErr.message }, { status: 500 });
+    let recordResult = null;
+    const finalTicketId = existingUser?.ticket_id || ticket_id || `AML-2026-${cleanNim.slice(-4) || "REG"}`;
+    const finalIgUrl = igScreenshotUrl || existingUser?.ig_screenshot_url || null;
+    const finalTiktokUrl = tiktokScreenshotUrl || existingUser?.tiktok_screenshot_url || null;
+
+    if (existingUser) {
+      // Jika peserta mendaftar ulang (misal revisi nama/delegasi), update record yang ada
+      const { data: updatedData, error: updateErr } = await supabase
+        .from("event_registrasi")
+        .update({
+          nama: nama.trim(),
+          email: email.trim(),
+          delegasi: delegasi.trim(),
+          ig_screenshot_url: finalIgUrl,
+          tiktok_screenshot_url: finalTiktokUrl,
+        })
+        .eq("id", existingUser.id)
+        .select()
+        .single();
+
+      if (updateErr) {
+        throw new Error(updateErr.message);
+      }
+      recordResult = updatedData;
+    } else {
+      // Insert peserta baru
+      const { data: insertedData, error: insertErr } = await supabase
+        .from("event_registrasi")
+        .insert({
+          event_slug,
+          nama: nama.trim(),
+          nim: cleanNim,
+          email: email.trim(),
+          delegasi: delegasi.trim(),
+          ticket_id: finalTicketId,
+          ig_screenshot_url: finalIgUrl,
+          tiktok_screenshot_url: finalTiktokUrl,
+        })
+        .select()
+        .single();
+
+      if (insertErr) {
+        throw new Error(insertErr.message);
+      }
+      recordResult = insertedData;
     }
 
     return NextResponse.json(
       {
         success: true,
-        data: insertedData,
+        data: recordResult,
         ticketId: finalTicketId,
+        isUpdate: !!existingUser,
       },
       { status: 201 }
     );

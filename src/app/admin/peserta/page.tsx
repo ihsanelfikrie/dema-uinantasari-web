@@ -119,6 +119,21 @@ export default function AdminPesertaPage() {
     });
   }, [pesertaList, eventFilter, searchQuery]);
 
+  // Pagination for scaling smoothly to 100+ participants
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(25);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, eventFilter, pageSize]);
+
+  const totalPages = pageSize === 0 ? 1 : Math.ceil(filteredPeserta.length / pageSize) || 1;
+  const paginatedPeserta = useMemo(() => {
+    if (pageSize === 0) return filteredPeserta;
+    const start = (currentPage - 1) * pageSize;
+    return filteredPeserta.slice(start, start + pageSize);
+  }, [filteredPeserta, currentPage, pageSize]);
+
   // Statistics
   const totalPendaftar = pesertaList.length;
   const uniqueDelegasi = useMemo(() => {
@@ -351,10 +366,10 @@ export default function AdminPesertaPage() {
                   </td>
                 </tr>
               ) : (
-                filteredPeserta.map((peserta, idx) => (
+                paginatedPeserta.map((peserta, idx) => (
                   <tr key={peserta.id} className="hover:bg-neutral-50/60 transition-colors">
-                    <td className="py-3 px-4 text-center text-neutral-400 font-medium">
-                      {idx + 1}
+                    <td className="py-3 px-4 text-center text-neutral-400 font-medium font-mono text-[11px]">
+                      {pageSize === 0 ? idx + 1 : (currentPage - 1) * pageSize + idx + 1}
                     </td>
 
                     <td className="py-3 px-4">
@@ -437,12 +452,49 @@ export default function AdminPesertaPage() {
           </table>
         </div>
 
-        {/* Table Footer */}
-        <div className="py-3 px-4 bg-neutral-50/70 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-500">
-          <span>
-            Menampilkan <strong>{filteredPeserta.length}</strong> dari <strong>{pesertaList.length}</strong> peserta
-          </span>
-          <span className="text-neutral-400">Database Supabase • event_registrasi</span>
+        {/* Table Footer with Pagination Controls */}
+        <div className="py-3 px-4 bg-neutral-50/80 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-600">
+          <div className="flex items-center gap-2">
+            <span>Tampilkan:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="px-2 py-1 bg-white border border-neutral-200 rounded-lg text-[11px] font-semibold text-neutral-800 focus:outline-none focus:ring-1 focus:ring-[#1C4BBC] cursor-pointer"
+            >
+              <option value={25}>25 per halaman</option>
+              <option value={50}>50 per halaman</option>
+              <option value={100}>100 per halaman</option>
+              <option value={0}>Tampilkan Semua ({filteredPeserta.length})</option>
+            </select>
+            <span className="text-neutral-300">|</span>
+            <span>
+              Menampilkan {filteredPeserta.length === 0 ? 0 : pageSize === 0 ? 1 : (currentPage - 1) * pageSize + 1} - {pageSize === 0 ? filteredPeserta.length : Math.min(filteredPeserta.length, currentPage * pageSize)} dari <strong>{filteredPeserta.length}</strong> peserta
+            </span>
+          </div>
+
+          {pageSize > 0 && totalPages > 1 && (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-[11px] font-semibold text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              >
+                Sebelumnya
+              </button>
+              <span className="px-2 py-1 text-[11px] font-mono font-bold text-neutral-800">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-[11px] font-semibold text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              >
+                Selanjutnya
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

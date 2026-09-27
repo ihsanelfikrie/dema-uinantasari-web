@@ -83,8 +83,61 @@ export default function AntasariMediaLabPage() {
     }
   }, []);
 
-  // Handle file uploads with preview
-  const handleFileChange = (
+  // Helper kompresi gambar di browser agar hemat kuota, cepat, dan aman dari batas serverless Vercel
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      if (!file.type.startsWith("image/") || file.size < 150 * 1024) {
+        return resolve(file);
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return resolve(file);
+
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) return resolve(file);
+              const compressedFile = new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
+            },
+            "image/jpeg",
+            0.75
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle file uploads with preview & auto-compression
+  const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     type: "ig" | "tiktok"
   ) => {
@@ -96,23 +149,36 @@ export default function AntasariMediaLabPage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setErrorMsg("Ukuran gambar maksimal adalah 5MB");
-      return;
-    }
-
     setErrorMsg("");
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (type === "ig") {
-        setIgFile(file);
-        setIgPreview(event.target?.result as string);
-      } else {
-        setTiktokFile(file);
-        setTiktokPreview(event.target?.result as string);
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const optimizedFile = await compressImage(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (type === "ig") {
+          setIgFile(optimizedFile);
+          setIgPreview(dataUrl);
+        } else {
+          setTiktokFile(optimizedFile);
+          setTiktokPreview(dataUrl);
+        }
+      };
+      reader.readAsDataURL(optimizedFile);
+    } catch (err) {
+      console.warn("Gagal mengompresi gambar, menggunakan file asli:", err);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (type === "ig") {
+          setIgFile(file);
+          setIgPreview(dataUrl);
+        } else {
+          setTiktokFile(file);
+          setTiktokPreview(dataUrl);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const removeFile = (type: "ig" | "tiktok") => {
