@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import ThemeToggle from "../ui/ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -198,18 +197,13 @@ export default function Navbar() {
               </Link>
             );
           })}
-          {/* Integrated ThemeToggle inside flow */}
-          <div className="ml-auto pl-2" suppressHydrationWarning>
-            <ThemeToggle />
-          </div>
         </nav>
 
         {/* Mobile Action Area */}
         <div className="flex md:hidden items-center gap-2 ml-auto" suppressHydrationWarning>
-          <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200/50 hover:text-neutral-900 focus:outline-none transition-colors"
+            className="p-2 rounded-lg text-neutral-600 hover:bg-neutral-200/50 hover:text-neutral-900 focus:outline-none transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
