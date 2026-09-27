@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       const cleanNim = checkNim.trim().replace(/\s+/g, "");
       const { data: existing, error: checkErr } = await supabase
         .from("event_registrasi")
-        .select("id, ticket_id, nama, nim, delegasi, created_at")
+        .select("id, ticket_id, nama, nim, delegasi, email, created_at")
         .eq("nim", cleanNim)
         .order("created_at", { ascending: false })
         .limit(1)

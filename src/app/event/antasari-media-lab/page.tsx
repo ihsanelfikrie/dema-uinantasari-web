@@ -8,7 +8,9 @@ import {
   AlertCircle, 
   ExternalLink, 
   FileCheck2,
-  X
+  X,
+  Search,
+  CheckCircle2
 } from "lucide-react";
 import TicketCard, { TicketData } from "@/components/event/TicketCard";
 import { createClient } from "@/lib/supabase/client";
@@ -46,6 +48,55 @@ export default function AntasariMediaLabPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [ticketData, setTicketData] = useState<TicketData | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+
+  // Quick Ticket Retrieval state (Mitigasi tiket hilang / lupa simpan)
+  const [showLookup, setShowLookup] = useState(false);
+  const [lookupNim, setLookupNim] = useState("");
+  const [isLookingUp, setIsLookingUp] = useState(false);
+  const [lookupError, setLookupError] = useState("");
+
+  const handleLookupTicket = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!lookupNim.trim()) return;
+    setIsLookingUp(true);
+    setLookupError("");
+    try {
+      const cleanNim = lookupNim.trim().replace(/\s+/g, "");
+      const res = await fetch(`/api/peserta?check_nim=${encodeURIComponent(cleanNim)}&t=${Date.now()}`, {
+        cache: "no-store",
+      });
+      const result = await res.json();
+      if (result && result.exists && result.data) {
+        const d = result.data;
+        const recoveredTicket: TicketData = {
+          nama: d.nama,
+          nim: d.nim,
+          email: d.email || "-",
+          delegasi: d.delegasi || "-",
+          ticketId: d.ticket_id || `AML-2026-${d.nim.slice(-4)}`,
+          registeredAt: new Date(d.created_at).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }),
+        };
+        setTicketData(recoveredTicket);
+        try {
+          localStorage.setItem("aml_ticket_data", JSON.stringify(recoveredTicket));
+        } catch (err) {
+          console.error("Local storage error:", err);
+        }
+        setShowLookup(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        setLookupError("NIM tidak ditemukan di database. Pastikan nomor NIM Anda sudah benar atau isi formulir pendaftaran baru di bawah.");
+      }
+    } catch (err) {
+      setLookupError("Gagal menghubungi server untuk pencarian tiket. Coba beberapa saat lagi.");
+    } finally {
+      setIsLookingUp(false);
+    }
+  };
 
   // Check for saved ticket in localStorage on initial mount and strictly verify against database
   useEffect(() => {
@@ -397,6 +448,57 @@ export default function AntasariMediaLabPage() {
                 <span>{errorMsg}</span>
               </div>
             )}
+
+            {/* Quick Ticket Retrieval Box (Mitigasi Tiket Hilang) */}
+            <div className="bg-white/80 dark:bg-[#160808]/80 border border-neutral-200/90 dark:border-neutral-800 rounded-xl p-4 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => setShowLookup(!showLookup)}
+                className="w-full flex items-center justify-between text-left text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:text-[#1C4BBC] dark:hover:text-[#82BE3B] transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Search className="w-4 h-4 text-[#1C4BBC]" />
+                  <span>Sudah pernah daftar tapi tiket hilang / belum tersimpan?</span>
+                </div>
+                <span className="text-[11px] font-bold text-[#1C4BBC] underline shrink-0 ml-2">
+                  {showLookup ? "Tutup" : "Cari Tiket Saya"}
+                </span>
+              </button>
+
+              {showLookup && (
+                <form onSubmit={handleLookupTicket} className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2.5">
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+                    Ketik NIM Anda untuk mengecek dan menampilkan kembali tiket resmi yang sudah terbit di sistem:
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={lookupNim}
+                      onChange={(e) => setLookupNim(e.target.value)}
+                      placeholder="Masukkan NIM Anda..."
+                      className="flex-1 px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLookingUp || !lookupNim.trim()}
+                      className="px-4 py-2 rounded-lg bg-[#1C4BBC] hover:bg-[#153a99] text-white text-xs font-semibold cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shrink-0"
+                    >
+                      {isLookingUp ? (
+                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Search className="w-3.5 h-3.5" />
+                      )}
+                      <span>Cari</span>
+                    </button>
+                  </div>
+                  {lookupError && (
+                    <div className="text-[11px] text-red-600 dark:text-red-400 mt-1">
+                      {lookupError}
+                    </div>
+                  )}
+                </form>
+              )}
+            </div>
 
             <form onSubmit={handleSubmit} className="bg-white dark:bg-[#160808] rounded-xl p-5 sm:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-sm space-y-4">
               {/* Email */}
