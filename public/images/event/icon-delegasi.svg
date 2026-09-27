@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:affinity="https://www.affinity.studio/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-3726.02315,-1712.487596)">
+        <g transform="matrix(1.314669,0,0,1.314669,-1227.649111,1364.601152)">
+            <circle cx="3798.19" cy="294.81" r="30.19" style="fill:url(#_Linear1);"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,3726.02315,1712.487596)">
+            <use xlink:href="#_Image2" x="17.505" y="15.085" width="45px" height="45px"/>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0,60.380935,-60.380935,0,3798.190468,264.619065)"><stop offset="0" style="stop-color:rgb(164,210,114);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(129,190,63);stop-opacity:1"/></linearGradient>
+        <image id="_Image2" width="45px" height="45px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABw0lEQVRYhe2XvyuFURjHP69uukLdlNQdWC6DKOXHyqQ7GAwmizvLYLKZ2Az3vzD5A4wGSsogMclgMJKSkvJYDDy+6uS93t5T51t3+fY553x7e577nAMBMrOG/b92QrIAdIWCZVIKXZQqOda+A0/O6wZ6nfcGPDuvCvT89eA8X/o8y7KBrz9gRXAHgtvKcW6c5ZFCF6WKmTUCuBHhVcXauuD6BTcYlO4XZWZmeTbooHazLNsOAaMsjxS6KKmJ+A6cO68KTDrvBbhyXg0Ydd4jcOO8IWA4PKaTuCI+CEZdTc8E1xTcvuA20tU0BkUZWjVit5k1nacmXU1wM4KrC25ccA3BKV2WaSKGqhVleaTQRUk14htw4Lx+YMl5j8Ch8+rAvPPugBPnjQHTzrsGLpw3/cl+V5knopm1BbcWZXmk0EVJNWLVzDacp950Q4JTk25McL5ZAWYFNyW4Ur0RQ5UmYmGKMrRqxFdgz3kDwHrAfreAHyYTwHLA2mPgyHmLwNwPMsdEVPJjHTNbDVybJmLpFGVo1Yi9ZtZ2Xq2ALItm1ue8BQXKhy2w2elEAZpD/VMIRVkeKXRRqgCtDu53L7zTDp9x8gEuQQmu8JugkAAAAABJRU5ErkJggg=="/>
+    </defs>
+</svg>
