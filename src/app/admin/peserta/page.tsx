@@ -52,7 +52,10 @@ export default function AdminPesertaPage() {
     setIsLoading(true);
     setErrorMsg("");
     try {
-      const res = await fetch("/api/peserta");
+      const res = await fetch(`/api/peserta?t=${Date.now()}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+      });
       if (!res.ok) {
         throw new Error("Gagal mengambil data peserta");
       }

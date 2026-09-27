@@ -1,20 +1,54 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(request: Request) {
   try {
     const supabase = await createClient();
+    const { searchParams } = new URL(request.url);
 
-    // Verify admin session
+    // Public verification endpoint: cek apakah NIM/Tiket valid di database
+    const checkNim = searchParams.get("check_nim");
+    if (checkNim) {
+      const cleanNim = checkNim.trim().replace(/\s+/g, "");
+      const { data: existing, error: checkErr } = await supabase
+        .from("event_registrasi")
+        .select("id, ticket_id, nama, nim, delegasi, created_at")
+        .eq("nim", cleanNim)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (checkErr) {
+        return NextResponse.json({ exists: false, error: checkErr.message }, {
+          status: 500,
+          headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+        });
+      }
+
+      return NextResponse.json(
+        { exists: !!existing, data: existing },
+        { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } }
+      );
+    }
+
+    // Verify admin session for viewing all participant data
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized." },
+        { 
+          status: 401,
+          headers: { "Cache-Control": "no-store, no-cache, must-revalidate" }
+        }
+      );
     }
 
-    const { searchParams } = new URL(request.url);
     const eventSlug = searchParams.get("event") || "";
 
     let query = supabase
@@ -22,19 +56,33 @@ export async function GET(request: Request) {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (eventSlug) {
+    if (eventSlug && eventSlug !== "all") {
       query = query.eq("event_slug", eventSlug);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { error: error.message },
+        { 
+          status: 500,
+          headers: { "Cache-Control": "no-store, no-cache, must-revalidate" }
+        }
+      );
     }
 
-    return NextResponse.json(data ?? []);
+    return NextResponse.json(data ?? [], {
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+    });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message },
+      { 
+        status: 500,
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate" }
+      }
+    );
   }
 }
 

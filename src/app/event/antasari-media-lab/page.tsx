@@ -47,13 +47,36 @@ export default function AntasariMediaLabPage() {
   const [ticketData, setTicketData] = useState<TicketData | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Check for saved ticket in localStorage on initial mount
+  // Check for saved ticket in localStorage on initial mount and strictly verify against database
   useEffect(() => {
     setIsMounted(true);
     try {
       const saved = localStorage.getItem("aml_ticket_data");
       if (saved) {
-        setTicketData(JSON.parse(saved));
+        const parsed: TicketData = JSON.parse(saved);
+        setTicketData(parsed);
+
+        // Verifikasi otomatis ke database: Pastikan tiket ini benar-benar ada di sistem database
+        if (parsed.nim) {
+          fetch(`/api/peserta?check_nim=${encodeURIComponent(parsed.nim)}&t=${Date.now()}`, {
+            cache: "no-store",
+          })
+            .then((r) => r.json())
+            .then((res) => {
+              if (res && res.exists === false) {
+                // Tiket ada di cache lokal HP tapi tidak terdaftar di database Supabase!
+                console.warn("Tiket lokal tidak ditemukan di database Supabase. Meminta pendaftaran ulang.");
+                localStorage.removeItem("aml_ticket_data");
+                setTicketData(null);
+                setErrorMsg(
+                  "Perhatian: Data tiket Anda sebelumnya belum tercatat di database resmi. Harap isi kembali formulir di bawah ini agar kehadiran dan hak e-sertifikat Anda terjamin sah."
+                );
+              }
+            })
+            .catch((e) => {
+              console.warn("Gagal memverifikasi tiket lokal:", e);
+            });
+        }
       }
     } catch (e) {
       console.error("Local storage error:", e);
