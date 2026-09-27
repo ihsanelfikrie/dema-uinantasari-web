@@ -543,7 +543,7 @@ export default function AdminPresensiPage() {
   // 8. Native getUserMedia + jsQR scanner — works on Safari iOS, Android Chrome, all browsers
   const stopScanner = () => {
     if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
+      clearInterval(rafRef.current);
       rafRef.current = null;
     }
     if (streamRef.current) {
@@ -599,41 +599,48 @@ export default function AdminPresensiPage() {
       await video.play();
       setIsScanning(true);
 
-      // Start jsQR decode loop using requestAnimationFrame
-      const scanLoop = async () => {
-        if (!streamRef.current || !videoRef.current || !canvasRef.current) return;
+      // Pre-load jsQR ONCE before the scan loop — removes per-frame async overhead
+      const jsQR = (await import("jsqr")).default;
 
+      // Use a canvas that stays at a stable moderate resolution for reliable jsQR detection.
+      // Full 1280x720 is often TOO high-res for jsQR to scan quickly on phone CPUs.
+      // Downsample to max 640px wide keeps it fast while preserving QR readability.
+      const SCAN_W = 640;
+      const SCAN_H = 360;
+      const canvas = canvasRef.current!;
+      canvas.width = SCAN_W;
+      canvas.height = SCAN_H;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+
+      // Synchronous scan tick — runs every ~120ms (≈8fps decode, plenty for QR)
+      // Using setInterval instead of async RAF avoids frame scheduling issues on Safari
+      const intervalId = setInterval(() => {
         const vid = videoRef.current;
-        const canvas = canvasRef.current;
+        if (!vid || !streamRef.current || vid.readyState < vid.HAVE_ENOUGH_DATA || vid.videoWidth === 0) return;
+        if (isProcessingScanRef.current) return;
 
-        if (vid.readyState === vid.HAVE_ENOUGH_DATA && vid.videoWidth > 0) {
-          canvas.width = vid.videoWidth;
-          canvas.height = vid.videoHeight;
-          const ctx = canvas.getContext("2d", { willReadFrequently: true });
-          if (ctx) {
-            ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        // Draw downsampled frame to canvas
+        ctx.drawImage(vid, 0, 0, SCAN_W, SCAN_H);
+        const imageData = ctx.getImageData(0, 0, SCAN_W, SCAN_H);
 
-            const jsQR = (await import("jsqr")).default;
-            const code = jsQR(imageData.data, imageData.width, imageData.height, {
-              inversionAttempts: "dontInvert",
-            });
+        // attemptBoth: try normal + inverted — handles dark/light backgrounds & varied lighting
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "attemptBoth",
+        });
 
-            if (code && code.data && !isProcessingScanRef.current) {
-              isProcessingScanRef.current = true;
-              verifyAttendance(code.data, "qr_scan").finally(() => {
-                setTimeout(() => {
-                  isProcessingScanRef.current = false;
-                }, 1800);
-              });
-            }
-          }
+        if (code && code.data && code.data.trim()) {
+          isProcessingScanRef.current = true;
+          verifyAttendance(code.data.trim(), "qr_scan").finally(() => {
+            setTimeout(() => {
+              isProcessingScanRef.current = false;
+            }, 2000);
+          });
         }
+      }, 120);
 
-        rafRef.current = requestAnimationFrame(scanLoop);
-      };
+      // Store intervalId in rafRef so stopScanner can clear it
+      rafRef.current = intervalId as unknown as number;
 
-      rafRef.current = requestAnimationFrame(scanLoop);
 
     } catch (err: any) {
       console.error("Gagal mengakses kamera:", err);
