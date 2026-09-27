@@ -2,7 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
-import { Download, Printer, CheckCircle, RotateCcw } from "lucide-react";
+import { 
+  Download, 
+  Printer, 
+  CheckCircle, 
+  RotateCcw, 
+  AlertTriangle, 
+  Award, 
+  QrCode,
+  ShieldAlert
+} from "lucide-react";
 
 export interface TicketData {
   nama: string;
@@ -225,16 +234,16 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Success Notification Alert */}
-      <div className="bg-[#82BE3B]/15 border border-[#82BE3B]/30 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-        <div className="w-9 h-9 rounded-full bg-[#82BE3B] text-white flex items-center justify-center shrink-0 shadow-sm">
+      <div className="bg-[#82BE3B]/15 border border-[#82BE3B]/30 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-sm">
+        <div className="w-10 h-10 rounded-full bg-[#82BE3B] text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
           <CheckCircle className="w-5 h-5" />
         </div>
         <div>
-          <h4 className="text-sm font-bold text-neutral-900">
-            Pendaftaran Berhasil & Tiket Resmi Diterbitkan!
+          <h4 className="text-sm sm:text-base font-bold text-neutral-900">
+            Pendaftaran Berhasil! Segera Simpan Tiket Resmi Anda
           </h4>
-          <p className="text-xs text-neutral-600 mt-0.5">
-            Tiket resmi Anda telah dibuat. Silakan <strong>download gambar tiket</strong> di bawah ini untuk ditunjukkan saat registrasi ulang di lokasi.
+          <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
+            Tiket resmi Antasari Media Lab Anda telah diterbitkan. <strong>Harap langsung download atau tangkap layar (screenshot)</strong> tiket di bawah ini untuk disimpan aman di galeri ponsel Anda.
           </p>
         </div>
       </div>
@@ -292,10 +301,56 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         )}
       </div>
 
-      {/* Helper Note */}
-      <p className="text-center text-xs text-neutral-500">
-        Tips: Anda dapat langsung menekan dan menahan gambar tiket di atas untuk menyimpan ke galeri ponsel Anda.
-      </p>
+      {/* Important Notice Card: Wajib Simpan Tiket untuk Registrasi & Sertifikat */}
+      <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/90 p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="text-sm sm:text-base font-extrabold text-amber-950 font-poppins tracking-wide">
+              PENTING: HARAP SIMPAN TIKET INI BAIK-BAIK!
+            </h4>
+            <p className="text-xs text-amber-800 mt-0.5">
+              Tiket ini adalah identitas resmi kepesertaan Anda dan tidak boleh hilang:
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+          <div className="bg-white/95 rounded-xl p-3.5 border border-amber-200/80 shadow-xs flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC] flex items-center justify-center shrink-0 mt-0.5">
+              <QrCode className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-neutral-900 block">
+                1. Registrasi Ulang / Check-In
+              </span>
+              <p className="text-[11px] text-neutral-600 mt-1 leading-relaxed">
+                QR Code pada tiket wajib ditunjukkan dan dipindai oleh panitia di meja registrasi pada hari-H acara.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/95 rounded-xl p-3.5 border border-amber-200/80 shadow-xs flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#82BE3B]/20 text-[#527d21] flex items-center justify-center shrink-0 mt-0.5">
+              <Award className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-neutral-900 block">
+                2. Syarat Klaim E-Sertifikat
+              </span>
+              <p className="text-[11px] text-neutral-600 mt-1 leading-relaxed">
+                Nomor ID Tiket dan NIM merupakan syarat mutlak untuk verifikasi penerbitan sertifikat resmi kegiatan.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-3 bg-amber-100/70 rounded-xl border border-amber-200 text-[11px] text-amber-900 flex items-center justify-center text-center font-medium">
+          💡 Tips: Silakan klik tombol &quot;Download Tiket (PNG)&quot; di atas atau screenshot layar ponsel Anda sekarang agar tersimpan aman di galeri.
+        </div>
+      </div>
     </div>
   );
 }
