@@ -182,8 +182,33 @@ export default function AntasariMediaLabPage() {
     setIsSubmitting(true);
 
     try {
-      // Simulate submission processing
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const cleanNim = nim.trim().replace(/\s+/g, "");
+      const generatedTicketId = `AML-2026-${cleanNim.slice(-4) || "REG"}`;
+
+      // Kirim via server API /api/peserta agar pasti tersimpan ke database & storage Supabase
+      const formData = new FormData();
+      formData.append("nama", nama.trim());
+      formData.append("nim", cleanNim);
+      formData.append("email", email.trim());
+      formData.append("delegasi", finalDelegasi);
+      formData.append("ticket_id", generatedTicketId);
+      formData.append("event_slug", "antasari-media-lab");
+      if (igFile) {
+        formData.append("ig_file", igFile);
+      }
+      if (tiktokFile) {
+        formData.append("tiktok_file", tiktokFile);
+      }
+
+      const res = await fetch("/api/peserta", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error || "Gagal menyimpan pendaftaran ke server.");
+      }
 
       const now = new Date();
       const dateStr = now.toLocaleDateString("id-ID", {
@@ -194,13 +219,12 @@ export default function AntasariMediaLabPage() {
         minute: "2-digit",
       });
 
-      const cleanNim = nim.trim().replace(/\s+/g, "");
       const newTicket: TicketData = {
         nama: nama.trim(),
         nim: cleanNim,
         email: email.trim(),
         delegasi: finalDelegasi,
-        ticketId: `AML-2026-${cleanNim.slice(-4) || "REG"}`,
+        ticketId: result.ticketId || generatedTicketId,
         registeredAt: dateStr,
       };
 
@@ -211,64 +235,11 @@ export default function AntasariMediaLabPage() {
         console.warn("Could not save to localStorage:", err);
       }
 
-      // Record to Supabase database & storage
-      try {
-        const supabase = createClient();
-        let igScreenshotUrl = "";
-        let tiktokScreenshotUrl = "";
-
-        // Upload screenshot IG ke bucket bukti-follow
-        if (igFile) {
-          const fileExt = igFile.name.split(".").pop() || "jpg";
-          const fileName = `${cleanNim}-ig-${Date.now()}.${fileExt}`;
-          const { data: uploadData } = await supabase.storage
-            .from("bukti-follow")
-            .upload(fileName, igFile, { upsert: true });
-
-          if (uploadData?.path) {
-            const { data: publicUrlData } = supabase.storage
-              .from("bukti-follow")
-              .getPublicUrl(uploadData.path);
-            igScreenshotUrl = publicUrlData.publicUrl;
-          }
-        }
-
-        // Upload screenshot TikTok ke bucket bukti-follow
-        if (tiktokFile) {
-          const fileExt = tiktokFile.name.split(".").pop() || "jpg";
-          const fileName = `${cleanNim}-tiktok-${Date.now()}.${fileExt}`;
-          const { data: uploadData } = await supabase.storage
-            .from("bukti-follow")
-            .upload(fileName, tiktokFile, { upsert: true });
-
-          if (uploadData?.path) {
-            const { data: publicUrlData } = supabase.storage
-              .from("bukti-follow")
-              .getPublicUrl(uploadData.path);
-            tiktokScreenshotUrl = publicUrlData.publicUrl;
-          }
-        }
-
-        // Simpan pendaftar ke tabel event_registrasi
-        await supabase.from("event_registrasi").insert({
-          event_slug: "antasari-media-lab",
-          nama: newTicket.nama,
-          nim: newTicket.nim,
-          email: newTicket.email,
-          delegasi: newTicket.delegasi,
-          ticket_id: newTicket.ticketId,
-          ig_screenshot_url: igScreenshotUrl || null,
-          tiktok_screenshot_url: tiktokScreenshotUrl || null,
-        });
-      } catch (dbErr) {
-        console.warn("Catatan database Supabase:", dbErr);
-      }
-
       setTicketData(newTicket);
       window.scrollTo({ top: 100, behavior: "smooth" });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Submission failed:", err);
-      setErrorMsg("Terjadi kendala saat memproses pendaftaran. Silakan coba lagi.");
+      setErrorMsg(err.message || "Terjadi kendala saat memproses pendaftaran. Silakan coba lagi.");
     } finally {
       setIsSubmitting(false);
     }
