@@ -9,12 +9,14 @@ import {
   UploadCloud,
   Inbox,
   MessageSquare,
+  Users,
 } from "lucide-react";
 
 export const revalidate = 0; // Always load latest statistics
 
 export default async function AdminDashboardPage() {
   const stats = {
+    pesertaCount: 0,
     beritaPublished: 0,
     beritaDraft: 0,
     kegiatanCount: 0,
@@ -25,6 +27,12 @@ export default async function AdminDashboardPage() {
 
   try {
     const supabase = await createClient();
+
+    // Query participants count
+    const { count: pesertaCount } = await supabase
+      .from("event_registrasi")
+      .select("*", { count: "exact", head: true });
+    stats.pesertaCount = pesertaCount || 0;
 
     // Query news count
     const { data: beritaData } = await supabase.from("berita").select("status");
@@ -68,6 +76,13 @@ export default async function AdminDashboardPage() {
 
   const statCards = [
     {
+      title: "Peserta Event",
+      value: stats.pesertaCount,
+      subtext: "Mahasiswa terdaftar event",
+      icon: Users,
+      color: "bg-emerald-50 text-emerald-600",
+    },
+    {
       title: "Informasi & Kajian",
       value: stats.beritaPublished + stats.beritaDraft,
       subtext: `${stats.beritaPublished} diterbitkan · ${stats.beritaDraft} draf`,
@@ -79,7 +94,7 @@ export default async function AdminDashboardPage() {
       value: stats.kegiatanCount,
       subtext: "Total program kerja terdaftar",
       icon: Calendar,
-      color: "bg-emerald-50 text-emerald-600",
+      color: "bg-teal-50 text-teal-600",
     },
     {
       title: "Dokumen Resmi",
@@ -156,6 +171,17 @@ export default async function AdminDashboardPage() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Link
+            href="/admin/peserta"
+            className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 hover:border-brand-primary/20 hover:bg-neutral-50 transition-all text-xs font-semibold text-neutral-750 font-poppins group"
+          >
+            <div className="flex items-center gap-3">
+              <Users className="h-5 w-5 text-emerald-600 stroke-[1.5]" />
+              Data Peserta Event
+            </div>
+            <ArrowRight className="h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+          </Link>
+
           <Link
             href="/admin/berita/tambah"
             className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 hover:border-brand-primary/20 hover:bg-neutral-50 transition-all text-xs font-semibold text-neutral-750 font-poppins group"
