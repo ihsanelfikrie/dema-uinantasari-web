@@ -10,7 +10,8 @@ import {
   FileCheck2,
   X,
   Search,
-  CheckCircle2
+  CheckCircle2,
+  MessageCircle
 } from "lucide-react";
 import TicketCard, { TicketData } from "@/components/event/TicketCard";
 import { createClient } from "@/lib/supabase/client";
@@ -696,6 +697,20 @@ export default function AntasariMediaLabPage() {
                     <span>Daftar & Terbitkan Tiket</span>
                   )}
                 </button>
+              </div>
+
+              {/* Narhub Contact Assistance Note */}
+              <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800/80 text-center text-xs text-neutral-500 flex flex-wrap items-center justify-center gap-1.5">
+                <span>Ada kendala atau pertanyaan seputar registrasi?</span>
+                <a
+                  href="https://wa.me/6282162138655?text=Halo%20Kak%20Wafi%20(Panitia%20Antasari%20Media%20Lab),%20saya%20ingin%20bertanya%20seputar%20pendaftaran"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Narhub: +62 821 6213 8655 (Wafi)</span>
+                </a>
               </div>
             </form>
           </div>

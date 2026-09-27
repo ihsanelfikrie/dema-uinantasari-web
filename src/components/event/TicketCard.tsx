@@ -447,9 +447,11 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
     setRetryCount((prev) => prev + 1);
   };
 
-  // Pre-filled WhatsApp Hotline Message
-  const whatsappUrl = `https://wa.me/6281251390499?text=${encodeURIComponent(
-    `Halo Panitia Antasari Media Lab DEMA UIN Antasari,\n\nSaya ingin mengonfirmasi pendaftaran saya:\n- Nama: ${data.nama}\n- NIM: ${data.nim}\n- Delegasi: ${data.delegasi}\n- ID Tiket: ${data.ticketId}\n\nMohon bantu verifikasi tiket saya. Terima kasih!`
+  // Pre-filled WhatsApp Narahubung Hotline (Wafi)
+  const narhubPhone = "6282162138655";
+  const narhubDisplay = "+62 821 6213 8655 (Wafi)";
+  const whatsappUrl = `https://wa.me/${narhubPhone}?text=${encodeURIComponent(
+    `Halo Kak Wafi (Narahubung Antasari Media Lab DEMA UIN Antasari),\n\nSaya ingin berkonsultasi mengenai tiket / pendaftaran saya:\n- Nama: ${data.nama}\n- NIM: ${data.nim}\n- Delegasi: ${data.delegasi}\n- ID Tiket: ${data.ticketId}\n\nKendala/pertanyaan saya:\n...`
   )}`;
 
   return (
@@ -597,7 +599,7 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
               className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-xs sm:text-sm text-emerald-700 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 transition-colors shadow-xs"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Bantuan Panitia (WA)</span>
+              <span>Bantuan Narhub Wafi (WA)</span>
             </a>
           </div>
         </div>
@@ -750,11 +752,50 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
             rel="noopener noreferrer"
             className="text-[11px] font-bold text-emerald-800 hover:underline inline-flex items-center gap-1 shrink-0"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>Hubungi Panitia AML</span>
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>Chat Narhub: +62 821 6213 8655 (Wafi)</span>
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>
+      </div>
+
+      {/* Dedicated Narahubung Resmi Card */}
+      <div className="rounded-2xl border-2 border-emerald-400/80 bg-gradient-to-r from-emerald-50 via-teal-50/40 to-white dark:from-emerald-950/30 dark:via-neutral-900 dark:to-neutral-900 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/20 mt-0.5">
+            <MessageCircle className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h4 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white">
+                Pusat Bantuan & Narahubung Tiket
+              </h4>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-300/60">
+                Official Narhub
+              </span>
+            </div>
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
+              Jika mengalami kendala mengunduh tiket, kesalahan penulisan data Nama/NIM/Delegasi, atau ada pertanyaan seputar acara, silakan hubungi Narahubung Panitia:
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+              <span className="text-neutral-500 font-medium">Narahubung (Narhub):</span>
+              <span className="font-extrabold text-emerald-700 dark:text-emerald-400 font-mono text-sm sm:text-base">
+                +62 821 6213 8655 (Wafi)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 active:scale-95 transition-all shrink-0 cursor-pointer"
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>Chat WhatsApp (Wafi)</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </a>
       </div>
     </div>
   );
