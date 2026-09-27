@@ -60,14 +60,14 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // 1. Generate clean QR code from NIM
+        // 1. Generate clean transparent QR code from NIM
         const cleanNim = data.nim.trim();
         const qrDataUrl = await QRCode.toDataURL(cleanNim, {
           width: 320,
-          margin: 1,
+          margin: 0,
           color: {
-            dark: "#1C4BBC",
-            light: "#FFFFFF",
+            dark: "#FFFFFF",
+            light: "#00000000", // 100% transparent background
           },
           errorCorrectionLevel: "M",
         });
@@ -148,26 +148,34 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         ctx.fillStyle = "#1f2937";
         ctx.fillText(data.ticketId, col2IconX, 462);
 
-        // 6. Draw White QR Code Card on Right Side (Center at x = 976)
-        const qrCardWidth = 280;
-        const qrCardHeight = 280;
-        const qrCardX = 976 - qrCardWidth / 2; // 836
-        const qrCardY = 160;
+        // 6. Draw Gradient Lime Green QR Code directly on Blue Card (Centered at x = 976, no white background)
+        const qrSize = 295;
+        const qrX = 976 - qrSize / 2; // 828.5
+        const qrY = 160;
 
-        ctx.fillStyle = "#FFFFFF";
-        ctx.beginPath();
-        if (typeof ctx.roundRect === "function") {
-          ctx.roundRect(qrCardX, qrCardY, qrCardWidth, qrCardHeight, 22);
-        } else {
-          ctx.rect(qrCardX, qrCardY, qrCardWidth, qrCardHeight);
+        const gradCanvas = document.createElement("canvas");
+        gradCanvas.width = qrSize;
+        gradCanvas.height = qrSize;
+        const gradCtx = gradCanvas.getContext("2d");
+        if (gradCtx) {
+          // Draw white QR modules on transparent background
+          gradCtx.drawImage(qrImg, 0, 0, qrSize, qrSize);
+
+          // Colorize only the QR modules
+          gradCtx.globalCompositeOperation = "source-in";
+
+          // Vertical gradient from light mint green at top to rich lime green at bottom
+          const gradient = gradCtx.createLinearGradient(0, 0, 0, qrSize);
+          gradient.addColorStop(0, "#E8FCD0");
+          gradient.addColorStop(0.35, "#BCEE76");
+          gradient.addColorStop(0.7, "#98DE45");
+          gradient.addColorStop(1, "#82BE3B");
+          gradCtx.fillStyle = gradient;
+          gradCtx.fillRect(0, 0, qrSize, qrSize);
+
+          // Draw directly on the blue card of the template
+          ctx.drawImage(gradCanvas, qrX, qrY, qrSize, qrSize);
         }
-        ctx.fill();
-
-        // Draw QR Code inside white card with padding
-        const qrSize = 252;
-        const qrX = qrCardX + (qrCardWidth - qrSize) / 2;
-        const qrY = qrCardY + (qrCardHeight - qrSize) / 2;
-        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
         // 7. Draw NIM text in green pill (Centered at x = 976, y = 525)
         ctx.font = "bold 25px 'Poppins', sans-serif";
