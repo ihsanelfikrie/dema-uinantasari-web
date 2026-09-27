@@ -146,7 +146,7 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
       // Bottom Note
       ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
       ctx.font = "15px sans-serif";
-      ctx.fillText("⚠️ Harap tunjukkan QR Code pada panitia registrasi di lokasi kegiatan untuk verifikasi kehadiran.", 60, 560);
+      ctx.fillText("Catatan: Harap tunjukkan QR Code pada panitia registrasi di lokasi kegiatan untuk verifikasi kehadiran.", 60, 560);
 
       // 6. Right Stub (QR Code Area)
       ctx.fillStyle = "#82BE3B";
@@ -397,7 +397,7 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
 
       {/* Mobile Friendly Helper Note */}
       <div className="text-center text-xs text-neutral-500 dark:text-neutral-400">
-        💡 <strong>Tips:</strong> Anda dapat langsung menyimpan gambar tiket di galeri HP Anda atau mengambil tangkapan layar (screenshot) sebagai cadangan.
+        Catatan: Anda dapat langsung menyimpan gambar tiket di galeri perangkat Anda atau mengambil tangkapan layar (screenshot) sebagai cadangan.
       </div>
     </div>
   );

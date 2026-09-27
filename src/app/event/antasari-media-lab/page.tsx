@@ -397,7 +397,7 @@ export default function AntasariMediaLabPage() {
                     <strong className="text-neutral-800 dark:text-neutral-200">Fasilitator:</strong> Ihsan El Fikrie (Graphic Designer), Kysahh (Fotografer & Creator), Dinur Pradipta (Social Media).
                   </div>
                   <div className="text-[11px] text-[#82BE3B] font-semibold">
-                    📞 Narahubung / Info: +62 821 6213 8655 (Wafi)
+                    Narahubung: +62 821 6213 8655 (Wafi)
                   </div>
                 </div>
               </div>
