@@ -42,7 +42,6 @@ export default function AntasariMediaLabPage() {
   const [nama, setNama] = useState("");
   const [nim, setNim] = useState("");
   const [delegasi, setDelegasi] = useState("");
-  const [customDelegasi, setCustomDelegasi] = useState("");
   
   // File Upload State
   const [igFile, setIgFile] = useState<File | null>(null);
@@ -171,9 +170,9 @@ export default function AntasariMediaLabPage() {
       return;
     }
 
-    const finalDelegasi = delegasi === "Lainnya" ? customDelegasi.trim() : delegasi.trim();
+    const finalDelegasi = delegasi.trim();
     if (!finalDelegasi) {
-      setErrorMsg("Harap pilih atau sebutkan Asal Delegasi / Lembaga Anda.");
+      setErrorMsg("Harap isi Asal Delegasi Anda.");
       return;
     }
 
@@ -290,7 +289,6 @@ export default function AntasariMediaLabPage() {
       setNama("");
       setNim("");
       setDelegasi("");
-      setCustomDelegasi("");
       setIgFile(null);
       setIgPreview("");
       setTiktokFile(null);
@@ -298,20 +296,6 @@ export default function AntasariMediaLabPage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-
-  const delegationOptions = [
-    "Fakultas Tarbiyah dan Keguruan (FTK)",
-    "Fakultas Syariah (FS)",
-    "Fakultas Ushuluddin dan Humaniora (FUH)",
-    "Fakultas Ekonomi dan Bisnis Islam (FEBI)",
-    "Fakultas Dakwah dan Ilmu Komunikasi (FDIK)",
-    "Pascasarjana UIN Antasari",
-    "Unit Kegiatan Mahasiswa (UKM/UKK)",
-    "Himpunan Mahasiswa Jurusan (HMJ/HMP)",
-    "Pengurus Lembaga / DEMA / SEMA",
-    "Umum / Mahasiswa Aktif UIN Antasari",
-    "Lainnya",
-  ];
 
   return (
     <main suppressHydrationWarning className="min-h-screen bg-[#F4F2EF] dark:bg-[#0c0505] text-neutral-900 dark:text-neutral-100 transition-colors pb-24 pt-20 sm:pt-24">
@@ -559,32 +543,16 @@ export default function AntasariMediaLabPage() {
               {/* Asal Delegasi */}
               <div className="space-y-1.5">
                 <label className="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                  Asal Delegasi / Lembaga <span className="text-[#1C4BBC]">*</span>
+                  Asal Delegasi <span className="text-[#1C4BBC]">*</span>
                 </label>
-                <select
+                <input
+                  type="text"
                   required
                   value={delegasi}
                   onChange={(e) => setDelegasi(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all cursor-pointer"
-                >
-                  <option value="" disabled>-- Pilih Asal Delegasi / Lembaga --</option>
-                  {delegationOptions.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
-
-                {delegasi === "Lainnya" && (
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      required
-                      value={customDelegasi}
-                      onChange={(e) => setCustomDelegasi(e.target.value)}
-                      placeholder="Sebutkan nama organisasi / komunitas / jurusan Anda"
-                      className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
-                    />
-                  </div>
-                )}
+                  placeholder="contoh: HMJ PAI FTK / LPM Sukma / Umum"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
+                />
               </div>
 
               {/* ── BUKTI SCREENSHOT UPLOADS ── */}
