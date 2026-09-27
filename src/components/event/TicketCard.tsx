@@ -27,23 +27,16 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
   useEffect(() => {
     async function makeQR() {
       try {
-        // Encode NIM and basic verification payload
-        const qrPayload = JSON.stringify({
-          event: "ANTASARI_MEDIA_LAB_2026",
-          ticketId: data.ticketId,
-          nim: data.nim,
-          nama: data.nama,
-          delegasi: data.delegasi,
-        });
-
-        const url = await QRCode.toDataURL(qrPayload, {
+        // Encode strictly NIM only for a clean, minimal QR Code
+        const cleanNim = data.nim.trim();
+        const url = await QRCode.toDataURL(cleanNim, {
           width: 320,
           margin: 1,
           color: {
             dark: "#1C4BBC",
             light: "#FFFFFF",
           },
-          errorCorrectionLevel: "H",
+          errorCorrectionLevel: "M",
         });
         setQrDataUrl(url);
       } catch (err) {
