@@ -58,10 +58,10 @@ export default function EventCard() {
                 Ihsan El Fikrie <span className="text-neutral-400 font-normal">/ Graphic Designer</span>
               </span>
               <span className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-medium">
-                Kysahh <span className="text-neutral-400 font-normal">/ Fotografer & Creator</span>
+                Kysahh <span className="text-neutral-400 font-normal">/ Fotografer & Content Creator</span>
               </span>
               <span className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-medium">
-                Dinur Pradipta <span className="text-neutral-400 font-normal">/ Social Media Specialist</span>
+                Dinur M. Pradipta <span className="text-neutral-400 font-normal">/ Social Media Specialist</span>
               </span>
             </div>
           </div>
