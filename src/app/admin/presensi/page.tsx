@@ -22,7 +22,8 @@ import {
   Copy, 
   Check, 
   FlipHorizontal,
-  ChevronDown
+  ChevronDown,
+  ArrowRight
 } from "lucide-react";
 
 interface Peserta {
@@ -89,6 +90,8 @@ export default function AdminPresensiPage() {
   const [filterStatus, setFilterStatus] = useState<"all" | "hadir" | "belum">("all");
   const [tableMissing, setTableMissing] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"scanner" | "rekap">("scanner");
+  const [mobileLimit, setMobileLimit] = useState(20);
 
   // Refs for native getUserMedia scanner (Safari iOS compatible)
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -972,9 +975,39 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
+          2.1 MOBILE SEGMENTED CONTROL (< lg)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="lg:hidden grid grid-cols-2 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs">
+        <button
+          type="button"
+          onClick={() => setMobileTab("scanner")}
+          className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            mobileTab === "scanner"
+              ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-xs"
+              : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+          }`}
+        >
+          <Camera className="w-4 h-4 text-emerald-600" />
+          <span>Scanner QR ({isScanning ? "Aktif" : "Siap"})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("rekap")}
+          className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            mobileTab === "rekap"
+              ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-xs"
+              : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+          }`}
+        >
+          <Users className="w-4 h-4 text-[#1C4BBC]" />
+          <span>Daftar Peserta ({stats.hadir}/{stats.total})</span>
+        </button>
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
           3. SCANNER & STATUS GRID (Optimized for Mobile Screens)
       ───────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+      <div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 ${mobileTab === "rekap" ? "hidden lg:grid" : ""}`}>
         {/* Left Column: Camera Viewport & Controls (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-white dark:bg-[#160808] p-4 sm:p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3.5">
@@ -1142,11 +1175,42 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                 </div>
               </form>
             </div>
+
+            {/* Mobile Quick Counters under Camera & Manual Input */}
+            <div className="lg:hidden pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2.5">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-neutral-50 dark:bg-neutral-900 p-2 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-center">
+                  <span className="text-[9px] text-neutral-500 uppercase tracking-wider block">Total</span>
+                  <strong className="text-sm font-bold font-mono text-neutral-900 dark:text-white">{stats.total}</strong>
+                </div>
+                <div className="bg-emerald-50 dark:bg-emerald-950/30 p-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800 text-center">
+                  <span className="text-[9px] text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider block">Hadir</span>
+                  <strong className="text-sm font-bold font-mono text-emerald-700 dark:text-emerald-300">{stats.hadir}</strong>
+                </div>
+                <div className="bg-neutral-50 dark:bg-neutral-900 p-2 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-center">
+                  <span className="text-[9px] text-neutral-500 uppercase tracking-wider block">Belum</span>
+                  <strong className="text-sm font-bold font-mono text-neutral-600 dark:text-neutral-400">{stats.belum}</strong>
+                </div>
+              </div>
+
+              {/* Shortcut button to switch to participant list without scrolling */}
+              <button
+                type="button"
+                onClick={() => setMobileTab("rekap")}
+                className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs font-bold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 flex items-center justify-between shadow-2xs cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5 text-[#1C4BBC]" />
+                  <span>Lihat Daftar Peserta ({stats.hadir} Hadir)</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Live Result Banner & Summary Counters (7 cols) */}
-        <div className="lg:col-span-7 space-y-3.5">
+        {/* Right Column: Live Result Banner & Summary Counters (7 cols) - Desktop Only, mobile has overlay */}
+        <div className="hidden lg:block lg:col-span-7 space-y-3.5">
           {/* Real-Time Scan Result Alert Banner */}
           {lastScanResult ? (
             <div
@@ -1254,7 +1318,25 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
       {/* ─────────────────────────────────────────────────────────────
           4. REKAP KEHADIRAN (Desktop Table + Mobile Touch Card List)
       ───────────────────────────────────────────────────────────── */}
-      <div className="bg-white dark:bg-[#160808] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4 p-4 sm:p-6">
+      <div className={`bg-white dark:bg-[#160808] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4 p-4 sm:p-6 ${mobileTab === "scanner" ? "hidden lg:block" : "block"}`}>
+        {/* Mobile Header in Rekap Tab: Quick Back to Scanner */}
+        <div className="lg:hidden flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+          <button
+            type="button"
+            onClick={() => setMobileTab("scanner")}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs cursor-pointer"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>← Buka Kamera Scanner</span>
+          </button>
+          <div className="text-right">
+            <span className="text-[10px] text-neutral-400 block font-medium">Kehadiran</span>
+            <span className="text-xs font-bold font-mono text-emerald-600">
+              {stats.hadir} / {stats.total} ({stats.persentase}%)
+            </span>
+          </div>
+        </div>
+
         {/* Controls: Filter Tabs, Search & Export */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Status Tabs */}
@@ -1338,71 +1420,86 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               Tidak ada data yang cocok dengan filter.
             </div>
           ) : (
-            filteredPeserta.map((peserta) => {
-              const att = attendanceMap.get(peserta.nim.trim());
-              const isPresent = !!att;
+            <>
+              {filteredPeserta.slice(0, mobileLimit).map((peserta) => {
+                const att = attendanceMap.get(peserta.nim.trim());
+                const isPresent = !!att;
 
-              return (
-                <div
-                  key={peserta.id}
-                  className={`p-3.5 rounded-xl border transition-all ${
-                    isPresent
-                      ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700/80 shadow-2xs"
-                      : "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <strong className="text-xs font-bold text-neutral-900 dark:text-white block">
-                        {peserta.nama}
-                      </strong>
-                      <span className="font-mono text-[11px] text-neutral-500 block">
-                        NIM: {peserta.nim} · {peserta.delegasi}
-                      </span>
+                return (
+                  <div
+                    key={peserta.id}
+                    className={`p-3.5 rounded-xl border transition-all ${
+                      isPresent
+                        ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700/80 shadow-2xs"
+                        : "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <strong className="text-xs font-bold text-neutral-900 dark:text-white block">
+                          {peserta.nama}
+                        </strong>
+                        <span className="font-mono text-[11px] text-neutral-500 block">
+                          NIM: {peserta.nim} · {peserta.delegasi}
+                        </span>
+                      </div>
+
+                      {/* Status Badge */}
+                      {isPresent ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shrink-0 shadow-2xs">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>HADIR</span>
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 shrink-0">
+                          Belum Hadir
+                        </span>
+                      )}
                     </div>
 
-                    {/* Status Badge */}
-                    {isPresent ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shrink-0 shadow-2xs">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>HADIR</span>
+                    <div className="mt-2.5 pt-2 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-[11px]">
+                      <span className="font-mono text-[10px] text-neutral-400">
+                        {isPresent && att?.waktu_absen
+                          ? `Pukul ${new Date(att.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} WITA`
+                          : peserta.ticket_id}
                       </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 shrink-0">
-                        Belum Hadir
-                      </span>
-                    )}
-                  </div>
 
-                  <div className="mt-2.5 pt-2 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-[11px]">
-                    <span className="font-mono text-[10px] text-neutral-400">
-                      {isPresent && att?.waktu_absen
-                        ? `Pukul ${new Date(att.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} WITA`
-                        : peserta.ticket_id}
-                    </span>
-
-                    {isPresent ? (
-                      <button
-                        type="button"
-                        onClick={() => handleCancelAttendance(peserta.nim, peserta.nama)}
-                        className="text-red-600 font-semibold hover:underline text-[11px]"
-                      >
-                        Batal Hadir
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => verifyAttendance(peserta.nim, "manual")}
-                        disabled={!activeSesiId}
-                        className="px-3 py-1 rounded-lg font-bold text-white bg-emerald-600 hover:bg-emerald-700 text-[11px] shadow-2xs disabled:opacity-50"
-                      >
-                        + Hadirkan
-                      </button>
-                    )}
+                      {isPresent ? (
+                        <button
+                          type="button"
+                          onClick={() => handleCancelAttendance(peserta.nim, peserta.nama)}
+                          className="text-red-600 font-semibold hover:underline text-[11px]"
+                        >
+                          Batal Hadir
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => verifyAttendance(peserta.nim, "manual")}
+                          disabled={!activeSesiId}
+                          className="px-3 py-1 rounded-lg font-bold text-white bg-emerald-600 hover:bg-emerald-700 text-[11px] shadow-2xs disabled:opacity-50"
+                        >
+                          + Hadirkan
+                        </button>
+                      )}
+                    </div>
                   </div>
+                );
+              })}
+
+              {/* Show more button to prevent endless scrolling on mobile */}
+              {filteredPeserta.length > mobileLimit && (
+                <div className="pt-2 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setMobileLimit((prev) => prev + 25)}
+                    className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-bold text-[#1C4BBC] hover:bg-neutral-100 transition-colors cursor-pointer"
+                  >
+                    Tampilkan 25 Peserta Lagi ({filteredPeserta.length - mobileLimit} tersisa)
+                  </button>
                 </div>
-              );
-            })
+              )}
+            </>
           )}
         </div>
 

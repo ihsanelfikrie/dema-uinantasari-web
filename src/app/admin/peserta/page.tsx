@@ -195,35 +195,35 @@ export default function AdminPesertaPage() {
   };
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 max-w-7xl mx-auto" suppressHydrationWarning>
+    <div className="p-1 sm:p-6 lg:p-8 space-y-3.5 sm:space-y-6 max-w-7xl mx-auto" suppressHydrationWarning>
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span className="text-xs font-bold text-brand-primary uppercase tracking-wider block mb-1">
+          <span className="text-[10px] font-bold text-brand-primary uppercase tracking-wider block">
             Manajemen Pendaftaran
           </span>
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 font-poppins">
+          <h1 className="text-xl sm:text-3xl font-bold text-neutral-900 font-poppins mt-0.5">
             Data Peserta Event
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-0.5">
             Daftar seluruh mahasiswa dan delegasi ormawa yang telah mendaftar melalui form publik.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
           <Link
             href="/admin/presensi"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-sm transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-xs whitespace-nowrap shrink-0"
           >
             <QrCode className="w-3.5 h-3.5" />
-            <span>Scan Presensi QR</span>
+            <span>Scan QR</span>
           </Link>
 
           <button
             type="button"
             onClick={fetchPeserta}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:bg-neutral-50 shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:bg-neutral-50 shadow-2xs whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
             <span>Segarkan</span>
@@ -233,17 +233,17 @@ export default function AdminPesertaPage() {
             type="button"
             onClick={handleExportCSV}
             disabled={filteredPeserta.length === 0}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#82BE3B] hover:bg-[#72a833] text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#82BE3B] hover:bg-[#72a833] text-xs font-semibold text-white shadow-2xs whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export CSV (Excel)</span>
+            <span>Export Excel</span>
           </button>
         </div>
       </div>
 
       {/* Success Notification */}
       {successMsg && (
-        <div className="bg-[#82BE3B]/15 border border-[#82BE3B]/30 rounded-xl p-3.5 flex items-center gap-2.5 text-xs text-[#527d21]">
+        <div className="bg-[#82BE3B]/15 border border-[#82BE3B]/30 rounded-xl p-3 flex items-center gap-2 text-xs text-[#527d21]">
           <CheckCircle className="w-4 h-4 shrink-0 text-[#82BE3B]" />
           <span>{successMsg}</span>
         </div>
@@ -251,62 +251,62 @@ export default function AdminPesertaPage() {
 
       {/* Error Notification */}
       {errorMsg && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-3.5 flex items-center gap-2.5 text-xs text-red-600">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2 text-xs text-red-600">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-sm">
+      {/* Stat Cards - Compact row on Mobile */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-neutral-100 shadow-2xs sm:shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-              Total Pendaftar
+            <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 uppercase tracking-wider truncate">
+              Total
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#1C4BBC]/10 text-[#1C4BBC] flex items-center justify-center">
-              <Users className="w-4 h-4" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#1C4BBC]/10 text-[#1C4BBC] flex items-center justify-center shrink-0">
+              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold text-neutral-900 mt-2 font-poppins">
+          <p className="text-lg sm:text-3xl font-extrabold text-neutral-900 mt-1 sm:mt-2 font-poppins">
             {totalPendaftar}
           </p>
-          <span className="text-[11px] text-neutral-400 mt-1 block">
-            Peserta masuk ke database
+          <span className="text-[9px] sm:text-[11px] text-neutral-400 mt-0.5 sm:mt-1 block truncate">
+            Peserta masuk
           </span>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-sm">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-neutral-100 shadow-2xs sm:shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-              Delegasi Terdaftar
+            <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 uppercase tracking-wider truncate">
+              Delegasi
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#82BE3B]/15 text-[#82BE3B] flex items-center justify-center">
-              <Building2 className="w-4 h-4" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#82BE3B]/15 text-[#82BE3B] flex items-center justify-center shrink-0">
+              <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold text-neutral-900 mt-2 font-poppins">
+          <p className="text-lg sm:text-3xl font-extrabold text-neutral-900 mt-1 sm:mt-2 font-poppins">
             {uniqueDelegasi}
           </p>
-          <span className="text-[11px] text-neutral-400 mt-1 block">
-            Organisasi / Instansi unik
+          <span className="text-[9px] sm:text-[11px] text-neutral-400 mt-0.5 sm:mt-1 block truncate">
+            Ormawa unik
           </span>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-sm">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-neutral-100 shadow-2xs sm:shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-              Pendaftar Hari Ini
+            <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 uppercase tracking-wider truncate">
+              Hari Ini
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-              <Calendar className="w-4 h-4" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold text-neutral-900 mt-2 font-poppins">
+          <p className="text-lg sm:text-3xl font-extrabold text-neutral-900 mt-1 sm:mt-2 font-poppins">
             {pendaftarHariIni}
           </p>
-          <span className="text-[11px] text-neutral-400 mt-1 block">
-            Registrasi 24 jam terakhir
+          <span className="text-[9px] sm:text-[11px] text-neutral-400 mt-0.5 sm:mt-1 block truncate">
+            24 jam terakhir
           </span>
         </div>
       </div>
