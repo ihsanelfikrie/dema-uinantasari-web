@@ -348,10 +348,20 @@ export default function AdminPresensiPage() {
     }
   };
 
+  // Helper: tampilkan hasil scan & auto-clear setelah 2.5 detik
+  const showResultRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showResult = (result: ScanResult) => {
+    if (showResultRef.current) clearTimeout(showResultRef.current);
+    setLastScanResult(result);
+    showResultRef.current = setTimeout(() => {
+      setLastScanResult(null);
+    }, 2500);
+  };
+
   // 5. Verify Attendance Function (Camera QR & Manual Input)
   const verifyAttendance = async (code: string, metode: "qr_scan" | "manual" = "qr_scan") => {
     if (!activeSesiId) {
-      setLastScanResult({
+      showResult({
         type: "warning",
         title: "Sesi Belum Dipilih",
         message: "Silakan pilih sesi absensi yang aktif terlebih dahulu sebelum memindai.",
@@ -377,7 +387,7 @@ export default function AdminPresensiPage() {
         );
 
         if (!matched) {
-          setLastScanResult({
+          showResult({
             type: "error",
             title: "Peserta Tidak Ditemukan",
             message: `NIM / Kode "${cleanCode}" tidak terdaftar dalam database event ini.`,
@@ -394,7 +404,7 @@ export default function AdminPresensiPage() {
             minute: "2-digit",
             second: "2-digit",
           });
-          setLastScanResult({
+          showResult({
             type: "warning",
             title: "Sudah Pernah Diabsen!",
             message: `${matched.nama} (${matched.nim}) sudah tercatat hadir pada pukul ${waktuStr} WITA.`,
@@ -426,7 +436,7 @@ export default function AdminPresensiPage() {
           minute: "2-digit",
         });
 
-        setLastScanResult({
+        showResult({
           type: "success",
           title: "✓ Kehadiran Terverifikasi!",
           message: `${matched.nama} (${matched.nim}) berhasil diverifikasi hadir.`,
@@ -452,7 +462,7 @@ export default function AdminPresensiPage() {
       const result = await res.json();
 
       if (res.status === 404) {
-        setLastScanResult({
+        showResult({
           type: "error",
           title: "Peserta Tidak Ditemukan",
           message: `NIM / Kode "${cleanCode}" tidak terdaftar dalam database event ini.`,
@@ -470,7 +480,7 @@ export default function AdminPresensiPage() {
           ? new Date(result.attendance.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
           : "sebelumnya";
 
-        setLastScanResult({
+        showResult({
           type: "warning",
           title: "Sudah Pernah Diabsen!",
           message: `${result.peserta.nama} (${result.peserta.nim}) sudah tercatat hadir pada pukul ${waktuStr} WITA.`,
@@ -481,7 +491,7 @@ export default function AdminPresensiPage() {
       } else {
         const waktuStr = new Date(result.attendance.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
 
-        setLastScanResult({
+        showResult({
           type: "success",
           title: "✓ Kehadiran Terverifikasi!",
           message: `${result.peserta.nama} (${result.peserta.nim}) berhasil diverifikasi hadir.`,
@@ -493,7 +503,7 @@ export default function AdminPresensiPage() {
         setAttendanceLogs((prev) => [result.attendance, ...prev]);
       }
     } catch (err: any) {
-      setLastScanResult({
+      showResult({
         type: "error",
         title: "Kesalahan Sistem",
         message: err.message || "Gagal memverifikasi presensi.",
@@ -1023,7 +1033,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               <canvas ref={canvasRef} className="hidden" />
 
               {/* Viewfinder overlay when scanning */}
-              {isScanning && (
+              {isScanning && !lastScanResult && (
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                   {/* Corner brackets */}
                   <div className="relative w-52 h-52">
@@ -1034,6 +1044,49 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                     {/* Scan line animation */}
                     <span className="absolute left-1 right-1 h-0.5 bg-emerald-400/80 rounded-full animate-scan-line" />
                   </div>
+                </div>
+              )}
+
+              {/* ✅ SCAN RESULT OVERLAY — muncul langsung di atas kamera */}
+              {isScanning && lastScanResult && (
+                <div
+                  className={`absolute inset-0 flex flex-col items-center justify-center p-5 text-center pointer-events-none
+                    ${lastScanResult.type === "success"
+                      ? "bg-emerald-900/90"
+                      : lastScanResult.type === "warning"
+                      ? "bg-amber-900/90"
+                      : "bg-red-900/90"
+                    }`}
+                >
+                  {/* Icon besar */}
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-3 text-white
+                    ${lastScanResult.type === "success" ? "bg-emerald-500" : lastScanResult.type === "warning" ? "bg-amber-500" : "bg-red-500"}`}>
+                    {lastScanResult.type === "success"
+                      ? <CheckCircle2 className="w-8 h-8" />
+                      : lastScanResult.type === "warning"
+                      ? <AlertTriangle className="w-8 h-8" />
+                      : <AlertCircle className="w-8 h-8" />
+                    }
+                  </div>
+                  {/* Judul */}
+                  <p className={`text-base font-bold text-white leading-tight`}>
+                    {lastScanResult.title}
+                  </p>
+                  {/* Pesan detail */}
+                  <p className="text-xs text-white/80 mt-1.5 leading-relaxed max-w-[220px]">
+                    {lastScanResult.message}
+                  </p>
+                  {/* Nama & waktu */}
+                  {lastScanResult.peserta && (
+                    <div className={`mt-3 px-3 py-1.5 rounded-xl text-xs font-bold text-white
+                      ${lastScanResult.type === "success" ? "bg-emerald-600/60" : lastScanResult.type === "warning" ? "bg-amber-600/60" : "bg-red-600/60"}`}>
+                      {lastScanResult.peserta.nama}
+                      {lastScanResult.waktu && (
+                        <span className="font-normal text-white/70 ml-1">· {lastScanResult.waktu} WITA</span>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-[10px] text-white/40 mt-3">Scan otomatis lanjut dalam 2 detik...</p>
                 </div>
               )}
 
