@@ -53,9 +53,11 @@ export default function AntasariMediaLabPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [ticketData, setTicketData] = useState<TicketData | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Check for saved ticket in localStorage on initial mount
   useEffect(() => {
+    setIsMounted(true);
     try {
       const saved = localStorage.getItem("aml_ticket_data");
       if (saved) {
@@ -263,8 +265,8 @@ export default function AntasariMediaLabPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#F4F2EF] dark:bg-[#0c0505] text-neutral-900 dark:text-neutral-100 transition-colors pb-24 pt-20 sm:pt-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main suppressHydrationWarning className="min-h-screen bg-[#F4F2EF] dark:bg-[#0c0505] text-neutral-900 dark:text-neutral-100 transition-colors pb-24 pt-20 sm:pt-24">
+      <div suppressHydrationWarning className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navigation Breadcrumb / Back button */}
         <div className="mb-6">
           <Link
@@ -300,7 +302,7 @@ export default function AntasariMediaLabPage() {
         </div>
 
         {/* ── SHOW TICKET IF REGISTERED ── */}
-        {ticketData ? (
+        {isMounted && ticketData ? (
           <div className="space-y-6">
             <TicketCard data={ticketData} onReset={handleResetForm} />
           </div>
@@ -324,7 +326,34 @@ export default function AntasariMediaLabPage() {
                 </span>
               </div>
 
-              {/* Event highlights */}
+              {/* Event highlights with poster preview */}
+              <div className="flex flex-col sm:flex-row gap-5 items-center bg-[#CAD3E6]/15 dark:bg-white/5 p-4 sm:p-5 rounded-2xl mb-4 border border-neutral-200/50 dark:border-neutral-800">
+                <div className="w-32 sm:w-36 shrink-0 rounded-xl overflow-hidden shadow-md border border-white/50">
+                  <img
+                    src="/images/event/antasari-media-lab-poster.jpg"
+                    alt="Poster Antasari Media Lab"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+                <div className="flex-1 space-y-2 text-xs">
+                  <div className="flex items-center gap-2 text-[#1C4BBC] dark:text-[#CAD3E6] font-bold text-sm">
+                    <Calendar className="w-4 h-4 text-[#82BE3B]" />
+                    <span>Sabtu, 3 Oktober 2026 • 08.00 WITA</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
+                    <MapPin className="w-4 h-4 text-[#82BE3B]" />
+                    <span className="font-semibold">Aula Sasangga Banua (Gedung Eks Kantor Gubernur Kalsel)</span>
+                  </div>
+                  <div className="pt-1 text-[11px] text-neutral-600 dark:text-neutral-400">
+                    <strong className="text-neutral-800 dark:text-neutral-200">Fasilitator:</strong> Ihsan El Fikrie (Graphic Designer), Kysahh (Fotografer & Creator), Dinur Pradipta (Social Media).
+                  </div>
+                  <div className="text-[11px] text-[#82BE3B] font-semibold">
+                    📞 Narahubung / Info: +62 821 6213 8655 (Wafi)
+                  </div>
+                </div>
+              </div>
+
+              {/* Event highlights grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="bg-[#CAD3E6]/20 dark:bg-white/5 p-3 rounded-xl">
                   <span className="text-neutral-500 text-[10px] block">Penyelenggara</span>

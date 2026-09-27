@@ -15,16 +15,15 @@ export default function EventCard({ compact = false }: EventCardProps) {
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1C4BBC] via-[#82BE3B] to-[#CAD3E6] z-10" />
 
       {/* Left/Top Image Banner Container */}
-      <div className="relative md:w-5/12 bg-[#1C4BBC] overflow-hidden flex items-center justify-center p-4 sm:p-6 min-h-[220px] md:min-h-full">
-        {/* Pattern & glow overlay */}
-        <div className="absolute inset-0 bg-radial-gradient opacity-20 pointer-events-none" />
-        <div className="absolute -top-12 -left-12 w-48 h-48 bg-[#82BE3B]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative md:w-5/12 bg-gradient-to-b from-[#1C4BBC] to-[#0c2666] overflow-hidden flex items-center justify-center p-4 sm:p-6 min-h-[300px] md:min-h-full">
+        {/* Glow ambient overlay */}
+        <div className="absolute -top-12 -left-12 w-48 h-48 bg-[#82BE3B]/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#CAD3E6]/25 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 w-full overflow-hidden rounded-2xl shadow-xl border border-white/20 transition-transform duration-500 group-hover:scale-[1.03]">
+        <div className="relative z-10 w-full max-w-[280px] sm:max-w-[320px] overflow-hidden rounded-2xl shadow-2xl border border-white/20 transition-transform duration-500 group-hover:scale-[1.03]">
           <img
-            src="/images/event/antasari-media-lab-header.png"
-            alt="Antasari Media Lab Header"
+            src="/images/event/antasari-media-lab-poster.jpg"
+            alt="Poster Resmi Antasari Media Lab"
             className="w-full h-auto object-cover block"
           />
         </div>
@@ -45,7 +44,7 @@ export default function EventCard({ compact = false }: EventCardProps) {
           {/* Metadata badges */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#1C4BBC]/10 text-[#1C4BBC] dark:bg-[#1C4BBC]/20 dark:text-[#CAD3E6]">
-              <Sparkles className="w-3 h-3" />
+              <Sparkles className="w-3 h-3 text-[#82BE3B]" />
               Event Unggulan DEMA
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
@@ -68,15 +67,33 @@ export default function EventCard({ compact = false }: EventCardProps) {
             Program akselerasi dan pelatihan intensif media kreatif digital untuk perwakilan pengurus lembaga mahasiswa, ormawa, dan mahasiswa se-UIN Antasari Banjarmasin.
           </p>
 
+          {/* Pemateri Highlight Chips */}
+          <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800/80">
+            <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+              Pemateri & Fasilitator:
+            </p>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 font-medium text-neutral-700 dark:text-neutral-300">
+                🎨 Ihsan El Fikrie <span className="text-[10px] text-neutral-400">(Graphic Designer)</span>
+              </span>
+              <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 font-medium text-neutral-700 dark:text-neutral-300">
+                📸 Kysahh <span className="text-[10px] text-neutral-400">(Fotografer & Creator)</span>
+              </span>
+              <span className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 font-medium text-neutral-700 dark:text-neutral-300">
+                📱 Dinur Pradipta <span className="text-[10px] text-neutral-400">(Social Media)</span>
+              </span>
+            </div>
+          </div>
+
           {/* Information Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 pt-5 border-t border-neutral-100 dark:border-neutral-800/80 text-xs text-neutral-600 dark:text-neutral-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800/80 text-xs text-neutral-600 dark:text-neutral-300">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-lg bg-[#1C4BBC]/10 dark:bg-[#1C4BBC]/20 flex items-center justify-center text-[#1C4BBC] dark:text-[#CAD3E6] shrink-0">
                 <Calendar className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-[10px] text-neutral-400 font-medium">Jadwal Pelaksanaan</p>
-                <p className="font-semibold text-neutral-800 dark:text-neutral-200">Oktober 2026</p>
+                <p className="text-[10px] text-neutral-400 font-medium">Waktu Pelaksanaan</p>
+                <p className="font-semibold text-neutral-800 dark:text-neutral-200">Sabtu, 3 Okt 2026 • 08.00 WITA</p>
               </div>
             </div>
 
@@ -86,7 +103,7 @@ export default function EventCard({ compact = false }: EventCardProps) {
               </div>
               <div>
                 <p className="text-[10px] text-neutral-400 font-medium">Lokasi Kegiatan</p>
-                <p className="font-semibold text-neutral-800 dark:text-neutral-200">Kampus UIN Antasari</p>
+                <p className="font-semibold text-neutral-800 dark:text-neutral-200">Aula Sasangga Banua</p>
               </div>
             </div>
 
