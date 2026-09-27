@@ -110,6 +110,55 @@ export default function AntasariMediaLabPage() {
     }
   };
 
+  // Testing Shortcut: 3 clicks on FileCheck2 icon to fill dummy proof images
+  const [testClickCount, setTestClickCount] = useState(0);
+  const [dummyFilledNotification, setDummyFilledNotification] = useState(false);
+
+  const handleSecretIconClick = () => {
+    const nextCount = testClickCount + 1;
+    setTestClickCount(nextCount);
+
+    if (nextCount >= 3) {
+      setTestClickCount(0);
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 400;
+        canvas.height = 600;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#1C4BBC";
+          ctx.fillRect(0, 0, 400, 600);
+          ctx.fillStyle = "#82BE3B";
+          ctx.fillRect(0, 560, 400, 40);
+          ctx.fillStyle = "#FFFFFF";
+          ctx.font = "bold 22px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("BUKTI FOLLOW VERIFIED", 200, 280);
+          ctx.font = "14px sans-serif";
+          ctx.fillStyle = "#CAD3E6";
+          ctx.fillText("TEST MODE (AUTO-GENERATED)", 200, 320);
+          const dummyUrl = canvas.toDataURL("image/png");
+
+          setIgPreview(dummyUrl);
+          setTiktokPreview(dummyUrl);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const dummyFile = new File([blob], "dummy-proof.png", { type: "image/png" });
+              setIgFile(dummyFile);
+              setTiktokFile(dummyFile);
+            }
+          }, "image/png");
+
+          setDummyFilledNotification(true);
+          setTimeout(() => setDummyFilledNotification(false), 3500);
+        }
+      } catch (err) {
+        console.error("Dummy proof generation failed:", err);
+      }
+    }
+  };
+
   // Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -540,11 +589,25 @@ export default function AntasariMediaLabPage() {
 
               {/* ── BUKTI SCREENSHOT UPLOADS ── */}
               <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 space-y-4">
-                <div className="flex items-center gap-2">
-                  <FileCheck2 className="w-5 h-5 text-[#82BE3B]" />
-                  <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
-                    Unggah Bukti Screenshot Follow Media Sosial
-                  </h4>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSecretIconClick}
+                      className="p-1 -m-1 rounded-lg hover:bg-[#82BE3B]/15 active:scale-90 transition-all cursor-pointer select-none focus:outline-none"
+                      title="Klik 3 kali untuk isi otomatis bukti testing"
+                    >
+                      <FileCheck2 className="w-5 h-5 text-[#82BE3B]" />
+                    </button>
+                    <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
+                      Unggah Bukti Screenshot Follow Media Sosial
+                    </h4>
+                  </div>
+                  {dummyFilledNotification && (
+                    <span className="text-[11px] font-semibold text-[#82BE3B] bg-[#82BE3B]/15 border border-[#82BE3B]/30 px-2.5 py-0.5 rounded-full animate-bounce">
+                      ✓ Mode Testing: Bukti Follow Terisi Otomatis!
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
