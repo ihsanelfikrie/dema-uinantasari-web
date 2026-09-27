@@ -16,9 +16,9 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-brand-background">
+    <div className="flex min-h-screen bg-brand-background" suppressHydrationWarning>
       <Sidebar />
-      <main className="flex-1 overflow-y-auto min-h-screen">
+      <main className="flex-1 overflow-y-auto min-h-screen" suppressHydrationWarning>
         {children}
       </main>
     </div>
