@@ -456,19 +456,17 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
-      {/* Success Notification Alert */}
-      <div className="bg-[#82BE3B]/15 border border-[#82BE3B]/30 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-sm">
-        <div className="w-10 h-10 rounded-full bg-[#82BE3B] text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-          <CheckCircle className="w-5 h-5" />
+      {/* Notifikasi Sukses Minimalis */}
+      <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#160808] px-4 py-3 flex items-center justify-between gap-3 text-xs shadow-2xs">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="text-neutral-800 dark:text-neutral-200">
+            <strong>Pendaftaran Berhasil!</strong> Tiket resmi Anda telah diterbitkan.
+          </span>
         </div>
-        <div className="flex-1">
-          <h4 className="text-sm sm:text-base font-bold text-neutral-900">
-            Pendaftaran Berhasil & Terdata di Sistem!
-          </h4>
-          <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
-            Data Anda telah tercatat sah di database panitia DEMA UIN Antasari. <strong>Simpan bukti tiket atau kode QR di bawah ini</strong> untuk verifikasi saat registrasi ulang dan penerbitan sertifikat resmi.
-          </p>
-        </div>
+        <span className="text-[11px] font-mono font-bold text-[#1C4BBC] dark:text-[#82BE3B] shrink-0 bg-neutral-100 dark:bg-neutral-800/80 px-2 py-0.5 rounded">
+          {data.ticketId}
+        </span>
       </div>
 
       {/* TIER 3: EMERGENCY LIVE HTML DIGITAL PASS (Rendered if Canvas totally fails) */}
@@ -697,105 +695,33 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         </div>
       )}
 
-      {/* Important Notice Card: Wajib Simpan Tiket untuk Registrasi & Sertifikat */}
-      <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/90 p-5 sm:p-6 shadow-sm space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-            <AlertTriangle className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="text-sm sm:text-base font-extrabold text-amber-950 font-poppins tracking-wide">
-              PENTING: HARAP SIMPAN TIKET INI BAIK-BAIK!
-            </h4>
-            <p className="text-xs text-amber-800 mt-0.5">
-              Tiket ini adalah identitas resmi kepesertaan Anda dan tidak boleh hilang:
-            </p>
-          </div>
+      {/* Catatan Registrasi & Narahubung (Minimalist & Clean) */}
+      <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#160808] p-4 sm:p-5 shadow-2xs space-y-3">
+        <div className="flex items-start gap-2.5 text-xs text-neutral-600 dark:text-neutral-400">
+          <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+          <p className="leading-relaxed">
+            <strong className="text-neutral-900 dark:text-white font-semibold">Simpan tiket ini baik-baik.</strong> Tiket wajib ditunjukkan saat registrasi ulang di lokasi dan digunakan untuk verifikasi e-sertifikat kegiatan.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-          <div className="bg-white/95 rounded-xl p-3.5 border border-amber-200/80 shadow-xs flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC] flex items-center justify-center shrink-0 mt-0.5">
-              <QrCode className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-neutral-900 block">
-                1. Registrasi Ulang / Check-In
-              </span>
-              <p className="text-[11px] text-neutral-600 mt-1 leading-relaxed">
-                QR Code pada tiket wajib ditunjukkan dan dipindai oleh panitia di meja registrasi pada hari-H acara.
-              </p>
-            </div>
+        <div className="pt-2.5 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="text-neutral-500 dark:text-neutral-400">
+            Ada kendala tiket atau salah data?{" "}
+            <span className="text-neutral-700 dark:text-neutral-300">
+              Narahubung: <strong className="text-neutral-900 dark:text-white font-mono">+62 821 6213 8655 (Wafi)</strong>
+            </span>
           </div>
-
-          <div className="bg-white/95 rounded-xl p-3.5 border border-amber-200/80 shadow-xs flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#82BE3B]/20 text-[#527d21] flex items-center justify-center shrink-0 mt-0.5">
-              <Award className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-neutral-900 block">
-                2. Syarat Klaim E-Sertifikat
-              </span>
-              <p className="text-[11px] text-neutral-600 mt-1 leading-relaxed">
-                Nomor ID Tiket dan NIM merupakan syarat mutlak untuk verifikasi penerbitan sertifikat resmi kegiatan.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Emergency Assistance Footer */}
-        <div className="p-3 bg-amber-100/70 rounded-xl border border-amber-200 text-[11px] text-amber-900 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>💡 Tips: Selalu simpan tangkapan layar (screenshot) layar ini di galeri ponsel Anda.</span>
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] font-bold text-emerald-800 hover:underline inline-flex items-center gap-1 shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/60 transition-colors shrink-0"
           >
             <MessageCircle className="w-3.5 h-3.5" />
-            <span>Chat Narhub: +62 821 6213 8655 (Wafi)</span>
+            <span>Chat WhatsApp</span>
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>
-      </div>
-
-      {/* Dedicated Narahubung Resmi Card */}
-      <div className="rounded-2xl border-2 border-emerald-400/80 bg-gradient-to-r from-emerald-50 via-teal-50/40 to-white dark:from-emerald-950/30 dark:via-neutral-900 dark:to-neutral-900 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/20 mt-0.5">
-            <MessageCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h4 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white">
-                Pusat Bantuan & Narahubung Tiket
-              </h4>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-300/60">
-                Official Narhub
-              </span>
-            </div>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
-              Jika mengalami kendala mengunduh tiket, kesalahan penulisan data Nama/NIM/Delegasi, atau ada pertanyaan seputar acara, silakan hubungi Narahubung Panitia:
-            </p>
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-              <span className="text-neutral-500 font-medium">Narahubung (Narhub):</span>
-              <span className="font-extrabold text-emerald-700 dark:text-emerald-400 font-mono text-sm sm:text-base">
-                +62 821 6213 8655 (Wafi)
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 active:scale-95 transition-all shrink-0 cursor-pointer"
-        >
-          <MessageCircle className="w-4 h-4" />
-          <span>Chat WhatsApp (Wafi)</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
       </div>
     </div>
   );
