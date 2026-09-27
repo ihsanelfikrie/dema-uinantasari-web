@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
-import { Download, Printer, CheckCircle, RotateCcw, Share2, Sparkles, Building2, User, CreditCard, Mail } from "lucide-react";
+import { Download, Printer, CheckCircle, RotateCcw, Building2, User, CreditCard, Mail } from "lucide-react";
 
 export interface TicketData {
   nama: string;
@@ -307,7 +307,6 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
             {/* Ticket Footer / Instructions */}
             <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#CAD3E6]">
               <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#82BE3B]" />
                 Registrasi: {data.registeredAt}
               </span>
               <span className="bg-[#82BE3B]/20 text-[#82BE3B] px-2 py-0.5 rounded font-semibold text-[10px] uppercase">
