@@ -75,10 +75,10 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         // 2. Load all required images in parallel
         const [templateImg, iconUser, iconMail, iconDelegasi, iconNim, qrImg] = await Promise.all([
           loadImage("/images/event/tiket-template.jpg"),
-          loadImage("/images/event/icon-user.png"),
-          loadImage("/images/event/icon-mail.png"),
-          loadImage("/images/event/icon-delegasi.png"),
-          loadImage("/images/event/icon-nim.png"),
+          loadImage("/images/event/icon-user.png?v=2"),
+          loadImage("/images/event/icon-mail.png?v=2"),
+          loadImage("/images/event/icon-delegasi.png?v=2"),
+          loadImage("/images/event/icon-nim.png?v=2"),
           loadImage(qrDataUrl),
         ]);
 
