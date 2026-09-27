@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
 import { 
   Users, 
   Search, 
@@ -16,7 +17,8 @@ import {
   Eye, 
   Building2, 
   Calendar,
-  Ticket
+  Ticket,
+  QrCode
 } from "lucide-react";
 
 interface Peserta {
@@ -208,7 +210,15 @@ export default function AdminPesertaPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            href="/admin/presensi"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-sm transition-all"
+          >
+            <QrCode className="w-3.5 h-3.5" />
+            <span>Scan Presensi QR</span>
+          </Link>
+
           <button
             type="button"
             onClick={fetchPeserta}

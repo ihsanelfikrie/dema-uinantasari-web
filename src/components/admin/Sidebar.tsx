@@ -12,6 +12,7 @@ import {
   LogOut,
   Users,
   MessageSquare,
+  QrCode,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -30,6 +31,7 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Peserta Event", href: "/admin/peserta", icon: Users },
+    { name: "Scan Presensi QR", href: "/admin/presensi", icon: QrCode },
     { name: "Info & Kajian", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },

@@ -85,4 +85,38 @@ DROP POLICY IF EXISTS "Izinkan lihat bukti follow" ON storage.objects;
 CREATE POLICY "Izinkan lihat bukti follow" ON storage.objects
     FOR SELECT USING (bucket_id = 'bukti-follow');
 
+-- 6. event_sesi_absen: Daftar sesi absensi per event (Dibuat oleh admin)
+CREATE TABLE IF NOT EXISTS event_sesi_absen (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_slug TEXT NOT NULL DEFAULT 'antasari-media-lab',
+    nama_sesi TEXT NOT NULL, -- contoh: 'Absensi Datang (Pagi)', 'Absensi Siang (ISHOMA)', 'Absensi Pulang'
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. event_absensi: Rekap log kehadiran scan QR per sesi
+CREATE TABLE IF NOT EXISTS event_absensi (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sesi_id UUID NOT NULL REFERENCES event_sesi_absen(id) ON DELETE CASCADE,
+    event_slug TEXT NOT NULL DEFAULT 'antasari-media-lab',
+    peserta_id UUID NOT NULL REFERENCES event_registrasi(id) ON DELETE CASCADE,
+    nim TEXT NOT NULL,
+    waktu_absen TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    metode TEXT NOT NULL DEFAULT 'qr_scan', -- 'qr_scan' | 'manual'
+    catatan TEXT,
+    CONSTRAINT unique_sesi_nim UNIQUE (sesi_id, nim)
+);
+
+-- Aktifkan RLS
+ALTER TABLE event_sesi_absen ENABLE ROW LEVEL SECURITY;
+ALTER TABLE event_absensi ENABLE ROW LEVEL SECURITY;
+
+-- Policy RLS
+DROP POLICY IF EXISTS "Akses penuh event_sesi_absen" ON event_sesi_absen;
+CREATE POLICY "Akses penuh event_sesi_absen" ON event_sesi_absen FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Akses penuh event_absensi" ON event_absensi;
+CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
+
+
 
