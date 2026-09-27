@@ -398,10 +398,10 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-brand-background dark:bg-brand-dark-bg pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 min-h-[85vh] perspective-1000"
+      className="relative overflow-hidden bg-brand-background pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-200/60 transition-colors duration-300 min-h-[85vh] perspective-1000"
     >
       {/* Background grid texture */}
-      <div className="absolute inset-0 z-[1] opacity-[0.05] dark:opacity-[0.02] pointer-events-none select-none">
+      <div className="absolute inset-0 z-[1] opacity-[0.05] pointer-events-none select-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#990808_1px,transparent_1px),linear-gradient(to_bottom,#990808_1px,transparent_1px)] bg-[size:4.5rem_4.5rem]" />
         {/* Intersection crosses */}
         <div className="absolute top-20 left-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
@@ -413,7 +413,7 @@ export default function HeroSection() {
       </div>
 
       {/* Decorative Minimal Geometric Outlines with SVG Stroke Drawing */}
-      <div className="absolute inset-0 z-[2] pointer-events-none select-none opacity-40 dark:opacity-20">
+      <div className="absolute inset-0 z-[2] pointer-events-none select-none opacity-40">
         <svg
           viewBox="0 0 1600 800"
           className="absolute inset-0 w-full h-full"
@@ -421,7 +421,7 @@ export default function HeroSection() {
         >
           {/* Large Outer Thin Dashed Circle */}
           <circle
-            className="hero-geo-shape text-brand-primary/30 dark:text-brand-secondary/30"
+            className="hero-geo-shape text-brand-primary/30"
             cx="800"
             cy="400"
             r="280"
@@ -433,7 +433,7 @@ export default function HeroSection() {
           />
           {/* Medium Inner Thin Circle */}
           <circle
-            className="hero-geo-shape hero-stroke-solid text-brand-primary/20 dark:text-brand-secondary/20"
+            className="hero-geo-shape hero-stroke-solid text-brand-primary/20"
             cx="800"
             cy="400"
             r="180"
@@ -446,7 +446,7 @@ export default function HeroSection() {
           />
           {/* Left decorative box */}
           <rect
-            className="hero-geo-shape hero-stroke-rect-1 text-brand-primary/20 dark:text-brand-secondary/20"
+            className="hero-geo-shape hero-stroke-rect-1 text-brand-primary/20"
             x="250"
             y="200"
             width="60"
@@ -462,7 +462,7 @@ export default function HeroSection() {
           />
           {/* Right decorative circle */}
           <circle
-            className="hero-geo-shape hero-stroke-circle-2 text-brand-primary/10 dark:text-brand-secondary/10"
+            className="hero-geo-shape hero-stroke-circle-2 text-brand-primary/10"
             cx="1350"
             cy="500"
             r="40"
@@ -475,7 +475,7 @@ export default function HeroSection() {
           />
           {/* Upper right decorative small box */}
           <rect
-            className="hero-geo-shape hero-stroke-rect-2 text-brand-primary/30 dark:text-brand-secondary/30"
+            className="hero-geo-shape hero-stroke-rect-2 text-brand-primary/30"
             x="1300"
             y="300"
             width="40"
@@ -492,9 +492,8 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      {/* Background images */}
-      <div className="hero-bg absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] dark:opacity-0 pointer-events-none select-none transition-all duration-300 z-0" />
-      <div className="absolute inset-0 bg-[url('/images/kabinet/hero-bg-dark.jpg')] bg-cover bg-center bg-no-repeat opacity-0 dark:opacity-[0.55] pointer-events-none select-none transition-all duration-300 z-0" />
+      {/* Background image */}
+      <div className="hero-bg absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] pointer-events-none select-none transition-all duration-300 z-0" />
 
       {/* Left Leader Portrait */}
       <img
@@ -542,27 +541,27 @@ export default function HeroSection() {
       {/* Hero Content */}
       <div className="max-w-4xl flex flex-col items-center relative z-20">
         {/* Badge */}
-        <span className="hero-badge opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary dark:text-brand-secondary uppercase bg-brand-primary/10 dark:bg-brand-secondary/10 px-4 py-1.5 rounded-full mb-6">
+        <span className="hero-badge opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary uppercase bg-brand-primary/10 px-4 py-1.5 rounded-full mb-6">
           Kabinet Laskar Purnama Antasari
         </span>
 
         {/* Headline with dynamic split character reveal */}
-        <h1 className="hero-title text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-col items-center gap-2">
+        <h1 className="hero-title text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-col items-center gap-2">
           <div className="flex flex-wrap justify-center gap-x-3 sm:gap-x-4">
             <span className="inline-block">{splitText("DEMA")}</span>
             <span className="inline-block">{splitText("UIN")}</span>
             <span className="inline-block">{splitText("Antasari")}</span>
           </div>
-          <span className="text-brand-primary dark:text-brand-secondary inline-block">
+          <span className="text-brand-primary inline-block">
             {splitText("2026/2027")}
           </span>
         </h1>
 
         {/* Clean minimal separator line under header */}
-        <div className="hero-headline-line w-24 h-[3px] bg-brand-primary dark:bg-brand-secondary rounded-full mt-6 origin-center" />
+        <div className="hero-headline-line w-24 h-[3px] bg-brand-primary rounded-full mt-6 origin-center" />
 
         {/* Paragraph Desktop */}
-        <p className="mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
+        <p className="mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
           <span className="inline-block overflow-hidden py-0.5">
             <span className="animate-paragraph-line inline-block opacity-0">
               Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
@@ -581,7 +580,7 @@ export default function HeroSection() {
         </p>
 
         {/* Paragraph Mobile */}
-        <p className="hero-mobile-para opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300 max-w-2xl font-normal block sm:hidden">
+        <p className="hero-mobile-para opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 max-w-2xl font-normal block sm:hidden">
           Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
           sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
           berdampak bagi civitas akademika dan masyarakat luas.
@@ -597,7 +596,7 @@ export default function HeroSection() {
           </Link>
           <Link
             href="/layanan"
-            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 dark:border-red-950/50 bg-white/5 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-200 shadow-sm transition-colors duration-200"
+            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 bg-white/80 hover:bg-white px-6 py-3 text-sm font-semibold text-neutral-800 shadow-sm transition-colors duration-200"
           >
             Layanan Portal
           </Link>

@@ -14,9 +14,17 @@
   --font-poppins: var(--font-poppins), sans-serif;
 }
 
+/* Enforce dark variant to a selector that is never matched, completely disabling dark mode */
+@custom-variant dark (&:where(.dark-mode-disabled-never-match));
+
 :root {
+  color-scheme: light;
   --background: #F4F2EF;
   --foreground: #1a1a1a;
+}
+
+html {
+  color-scheme: light;
 }
 
 body {

@@ -56,7 +56,8 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${poppins.variable} ${timesNewRoman.variable} ${akzidenzGrotesk.variable} font-poppins h-full antialiased`}
+      className={`${poppins.variable} ${timesNewRoman.variable} ${akzidenzGrotesk.variable} font-poppins h-full antialiased light`}
+      style={{ colorScheme: "light" }}
       suppressHydrationWarning
     >
       <head>
