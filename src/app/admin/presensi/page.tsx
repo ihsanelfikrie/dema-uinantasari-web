@@ -16,13 +16,13 @@ import {
   UserCheck, 
   Clock, 
   Users, 
-  Sparkles, 
   X, 
-  ChevronRight,
-  Database,
-  ExternalLink,
-  Copy,
-  Check
+  Database, 
+  ExternalLink, 
+  Copy, 
+  Check, 
+  FlipHorizontal,
+  ChevronDown
 } from "lucide-react";
 
 interface Peserta {
@@ -77,6 +77,7 @@ export default function AdminPresensiPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [availableCameras, setAvailableCameras] = useState<{ id: string; label: string }[]>([]);
   const [selectedCameraId, setSelectedCameraId] = useState<string>("");
+  const [cameraFacing, setCameraFacing] = useState<"environment" | "user">("environment");
   const [manualCode, setManualCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [lastScanResult, setLastScanResult] = useState<ScanResult | null>(null);
@@ -98,9 +99,13 @@ export default function AdminPresensiPage() {
   // Audio synthesizer for scan feedback
   const playSound = (type: "success" | "warning" | "error") => {
     try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
 
       if (type === "success") {
         // High 2-tone pleasant chord (D5 -> A5)
@@ -109,14 +114,14 @@ export default function AdminPresensiPage() {
         const gain = ctx.createGain();
 
         osc1.type = "sine";
-        osc1.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-        osc1.frequency.setValueAtTime(880.00, ctx.currentTime + 0.1); // A5
+        osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc1.frequency.setValueAtTime(880.00, ctx.currentTime + 0.1);
 
         osc2.type = "sine";
         osc2.frequency.setValueAtTime(880.00, ctx.currentTime);
-        osc2.frequency.setValueAtTime(1174.66, ctx.currentTime + 0.1); // D6
+        osc2.frequency.setValueAtTime(1174.66, ctx.currentTime + 0.1);
 
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
 
         osc1.connect(gain);
@@ -128,7 +133,7 @@ export default function AdminPresensiPage() {
         osc1.stop(ctx.currentTime + 0.35);
         osc2.stop(ctx.currentTime + 0.35);
       } else {
-        // Warning / Error low double beep
+        // Warning / Error low double tone
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "square";
@@ -145,16 +150,16 @@ export default function AdminPresensiPage() {
         osc.stop(ctx.currentTime + 0.3);
       }
     } catch (e) {
-      console.warn("Audio Context playback error:", e);
+      console.warn("Audio Context error:", e);
     }
 
     if (typeof navigator !== "undefined" && navigator.vibrate) {
-      if (type === "success") navigator.vibrate(100);
+      if (type === "success") navigator.vibrate(120);
       else navigator.vibrate([100, 50, 100]);
     }
   };
 
-  // 1. Fetch Sessions for Event
+  // 1. Fetch Sessions for Event (with local storage resilience fallback)
   const fetchSessions = async () => {
     setIsLoadingSesi(true);
     try {
@@ -162,13 +167,38 @@ export default function AdminPresensiPage() {
         cache: "no-store",
       });
       const data = await res.json();
+
       if (data.tableMissing) {
         setTableMissing(true);
+        // Resilient Fallback: Load sessions from localStorage
+        const localKey = `local_presensi_sesi_${eventSlug}`;
+        let localSesi: SesiAbsen[] = [];
+        try {
+          const saved = localStorage.getItem(localKey);
+          if (saved) {
+            localSesi = JSON.parse(saved);
+          } else {
+            // Seed 3 standard sessions
+            localSesi = [
+              { id: "sesi-datang", event_slug: eventSlug, nama_sesi: "Absensi Datang (Pagi)", is_active: true, created_at: new Date().toISOString() },
+              { id: "sesi-siang", event_slug: eventSlug, nama_sesi: "Absensi Siang (ISHOMA)", is_active: true, created_at: new Date().toISOString() },
+              { id: "sesi-pulang", event_slug: eventSlug, nama_sesi: "Absensi Pulang (Sore)", is_active: true, created_at: new Date().toISOString() },
+            ];
+            localStorage.setItem(localKey, JSON.stringify(localSesi));
+          }
+        } catch (e) {
+          console.warn("LocalStorage error:", e);
+        }
+
+        setSesiList(localSesi);
+        if (localSesi.length > 0 && !activeSesiId) {
+          setActiveSesiId(localSesi[0].id);
+        }
         return;
       }
+
       setTableMissing(false);
       setSesiList(data.data || []);
-      // Auto select first session if none selected
       if (data.data?.length > 0 && !activeSesiId) {
         setActiveSesiId(data.data[0].id);
       }
@@ -194,8 +224,22 @@ export default function AdminPresensiPage() {
       if (Array.isArray(dataPeserta)) {
         setPesertaList(dataPeserta);
       }
+
       if (dataLogs && Array.isArray(dataLogs.data)) {
         setAttendanceLogs(dataLogs.data);
+      } else if (tableMissing || dataLogs?.tableMissing) {
+        // Load local attendance logs from localStorage fallback
+        try {
+          const localLogsKey = `local_logs_${eventSlug}_${activeSesiId}`;
+          const savedLogs = localStorage.getItem(localLogsKey);
+          if (savedLogs) {
+            setAttendanceLogs(JSON.parse(savedLogs));
+          } else {
+            setAttendanceLogs([]);
+          }
+        } catch (e) {
+          console.warn("LocalStorage logs error:", e);
+        }
       }
     } catch (err) {
       console.error("Gagal mengambil data peserta & log:", err);
@@ -212,7 +256,7 @@ export default function AdminPresensiPage() {
     if (activeSesiId || sesiList.length === 0) {
       fetchData();
     }
-  }, [activeSesiId, eventSlug]);
+  }, [activeSesiId, eventSlug, tableMissing]);
 
   // Attendance lookup map: NIM -> AbsensiLog for active session
   const attendanceMap = useMemo(() => {
@@ -238,6 +282,24 @@ export default function AdminPresensiPage() {
 
     setIsCreatingSesi(true);
     try {
+      if (tableMissing) {
+        // Local fallback creation
+        const newSesi: SesiAbsen = {
+          id: `sesi-${Date.now()}`,
+          event_slug: eventSlug,
+          nama_sesi: newSesiName.trim(),
+          is_active: true,
+          created_at: new Date().toISOString(),
+        };
+        const updated = [...sesiList, newSesi];
+        setSesiList(updated);
+        localStorage.setItem(`local_presensi_sesi_${eventSlug}`, JSON.stringify(updated));
+        setActiveSesiId(newSesi.id);
+        setNewSesiName("");
+        setShowAddSesiModal(false);
+        return;
+      }
+
       const res = await fetch("/api/presensi/sesi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -265,9 +327,17 @@ export default function AdminPresensiPage() {
 
   // 4. Delete Session
   const handleDeleteSesi = async (id: string, name: string) => {
-    if (!confirm(`Hapus sesi "${name}"? Semua data presensi untuk sesi ini juga akan terhapus.`)) return;
+    if (!confirm(`Hapus sesi "${name}"? Data kehadiran sesi ini juga akan dibersihkan.`)) return;
 
     try {
+      if (tableMissing) {
+        const updated = sesiList.filter((s) => s.id !== id);
+        setSesiList(updated);
+        localStorage.setItem(`local_presensi_sesi_${eventSlug}`, JSON.stringify(updated));
+        if (activeSesiId === id) setActiveSesiId(updated[0]?.id || "");
+        return;
+      }
+
       const res = await fetch(`/api/presensi/sesi/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Gagal menghapus sesi.");
       if (activeSesiId === id) setActiveSesiId("");
@@ -277,13 +347,13 @@ export default function AdminPresensiPage() {
     }
   };
 
-  // 5. Verify Attendance Function (Used by both Camera QR & Manual Input)
+  // 5. Verify Attendance Function (Camera QR & Manual Input)
   const verifyAttendance = async (code: string, metode: "qr_scan" | "manual" = "qr_scan") => {
     if (!activeSesiId) {
       setLastScanResult({
         type: "warning",
         title: "Sesi Belum Dipilih",
-        message: "Silakan buat atau pilih Sesi Absen aktif terlebih dahulu di atas.",
+        message: "Silakan pilih sesi absensi yang aktif terlebih dahulu sebelum memindai.",
       });
       playSound("warning");
       return;
@@ -293,13 +363,87 @@ export default function AdminPresensiPage() {
 
     setIsVerifying(true);
     try {
+      let cleanCode = code.trim().replace(/\s+/g, "");
+      if (cleanCode.includes("nim=")) {
+        const match = cleanCode.match(/nim=([^&]+)/);
+        if (match) cleanCode = match[1];
+      }
+
+      // Check if table missing (Local Fallback Verification)
+      if (tableMissing) {
+        const matched = pesertaList.find(
+          (p) => p.nim.trim() === cleanCode || p.ticket_id.trim() === cleanCode
+        );
+
+        if (!matched) {
+          setLastScanResult({
+            type: "error",
+            title: "Peserta Tidak Ditemukan",
+            message: `NIM / Kode "${cleanCode}" tidak terdaftar dalam database event ini.`,
+          });
+          playSound("error");
+          return;
+        }
+
+        // Check if already attended
+        const existingAtt = attendanceMap.get(matched.nim.trim());
+        if (existingAtt) {
+          const waktuStr = new Date(existingAtt.waktu_absen).toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          setLastScanResult({
+            type: "warning",
+            title: "Sudah Pernah Diabsen!",
+            message: `${matched.nama} (${matched.nim}) sudah tercatat hadir pada pukul ${waktuStr} WITA.`,
+            peserta: matched,
+            waktu: waktuStr,
+          });
+          playSound("warning");
+          return;
+        }
+
+        // Record locally
+        const newRecord: AbsensiLog = {
+          id: `log-${Date.now()}`,
+          sesi_id: activeSesiId,
+          peserta_id: matched.id,
+          nim: matched.nim,
+          waktu_absen: new Date().toISOString(),
+          metode,
+        };
+
+        const updatedLogs = [newRecord, ...attendanceLogs];
+        setAttendanceLogs(updatedLogs);
+        try {
+          localStorage.setItem(`local_logs_${eventSlug}_${activeSesiId}`, JSON.stringify(updatedLogs));
+        } catch (e) {}
+
+        const waktuStr = new Date(newRecord.waktu_absen).toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        setLastScanResult({
+          type: "success",
+          title: "✓ Kehadiran Terverifikasi!",
+          message: `${matched.nama} (${matched.nim}) berhasil diverifikasi hadir.`,
+          peserta: matched,
+          waktu: waktuStr,
+        });
+        playSound("success");
+        return;
+      }
+
+      // Production Server Verification
       const res = await fetch("/api/presensi/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sesi_id: activeSesiId,
           event_slug: eventSlug,
-          code: code.trim(),
+          code: cleanCode,
           metode,
         }),
       });
@@ -310,7 +454,7 @@ export default function AdminPresensiPage() {
         setLastScanResult({
           type: "error",
           title: "Peserta Tidak Ditemukan",
-          message: `NIM / Kode "${code.trim()}" tidak terdaftar dalam database event ini.`,
+          message: `NIM / Kode "${cleanCode}" tidak terdaftar dalam database event ini.`,
         });
         playSound("error");
         return;
@@ -334,8 +478,7 @@ export default function AdminPresensiPage() {
         });
         playSound("warning");
       } else {
-        // Success verified!
-        const waktuStr = new Date(result.attendance.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        const waktuStr = new Date(result.attendance.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
 
         setLastScanResult({
           type: "success",
@@ -346,7 +489,6 @@ export default function AdminPresensiPage() {
         });
         playSound("success");
 
-        // Immediately update local logs
         setAttendanceLogs((prev) => [result.attendance, ...prev]);
       }
     } catch (err: any) {
@@ -375,6 +517,14 @@ export default function AdminPresensiPage() {
     if (!confirm(`Batalkan status kehadiran peserta "${nama}" pada sesi ${currentSesiName}?`)) return;
 
     try {
+      if (tableMissing) {
+        const updated = attendanceLogs.filter((log) => !(log.sesi_id === activeSesiId && log.nim.trim() === nim.trim()));
+        setAttendanceLogs(updated);
+        localStorage.setItem(`local_logs_${eventSlug}_${activeSesiId}`, JSON.stringify(updated));
+        if (lastScanResult?.peserta?.nim === nim) setLastScanResult(null);
+        return;
+      }
+
       const res = await fetch(`/api/presensi/verify?sesi_id=${encodeURIComponent(activeSesiId)}&nim=${encodeURIComponent(nim)}`, {
         method: "DELETE",
       });
@@ -389,45 +539,43 @@ export default function AdminPresensiPage() {
     }
   };
 
-  // 8. Setup HTML5 QR Code Scanner
+  // 8. Setup HTML5 QR Code Scanner with Environment Facing Mode for Mobile
   const startScanner = async () => {
     if (!activeSesiId) {
-      alert("Pilih atau buat sesi absensi terlebih dahulu sebelum menyalakan scanner kamera.");
+      alert("Pilih atau buat sesi absensi terlebih dahulu sebelum menyalakan scanner.");
       return;
     }
 
     try {
       const { Html5Qrcode } = await import("html5-qrcode");
 
-      // Get cameras
-      const devices = await Html5Qrcode.getCameras();
-      if (!devices || devices.length === 0) {
-        alert("Tidak ditemukan kamera pada perangkat ini.");
-        return;
-      }
-
-      setAvailableCameras(devices.map((d) => ({ id: d.id, label: d.label || "Kamera" })));
-
-      // Prefer back camera (environment) if available
-      let preferredCamera = selectedCameraId || devices[0].id;
-      const backCam = devices.find((d) => d.label.toLowerCase().includes("back") || d.label.toLowerCase().includes("belakang") || d.label.toLowerCase().includes("environment"));
-      if (backCam && !selectedCameraId) {
-        preferredCamera = backCam.id;
-        setSelectedCameraId(backCam.id);
+      if (html5QrCodeRef.current) {
+        try {
+          await html5QrCodeRef.current.stop();
+          html5QrCodeRef.current.clear();
+        } catch (e) {}
       }
 
       const html5QrCode = new Html5Qrcode(scannerContainerId);
       html5QrCodeRef.current = html5QrCode;
 
+      // Camera config: preferred back camera by default on phones
+      const cameraConfig = selectedCameraId
+        ? selectedCameraId
+        : { facingMode: cameraFacing };
+
       await html5QrCode.start(
-        preferredCamera,
+        cameraConfig,
         {
           fps: 15,
-          qrbox: { width: 250, height: 250 },
+          qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const qrboxSize = Math.max(180, Math.floor(minEdge * 0.72));
+            return { width: qrboxSize, height: qrboxSize };
+          },
           aspectRatio: 1.0,
         },
-        (decodedText) => {
-          // Debounce scan calls to prevent rapid repeated firing
+        (decodedText: string) => {
           if (isProcessingScanRef.current) return;
           isProcessingScanRef.current = true;
 
@@ -437,15 +585,23 @@ export default function AdminPresensiPage() {
             }, 1800);
           });
         },
-        () => {
-          // QR not found in frame (ignore continuous scan ticks)
-        }
+        () => {}
       );
 
       setIsScanning(true);
+
+      // Enumerate cameras in background
+      try {
+        const devices = await Html5Qrcode.getCameras();
+        if (devices && devices.length > 0) {
+          setAvailableCameras(devices.map((d) => ({ id: d.id, label: d.label || `Kamera ${d.id.slice(0, 4)}` })));
+        }
+      } catch (camErr) {
+        console.warn("Could not list all cameras:", camErr);
+      }
     } catch (err: any) {
       console.error("Gagal menyalakan scanner:", err);
-      alert(`Gagal mengakses kamera: ${err.message || "Izin kamera ditolak atau kamera sedang digunakan."}`);
+      alert(`Gagal mengakses kamera: ${err?.message || "Pastikan Anda memberikan izin akses kamera di browser ponsel Anda."}`);
       setIsScanning(false);
     }
   };
@@ -462,7 +618,20 @@ export default function AdminPresensiPage() {
     setIsScanning(false);
   };
 
-  // Clean up scanner on unmount
+  // Flip Camera between Rear and Front
+  const flipCamera = async () => {
+    const nextFacing = cameraFacing === "environment" ? "user" : "environment";
+    setCameraFacing(nextFacing);
+    setSelectedCameraId("");
+
+    if (isScanning) {
+      await stopScanner();
+      setTimeout(() => {
+        startScanner();
+      }, 350);
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (html5QrCodeRef.current && isScanning) {
@@ -471,14 +640,13 @@ export default function AdminPresensiPage() {
     };
   }, [isScanning]);
 
-  // Switch camera when user picks another camera in dropdown
   const handleCameraChange = async (newCamId: string) => {
     setSelectedCameraId(newCamId);
     if (isScanning) {
       await stopScanner();
       setTimeout(() => {
         startScanner();
-      }, 300);
+      }, 350);
     }
   };
 
@@ -487,11 +655,9 @@ export default function AdminPresensiPage() {
     return pesertaList.filter((p) => {
       const isPresent = attendanceMap.has(p.nim.trim());
 
-      // Filter by Attendance Status
       if (filterStatus === "hadir" && !isPresent) return false;
       if (filterStatus === "belum" && isPresent) return false;
 
-      // Filter by Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchNama = p.nama.toLowerCase().includes(q);
@@ -528,7 +694,7 @@ export default function AdminPresensiPage() {
       return [
         idx + 1,
         `"${p.nama.replace(/"/g, '""')}"`,
-        `"${p.nim}"`,
+        `"'${p.nim}"`,
         `"${p.delegasi.replace(/"/g, '""')}"`,
         `"${p.email}"`,
         `"${p.ticket_id}"`,
@@ -586,30 +752,32 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Page Header & Event Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#160808] p-5 sm:p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs">
+    <div className="space-y-4 sm:space-y-6 max-w-7xl mx-auto">
+      {/* ─────────────────────────────────────────────────────────────
+          1. HEADER & EVENT SELECTOR (Responsive Stack on Mobile)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="bg-white dark:bg-[#160808] p-4 sm:p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white font-poppins">
+            <h1 className="text-lg sm:text-2xl font-bold text-neutral-900 dark:text-white font-poppins">
               Presensi & Verifikasi QR Code
             </h1>
           </div>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-            Scan tiket resmi peserta secara real-time, verifikasi kehadiran per sesi, dan pantau kehadiran mahasiswa.
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Pindai tiket peserta langsung lewat kamera HP atau barcode reader.
           </p>
         </div>
 
         {/* Event Selector Dropdown */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-neutral-800">
           <label className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 shrink-0">
             Event:
           </label>
           <select
             value={eventSlug}
             onChange={(e) => setEventSlug(e.target.value)}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
           >
             <option value="antasari-media-lab">Antasari Media Lab 2026</option>
             <option value="all">Semua Event</option>
@@ -617,34 +785,39 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         </div>
       </div>
 
-      {/* Database Setup Alert if tables not yet created in Supabase */}
+      {/* Database Assistant Banner (if SQL hasn't been run yet) */}
       {tableMissing && (
-        <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 dark:bg-amber-950/30 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5">
           <div className="flex items-start gap-3">
-            <Database className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
+            <Database className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-sm font-bold text-amber-950 font-poppins">
-                Tabel Database Presensi Belum Diaktifkan di Supabase
-              </h4>
-              <p className="text-xs text-amber-800 mt-1 leading-relaxed">
-                Supabase membutuhkan tabel <code>event_sesi_absen</code> dan <code>event_absensi</code> untuk mencatat presensi scan QR. Silakan jalankan script SQL kami sekali di SQL Editor Supabase Anda.
+              <div className="flex items-center gap-2">
+                <h4 className="text-xs sm:text-sm font-bold text-amber-950 dark:text-amber-200 font-poppins">
+                  Mode Presensi Aktif (Penyimpanan Lokal Aktif)
+                </h4>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200/80 text-amber-900">
+                  Siap Digunakan
+                </span>
+              </div>
+              <p className="text-xs text-amber-800 dark:text-amber-300/90 mt-0.5 leading-relaxed">
+                Anda sudah bisa langsung scan dan mencoba fitur presensi di HP sekarang. Untuk sinkronisasi database permanen di Supabase, cukup jalankan script SQL sekali di SQL Editor.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
             <button
               type="button"
               onClick={copySqlCode}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-900 bg-amber-200/80 hover:bg-amber-200 cursor-pointer transition-colors"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-amber-900 bg-amber-200/80 hover:bg-amber-200 cursor-pointer transition-colors"
             >
               {copiedSql ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSql ? "Tersalin!" : "Salin Kode SQL"}</span>
+              <span>{copiedSql ? "Tersalin!" : "Salin SQL"}</span>
             </button>
             <a
               href="https://supabase.com/dashboard/project/rifcawifuojzercjauhy/sql/new"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-sm cursor-pointer transition-colors"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-xs cursor-pointer transition-colors"
             >
               <span>Buka SQL Editor</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -653,52 +826,53 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         </div>
       )}
 
-      {/* Sesi Absen Section (Admin creates/chooses session first) */}
-      <div className="bg-white dark:bg-[#160808] p-5 sm:p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* ─────────────────────────────────────────────────────────────
+          2. KELOLA SESI ABSENSI (Admin adds/chooses session first)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="bg-white dark:bg-[#160808] p-4 sm:p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white font-poppins flex items-center gap-2">
+            <h2 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white font-poppins flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-[#1C4BBC]" />
-              <span>Sesi Absensi Aktif</span>
+              <span>Sesi Absensi:</span>
+              <span className="text-[#1C4BBC] dark:text-[#82BE3B] underline underline-offset-2">
+                {currentSesiName}
+              </span>
             </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-              Pilih sesi absensi yang sedang berlangsung (misal: Datang, Siang, Pulang) untuk verifikasi scan QR:
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+              Pilih sesi aktif untuk verifikasi atau tambah sesi baru:
             </p>
           </div>
 
           <button
             type="button"
             onClick={() => setShowAddSesiModal(true)}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-sm transition-all cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-sm transition-all cursor-pointer shrink-0 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Jenis Absen</span>
+            <span>+ Tambah Jenis Absen</span>
           </button>
         </div>
 
-        {/* Sesi Pills / Tabs */}
+        {/* Sesi Scrollable Pills (Horizontal Touch Scroll on Phone) */}
         {isLoadingSesi ? (
-          <div className="py-4 text-xs text-neutral-400">Memuat sesi absensi...</div>
+          <div className="py-2 text-xs text-neutral-400">Memuat sesi absensi...</div>
         ) : sesiList.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 p-6 text-center space-y-2">
-            <Clock className="w-8 h-8 text-neutral-300 mx-auto" />
+          <div className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 p-4 text-center space-y-2">
             <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
               Belum Ada Sesi Absensi
-            </p>
-            <p className="text-[11px] text-neutral-500 max-w-sm mx-auto">
-              Silakan buat sesi absensi pertama terlebih dahulu (contoh: <strong>Absensi Datang (Pagi)</strong>) sebelum memulai scan tiket.
             </p>
             <button
               type="button"
               onClick={() => setShowAddSesiModal(true)}
-              className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#1C4BBC] bg-[#1C4BBC]/10 hover:bg-[#1C4BBC]/15"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-[#1C4BBC] bg-[#1C4BBC]/10"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Buat Sesi Pertama</span>
             </button>
           </div>
         ) : (
-          <div className="flex flex-wrap items-center gap-2 pt-1">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 no-scrollbar">
             {sesiList.map((sesi) => {
               const isActive = sesi.id === activeSesiId;
               const sessionAttCount = attendanceLogs.filter((l) => l.sesi_id === sesi.id).length;
@@ -706,20 +880,20 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               return (
                 <div
                   key={sesi.id}
-                  className={`inline-flex items-center gap-2 pl-3.5 pr-2 py-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                  className={`shrink-0 inline-flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                     isActive
                       ? "bg-[#1C4BBC] text-white border-[#1C4BBC] shadow-sm shadow-[#1C4BBC]/20"
                       : "bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:border-[#1C4BBC]"
                   }`}
                   onClick={() => setActiveSesiId(sesi.id)}
                 >
-                  <span>{sesi.nama_sesi}</span>
+                  <span className="whitespace-nowrap">{sesi.nama_sesi}</span>
                   <span
                     className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono font-bold ${
                       isActive ? "bg-white/20 text-white" : "bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                     }`}
                   >
-                    {sessionAttCount} Hadir
+                    {sessionAttCount}
                   </span>
                   <button
                     type="button"
@@ -730,7 +904,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                     className={`p-1 rounded hover:bg-red-500/20 transition-colors ${
                       isActive ? "text-white/70 hover:text-white" : "text-neutral-400 hover:text-red-500"
                     }`}
-                    title="Hapus sesi ini"
+                    title="Hapus sesi"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -741,62 +915,77 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         )}
       </div>
 
-      {/* Scanner & Live Verification Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: QR Camera Scanner & Manual Input (5 cols) */}
+      {/* ─────────────────────────────────────────────────────────────
+          3. SCANNER & STATUS GRID (Optimized for Mobile Screens)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+        {/* Left Column: Camera Viewport & Controls (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-white dark:bg-[#160808] p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-[#160808] p-4 sm:p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-neutral-900 dark:text-white font-poppins flex items-center gap-2">
-                <QrCode className="w-4 h-4 text-[#82BE3B]" />
-                <span>Kamera Scanner QR</span>
+              <h3 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white font-poppins flex items-center gap-1.5">
+                <QrCode className="w-4 h-4 text-emerald-600" />
+                <span>Kamera Scanner</span>
               </h3>
 
-              {isScanning ? (
-                <button
-                  type="button"
-                  onClick={stopScanner}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer"
-                >
-                  <CameraOff className="w-3.5 h-3.5" />
-                  <span>Matikan Kamera</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={startScanner}
-                  disabled={!activeSesiId}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors cursor-pointer disabled:opacity-50"
-                >
-                  <Camera className="w-3.5 h-3.5" />
-                  <span>Nyalakan Kamera</span>
-                </button>
-              )}
+              <div className="flex items-center gap-1.5">
+                {isScanning && (
+                  <button
+                    type="button"
+                    onClick={flipCamera}
+                    className="p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 text-neutral-600 dark:text-neutral-300"
+                    title="Putar Kamera Depan/Belakang"
+                  >
+                    <FlipHorizontal className="w-4 h-4" />
+                  </button>
+                )}
+
+                {isScanning ? (
+                  <button
+                    type="button"
+                    onClick={stopScanner}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer"
+                  >
+                    <CameraOff className="w-3.5 h-3.5" />
+                    <span>Tutup</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={startScanner}
+                    disabled={!activeSesiId}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>Nyalakan Kamera</span>
+                  </button>
+                )}
+              </div>
             </div>
 
-            {/* Camera Viewport */}
-            <div className="relative rounded-xl overflow-hidden bg-neutral-900 aspect-square flex flex-col items-center justify-center border border-neutral-800">
+            {/* Mobile Viewport Container */}
+            <div className="relative rounded-2xl overflow-hidden bg-neutral-950 aspect-square max-w-sm mx-auto flex flex-col items-center justify-center border border-neutral-800 shadow-inner">
               <div id={scannerContainerId} className="w-full h-full" />
 
               {!isScanning && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-neutral-400 bg-neutral-950/80 space-y-3 pointer-events-none">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400">
-                    <QrCode className="w-7 h-7" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-neutral-400 bg-neutral-950/85 space-y-2.5 pointer-events-none">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400">
+                    <QrCode className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-neutral-200">Kamera Scanner Sedang Nonaktif</p>
-                    <p className="text-[11px] text-neutral-500 mt-1 max-w-xs">
-                      Klik &quot;Nyalakan Kamera&quot; di atas untuk mulai memindai QR code tiket langsung dari kamera laptop atau ponsel Anda.
+                    <p className="text-xs font-semibold text-neutral-200">Kamera Sedang Nonaktif</p>
+                    <p className="text-[11px] text-neutral-500 mt-0.5">
+                      Klik <strong>&quot;Nyalakan Kamera&quot;</strong> di atas untuk memindai QR tiket peserta.
                     </p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Camera Selector Dropdown (if multiple cameras detected) */}
+            {/* Camera Selection Dropdown */}
             {availableCameras.length > 1 && (
-              <div className="flex items-center gap-2 text-xs">
-                <span className="text-neutral-500 shrink-0">Pilih Kamera:</span>
+              <div className="flex items-center gap-2 text-xs pt-1">
+                <span className="text-neutral-500 shrink-0 text-[11px]">Kamera:</span>
                 <select
                   value={selectedCameraId}
                   onChange={(e) => handleCameraChange(e.target.value)}
@@ -811,18 +1000,18 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               </div>
             )}
 
-            {/* Manual NIM / Barcode Input */}
+            {/* Manual Barcode / NIM Input Field */}
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
               <form onSubmit={handleManualSubmit} className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block">
-                  Scan Barcode Reader / Input NIM Manual:
+                <label className="text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 block">
+                  Input NIM / ID Tiket Manual:
                 </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={manualCode}
                     onChange={(e) => setManualCode(e.target.value)}
-                    placeholder="Ketik NIM / ID Tiket, tekan Enter..."
+                    placeholder="Ketik NIM lalu tekan Enter..."
                     disabled={!activeSesiId || isVerifying}
                     className="flex-1 px-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
                   />
@@ -831,7 +1020,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                     disabled={!manualCode.trim() || isVerifying || !activeSesiId}
                     className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] transition-colors disabled:opacity-50 cursor-pointer shrink-0"
                   >
-                    {isVerifying ? "Verifikasi..." : "Hadirkan"}
+                    {isVerifying ? "Cek..." : "Hadir"}
                   </button>
                 </div>
               </form>
@@ -839,12 +1028,12 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
           </div>
         </div>
 
-        {/* Right Column: Live Scan Status & Statistics (7 cols) */}
-        <div className="lg:col-span-7 space-y-4">
-          {/* Real-Time Last Scan Result Alert Banner */}
+        {/* Right Column: Live Result Banner & Summary Counters (7 cols) */}
+        <div className="lg:col-span-7 space-y-3.5">
+          {/* Real-Time Scan Result Alert Banner */}
           {lastScanResult ? (
             <div
-              className={`rounded-2xl p-5 border transition-all shadow-sm ${
+              className={`rounded-2xl p-4 sm:p-5 border transition-all shadow-sm ${
                 lastScanResult.type === "success"
                   ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-100"
                   : lastScanResult.type === "warning"
@@ -855,28 +1044,28 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
                   {lastScanResult.type === "success" ? (
-                    <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                      <CheckCircle2 className="w-6 h-6" />
+                    <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                      <CheckCircle2 className="w-5 h-5" />
                     </div>
                   ) : lastScanResult.type === "warning" ? (
-                    <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                      <AlertTriangle className="w-6 h-6" />
+                    <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                      <AlertTriangle className="w-5 h-5" />
                     </div>
                   ) : (
-                    <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                      <AlertCircle className="w-6 h-6" />
+                    <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                      <AlertCircle className="w-5 h-5" />
                     </div>
                   )}
 
                   <div>
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider block opacity-75">
-                      {lastScanResult.type === "success" ? "Verifikasi Berhasil" : lastScanResult.type === "warning" ? "Peringatan Absen" : "Gagal Verifikasi"}
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider block opacity-75">
+                      {lastScanResult.type === "success" ? "Verifikasi Berhasil" : lastScanResult.type === "warning" ? "Peringatan" : "Tidak Ditemukan"}
                     </span>
-                    <h4 className="text-base font-bold font-poppins">{lastScanResult.title}</h4>
-                    <p className="text-xs mt-1 leading-relaxed opacity-90">{lastScanResult.message}</p>
+                    <h4 className="text-sm sm:text-base font-bold font-poppins">{lastScanResult.title}</h4>
+                    <p className="text-xs mt-0.5 leading-relaxed opacity-90">{lastScanResult.message}</p>
 
                     {lastScanResult.peserta && (
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs bg-white/60 dark:bg-black/30 p-2.5 rounded-lg border border-black/5 dark:border-white/10 font-mono">
+                      <div className="mt-2.5 flex flex-wrap items-center gap-3 text-xs bg-white/70 dark:bg-black/30 p-2 rounded-lg border border-black/5 dark:border-white/10 font-mono">
                         <div>
                           <span className="text-[10px] text-neutral-500 block">NIM:</span>
                           <strong>{lastScanResult.peserta.nim}</strong>
@@ -884,10 +1073,6 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                         <div>
                           <span className="text-[10px] text-neutral-500 block">Delegasi:</span>
                           <span>{lastScanResult.peserta.delegasi}</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] text-neutral-500 block">Sesi:</span>
-                          <span className="font-sans font-semibold text-[#1C4BBC] dark:text-[#82BE3B]">{currentSesiName}</span>
                         </div>
                       </div>
                     )}
@@ -897,52 +1082,50 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                 <button
                   type="button"
                   onClick={() => setLastScanResult(null)}
-                  className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 opacity-60 hover:opacity-100 transition-opacity"
+                  className="p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 opacity-60"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-[#160808] p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 shrink-0">
-                  <UserCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">
-                    Siap Memindai Tiket Peserta
-                  </h4>
-                  <p className="text-[11px] text-neutral-500">
-                    Arahkan QR code tiket peserta ke kamera atau ketik NIM untuk mencatat kehadiran pada <strong>{currentSesiName}</strong>.
-                  </p>
-                </div>
+            <div className="bg-white dark:bg-[#160808] p-4 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 shrink-0">
+                <UserCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-neutral-900 dark:text-white">
+                  Siap Memindai Tiket
+                </h4>
+                <p className="text-[11px] text-neutral-500">
+                  Arahkan QR tiket ke kotak bidik kamera atau ketik NIM di kolom manual.
+                </p>
               </div>
             </div>
           )}
 
-          {/* Quick Statistics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white dark:bg-[#160808] p-4 rounded-xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs">
-              <span className="text-[11px] text-neutral-500 font-medium block">Total Pendaftar</span>
-              <strong className="text-xl font-bold font-mono text-neutral-900 dark:text-white">{stats.total}</strong>
+          {/* Quick Statistics Bar (Compact 4 columns on mobile & desktop) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="bg-white dark:bg-[#160808] p-3.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs">
+              <span className="text-[10px] text-neutral-500 font-medium block">Total Pendaftar</span>
+              <strong className="text-lg font-bold font-mono text-neutral-900 dark:text-white">{stats.total}</strong>
             </div>
 
-            <div className="bg-emerald-50/60 dark:bg-emerald-950/20 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/40 shadow-2xs">
-              <span className="text-[11px] text-emerald-800 dark:text-emerald-400 font-medium block">Sudah Hadir</span>
-              <div className="flex items-baseline gap-1.5">
-                <strong className="text-xl font-bold font-mono text-emerald-700 dark:text-emerald-300">{stats.hadir}</strong>
-                <span className="text-xs font-semibold text-emerald-600">({stats.persentase}%)</span>
+            <div className="bg-emerald-50/60 dark:bg-emerald-950/20 p-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/40 shadow-2xs">
+              <span className="text-[10px] text-emerald-800 dark:text-emerald-400 font-medium block">Sudah Hadir</span>
+              <div className="flex items-baseline gap-1">
+                <strong className="text-lg font-bold font-mono text-emerald-700 dark:text-emerald-300">{stats.hadir}</strong>
+                <span className="text-[11px] font-semibold text-emerald-600">({stats.persentase}%)</span>
               </div>
             </div>
 
-            <div className="bg-neutral-50 dark:bg-neutral-900 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-2xs">
-              <span className="text-[11px] text-neutral-500 font-medium block">Belum Hadir</span>
-              <strong className="text-xl font-bold font-mono text-neutral-600 dark:text-neutral-400">{stats.belum}</strong>
+            <div className="bg-neutral-50 dark:bg-neutral-900 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-2xs">
+              <span className="text-[10px] text-neutral-500 font-medium block">Belum Hadir</span>
+              <strong className="text-lg font-bold font-mono text-neutral-600 dark:text-neutral-400">{stats.belum}</strong>
             </div>
 
-            <div className="bg-white dark:bg-[#160808] p-4 rounded-xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs flex flex-col justify-center">
-              <span className="text-[11px] text-neutral-500 font-medium block">Sesi Terpilih</span>
+            <div className="bg-white dark:bg-[#160808] p-3.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs flex flex-col justify-center">
+              <span className="text-[10px] text-neutral-500 font-medium block">Sesi Terpilih</span>
               <span className="text-xs font-bold text-[#1C4BBC] dark:text-[#82BE3B] truncate" title={currentSesiName}>
                 {currentSesiName}
               </span>
@@ -951,17 +1134,19 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         </div>
       </div>
 
-      {/* Live Attendance Table Section */}
-      <div className="bg-white dark:bg-[#160808] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs overflow-hidden space-y-4 p-5 sm:p-6">
-        {/* Table Controls (Search, Filters, CSV Export) */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* ─────────────────────────────────────────────────────────────
+          4. REKAP KEHADIRAN (Desktop Table + Mobile Touch Card List)
+      ───────────────────────────────────────────────────────────── */}
+      <div className="bg-white dark:bg-[#160808] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4 p-4 sm:p-6">
+        {/* Controls: Filter Tabs, Search & Export */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Status Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-xl text-xs font-semibold shrink-0">
+          <div className="flex items-center gap-1 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-xl text-xs font-semibold overflow-x-auto no-scrollbar">
             <button
               type="button"
               onClick={() => setFilterStatus("all")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                filterStatus === "all" ? "bg-white dark:bg-neutral-800 shadow-xs text-neutral-900 dark:text-white" : "text-neutral-500 hover:text-neutral-800"
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer ${
+                filterStatus === "all" ? "bg-white dark:bg-neutral-800 shadow-2xs text-neutral-900 dark:text-white" : "text-neutral-500"
               }`}
             >
               Semua ({stats.total})
@@ -969,8 +1154,8 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
             <button
               type="button"
               onClick={() => setFilterStatus("hadir")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                filterStatus === "hadir" ? "bg-emerald-600 text-white shadow-xs font-bold" : "text-neutral-500 hover:text-emerald-600"
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer ${
+                filterStatus === "hadir" ? "bg-emerald-600 text-white shadow-2xs font-bold" : "text-neutral-500"
               }`}
             >
               Hadir ({stats.hadir})
@@ -978,24 +1163,24 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
             <button
               type="button"
               onClick={() => setFilterStatus("belum")}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                filterStatus === "belum" ? "bg-neutral-700 text-white shadow-xs font-bold" : "text-neutral-500 hover:text-neutral-800"
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer ${
+                filterStatus === "belum" ? "bg-neutral-700 text-white shadow-2xs font-bold" : "text-neutral-500"
               }`}
             >
-              Belum Hadir ({stats.belum})
+              Belum ({stats.belum})
             </button>
           </div>
 
           {/* Search Input & Action Buttons */}
-          <div className="flex items-center gap-2.5 flex-1 max-w-md ml-auto">
-            <div className="relative flex-1">
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 sm:w-64">
               <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari nama, NIM, delegasi..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+                placeholder="Cari nama / NIM..."
+                className="w-full pl-8 pr-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
               />
             </div>
 
@@ -1003,7 +1188,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               type="button"
               onClick={fetchData}
               disabled={isLoadingData}
-              className="p-2 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900 text-neutral-600 dark:text-neutral-400 cursor-pointer"
+              className="p-2 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 text-neutral-600 dark:text-neutral-400 cursor-pointer"
               title="Refresh Data"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoadingData ? "animate-spin" : ""}`} />
@@ -1013,16 +1198,101 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               type="button"
               onClick={handleExportCsv}
               disabled={pesertaList.length === 0}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 shadow-2xs transition-colors shrink-0 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 cursor-pointer disabled:opacity-50"
+              title="Download CSV Rekap"
             >
               <Download className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Export Rekap CSV</span>
+              <span className="hidden sm:inline">Export</span>
             </button>
           </div>
         </div>
 
-        {/* The Participant Attendance Table */}
-        <div className="border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-x-auto">
+        {/* ─────────────────────────────────────────────────────────
+            A. MOBILE CARD VIEW (< 640px) — Super comfortable on phone
+        ───────────────────────────────────────────────────────── */}
+        <div className="sm:hidden space-y-2.5">
+          {isLoadingData ? (
+            <div className="py-10 text-center text-xs text-neutral-400">
+              <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              Memuat data peserta...
+            </div>
+          ) : filteredPeserta.length === 0 ? (
+            <div className="py-10 text-center text-xs text-neutral-400">
+              Tidak ada data yang cocok dengan filter.
+            </div>
+          ) : (
+            filteredPeserta.map((peserta) => {
+              const att = attendanceMap.get(peserta.nim.trim());
+              const isPresent = !!att;
+
+              return (
+                <div
+                  key={peserta.id}
+                  className={`p-3.5 rounded-xl border transition-all ${
+                    isPresent
+                      ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700/80 shadow-2xs"
+                      : "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <strong className="text-xs font-bold text-neutral-900 dark:text-white block">
+                        {peserta.nama}
+                      </strong>
+                      <span className="font-mono text-[11px] text-neutral-500 block">
+                        NIM: {peserta.nim} · {peserta.delegasi}
+                      </span>
+                    </div>
+
+                    {/* Status Badge */}
+                    {isPresent ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shrink-0 shadow-2xs">
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>HADIR</span>
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 shrink-0">
+                        Belum Hadir
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-2.5 pt-2 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-[11px]">
+                    <span className="font-mono text-[10px] text-neutral-400">
+                      {isPresent && att?.waktu_absen
+                        ? `Pukul ${new Date(att.waktu_absen).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} WITA`
+                        : peserta.ticket_id}
+                    </span>
+
+                    {isPresent ? (
+                      <button
+                        type="button"
+                        onClick={() => handleCancelAttendance(peserta.nim, peserta.nama)}
+                        className="text-red-600 font-semibold hover:underline text-[11px]"
+                      >
+                        Batal Hadir
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => verifyAttendance(peserta.nim, "manual")}
+                        disabled={!activeSesiId}
+                        className="px-3 py-1 rounded-lg font-bold text-white bg-emerald-600 hover:bg-emerald-700 text-[11px] shadow-2xs disabled:opacity-50"
+                      >
+                        + Hadirkan
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* ─────────────────────────────────────────────────────────
+            B. DESKTOP TABLE VIEW (>= 640px)
+        ───────────────────────────────────────────────────────── */}
+        <div className="hidden sm:block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-neutral-50 dark:bg-neutral-900/80 text-neutral-500 font-semibold border-b border-neutral-200 dark:border-neutral-800">
               <tr>
@@ -1053,13 +1323,13 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                   const att = attendanceMap.get(peserta.nim.trim());
                   const isPresent = !!att;
 
-                  // ROW BECOMES GREEN IF PRESENT
+                  // ROW TURNS EMERALD GREEN IF PRESENT
                   return (
                     <tr
                       key={peserta.id}
                       className={`transition-colors ${
                         isPresent
-                          ? "bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-100 font-medium"
+                          ? "bg-emerald-50/90 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-100 font-medium border-l-4 border-l-emerald-500"
                           : "hover:bg-neutral-50/70 dark:hover:bg-neutral-900/50 text-neutral-700 dark:text-neutral-300"
                       }`}
                     >
@@ -1135,15 +1405,15 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
       {/* Modal: Tambah Sesi Absen Baru */}
       {showAddSesiModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white dark:bg-[#160808] w-full max-w-md rounded-2xl p-6 border border-neutral-200 dark:border-neutral-800 shadow-xl space-y-4">
+          <div className="bg-white dark:bg-[#160808] w-full max-w-md rounded-2xl p-5 sm:p-6 border border-neutral-200 dark:border-neutral-800 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800">
-              <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins">
+              <h3 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white font-poppins">
                 Tambah Jenis Sesi Absen
               </h3>
               <button
                 type="button"
                 onClick={() => setShowAddSesiModal(false)}
-                className="p-1 rounded-lg text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                className="p-1 rounded-lg text-neutral-400 hover:text-neutral-900"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1168,7 +1438,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               <div className="space-y-1.5">
                 <span className="text-[11px] text-neutral-500 block">Pilihan Cepat:</span>
                 <div className="flex flex-wrap gap-1.5">
-                  {["Absensi Datang (Pagi)", "Absensi Siang (ISHOMA)", "Absensi Pulang (Sore)", "Sesi Materi 1"].map((sug) => (
+                  {["Absensi Datang (Pagi)", "Absensi Siang (ISHOMA)", "Absensi Pulang (Sore)", "Sesi Workshop 1"].map((sug) => (
                     <button
                       key={sug}
                       type="button"
@@ -1185,7 +1455,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                 <button
                   type="button"
                   onClick={() => setShowAddSesiModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100"
                 >
                   Batal
                 </button>

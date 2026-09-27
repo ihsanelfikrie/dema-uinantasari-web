@@ -336,9 +336,107 @@ export default function AdminPesertaPage() {
         </div>
       </div>
 
-      {/* Data Table */}
+      {/* Data Table & Mobile Cards */}
       <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View: Touch Cards (sm:hidden) */}
+        <div className="sm:hidden divide-y divide-neutral-100">
+          {isLoading ? (
+            <div className="py-12 text-center text-neutral-400">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs">Memuat data peserta...</span>
+              </div>
+            </div>
+          ) : filteredPeserta.length === 0 ? (
+            <div className="py-12 text-center text-neutral-400 px-4">
+              <Ticket className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
+              <p className="font-semibold text-neutral-700 text-xs">Tidak ada data peserta ditemukan.</p>
+              <span className="text-[11px] text-neutral-400 mt-1 block">
+                {searchQuery ? "Coba ubah kata kunci pencarian Anda." : "Belum ada peserta yang mengisi formulir registrasi."}
+              </span>
+            </div>
+          ) : (
+            paginatedPeserta.map((peserta, idx) => (
+              <div key={peserta.id} className="p-4 hover:bg-neutral-50/50 transition-colors space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-800 font-mono text-[10px] font-bold">
+                      {peserta.ticket_id}
+                    </span>
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-[#1C4BBC] truncate max-w-[140px]">
+                      {peserta.delegasi}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(peserta.id, peserta.nama)}
+                    disabled={deletingId === peserta.id}
+                    className="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                    title="Hapus Peserta"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-neutral-900 text-sm">{peserta.nama}</h4>
+                  <div className="flex items-center gap-2 mt-1 text-xs">
+                    <span className="font-mono text-neutral-600">{peserta.nim}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(peserta.nim)}
+                      className="p-1 rounded text-neutral-400 hover:text-neutral-700 transition-colors"
+                      title="Salin NIM"
+                    >
+                      {copiedNim === peserta.nim ? (
+                        <Check className="w-3.5 h-3.5 text-[#82BE3B]" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                    <span className="text-neutral-300">•</span>
+                    <span className="text-neutral-500 font-mono text-[11px] truncate">{peserta.email}</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-neutral-100 flex items-center justify-between gap-2 text-[11px]">
+                  <span className="text-neutral-400">
+                    {new Date(peserta.created_at).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedPeserta(peserta);
+                        setActiveProofTab("ig");
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:text-[#1C4BBC] text-[11px] font-semibold"
+                    >
+                      <Eye className="w-3 h-3" />
+                      <span>Bukti</span>
+                    </button>
+                    <Link
+                      href={`/event/antasari-media-lab/tiket?nim=${encodeURIComponent(peserta.nim)}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-100 text-neutral-700 hover:bg-neutral-200 text-[11px] font-semibold"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Tiket</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop View: Full Table (hidden sm:block) */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-neutral-50 border-b border-neutral-100 text-neutral-500 font-semibold uppercase tracking-wider">
               <tr>
