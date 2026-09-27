@@ -28,6 +28,15 @@ const config: Config = {
         times: ["var(--font-times)", '"Times New Roman"', "Times", "serif"],
         akzidenz: ["var(--font-akzidenz)", '"Akzidenz-Grotesk"', '"Helvetica Neue"', "Arial", "sans-serif"],
       },
+      animation: {
+        "scan-line": "scanLine 2s ease-in-out infinite",
+      },
+      keyframes: {
+        scanLine: {
+          "0%, 100%": { top: "8px", opacity: "0.6" },
+          "50%": { top: "calc(100% - 8px)", opacity: "1" },
+        },
+      },
     },
   },
   plugins: [],

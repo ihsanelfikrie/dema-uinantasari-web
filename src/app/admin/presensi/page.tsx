@@ -75,12 +75,11 @@ export default function AdminPresensiPage() {
 
   // Scanner & Manual Input State
   const [isScanning, setIsScanning] = useState(false);
-  const [availableCameras, setAvailableCameras] = useState<{ id: string; label: string }[]>([]);
-  const [selectedCameraId, setSelectedCameraId] = useState<string>("");
   const [cameraFacing, setCameraFacing] = useState<"environment" | "user">("environment");
   const [manualCode, setManualCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [lastScanResult, setLastScanResult] = useState<ScanResult | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
 
   // UI Modals & Filters
   const [showAddSesiModal, setShowAddSesiModal] = useState(false);
@@ -91,9 +90,11 @@ export default function AdminPresensiPage() {
   const [tableMissing, setTableMissing] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
 
-  // Refs for scanner
-  const html5QrCodeRef = useRef<any>(null);
-  const scannerContainerId = "qr-reader-container";
+  // Refs for native getUserMedia scanner (Safari iOS compatible)
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const rafRef = useRef<number | null>(null);
   const isProcessingScanRef = useRef(false);
 
   // Audio synthesizer for scan feedback
@@ -539,114 +540,152 @@ export default function AdminPresensiPage() {
     }
   };
 
-  // 8. Setup HTML5 QR Code Scanner with Environment Facing Mode for Mobile
+  // 8. Native getUserMedia + jsQR scanner — works on Safari iOS, Android Chrome, all browsers
+  const stopScanner = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setIsScanning(false);
+  };
+
   const startScanner = async () => {
     if (!activeSesiId) {
       alert("Pilih atau buat sesi absensi terlebih dahulu sebelum menyalakan scanner.");
       return;
     }
 
+    setCameraError(null);
+
+    // Stop any existing stream first
+    stopScanner();
+
     try {
-      const { Html5Qrcode } = await import("html5-qrcode");
-
-      if (html5QrCodeRef.current) {
-        try {
-          await html5QrCodeRef.current.stop();
-          html5QrCodeRef.current.clear();
-        } catch (e) {}
-      }
-
-      const html5QrCode = new Html5Qrcode(scannerContainerId);
-      html5QrCodeRef.current = html5QrCode;
-
-      // Camera config: preferred back camera by default on phones
-      const cameraConfig = selectedCameraId
-        ? selectedCameraId
-        : { facingMode: cameraFacing };
-
-      await html5QrCode.start(
-        cameraConfig,
-        {
-          fps: 15,
-          qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
-            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-            const qrboxSize = Math.max(180, Math.floor(minEdge * 0.72));
-            return { width: qrboxSize, height: qrboxSize };
-          },
-          aspectRatio: 1.0,
+      // Safari iOS: must call getUserMedia after a user gesture.
+      // Use simple facingMode without `exact` to avoid OverconstrainedError on some iPhone models.
+      const constraints: MediaStreamConstraints = {
+        video: {
+          facingMode: cameraFacing,
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
         },
-        (decodedText: string) => {
-          if (isProcessingScanRef.current) return;
-          isProcessingScanRef.current = true;
+        audio: false,
+      };
 
-          verifyAttendance(decodedText, "qr_scan").finally(() => {
-            setTimeout(() => {
-              isProcessingScanRef.current = false;
-            }, 1800);
-          });
-        },
-        () => {}
-      );
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      streamRef.current = stream;
 
+      const video = videoRef.current;
+      if (!video) { stopScanner(); return; }
+
+      // CRITICAL for Safari iOS: playsinline + muted must be set before srcObject
+      video.setAttribute("playsinline", "true");
+      video.setAttribute("muted", "true");
+      video.muted = true;
+      video.srcObject = stream;
+
+      await new Promise<void>((resolve, reject) => {
+        video.onloadedmetadata = () => resolve();
+        video.onerror = reject;
+      });
+
+      await video.play();
       setIsScanning(true);
 
-      // Enumerate cameras in background
-      try {
-        const devices = await Html5Qrcode.getCameras();
-        if (devices && devices.length > 0) {
-          setAvailableCameras(devices.map((d) => ({ id: d.id, label: d.label || `Kamera ${d.id.slice(0, 4)}` })));
+      // Start jsQR decode loop using requestAnimationFrame
+      const scanLoop = async () => {
+        if (!streamRef.current || !videoRef.current || !canvasRef.current) return;
+
+        const vid = videoRef.current;
+        const canvas = canvasRef.current;
+
+        if (vid.readyState === vid.HAVE_ENOUGH_DATA && vid.videoWidth > 0) {
+          canvas.width = vid.videoWidth;
+          canvas.height = vid.videoHeight;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          if (ctx) {
+            ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            const jsQR = (await import("jsqr")).default;
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: "dontInvert",
+            });
+
+            if (code && code.data && !isProcessingScanRef.current) {
+              isProcessingScanRef.current = true;
+              verifyAttendance(code.data, "qr_scan").finally(() => {
+                setTimeout(() => {
+                  isProcessingScanRef.current = false;
+                }, 1800);
+              });
+            }
+          }
         }
-      } catch (camErr) {
-        console.warn("Could not list all cameras:", camErr);
-      }
+
+        rafRef.current = requestAnimationFrame(scanLoop);
+      };
+
+      rafRef.current = requestAnimationFrame(scanLoop);
+
     } catch (err: any) {
-      console.error("Gagal menyalakan scanner:", err);
-      alert(`Gagal mengakses kamera: ${err?.message || "Pastikan Anda memberikan izin akses kamera di browser ponsel Anda."}`);
+      console.error("Gagal mengakses kamera:", err);
+      let msg = "Tidak dapat mengakses kamera.";
+      if (err?.name === "NotAllowedError" || err?.name === "PermissionDeniedError") {
+        msg = "Izin kamera ditolak. Buka Pengaturan → Safari → Kamera → Izinkan, lalu muat ulang halaman.";
+      } else if (err?.name === "NotFoundError") {
+        msg = "Kamera tidak ditemukan di perangkat ini.";
+      } else if (err?.name === "OverconstrainedError") {
+        msg = "Kamera tidak mendukung resolusi yang diminta. Mencoba konfigurasi alternatif...";
+        // Retry with minimal constraints
+        try {
+          const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          streamRef.current = fallbackStream;
+          const video = videoRef.current!;
+          video.setAttribute("playsinline", "true");
+          video.muted = true;
+          video.srcObject = fallbackStream;
+          await video.play();
+          setIsScanning(true);
+          return;
+        } catch (e2: any) {
+          msg = `Gagal mengakses kamera: ${e2?.message}`;
+        }
+      } else {
+        msg = `Gagal mengakses kamera: ${err?.message || "Kesalahan tidak diketahui"}`;
+      }
+      setCameraError(msg);
       setIsScanning(false);
     }
   };
 
-  const stopScanner = async () => {
-    if (html5QrCodeRef.current && isScanning) {
-      try {
-        await html5QrCodeRef.current.stop();
-        html5QrCodeRef.current.clear();
-      } catch (err) {
-        console.warn("Error stopping scanner:", err);
-      }
-    }
-    setIsScanning(false);
-  };
-
   // Flip Camera between Rear and Front
   const flipCamera = async () => {
-    const nextFacing = cameraFacing === "environment" ? "user" : "environment";
+    const nextFacing: "environment" | "user" = cameraFacing === "environment" ? "user" : "environment";
     setCameraFacing(nextFacing);
-    setSelectedCameraId("");
-
-    if (isScanning) {
-      await stopScanner();
-      setTimeout(() => {
-        startScanner();
-      }, 350);
-    }
+    stopScanner();
+    // Small delay to allow stream cleanup before re-opening
+    setTimeout(() => startScanner(), 400);
   };
 
+  // Cleanup on unmount
   useEffect(() => {
-    return () => {
-      if (html5QrCodeRef.current && isScanning) {
-        html5QrCodeRef.current.stop().catch(() => {});
-      }
-    };
-  }, [isScanning]);
+    return () => stopScanner();
+  }, []);
 
-  const handleCameraChange = async (newCamId: string) => {
-    setSelectedCameraId(newCamId);
+  // Re-start scanner when cameraFacing changes while scanning
+  const handleCameraChange = async (newFacing: "environment" | "user") => {
+    setCameraFacing(newFacing);
     if (isScanning) {
-      await stopScanner();
-      setTimeout(() => {
-        startScanner();
-      }, 350);
+      stopScanner();
+      setTimeout(() => startScanner(), 400);
     }
   };
 
@@ -963,9 +1002,33 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               </div>
             </div>
 
-            {/* Mobile Viewport Container */}
+            {/* Native Camera Viewport — Safari iOS + Android Chrome compatible */}
             <div className="relative rounded-2xl overflow-hidden bg-neutral-950 aspect-square max-w-sm mx-auto flex flex-col items-center justify-center border border-neutral-800 shadow-inner">
-              <div id={scannerContainerId} className="w-full h-full" />
+              {/* Live video feed — playsinline + muted required by Safari iOS */}
+              <video
+                ref={videoRef}
+                playsInline
+                muted
+                autoPlay
+                className={`w-full h-full object-cover ${isScanning ? "block" : "hidden"}`}
+              />
+              {/* Hidden canvas for jsQR frame decode */}
+              <canvas ref={canvasRef} className="hidden" />
+
+              {/* Viewfinder overlay when scanning */}
+              {isScanning && (
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                  {/* Corner brackets */}
+                  <div className="relative w-52 h-52">
+                    <span className="absolute top-0 left-0 w-8 h-8 border-t-[3px] border-l-[3px] border-white/80 rounded-tl-md" />
+                    <span className="absolute top-0 right-0 w-8 h-8 border-t-[3px] border-r-[3px] border-white/80 rounded-tr-md" />
+                    <span className="absolute bottom-0 left-0 w-8 h-8 border-b-[3px] border-l-[3px] border-white/80 rounded-bl-md" />
+                    <span className="absolute bottom-0 right-0 w-8 h-8 border-b-[3px] border-r-[3px] border-white/80 rounded-br-md" />
+                    {/* Scan line animation */}
+                    <span className="absolute left-1 right-1 h-0.5 bg-emerald-400/80 rounded-full animate-scan-line" />
+                  </div>
+                </div>
+              )}
 
               {!isScanning && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-neutral-400 bg-neutral-950/85 space-y-2.5 pointer-events-none">
@@ -982,25 +1045,19 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               )}
             </div>
 
-            {/* Camera Selection Dropdown */}
-            {availableCameras.length > 1 && (
-              <div className="flex items-center gap-2 text-xs pt-1">
-                <span className="text-neutral-500 shrink-0 text-[11px]">Kamera:</span>
-                <select
-                  value={selectedCameraId}
-                  onChange={(e) => handleCameraChange(e.target.value)}
-                  className="flex-1 px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 text-xs bg-neutral-50 dark:bg-neutral-900"
-                >
-                  {availableCameras.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.label || "Kamera"}
-                    </option>
-                  ))}
-                </select>
+            {/* Camera error banner */}
+            {cameraError && (
+              <div className="rounded-xl bg-red-50 border border-red-200 p-3 flex items-start gap-2 text-xs text-red-700">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold mb-0.5">Kamera gagal aktif</p>
+                  <p>{cameraError}</p>
+                </div>
               </div>
             )}
 
-            {/* Manual Barcode / NIM Input Field */}
+
+            {/* Manual NIM / Ticket Input */}
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
               <form onSubmit={handleManualSubmit} className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 block">
