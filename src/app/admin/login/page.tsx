@@ -26,24 +26,35 @@ export default function AdminLoginPage() {
     }
 
     try {
-      let finalPassword = password;
-      if (email.trim().toLowerCase() === "komvigi@demauin.com" && password === "4321") {
-        finalPassword = "komvigi4321";
+      const cleanEmail = email.trim().toLowerCase();
+      let cleanPassword = password.trim();
+
+      if (cleanEmail === "komvigi@demauin.com" && cleanPassword === "4321") {
+        cleanPassword = "komvigi4321";
       }
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: finalPassword,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password: cleanPassword,
       });
 
       if (error) {
-        setErrorMsg("Email atau password admin salah.");
+        console.error("Login auth error:", error);
+        if (error.message.toLowerCase().includes("invalid login credentials")) {
+          setErrorMsg("Email atau password admin salah. Silakan periksa kembali.");
+        } else {
+          setErrorMsg(error.message);
+        }
+      } else if (data?.session || data?.user) {
+        // Gunakan full navigation agar cookie sesi terdeteksi oleh server & middleware
+        window.location.href = "/admin";
       } else {
         router.push("/admin");
         router.refresh();
       }
-    } catch (err) {
-      setErrorMsg("Terjadi kesalahan sistem saat mencoba masuk.");
+    } catch (err: any) {
+      console.error("Catch login error:", err);
+      setErrorMsg(err.message || "Terjadi kesalahan sistem saat mencoba masuk.");
     } finally {
       setLoading(false);
     }
