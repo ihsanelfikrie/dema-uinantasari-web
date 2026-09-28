@@ -651,7 +651,7 @@ export default function AdminPesertaPage() {
                     : "text-neutral-500 hover:text-neutral-800"
                 }`}
               >
-                TikTok (@dema.uinantasri)
+                TikTok (@dema.uinantasari)
               </button>
             </div>
 
