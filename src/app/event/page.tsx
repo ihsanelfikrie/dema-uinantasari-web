@@ -36,12 +36,12 @@ export default function EventPage() {
         <div className="text-center py-6 text-xs text-neutral-400 border-t border-neutral-200/60 dark:border-neutral-800">
           Informasi agenda lainnya dipublikasikan secara berkala melalui Instagram resmi{" "}
           <a
-            href="https://instagram.com/demauinantasari"
+            href="https://instagram.com/dema.uin.antasari"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-600 dark:text-neutral-300 font-medium underline underline-offset-4 hover:text-[#1C4BBC] transition-colors"
           >
-            @demauinantasari
+            @dema.uin.antasari
           </a>
         </div>
       </div>

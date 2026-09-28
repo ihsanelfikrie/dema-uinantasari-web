@@ -6,15 +6,27 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = await createClient();
+    // Gunakan anon client hanya untuk verifikasi sesi admin
+    const supabaseAuth = await createClient();
 
-    // Verify admin session
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+    } = await supabaseAuth.auth.getUser();
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    // Gunakan service role client agar operasi DELETE tidak diblokir RLS
+    // (tabel event_registrasi tidak punya policy DELETE untuk anon/authenticated)
+    let supabase = supabaseAuth;
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      const { createClient: createAdminClient } = await import("@supabase/supabase-js");
+      supabase = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { persistSession: false } }
+      ) as any;
     }
 
     const { id } = await params;

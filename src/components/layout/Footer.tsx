@@ -44,7 +44,7 @@ export default function Footer() {
   }
 
   const socialLinks = [
-    { icon: InstagramIcon, href: "https://instagram.com/dema_uinantasari", label: "@dema_uinantasari" },
+    { icon: InstagramIcon, href: "https://instagram.com/dema.uin.antasari", label: "@dema.uin.antasari" },
     { icon: YoutubeIcon, href: "https://youtube.com", label: "DEMA UIN Antasari" },
     { icon: Mail, href: "mailto:dema@uin-antasari.ac.id", label: "dema@uin-antasari.ac.id" },
   ];

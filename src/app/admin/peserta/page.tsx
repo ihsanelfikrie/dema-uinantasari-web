@@ -640,7 +640,7 @@ export default function AdminPesertaPage() {
                     : "text-neutral-500 hover:text-neutral-800"
                 }`}
               >
-                Instagram (@demauinantasari)
+                Instagram (@dema.uin.antasari)
               </button>
               <button
                 type="button"
@@ -651,7 +651,7 @@ export default function AdminPesertaPage() {
                     : "text-neutral-500 hover:text-neutral-800"
                 }`}
               >
-                TikTok (@dema_uinantasari)
+                TikTok (@dema.uinantasri)
               </button>
             </div>
 

@@ -311,12 +311,12 @@ export default function AntasariMediaLabPage() {
     }
 
     if (!igPreview) {
-      setErrorMsg("Harap unggah bukti screenshot follow akun Instagram @demauinantasari.");
+      setErrorMsg("Harap unggah bukti screenshot follow akun Instagram @dema.uin.antasari.");
       return;
     }
 
     if (!tiktokPreview) {
-      setErrorMsg("Harap unggah bukti screenshot follow akun TikTok @dema_uinantasari.");
+      setErrorMsg("Harap unggah bukti screenshot follow akun TikTok @dema.uinantasri.");
       return;
     }
 
@@ -588,7 +588,7 @@ export default function AntasariMediaLabPage() {
                 <div className="flex flex-wrap items-center gap-1.5 text-xs text-neutral-500">
                   <span>Wajib follow:</span>
                   <a
-                    href="https://instagram.com/demauinantasari"
+                    href="https://instagram.com/dema.uin.antasari"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-0.5 font-medium text-[#1C4BBC] dark:text-[#CAD3E6] hover:underline"
@@ -598,7 +598,7 @@ export default function AntasariMediaLabPage() {
                   </a>
                   <span>&</span>
                   <a
-                    href="https://www.tiktok.com/@dema_uinantasari"
+                    href="https://www.tiktok.com/@dema.uinantasri"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-0.5 font-medium text-[#82BE3B] hover:underline"
@@ -647,7 +647,7 @@ export default function AntasariMediaLabPage() {
                   {/* Upload TikTok */}
                   <div>
                     <span className="block text-[11px] text-neutral-500 mb-1">
-                      Screenshot TikTok @dema_uinantasari <span className="text-[#82BE3B]">*</span>
+                      Screenshot TikTok @dema.uinantasri <span className="text-[#82BE3B]">*</span>
                     </span>
                     {tiktokPreview ? (
                       <div className="flex items-center justify-between p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">

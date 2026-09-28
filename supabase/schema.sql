@@ -72,6 +72,13 @@ DROP POLICY IF EXISTS "Izinkan baca event_registrasi" ON event_registrasi;
 CREATE POLICY "Izinkan baca event_registrasi" ON event_registrasi
     FOR SELECT USING (true);
 
+-- Izinkan admin (authenticated user) menghapus data peserta
+-- Catatan: API route DELETE juga menggunakan service role key sebagai lapisan keamanan tambahan
+DROP POLICY IF EXISTS "Izinkan admin hapus event_registrasi" ON event_registrasi;
+CREATE POLICY "Izinkan admin hapus event_registrasi" ON event_registrasi
+    FOR DELETE USING (auth.role() = 'authenticated');
+
+
 -- Storage bucket untuk bukti screenshot follow IG & TikTok
 INSERT INTO storage.buckets (id, name, public) 
 VALUES ('bukti-follow', 'bukti-follow', true)
