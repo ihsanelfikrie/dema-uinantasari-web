@@ -13,6 +13,10 @@ export default function Home() {
       <HeroSection />
       
       <FadeInSection>
+        <EventSection />
+      </FadeInSection>
+
+      <FadeInSection>
         <LaunchingVideoSection />
       </FadeInSection>
 
@@ -26,10 +30,6 @@ export default function Home() {
       
       <FadeInSection>
         <AgendaTerkini />
-      </FadeInSection>
-
-      <FadeInSection>
-        <EventSection />
       </FadeInSection>
       
       <FadeInSection>

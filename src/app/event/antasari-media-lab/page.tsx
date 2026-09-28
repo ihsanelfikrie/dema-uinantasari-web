@@ -557,7 +557,7 @@ export default function AntasariMediaLabPage() {
                   required
                   value={delegasi}
                   onChange={(e) => setDelegasi(e.target.value)}
-                  placeholder="contoh: HMJ PAI / BEM Tarbiyah / LPM Sukma / Umum"
+                  placeholder="contoh: DEMA FTK / HMJ TI / KM-FEBI / LPM SUKMA"
                   className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
                 />
               </div>
