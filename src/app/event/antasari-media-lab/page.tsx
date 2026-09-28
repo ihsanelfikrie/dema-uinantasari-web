@@ -593,7 +593,7 @@ export default function AntasariMediaLabPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-0.5 font-medium text-[#1C4BBC] dark:text-[#CAD3E6] hover:underline"
                   >
-                    @demauinantasari
+                    @dema.uin.antasari
                     <ExternalLink className="w-3 h-3" />
                   </a>
                   <span>&</span>
@@ -603,7 +603,7 @@ export default function AntasariMediaLabPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-0.5 font-medium text-[#82BE3B] hover:underline"
                   >
-                    @dema_uinantasari
+                    @dema.uinantasri
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -612,7 +612,7 @@ export default function AntasariMediaLabPage() {
                   {/* Upload Instagram */}
                   <div>
                     <span className="block text-[11px] text-neutral-500 mb-1">
-                      Screenshot IG @demauinantasari <span className="text-[#1C4BBC]">*</span>
+                      Screenshot IG @dema.uin.antasari <span className="text-[#1C4BBC]">*</span>
                     </span>
                     {igPreview ? (
                       <div className="flex items-center justify-between p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
