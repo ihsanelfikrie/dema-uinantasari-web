@@ -1,297 +1,273 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { 
   FolderDown, 
   FileText, 
-  Palette, 
-  Camera, 
-  TrendingUp, 
   ExternalLink, 
   Download, 
-  CheckCircle2, 
-  CloudDownload,
-  Sparkles,
+  Sparkles, 
+  Clock, 
+  RefreshCw, 
+  Link2, 
+  FileDown, 
+  Image as ImageIcon, 
+  Folder,
   Layers,
-  Video,
-  FileSpreadsheet
+  Copy,
+  Check
 } from "lucide-react";
 
-export default function MateriSection() {
-  const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
+export interface MateriItem {
+  id: string;
+  event_slug: string;
+  judul: string;
+  sesi: string;
+  pemateri?: string | null;
+  deskripsi?: string | null;
+  tipe: "link" | "file" | "image" | "drive";
+  file_url: string;
+  button_label?: string | null;
+  urutan: number;
+  is_published: boolean;
+  created_at: string;
+}
 
-  const handleSimulatedDownload = (title: string, directUrl?: string) => {
-    if (directUrl) {
-      window.open(directUrl, "_blank");
-      return;
+export default function MateriSection() {
+  const [materiList, setMateriList] = useState<MateriItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const fetchMateri = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/event/materi?event=antasari-media-lab&public=true&t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMateriList(Array.isArray(data) ? data : []);
+      } else {
+        setMateriList([]);
+      }
+    } catch {
+      setMateriList([]);
+    } finally {
+      setLoading(false);
     }
-    setDownloadSuccess(title);
-    setTimeout(() => setDownloadSuccess(null), 3500);
+  };
+
+  useEffect(() => {
+    fetchMateri();
+  }, []);
+
+  const handleCopyLink = (item: MateriItem) => {
+    if (!item.file_url) return;
+    navigator.clipboard.writeText(item.file_url);
+    setCopiedId(item.id);
+    setTimeout(() => setCopiedId(null), 2500);
+  };
+
+  // Helper icon berdasarkan tipe materi
+  const renderTypeIcon = (tipe: string) => {
+    switch (tipe) {
+      case "image":
+        return <ImageIcon className="w-4 h-4 text-purple-600" />;
+      case "file":
+        return <FileDown className="w-4 h-4 text-emerald-600" />;
+      case "drive":
+        return <Folder className="w-4 h-4 text-amber-600" />;
+      default:
+        return <Link2 className="w-4 h-4 text-[#1C4BBC]" />;
+    }
+  };
+
+  const renderBadgeType = (tipe: string) => {
+    switch (tipe) {
+      case "image":
+        return <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-800">Gambar / Visual</span>;
+      case "file":
+        return <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">File Dokumen</span>;
+      case "drive":
+        return <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800">Google Drive</span>;
+      default:
+        return <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-800">Link Eksternal</span>;
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* Header Banner Modul */}
-      <div className="bg-white dark:bg-[#140606] p-6 sm:p-7 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm space-y-3">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC] dark:text-[#CAD3E6]">
-            <FolderDown className="w-5 h-5" />
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC] dark:text-[#CAD3E6]">
-            Modul & Toolkit Digital
-          </span>
+      <div className="bg-white dark:bg-[#140606] p-6 sm:p-7 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC] dark:text-[#CAD3E6]">
+              <FolderDown className="w-5 h-5" />
+            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC] dark:text-[#CAD3E6]">
+              Modul & Toolkit Digital
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={fetchMateri}
+            disabled={loading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 transition-colors cursor-pointer"
+            title="Muat ulang materi"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#1C4BBC]" : ""}`} />
+            <span>Perbarui Data</span>
+          </button>
         </div>
+
         <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-900 dark:text-white font-poppins">
           Materi Pelatihan Antasari Media Lab
         </h2>
         <p className="text-xs text-neutral-500 max-w-2xl leading-relaxed">
-          Kumpulan slide presentasi narasumber, template desain Canva siap pakai, dan template jadwal konten untuk menunjang pengelolaan media sosial ormawa Anda.
+          Kumpulan slide presentasi narasumber, template desain, aset grafis, dan toolkit penunjang pengelolaan media sosial ormawa.
         </p>
-
-        {/* Global Google Drive Hub Button */}
-        <div className="pt-2">
-          <a
-            href="https://drive.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-md shadow-[#1C4BBC]/20 transition-all cursor-pointer"
-          >
-            <CloudDownload className="w-4 h-4" />
-            <span>Buka Google Drive Arsip Lengkap Panitia</span>
-            <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-          </a>
-        </div>
       </div>
 
-      {/* Alert download notice */}
-      {downloadSuccess && (
-        <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2 font-medium animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Aset &ldquo;{downloadSuccess}&rdquo; siap dibuka / diunduh.</span>
+      {/* Loading Skeleton */}
+      {loading && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="p-6 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 animate-pulse space-y-4">
+              <div className="h-5 bg-neutral-200 dark:bg-neutral-800 rounded w-1/3" />
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-2/3" />
+              <div className="h-16 bg-neutral-100 dark:bg-neutral-800/60 rounded-xl" />
+              <div className="h-10 bg-neutral-200 dark:bg-neutral-800 rounded-xl" />
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Grid 3 Modul Materi Utama */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        
-        {/* Modul 1: Desain Grafis */}
-        <div className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-4 group hover:border-[#1C4BBC] transition-all">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="p-2.5 rounded-xl bg-blue-500/10 text-[#1C4BBC] dark:text-[#CAD3E6]">
-                <Palette className="w-5 h-5" />
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                Sesi 1
-              </span>
+      {/* STATE 1: MODUL BELUM TERSEDIA (KONDISI AWAL SEBELUM DIISI ADMIN) */}
+      {!loading && materiList.length === 0 && (
+        <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 p-8 sm:p-12 text-center shadow-xs space-y-5">
+          {/* Subtle Glow Background */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-36 bg-[#1C4BBC]/5 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Icon Badge */}
+          <div className="inline-flex p-4 rounded-3xl bg-neutral-100 dark:bg-neutral-800 text-neutral-500 mx-auto">
+            <Clock className="w-8 h-8 text-[#1C4BBC] dark:text-[#CAD3E6]" />
+          </div>
+
+          <div className="space-y-2 max-w-md mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 text-xs font-bold border border-amber-200/60">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Modul Belum Tersedia</span>
             </div>
 
-            <div>
-              <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins">
-                Desain Grafis & Identitas Visual
-              </h3>
-              <span className="text-xs font-semibold text-[#1C4BBC] dark:text-[#CAD3E6] block mt-0.5">
-                Ihsan El Fikrie <span className="text-neutral-400 font-normal">/ Graphic Designer</span>
-              </span>
-              <p className="mt-2 text-xs text-neutral-500 leading-relaxed">
-                Prinsip dasar tata letak, hirarki tipografi, konsistensi warna, dan pembuatan aset visual resmi lembaga mahasiswa.
-              </p>
-            </div>
+            <h3 className="text-lg sm:text-xl font-extrabold text-neutral-900 dark:text-white font-poppins">
+              Materi Pelatihan Segera Hadir
+            </h3>
 
-            {/* Aset List */}
-            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <FileText className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  <span>Slide PPT & PDF Materi</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Slide Desain Grafis - Ihsan El Fikrie")}
-                  className="text-[11px] font-bold text-[#1C4BBC] hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+              Materi slide presentasi, template kerja, dan toolkit pelatihan saat ini sedang disiapkan oleh narasumber dan panitia pelaksana.
+            </p>
+          </div>
+
+          {/* Info Card Peserta */}
+          <div className="max-w-lg mx-auto p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 text-left text-xs space-y-1.5">
+            <div className="font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1C4BBC]" />
+              <span>Informasi Akses Materi</span>
+            </div>
+            <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed text-[11px]">
+              Tautan unduhan dan modul pelatihan akan diaktifkan di halaman ini secara bertahap saat sesi pelatihan berlangsung pada <strong>Sabtu, 3 Oktober 2026</strong>. Peserta terdaftar dapat menyegarkan halaman ini saat sesi dimulai.
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={fetchMateri}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-[#1C4BBC] hover:bg-[#153a99] text-white transition-all shadow-xs cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Cek Pembaruan Materi</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* STATE 2: MODUL TERSEDIA (DINAMIS DARI PANEL ADMIN) */}
+      {!loading && materiList.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {materiList.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-[#1C4BBC] hover:shadow-md transition-all group"
+            >
+              <div className="space-y-3">
+                {/* Header Card: Icon + Category + Badge */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800">
+                      {renderTypeIcon(item.tipe)}
+                    </span>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                      {item.sesi || "Materi Pelatihan"}
+                    </span>
+                  </div>
+                  {renderBadgeType(item.tipe)}
+                </div>
+
+                {/* Title & Speaker */}
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins leading-snug group-hover:text-[#1C4BBC] transition-colors">
+                    {item.judul}
+                  </h3>
+                  {item.pemateri && (
+                    <span className="text-xs font-semibold text-[#1C4BBC] dark:text-[#CAD3E6] block mt-1">
+                      {item.pemateri}
+                    </span>
+                  )}
+                </div>
+
+                {/* Description */}
+                {item.deskripsi && (
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed line-clamp-3">
+                    {item.deskripsi}
+                  </p>
+                )}
               </div>
 
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
-                  <span>Template Canva Feed & Story</span>
-                </span>
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleCopyLink(item)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  title="Salin Tautan Materi"
+                >
+                  {copiedId === item.id ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-600 font-semibold text-[11px]">Tersalin</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span className="text-[11px]">Salin Link</span>
+                    </>
+                  )}
+                </button>
+
                 <a
-                  href="https://canva.com"
+                  href={item.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-bold text-[#1C4BBC] hover:underline cursor-pointer ml-2 inline-flex items-center gap-0.5"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-white bg-[#1C4BBC] hover:bg-[#153a99] transition-all shadow-xs cursor-pointer"
                 >
-                  <span>Buka</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <span>{item.button_label || "Buka Materi"}</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
                 </a>
               </div>
-
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <Layers className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span>Palet Warna & Font Pack</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Font Pack & Palet Warna")}
-                  className="text-[11px] font-bold text-[#1C4BBC] hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
             </div>
-          </div>
+          ))}
         </div>
-
-        {/* Modul 2: Fotografi HP & Video Reels */}
-        <div className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-4 group hover:border-[#82BE3B] transition-all">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="p-2.5 rounded-xl bg-[#82BE3B]/10 text-[#82BE3B]">
-                <Camera className="w-5 h-5" />
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                Sesi 2
-              </span>
-            </div>
-
-            <div>
-              <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins">
-                Fotografi HP & Video Reels
-              </h3>
-              <span className="text-xs font-semibold text-[#82BE3B] block mt-0.5">
-                Kysahh <span className="text-neutral-400 font-normal">/ Fotografer & Creator</span>
-              </span>
-              <p className="mt-2 text-xs text-neutral-500 leading-relaxed">
-                Teknik framing, pencahayaan alami, panduan dokumentasi seremonial, dan editing video transisi cepat di smartphone.
-              </p>
-            </div>
-
-            {/* Aset List */}
-            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <FileText className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  <span>Slide PPT & PDF Materi</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Slide Fotografi & Video - Kysahh")}
-                  className="text-[11px] font-bold text-[#82BE3B] hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <Video className="w-3.5 h-3.5 text-purple-500 shrink-0" />
-                  <span>Cheatsheet Video & Framing</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Cheatsheet Video Reels")}
-                  className="text-[11px] font-bold text-[#82BE3B] hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <Sparkles className="w-3.5 h-3.5 text-pink-500 shrink-0" />
-                  <span>Panduan Editing CapCut</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Panduan CapCut Ormawa")}
-                  className="text-[11px] font-bold text-[#82BE3B] hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Modul 3: Strategi Media Sosial */}
-        <div className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-sm flex flex-col justify-between space-y-4 group hover:border-[#1C4BBC] transition-all">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="p-2.5 rounded-xl bg-orange-500/10 text-orange-600">
-                <TrendingUp className="w-5 h-5" />
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                Sesi 3
-              </span>
-            </div>
-
-            <div>
-              <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins">
-                Strategi Medsos & Content Planning
-              </h3>
-              <span className="text-xs font-semibold text-orange-600 block mt-0.5">
-                Dinur M. Pradipta <span className="text-neutral-400 font-normal">/ Social Media Specialist</span>
-              </span>
-              <p className="mt-2 text-xs text-neutral-500 leading-relaxed">
-                Optimalisasi algoritma media sosial, copywriting menarik, dan manajemen kalender publikasi ormawa.
-              </p>
-            </div>
-
-            {/* Aset List */}
-            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <FileText className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  <span>Slide PPT & PDF Materi</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Slide Content Strategy - Dinur")}
-                  className="text-[11px] font-bold text-orange-600 hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>Template Content Calendar</span>
-                </span>
-                <a
-                  href="https://docs.google.com/spreadsheets"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] font-bold text-orange-600 hover:underline cursor-pointer ml-2 inline-flex items-center gap-0.5"
-                >
-                  <span>Buka Sheets</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300">
-                <span className="inline-flex items-center gap-1.5 truncate">
-                  <Sparkles className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                  <span>Formula Copywriting Ormawa</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSimulatedDownload("Formula Copywriting Medsos")}
-                  className="text-[11px] font-bold text-orange-600 hover:underline cursor-pointer ml-2"
-                >
-                  Download
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 }

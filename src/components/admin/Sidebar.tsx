@@ -15,6 +15,7 @@ import {
   MessageSquare,
   QrCode,
   Award,
+  FolderDown,
   Menu,
   X,
   ChevronRight
@@ -39,6 +40,7 @@ export default function Sidebar() {
     { name: "Peserta Event", href: "/admin/peserta", icon: Users },
     { name: "Scan Presensi QR", href: "/admin/presensi", icon: QrCode, badge: "Live" },
     { name: "Sertifikat Event", href: "/admin/sertifikat", icon: Award },
+    { name: "Modul & Materi", href: "/admin/materi", icon: FolderDown },
     { name: "Info & Kajian", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },

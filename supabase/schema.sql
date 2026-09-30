@@ -204,4 +204,54 @@ CREATE POLICY "Izinkan baca feedback" ON event_feedback
     FOR SELECT USING (true);
 
 
+-- 10. event_materi: Modul & Materi Pelatihan Event (Dikelola dari Admin)
+CREATE TABLE IF NOT EXISTS event_materi (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_slug TEXT NOT NULL DEFAULT 'antasari-media-lab',
+    judul TEXT NOT NULL,
+    sesi TEXT, -- contoh: 'Sesi 1: Desain Grafis', 'Sesi 2: Fotografi & Reels', 'Toolkit Umum'
+    pemateri TEXT, -- contoh: 'Ihsan El Fikrie / Graphic Designer'
+    deskripsi TEXT,
+    tipe TEXT NOT NULL DEFAULT 'link', -- 'link', 'file', 'image', 'drive'
+    file_url TEXT NOT NULL,
+    button_label TEXT DEFAULT 'Buka Tautan',
+    urutan INTEGER DEFAULT 0,
+    is_published BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE event_materi ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Akses publik baca event_materi" ON event_materi;
+CREATE POLICY "Akses publik baca event_materi" ON event_materi 
+    FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Akses penuh event_materi" ON event_materi;
+CREATE POLICY "Akses penuh event_materi" ON event_materi 
+    FOR ALL USING (true);
+
+-- Storage bucket untuk materi event (file PDF/PPT, modul, infografis)
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('event-materi', 'event-materi', true)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Izinkan publik lihat file materi" ON storage.objects;
+CREATE POLICY "Izinkan publik lihat file materi" ON storage.objects
+    FOR SELECT USING (bucket_id = 'event-materi');
+
+DROP POLICY IF EXISTS "Izinkan upload materi" ON storage.objects;
+CREATE POLICY "Izinkan upload materi" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'event-materi');
+
+DROP POLICY IF EXISTS "Izinkan update materi" ON storage.objects;
+CREATE POLICY "Izinkan update materi" ON storage.objects
+    FOR UPDATE USING (bucket_id = 'event-materi');
+
+DROP POLICY IF EXISTS "Izinkan hapus materi" ON storage.objects;
+CREATE POLICY "Izinkan hapus materi" ON storage.objects
+    FOR DELETE USING (bucket_id = 'event-materi');
+
+
+
 

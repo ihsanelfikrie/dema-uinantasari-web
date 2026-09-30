@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Lock } from "lucide-react";
 import MobileMenu from "./MobileMenu";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSecretLoggingIn, setIsSecretLoggingIn] = useState(false);
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
 
   // Handle scroll detection for background transition
@@ -24,6 +28,46 @@ export default function Navbar() {
   if (pathname.startsWith("/admin")) {
     return null;
   }
+
+  // Shortcut: Klik logo 3 kali untuk otomatis login dan pindah ke panel admin
+  const handleLogoClick = async (e: React.MouseEvent) => {
+    clickCountRef.current += 1;
+
+    // Jika sudah mencapai 3 kali klik atau native triple-click
+    if (clickCountRef.current >= 3 || e.detail >= 3) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+      clickCountRef.current = 0;
+      setIsSecretLoggingIn(true);
+
+      try {
+        // 1. Client-side login ke Supabase
+        const supabase = createClient();
+        if (supabase) {
+          await supabase.auth.signInWithPassword({
+            email: "komvigi@demauin.com",
+            password: "komvigi4321",
+          });
+        }
+
+        // 2. Server-side session sync via API
+        await fetch("/api/admin/quick-login", { method: "POST" });
+      } catch (err) {
+        console.error("Quick login error:", err);
+      } finally {
+        window.location.href = "/admin";
+      }
+      return;
+    }
+
+    // Reset hitungan jika tidak ada klik ke-3 dalam 1.5 detik
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+    clickTimerRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+    }, 1500);
+  };
 
   const leftLinks = [
     { href: "/", label: "Beranda" },
@@ -133,7 +177,12 @@ export default function Navbar() {
 
         {/* Center Logo */}
         <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2" suppressHydrationWarning>
-          <Link href="/" className="flex flex-col items-center justify-center text-center group py-1">
+          <Link
+            href="/"
+            onClick={handleLogoClick}
+            className="flex flex-col items-center justify-center text-center group py-1 select-none cursor-pointer"
+            title="DEMA UIN Antasari"
+          >
             <img
               src="/images/logo/logo-light.png"
               alt="DEMA UIN Antasari Logo"
@@ -218,6 +267,23 @@ export default function Navbar() {
         navLinks={mobileLinks}
         pathname={pathname}
       />
+
+      {/* Secret Admin Access Indicator Modal */}
+      {isSecretLoggingIn && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white dark:bg-[#140606] px-6 py-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-2xl flex items-center gap-3">
+            <div className="w-5 h-5 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin shrink-0" />
+            <div className="text-left">
+              <span className="text-xs font-bold text-neutral-900 dark:text-white block font-poppins">
+                Mengakses Panel Admin...
+              </span>
+              <span className="text-[10px] text-neutral-500 block">
+                Otentikasi berhasil, mengalihkan...
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
