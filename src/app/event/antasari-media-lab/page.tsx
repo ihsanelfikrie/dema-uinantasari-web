@@ -423,8 +423,8 @@ export default function AntasariMediaLabPage() {
   };
 
   return (
-    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-10 sm:py-14 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="mx-auto max-w-4xl space-y-6">
+    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg pt-20 pb-12 sm:pt-28 sm:pb-16 px-3.5 sm:px-6 lg:px-8 transition-colors">
+      <div className="mx-auto max-w-4xl space-y-5 sm:space-y-6">
         
         {/* Back Link */}
         <div>
@@ -500,13 +500,13 @@ export default function AntasariMediaLabPage() {
         </div>
 
         {/* ─────────────────────────────────────────────────────────────
-            SECTION NAVIGATION TABS (Pendaftaran | Lokasi | Materi | Sertifikat)
+            SECTION NAVIGATION TABS (Sticky on mobile & desktop)
         ───────────────────────────────────────────────────────────── */}
-        <div className="bg-white dark:bg-[#140606] p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+        <div className="bg-white/95 dark:bg-[#140606]/95 backdrop-blur-md p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-1.5 sticky top-16 md:top-20 z-20">
           <button
             type="button"
             onClick={() => switchSection("pendaftaran")}
-            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "pendaftaran"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -515,14 +515,14 @@ export default function AntasariMediaLabPage() {
             <FileText className="w-4 h-4 shrink-0" />
             <span>Pendaftaran</span>
             {isMounted && ticketData && (
-              <span className="hidden md:inline-block w-2 h-2 rounded-full bg-emerald-400" title="Tiket Aktif" />
+              <span className="hidden sm:inline-block w-2 h-2 rounded-full bg-emerald-400" title="Tiket Aktif" />
             )}
           </button>
 
           <button
             type="button"
             onClick={() => switchSection("lokasi")}
-            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "lokasi"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -535,7 +535,7 @@ export default function AntasariMediaLabPage() {
           <button
             type="button"
             onClick={() => switchSection("materi")}
-            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "materi"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -548,7 +548,7 @@ export default function AntasariMediaLabPage() {
           <button
             type="button"
             onClick={() => switchSection("sertifikat")}
-            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "sertifikat"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -696,7 +696,7 @@ export default function AntasariMediaLabPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="nama@email.com"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-base sm:text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -711,7 +711,7 @@ export default function AntasariMediaLabPage() {
                       value={nama}
                       onChange={(e) => setNama(e.target.value)}
                       placeholder="Contoh: Muhammad Ihsan"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-base sm:text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
                     />
                     <span className="text-[11px] text-neutral-400">
                       Nama ini akan tercetak pada tiket dan E-Sertifikat resmi Anda.
@@ -729,7 +729,7 @@ export default function AntasariMediaLabPage() {
                       value={nim}
                       onChange={(e) => setNim(e.target.value)}
                       placeholder="Contoh: 2101010101"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all font-mono"
+                      className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-base sm:text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all font-mono"
                     />
                   </div>
 
@@ -744,7 +744,7 @@ export default function AntasariMediaLabPage() {
                       value={delegasi}
                       onChange={(e) => setDelegasi(e.target.value)}
                       placeholder="Contoh: DEMA Fakultas Tarbiyah / HMJ PAI / Mahasiswa Umum"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-3 sm:py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900 text-base sm:text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -938,12 +938,12 @@ export default function AntasariMediaLabPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap sm:flex-col gap-2 shrink-0">
+                <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
                   <a
                     href="https://maps.app.goo.gl/Yf1wDEtwVBbQQZ31A"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition-all cursor-pointer w-full sm:w-auto"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>Buka Rute di Google Maps</span>
@@ -952,7 +952,7 @@ export default function AntasariMediaLabPage() {
                   <button
                     type="button"
                     onClick={handleCopyAddress}
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-3 sm:py-2 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer w-full sm:w-auto"
                   >
                     {copiedAddress ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-neutral-500" />}
                     <span>{copiedAddress ? "Alamat Tersalin!" : "Salin Alamat Lengkap"}</span>
@@ -960,8 +960,8 @@ export default function AntasariMediaLabPage() {
                 </div>
               </div>
 
-              {/* Interactive Google Maps Embed Container */}
-              <div className="relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 shadow-inner bg-neutral-100 aspect-video sm:aspect-[21/9]">
+              {/* Interactive Google Maps Embed Container: 4:3 on mobile */}
+              <div className="relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 shadow-inner bg-neutral-100 aspect-[4/3] sm:aspect-video md:aspect-[21/9]">
                 <iframe
                   title="Peta Lokasi Aula Sasangga Banua"
                   src="https://maps.google.com/maps?q=Kantor%20Gubernur%20Kalimantan%20Selatan%20Lama%2C%20Jl.%20Jenderal%20Sudirman%20No.1%2C%20Banjarmasin&t=&z=16&ie=UTF8&iwloc=&output=embed"

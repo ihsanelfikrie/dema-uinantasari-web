@@ -10,17 +10,17 @@ export const metadata: Metadata = {
 
 export default function EventPage() {
   return (
-    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 transition-colors">
+    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg pt-20 pb-12 sm:pt-28 sm:pb-16 px-3.5 sm:px-6 lg:px-8 transition-colors">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 block mb-2">
+        <div className="text-center mb-8 sm:mb-12">
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-neutral-400 block mb-1.5 sm:mb-2">
             Program & Kegiatan
           </span>
-          <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-4xl font-poppins">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-white font-poppins">
             Event DEMA UIN Antasari
           </h1>
-          <p className="mt-3 text-sm text-neutral-500 max-w-md mx-auto">
+          <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
             Agenda kegiatan akbar, workshop, dan pelatihan resmi kemahasiswaan DEMA UIN Antasari Banjarmasin.
           </p>
         </div>

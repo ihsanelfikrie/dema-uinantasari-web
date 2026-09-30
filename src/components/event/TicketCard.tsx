@@ -736,60 +736,64 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
             )}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+          {/* Action Buttons: Ergonomic Mobile Layout */}
+          <div className="flex flex-col gap-2.5 pt-1">
+            {/* Primary Download Button */}
             <button
               type="button"
               onClick={handleDownloadTicket}
               disabled={!ticketImageUrl || isGenerating}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-[#82BE3B] hover:bg-[#72a833] shadow-md shadow-[#82BE3B]/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-[#82BE3B] hover:bg-[#72a833] shadow-md shadow-[#82BE3B]/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
-              <span>Download Tiket (PNG)</span>
+              <span>Download Tiket Lengkap (PNG)</span>
             </button>
 
-            {standaloneQrUrl && (
+            {/* Secondary Actions Grid for Mobile / Row for Desktop */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
+              {standaloneQrUrl && (
+                <button
+                  type="button"
+                  onClick={handleDownloadQrOnly}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 transition-colors shadow-2xs cursor-pointer"
+                  title="Download hanya file QR Code"
+                >
+                  <QrCode className="w-3.5 h-3.5 text-[#1C4BBC]" />
+                  <span>Simpan QR</span>
+                </button>
+              )}
+
+              <a
+                href={WA_GROUP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-2xs cursor-pointer"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Grup WA</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+
               <button
                 type="button"
-                onClick={handleDownloadQrOnly}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 transition-colors shadow-xs cursor-pointer"
-                title="Download hanya file QR Code"
+                onClick={() => window.print()}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 transition-colors shadow-2xs cursor-pointer"
               >
-                <QrCode className="w-4 h-4 text-[#1C4BBC]" />
-                <span>Simpan QR Saja</span>
+                <Printer className="w-3.5 h-3.5" />
+                <span>Cetak</span>
               </button>
-            )}
 
-            <a
-              href={WA_GROUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-xs cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>Grup WA</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 transition-colors shadow-xs cursor-pointer"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Cetak Tiket</span>
-            </button>
-
-            {onReset && (
-              <button
-                type="button"
-                onClick={onReset}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-[#1C4BBC] bg-[#1C4BBC]/10 hover:bg-[#1C4BBC]/15 transition-colors cursor-pointer"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span>Daftar Peserta Lain</span>
-              </button>
-            )}
+              {onReset && (
+                <button
+                  type="button"
+                  onClick={onReset}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-[#1C4BBC] bg-[#1C4BBC]/10 hover:bg-[#1C4BBC]/15 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Daftar Lagi</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
