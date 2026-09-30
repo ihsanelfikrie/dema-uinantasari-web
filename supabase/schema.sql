@@ -180,4 +180,28 @@ CREATE POLICY "Izinkan hapus template sertifikat" ON storage.objects
     FOR DELETE USING (bucket_id = 'sertifikat-templates');
 
 
+-- 9. event_feedback: Kuesioner evaluasi & kepuasan peserta
+CREATE TABLE IF NOT EXISTS event_feedback (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_slug TEXT NOT NULL DEFAULT 'antasari-media-lab',
+    nim TEXT NOT NULL,
+    nama TEXT NOT NULL,
+    delegasi TEXT,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    materi_favorit TEXT,
+    saran TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE event_feedback ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Izinkan publik kirim feedback" ON event_feedback;
+CREATE POLICY "Izinkan publik kirim feedback" ON event_feedback
+    FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Izinkan baca feedback" ON event_feedback;
+CREATE POLICY "Izinkan baca feedback" ON event_feedback
+    FOR SELECT USING (true);
+
+
 

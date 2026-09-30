@@ -23,10 +23,13 @@ import {
   Check,
   ChevronRight,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  FolderDown
 } from "lucide-react";
 import TicketCard, { TicketData } from "@/components/event/TicketCard";
 import CertificateCard, { CertificateRenderData } from "@/components/event/CertificateCard";
+import FeedbackCard from "@/components/event/FeedbackCard";
+import MateriSection from "@/components/event/MateriSection";
 import { createClient } from "@/lib/supabase/client";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -46,9 +49,11 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 export default function AntasariMediaLabPage() {
-  // Navigation Section State (pendaftaran | lokasi | sertifikat)
-  const [activeSection, setActiveSection] = useState<"pendaftaran" | "lokasi" | "sertifikat">("pendaftaran");
+  // Navigation Section State (pendaftaran | lokasi | materi | sertifikat)
+  const [activeSection, setActiveSection] = useState<"pendaftaran" | "lokasi" | "materi" | "sertifikat">("pendaftaran");
   const [copiedAddress, setCopiedAddress] = useState(false);
+  const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
+  const [hideFeedback, setHideFeedback] = useState(false);
 
   // Form State
   const [email, setEmail] = useState("");
@@ -84,13 +89,13 @@ export default function AntasariMediaLabPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get("tab");
-      if (tab === "lokasi" || tab === "sertifikat" || tab === "pendaftaran") {
-        setActiveSection(tab);
+      if (tab === "lokasi" || tab === "sertifikat" || tab === "pendaftaran" || tab === "materi") {
+        setActiveSection(tab as any);
       }
     }
   }, []);
 
-  const switchSection = (tab: "pendaftaran" | "lokasi" | "sertifikat") => {
+  const switchSection = (tab: "pendaftaran" | "lokasi" | "materi" | "sertifikat") => {
     setActiveSection(tab);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -499,13 +504,13 @@ export default function AntasariMediaLabPage() {
         </div>
 
         {/* ─────────────────────────────────────────────────────────────
-            SECTION NAVIGATION TABS (Pendaftaran | Lokasi | Sertifikat)
+            SECTION NAVIGATION TABS (Pendaftaran | Lokasi | Materi | Sertifikat)
         ───────────────────────────────────────────────────────────── */}
-        <div className="bg-white dark:bg-[#140606] p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-3 gap-1.5">
+        <div className="bg-white dark:bg-[#140606] p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-1.5">
           <button
             type="button"
             onClick={() => switchSection("pendaftaran")}
-            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeSection === "pendaftaran"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -521,7 +526,7 @@ export default function AntasariMediaLabPage() {
           <button
             type="button"
             onClick={() => switchSection("lokasi")}
-            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeSection === "lokasi"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -533,8 +538,21 @@ export default function AntasariMediaLabPage() {
 
           <button
             type="button"
+            onClick={() => switchSection("materi")}
+            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+              activeSection === "materi"
+                ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
+                : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            }`}
+          >
+            <FolderDown className="w-4 h-4 shrink-0" />
+            <span>Materi & Modul</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => switchSection("sertifikat")}
-            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeSection === "sertifikat"
                 ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
@@ -1034,7 +1052,14 @@ export default function AntasariMediaLabPage() {
         )}
 
         {/* ─────────────────────────────────────────────────────────────
-            TAB 3: E-SERTIFIKAT DIGITAL
+            TAB 3: MATERI & MODUL PELATIHAN
+        ───────────────────────────────────────────────────────────── */}
+        {activeSection === "materi" && (
+          <MateriSection />
+        )}
+
+        {/* ─────────────────────────────────────────────────────────────
+            TAB 4: E-SERTIFIKAT DIGITAL
         ───────────────────────────────────────────────────────────── */}
         {activeSection === "sertifikat" && (
           <div className="space-y-6">
@@ -1142,9 +1167,19 @@ export default function AntasariMediaLabPage() {
               </div>
             )}
 
-            {/* Render Certificate Card when Eligible */}
+            {/* Render Certificate Card and Feedback Survey when Eligible */}
             {certData && (
-              <div className="space-y-4">
+              <div className="space-y-5">
+                {!hasSubmittedFeedback && !hideFeedback && (
+                  <FeedbackCard
+                    nim={certData.nim}
+                    nama={certData.nama}
+                    delegasi={certData.delegasi}
+                    onSubmitted={() => setHasSubmittedFeedback(true)}
+                    onSkip={() => setHideFeedback(true)}
+                  />
+                )}
+
                 <CertificateCard
                   data={certData}
                   onClose={() => {

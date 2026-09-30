@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, ArrowRight, ExternalLink, Award, FileText } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, ExternalLink, Award, FileText, FolderDown } from "lucide-react";
 
 export default function EventCard() {
   return (
@@ -118,6 +118,13 @@ export default function EventCard() {
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>Lokasi & Rute</span>
+            </Link>
+            <Link
+              href="/event/antasari-media-lab?tab=materi"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
+            >
+              <FolderDown className="w-3.5 h-3.5" />
+              <span>Materi & Modul</span>
             </Link>
             <Link
               href="/event/antasari-media-lab?tab=sertifikat"
