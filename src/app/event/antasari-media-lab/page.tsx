@@ -15,10 +15,6 @@ import {
   Calendar, 
   Award,
   FileText,
-  Clock,
-  Shirt,
-  Laptop,
-  Car,
   Copy,
   Check,
   ChevronRight,
@@ -977,56 +973,6 @@ export default function AntasariMediaLabPage() {
               </div>
             </div>
 
-            {/* Practical Arrival Guide Cards for Participants */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-2">
-                <div className="flex items-center gap-2.5 text-neutral-900 dark:text-white font-bold text-xs sm:text-sm">
-                  <div className="p-2 rounded-xl bg-[#1C4BBC]/10 text-[#1C4BBC]">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <span>Waktu Check-In & Registrasi</span>
-                </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                  Meja registrasi dan pemindaian barcode tiket dibuka mulai pukul <strong>07.30 WITA</strong>. Mohon hadir 15 menit sebelum acara dimulai agar tidak tertinggal materi.
-                </p>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-2">
-                <div className="flex items-center gap-2.5 text-neutral-900 dark:text-white font-bold text-xs sm:text-sm">
-                  <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600">
-                    <Shirt className="w-4 h-4" />
-                  </div>
-                  <span>Ketentuan Pakaian (Dress Code)</span>
-                </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                  Pakaian bebas, sopan, dan rapi. Disarankan mengenakan <strong>Jas Almamater UIN Antasari</strong> atau kemeja organisasi bagi perwakilan delegasi ormawa.
-                </p>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-2">
-                <div className="flex items-center gap-2.5 text-neutral-900 dark:text-white font-bold text-xs sm:text-sm">
-                  <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
-                    <Laptop className="w-4 h-4" />
-                  </div>
-                  <span>Peralatan yang Disarankan</span>
-                </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                  Membawa <strong>smartphone</strong> dengan kuota data internet aktif atau <strong>laptop</strong> untuk praktik langsung pembuatan materi desain dan content planning.
-                </p>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-2">
-                <div className="flex items-center gap-2.5 text-neutral-900 dark:text-white font-bold text-xs sm:text-sm">
-                  <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600">
-                    <Car className="w-4 h-4" />
-                  </div>
-                  <span>Akses Masuk & Parkir</span>
-                </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                  Parkir kendaraan roda 2 dan roda 4 tersedia aman di dalam area halaman Eks Kantor Gubernur Kalsel melalui gerbang utama Jalan Jenderal Sudirman.
-                </p>
-              </div>
-            </div>
 
             {/* Shortcut ke Pendaftaran jika belum daftar */}
             {!ticketData && (
