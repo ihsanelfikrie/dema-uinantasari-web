@@ -14,7 +14,9 @@ import {
   RefreshCw,
   MessageCircle,
   HelpCircle,
-  ExternalLink
+  ExternalLink,
+  Copy,
+  Check
 } from "lucide-react";
 
 export interface TicketData {
@@ -39,6 +41,7 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
   const [errorDetails, setErrorDetails] = useState<string>("");
   const [retryCount, setRetryCount] = useState<number>(0);
   const [isVectorFallback, setIsVectorFallback] = useState<boolean>(false);
+  const [copiedWa, setCopiedWa] = useState<boolean>(false);
 
   // Helper to load image as a Promise with a safety timeout
   const loadImage = (src: string, timeoutMs = 6000): Promise<HTMLImageElement> => {
@@ -447,6 +450,15 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
     setRetryCount((prev) => prev + 1);
   };
 
+  // Tautan Resmi Grup WhatsApp Peserta Antasari Media Lab
+  const WA_GROUP_URL = "https://chat.whatsapp.com/E37MHCG2vOV9hLFIhx3y25?s=cl&p=a&ilr=4&iam=1";
+
+  const handleCopyWa = () => {
+    navigator.clipboard.writeText(WA_GROUP_URL);
+    setCopiedWa(true);
+    setTimeout(() => setCopiedWa(false), 2500);
+  };
+
   // Pre-filled WhatsApp Narahubung Hotline (Wafi)
   const narhubPhone = "6282162138655";
   const narhubDisplay = "+62 821 6213 8655 (Wafi)";
@@ -467,6 +479,81 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
         <span className="text-[11px] font-mono font-bold text-[#1C4BBC] dark:text-[#82BE3B] shrink-0 bg-neutral-100 dark:bg-neutral-800/80 px-2 py-0.5 rounded">
           {data.ticketId}
         </span>
+      </div>
+
+      {/* Kartu Undangan Grup WhatsApp Resmi Peserta */}
+      <div className="rounded-2xl border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-50/90 via-white to-emerald-50/40 dark:from-[#0d2218] dark:via-[#140606] dark:to-[#0d2218]/40 p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-emerald-100 dark:border-emerald-900/40">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/25">
+              <MessageCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Langkah Wajib Selanjutnya
+              </span>
+              <h4 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white font-poppins">
+                Grup WhatsApp Peserta Pelatihan
+              </h4>
+            </div>
+          </div>
+
+          <a
+            href={WA_GROUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 shadow-md shadow-emerald-600/25 transition-all shrink-0 cursor-pointer"
+          >
+            <span>👉 Gabung Grup WhatsApp</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+
+        <div className="space-y-2.5 text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          <p>
+            Terima kasih kawan-kawan Antasari yang telah melakukan pendaftaran{" "}
+            <strong className="text-neutral-900 dark:text-white">
+              Antasari Media Lab – Pelatihan Media Sosial
+            </strong>
+            .
+          </p>
+          <p>
+            Untuk mendapatkan informasi terkait pelaksanaan pelatihan, silakan bergabung ke Grup WhatsApp melalui tautan berikut:
+          </p>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <a
+              href={WA_GROUP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-semibold text-emerald-700 dark:text-emerald-400 hover:underline break-all bg-emerald-100/70 dark:bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800/60"
+            >
+              <span>👉 https://chat.whatsapp.com/E37MHCG2vOV9hLFIhx3y25...</span>
+              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+            </a>
+            <button
+              type="button"
+              onClick={handleCopyWa}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-neutral-600 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 transition-colors cursor-pointer"
+              title="Salin Tautan Grup WhatsApp"
+            >
+              {copiedWa ? (
+                <>
+                  <Check className="w-3 h-3 text-emerald-600" />
+                  <span className="text-emerald-600 font-semibold">Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3 h-3" />
+                  <span>Salin Link</span>
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-[11px] text-amber-800 dark:text-amber-400 font-medium pt-0.5">
+            Pastikan Anda bergabung agar dapat menerima informasi dan pengumuman terbaru seputar pelatihan.
+          </p>
+        </div>
       </div>
 
       {/* TIER 3: EMERGENCY LIVE HTML DIGITAL PASS (Rendered if Canvas totally fails) */}
@@ -671,6 +758,17 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
                 <span>Simpan QR Saja</span>
               </button>
             )}
+
+            <a
+              href={WA_GROUP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-xs cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Grup WA</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
 
             <button
               type="button"
