@@ -16,13 +16,13 @@ export async function GET(request: Request) {
       const { data: existing, error: checkErr } = await supabase
         .from("event_registrasi")
         .select("id, ticket_id, nama, nim, delegasi, email, created_at")
-        .eq("nim", cleanNim)
+        .ilike("nim", cleanNim)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (checkErr) {
-        return NextResponse.json({ exists: false, error: checkErr.message }, {
+        return NextResponse.json({ exists: null, error: checkErr.message }, {
           status: 500,
           headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
         });
@@ -180,7 +180,7 @@ export async function POST(request: Request) {
       .from("event_registrasi")
       .select("id, ticket_id, ig_screenshot_url, tiktok_screenshot_url")
       .eq("event_slug", event_slug)
-      .eq("nim", cleanNim)
+      .ilike("nim", cleanNim)
       .maybeSingle();
 
     let recordResult = null;

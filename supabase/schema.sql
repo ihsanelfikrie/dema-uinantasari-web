@@ -72,6 +72,10 @@ DROP POLICY IF EXISTS "Izinkan baca event_registrasi" ON event_registrasi;
 CREATE POLICY "Izinkan baca event_registrasi" ON event_registrasi
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Izinkan publik update event_registrasi" ON event_registrasi;
+CREATE POLICY "Izinkan publik update event_registrasi" ON event_registrasi
+    FOR UPDATE USING (true);
+
 -- Izinkan admin (authenticated user) menghapus data peserta
 -- Catatan: API route DELETE juga menggunakan service role key sebagai lapisan keamanan tambahan
 DROP POLICY IF EXISTS "Izinkan admin hapus event_registrasi" ON event_registrasi;
@@ -87,6 +91,10 @@ ON CONFLICT (id) DO NOTHING;
 DROP POLICY IF EXISTS "Izinkan upload bukti follow" ON storage.objects;
 CREATE POLICY "Izinkan upload bukti follow" ON storage.objects
     FOR INSERT WITH CHECK (bucket_id = 'bukti-follow');
+
+DROP POLICY IF EXISTS "Izinkan update bukti follow" ON storage.objects;
+CREATE POLICY "Izinkan update bukti follow" ON storage.objects
+    FOR UPDATE USING (bucket_id = 'bukti-follow');
 
 DROP POLICY IF EXISTS "Izinkan lihat bukti follow" ON storage.objects;
 CREATE POLICY "Izinkan lihat bukti follow" ON storage.objects

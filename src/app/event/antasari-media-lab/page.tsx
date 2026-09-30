@@ -195,7 +195,10 @@ export default function AntasariMediaLabPage() {
         if (parsed.nim) {
           const cleanNim = parsed.nim.trim().replace(/\s+/g, "");
           fetch(`/api/peserta?check_nim=${encodeURIComponent(cleanNim)}&t=${Date.now()}`)
-            .then((res) => res.json())
+            .then((res) => {
+              if (!res.ok) return null; // Jangan reset jika server error / offline
+              return res.json();
+            })
             .then((result) => {
               if (result && result.exists === false) {
                 // Tiket lama peserta hanya tersimpan di cache lokal tapi tidak ada di database supabase
