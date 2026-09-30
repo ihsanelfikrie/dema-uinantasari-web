@@ -14,6 +14,7 @@ import {
   Users,
   MessageSquare,
   QrCode,
+  Award,
   Menu,
   X,
   ChevronRight
@@ -37,6 +38,7 @@ export default function Sidebar() {
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Peserta Event", href: "/admin/peserta", icon: Users },
     { name: "Scan Presensi QR", href: "/admin/presensi", icon: QrCode, badge: "Live" },
+    { name: "Sertifikat Event", href: "/admin/sertifikat", icon: Award },
     { name: "Info & Kajian", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },

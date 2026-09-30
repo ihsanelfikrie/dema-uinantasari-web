@@ -125,5 +125,51 @@ CREATE POLICY "Akses penuh event_sesi_absen" ON event_sesi_absen FOR ALL USING (
 DROP POLICY IF EXISTS "Akses penuh event_absensi" ON event_absensi;
 CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
 
+-- 8. event_sertifikat_config: Pengaturan generator sertifikat dinamis per event
+CREATE TABLE IF NOT EXISTS event_sertifikat_config (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_slug TEXT NOT NULL UNIQUE DEFAULT 'antasari-media-lab',
+    is_published BOOLEAN NOT NULL DEFAULT false, -- Saklar apakah peserta sudah boleh cek & unduh
+    template_url TEXT, -- URL file gambar template A4 Landscape yang diupload admin
+    nomor_format TEXT NOT NULL DEFAULT '{nomor}/DEMA-UIN/AML/X/2026', -- Format nomor surat/sertifikat
+    nomor_start INTEGER NOT NULL DEFAULT 1,
+    nama_pos_y INTEGER NOT NULL DEFAULT 1180, -- Posisi Y Nama Peserta (pada kanvas standar A4 3508x2480)
+    nama_font_size INTEGER NOT NULL DEFAULT 82, -- Ukuran font Nama
+    nama_color TEXT NOT NULL DEFAULT '#1C4BBC', -- Warna font Nama
+    nomor_pos_x INTEGER NOT NULL DEFAULT 1754, -- Posisi X Nomor Surat (center=1754)
+    nomor_pos_y INTEGER NOT NULL DEFAULT 780, -- Posisi Y Nomor Surat
+    nomor_font_size INTEGER NOT NULL DEFAULT 36, -- Ukuran font Nomor Surat
+    nomor_color TEXT NOT NULL DEFAULT '#444444',
+    require_presensi BOOLEAN NOT NULL DEFAULT true, -- Syarat wajib sudah presensi
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE event_sertifikat_config ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Akses penuh event_sertifikat_config" ON event_sertifikat_config;
+CREATE POLICY "Akses penuh event_sertifikat_config" ON event_sertifikat_config FOR ALL USING (true);
+
+-- Storage bucket untuk template sertifikat A4
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('sertifikat-templates', 'sertifikat-templates', true)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Izinkan publik lihat template sertifikat" ON storage.objects;
+CREATE POLICY "Izinkan publik lihat template sertifikat" ON storage.objects
+    FOR SELECT USING (bucket_id = 'sertifikat-templates');
+
+DROP POLICY IF EXISTS "Izinkan upload template sertifikat" ON storage.objects;
+CREATE POLICY "Izinkan upload template sertifikat" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'sertifikat-templates');
+
+DROP POLICY IF EXISTS "Izinkan update template sertifikat" ON storage.objects;
+CREATE POLICY "Izinkan update template sertifikat" ON storage.objects
+    FOR UPDATE USING (bucket_id = 'sertifikat-templates');
+
+DROP POLICY IF EXISTS "Izinkan hapus template sertifikat" ON storage.objects;
+CREATE POLICY "Izinkan hapus template sertifikat" ON storage.objects
+    FOR DELETE USING (bucket_id = 'sertifikat-templates');
+
 
 

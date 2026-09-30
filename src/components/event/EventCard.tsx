@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, ArrowRight, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, ExternalLink, Award, FileText } from "lucide-react";
 
 export default function EventCard() {
   return (
     <div className="group relative bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row">
       {/* Cover Poster: FULL Edge-to-Edge without background container */}
-      <div className="relative md:w-5/12 min-h-[340px] md:min-h-[460px] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+      <Link 
+        href="/event/antasari-media-lab"
+        className="relative md:w-5/12 min-h-[340px] md:min-h-[460px] overflow-hidden bg-neutral-100 dark:bg-neutral-900 block"
+      >
         <img
           src="/images/event/antasari-media-lab-poster.jpg"
           alt="Poster Antasari Media Lab"
@@ -21,7 +24,7 @@ export default function EventCard() {
             Pendaftaran Dibuka
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Content Area */}
       <div className="p-6 sm:p-8 md:p-10 md:w-7/12 flex flex-col justify-between">
@@ -34,9 +37,11 @@ export default function EventCard() {
           </div>
 
           {/* Event Title */}
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight">
-            Antasari Media Lab
-          </h3>
+          <Link href="/event/antasari-media-lab" className="block group/title">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight group-hover/title:text-[#1C4BBC] transition-colors">
+              Antasari Media Lab
+            </h3>
+          </Link>
 
           {/* Slogan */}
           <p className="mt-2 text-sm font-medium text-neutral-600 dark:text-neutral-300">
@@ -82,33 +87,60 @@ export default function EventCard() {
               <MapPin className="w-4 h-4 text-[#82BE3B] shrink-0 mt-0.5" />
               <div>
                 <span className="text-neutral-400 text-[11px] block">Lokasi Kegiatan</span>
-                <a
-                  href="https://maps.app.goo.gl/Yf1wDEtwVBbQQZ31A"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/event/antasari-media-lab?tab=lokasi"
                   className="font-semibold text-neutral-800 dark:text-neutral-200 hover:text-[#1C4BBC] dark:hover:text-[#82BE3B] transition-colors inline-flex items-center gap-1 group/loc"
-                  title="Lihat rute Google Maps"
+                  title="Lihat detail lokasi & peta rute"
                 >
                   <span>Aula Sasangga Banua (Eks Kantor Gubernur)</span>
                   <ExternalLink className="w-3 h-3 text-neutral-400 group-hover/loc:text-[#1C4BBC]" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer Action */}
-        <div className="mt-8 pt-5 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <span className="text-xs text-neutral-400">
-            Pendaftaran gratis untuk delegasi ormawa
-          </span>
-          <Link
-            href="/event/antasari-media-lab"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm text-white bg-[#1C4BBC] hover:bg-[#14378f] transition-colors"
-          >
-            Daftar Sekarang
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        {/* Section Quick Jump Links & Action Button */}
+        <div className="mt-8 pt-5 border-t border-neutral-100 dark:border-neutral-800 flex flex-col gap-3">
+          {/* Quick Section Jump Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[11px] text-neutral-400 font-medium mr-1">Menu Cepat:</span>
+            <Link
+              href="/event/antasari-media-lab?tab=pendaftaran"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Pendaftaran</span>
+            </Link>
+            <Link
+              href="/event/antasari-media-lab?tab=lokasi"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Lokasi & Rute</span>
+            </Link>
+            <Link
+              href="/event/antasari-media-lab?tab=sertifikat"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 text-xs font-semibold transition-colors"
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>E-Sertifikat</span>
+            </Link>
+          </div>
+
+          {/* Main Action Bar */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+            <span className="text-xs text-neutral-400">
+              Pendaftaran gratis untuk delegasi ormawa & mahasiswa
+            </span>
+            <Link
+              href="/event/antasari-media-lab"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-[#1C4BBC] hover:bg-[#14378f] shadow-sm shadow-[#1C4BBC]/20 transition-all cursor-pointer"
+            >
+              <span>Buka Halaman Acara</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
