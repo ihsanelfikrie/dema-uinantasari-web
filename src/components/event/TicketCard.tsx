@@ -16,7 +16,8 @@ import {
   HelpCircle,
   ExternalLink,
   Copy,
-  Check
+  Check,
+  MapPin
 } from "lucide-react";
 
 export interface TicketData {
@@ -800,6 +801,22 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
           <p className="leading-relaxed">
             <strong className="text-neutral-900 dark:text-white font-semibold">Simpan tiket ini baik-baik.</strong> Tiket wajib ditunjukkan saat registrasi ulang di lokasi dan digunakan untuk verifikasi e-sertifikat kegiatan.
           </p>
+        </div>
+
+        <div className="pt-2.5 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+            <MapPin className="w-3.5 h-3.5 text-[#82BE3B] shrink-0" />
+            <span>Lokasi: Aula Sasangga Banua (Eks Kantor Gubernur)</span>
+          </div>
+          <a
+            href="https://maps.app.goo.gl/Yf1wDEtwVBbQQZ31A"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 font-semibold text-[#1C4BBC] dark:text-[#CAD3E6] hover:text-[#82BE3B] transition-colors shrink-0"
+          >
+            <span>Cek Lokasi di Google Maps</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
         </div>
 
         <div className="pt-2.5 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">

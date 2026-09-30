@@ -11,7 +11,9 @@ import {
   X,
   Search,
   CheckCircle2,
-  MessageCircle
+  MessageCircle,
+  MapPin,
+  Calendar
 } from "lucide-react";
 import TicketCard, { TicketData } from "@/components/event/TicketCard";
 import { createClient } from "@/lib/supabase/client";
@@ -437,9 +439,24 @@ export default function AntasariMediaLabPage() {
               <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white font-poppins">
                 Pendaftaran Antasari Media Lab
               </h1>
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                Sabtu, 3 Oktober 2026 • 08.00 WITA • Aula Sasangga Banua
-              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-[#1C4BBC] dark:text-[#CAD3E6]" />
+                  <span>Sabtu, 3 Oktober 2026 • 08.00 WITA</span>
+                </span>
+                <span className="hidden sm:inline text-neutral-300 dark:text-neutral-700">•</span>
+                <a
+                  href="https://maps.app.goo.gl/Yf1wDEtwVBbQQZ31A"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 font-semibold hover:bg-emerald-100 transition-colors"
+                  title="Buka rute Google Maps"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Aula Sasangga Banua (Cek Google Maps)</span>
+                  <ExternalLink className="w-3 h-3 shrink-0 opacity-70" />
+                </a>
+              </div>
             </div>
 
             {/* Error Message Alert */}

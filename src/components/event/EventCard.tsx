@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, ExternalLink } from "lucide-react";
 
 export default function EventCard() {
   return (
@@ -82,9 +82,16 @@ export default function EventCard() {
               <MapPin className="w-4 h-4 text-[#82BE3B] shrink-0 mt-0.5" />
               <div>
                 <span className="text-neutral-400 text-[11px] block">Lokasi Kegiatan</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                  Aula Sasangga Banua (Eks Kantor Gubernur)
-                </span>
+                <a
+                  href="https://maps.app.goo.gl/Yf1wDEtwVBbQQZ31A"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-neutral-800 dark:text-neutral-200 hover:text-[#1C4BBC] dark:hover:text-[#82BE3B] transition-colors inline-flex items-center gap-1 group/loc"
+                  title="Lihat rute Google Maps"
+                >
+                  <span>Aula Sasangga Banua (Eks Kantor Gubernur)</span>
+                  <ExternalLink className="w-3 h-3 text-neutral-400 group-hover/loc:text-[#1C4BBC]" />
+                </a>
               </div>
             </div>
           </div>
