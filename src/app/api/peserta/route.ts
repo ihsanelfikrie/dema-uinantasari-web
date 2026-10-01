@@ -97,6 +97,8 @@ export async function POST(request: Request) {
     const event_slug = (formData.get("event_slug") as string) || "antasari-media-lab";
     const igFile = formData.get("ig_file") as File | null;
     const tiktokFile = formData.get("tiktok_file") as File | null;
+    const clientIgUrl = (formData.get("ig_screenshot_url") as string) || "";
+    const clientTiktokUrl = (formData.get("tiktok_screenshot_url") as string) || "";
 
     if (!nama || !nim || !email || !delegasi) {
       return NextResponse.json(
@@ -116,13 +118,13 @@ export async function POST(request: Request) {
       );
     }
 
-    let igScreenshotUrl = "";
-    let tiktokScreenshotUrl = "";
+    let igScreenshotUrl = clientIgUrl.trim();
+    let tiktokScreenshotUrl = clientTiktokUrl.trim();
 
     const cleanNim = nim.trim().replace(/\s+/g, "");
 
-    // Upload IG file if exists
-    if (igFile && typeof igFile !== "string" && igFile.size > 0) {
+    // Upload IG file if exists and not already uploaded via client
+    if (!igScreenshotUrl && igFile && typeof igFile !== "string" && igFile.size > 0) {
       try {
         const ext = igFile.name.split(".").pop() || "jpg";
         const fileName = `${cleanNim}-ig-${Date.now()}.${ext}`;
@@ -148,8 +150,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Upload TikTok file if exists
-    if (tiktokFile && typeof tiktokFile !== "string" && tiktokFile.size > 0) {
+    // Upload TikTok file if exists and not already uploaded via client
+    if (!tiktokScreenshotUrl && tiktokFile && typeof tiktokFile !== "string" && tiktokFile.size > 0) {
       try {
         const ext = tiktokFile.name.split(".").pop() || "jpg";
         const fileName = `${cleanNim}-tiktok-${Date.now()}.${ext}`;

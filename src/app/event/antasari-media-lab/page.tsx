@@ -27,6 +27,7 @@ import CertificateCard, { CertificateRenderData } from "@/components/event/Certi
 import FeedbackCard from "@/components/event/FeedbackCard";
 import MateriSection from "@/components/event/MateriSection";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage } from "@/lib/compressImage";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg
@@ -221,7 +222,7 @@ export default function AntasariMediaLabPage() {
     }
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "ig" | "tiktok") => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: "ig" | "tiktok") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -230,22 +231,25 @@ export default function AntasariMediaLabPage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Ukuran gambar maksimal adalah 5MB");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Ukuran gambar maksimal adalah 10MB");
       return;
     }
+
+    // Kompresi otomatis gambar di browser agar cepat diunggah & aman dari batas payload
+    const optimizedFile = await compressImage(file, 1280, 0.82);
 
     const reader = new FileReader();
     reader.onloadend = () => {
       if (type === "ig") {
-        setIgFile(file);
+        setIgFile(optimizedFile);
         setIgPreview(reader.result as string);
       } else {
-        setTiktokFile(file);
+        setTiktokFile(optimizedFile);
         setTiktokPreview(reader.result as string);
       }
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(optimizedFile);
   };
 
   const removeFile = (type: "ig" | "tiktok") => {
@@ -283,6 +287,10 @@ export default function AntasariMediaLabPage() {
       const cleanNim = nim.trim().replace(/\s+/g, "");
       const generatedTicketId = `AML-2026-${cleanNim.slice(-4) || Math.floor(1000 + Math.random() * 9000)}`;
 
+      // Pastikan kedua file dikompresi sebelum upload (ringan ~100-200KB)
+      const readyIgFile = await compressImage(igFile, 1280, 0.82);
+      const readyTiktokFile = await compressImage(tiktokFile, 1280, 0.82);
+
       // 1. Direct Client-Side Supabase Upload (Primary: Fast & eliminates body-size limits)
       let igUploadedUrl = "";
       let tiktokUploadedUrl = "";
@@ -291,31 +299,33 @@ export default function AntasariMediaLabPage() {
         const supabase = createClient();
         
         // Upload IG
-        const igExt = igFile.name.split(".").pop() || "jpg";
-        const igPath = `${cleanNim}-ig-${Date.now()}.${igExt}`;
-        const { data: igUp } = await supabase.storage
+        const igPath = `${cleanNim}-ig-${Date.now()}.jpg`;
+        const { data: igUp, error: igErr } = await supabase.storage
           .from("bukti-follow")
-          .upload(igPath, igFile, { upsert: true });
+          .upload(igPath, readyIgFile, { upsert: true, contentType: "image/jpeg" });
 
-        if (igUp?.path) {
+        if (igUp?.path && !igErr) {
           const { data: pubData } = supabase.storage
             .from("bukti-follow")
             .getPublicUrl(igUp.path);
           igUploadedUrl = pubData.publicUrl;
+        } else if (igErr) {
+          console.warn("Storage upload IG error:", igErr);
         }
 
         // Upload TikTok
-        const ttExt = tiktokFile.name.split(".").pop() || "jpg";
-        const ttPath = `${cleanNim}-tiktok-${Date.now()}.${ttExt}`;
-        const { data: ttUp } = await supabase.storage
+        const ttPath = `${cleanNim}-tiktok-${Date.now()}.jpg`;
+        const { data: ttUp, error: ttErr } = await supabase.storage
           .from("bukti-follow")
-          .upload(ttPath, tiktokFile, { upsert: true });
+          .upload(ttPath, readyTiktokFile, { upsert: true, contentType: "image/jpeg" });
 
-        if (ttUp?.path) {
+        if (ttUp?.path && !ttErr) {
           const { data: pubData } = supabase.storage
             .from("bukti-follow")
             .getPublicUrl(ttUp.path);
           tiktokUploadedUrl = pubData.publicUrl;
+        } else if (ttErr) {
+          console.warn("Storage upload TikTok error:", ttErr);
         }
       } catch (clientUploadErr) {
         console.warn("Client-side storage upload fallback to API formData:", clientUploadErr);
@@ -332,14 +342,14 @@ export default function AntasariMediaLabPage() {
 
       if (igUploadedUrl) {
         formData.append("ig_screenshot_url", igUploadedUrl);
-      } else if (igFile) {
-        formData.append("ig_file", igFile);
+      } else {
+        formData.append("ig_file", readyIgFile);
       }
 
       if (tiktokUploadedUrl) {
         formData.append("tiktok_screenshot_url", tiktokUploadedUrl);
-      } else if (tiktokFile) {
-        formData.append("tiktok_file", tiktokFile);
+      } else {
+        formData.append("tiktok_file", readyTiktokFile);
       }
 
       const res = await fetch("/api/peserta", {
@@ -384,10 +394,14 @@ export default function AntasariMediaLabPage() {
       setTicketData(newTicket);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
-      console.error(err);
-      setErrorMsg(
-        err.message || "Terjadi kesalahan saat memproses pendaftaran. Silakan periksa koneksi internet Anda."
-      );
+      console.error("Gagal submit pendaftaran:", err);
+      let userFriendlyMsg = "Terjadi kesalahan saat memproses pendaftaran. Silakan periksa koneksi internet Anda dan coba lagi.";
+      if (err?.message === "Failed to fetch" || err?.name === "TypeError") {
+        userFriendlyMsg = "Koneksi internet terputus atau respon server tertunda saat mengunggah berkas. Gambar telah dikompresi otomatis, silakan klik tombol Kirim Pendaftaran kembali.";
+      } else if (err?.message) {
+        userFriendlyMsg = err.message;
+      }
+      setErrorMsg(userFriendlyMsg);
     } finally {
       setIsSubmitting(false);
     }
