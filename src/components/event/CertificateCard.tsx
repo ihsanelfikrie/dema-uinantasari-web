@@ -117,51 +117,56 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
 
       const conf = data.config || {};
       const nomorX = conf.nomor_pos_x ?? 1754;
-      const nomorY = conf.nomor_pos_y ?? 780;
-      const nomorSize = conf.nomor_font_size ?? 38;
-      const nomorColor = conf.nomor_color || "#333333";
+      const nomorY = conf.nomor_pos_y ?? 845;
+      const nomorSize = conf.nomor_font_size ?? 44;
+      const nomorColor = conf.nomor_color || "#FFFFFF";
 
-      const namaY = conf.nama_pos_y ?? 1180;
-      const namaSize = conf.nama_font_size ?? 84;
-      const namaColor = conf.nama_color || "#1C4BBC";
+      const namaY = conf.nama_pos_y ?? 1232;
+      const namaSize = conf.nama_font_size ?? 86;
+      const namaColor = conf.nama_color || "#FFFFFF";
 
       // 2. Fungsi Menggambar Teks Dinamis dengan Proteksi Auto-Shrink untuk Nama Panjang
-      const drawTexts = () => {
+      const drawTexts = (isVector = false) => {
         // --- A. Render Nomor Surat ---
         ctx.textAlign = "center";
-        ctx.fillStyle = nomorColor;
-        let effectiveNomorSize = nomorSize;
-        ctx.font = `500 ${effectiveNomorSize}px Poppins, sans-serif`;
-        const fullNomorStr = `Nomor: ${data.nomorSertifikat}`;
-        while (ctx.measureText(fullNomorStr).width > 2200 && effectiveNomorSize > 24) {
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = isVector ? "#333333" : nomorColor;
+        let effectiveNomorSize = isVector ? 38 : nomorSize;
+        ctx.font = `600 ${effectiveNomorSize}px Poppins, sans-serif`;
+        const fullNomorStr = data.nomorSertifikat;
+        while (ctx.measureText(fullNomorStr).width > 1200 && effectiveNomorSize > 20) {
           effectiveNomorSize -= 2;
-          ctx.font = `500 ${effectiveNomorSize}px Poppins, sans-serif`;
+          ctx.font = `600 ${effectiveNomorSize}px Poppins, sans-serif`;
         }
-        ctx.fillText(fullNomorStr, nomorX, nomorY);
+        ctx.fillText(fullNomorStr, nomorX, isVector ? 780 : nomorY);
 
         // --- B. Render Nama Peserta dengan Auto-Scale Font ---
-        ctx.fillStyle = namaColor;
-        let effectiveNamaSize = namaSize;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = isVector ? "#1C4BBC" : namaColor;
+        let effectiveNamaSize = isVector ? 84 : namaSize;
         ctx.font = `bold ${effectiveNamaSize}px Poppins, sans-serif`;
 
-        // Batasi lebar maksimum nama agar tidak keluar dari margin kanvas (lebar max 2700px)
-        const MAX_NAME_WIDTH = 2700;
+        // Batasi lebar maksimum nama agar pas di dalam bracket box (lebar max 2400px)
+        const MAX_NAME_WIDTH = 2400;
         while (ctx.measureText(data.nama).width > MAX_NAME_WIDTH && effectiveNamaSize > 38) {
           effectiveNamaSize -= 2;
           ctx.font = `bold ${effectiveNamaSize}px Poppins, sans-serif`;
         }
 
-        ctx.fillText(data.nama, CANVAS_WIDTH / 2, namaY);
+        ctx.fillText(data.nama, CANVAS_WIDTH / 2, isVector ? 1180 : namaY);
 
-        // Underline aksen halus di bawah nama yang disesuaikan ukurannya
-        const textWidth = ctx.measureText(data.nama).width;
-        ctx.strokeStyle = namaColor + "55";
-        ctx.lineWidth = Math.max(3, Math.round(effectiveNamaSize * 0.05));
-        ctx.beginPath();
-        const underlineY = namaY + Math.round(effectiveNamaSize * 0.22);
-        ctx.moveTo(CANVAS_WIDTH / 2 - textWidth / 2, underlineY);
-        ctx.lineTo(CANVAS_WIDTH / 2 + textWidth / 2, underlineY);
-        ctx.stroke();
+        // Underline aksen hanya jika pada vector fallback (karena template resmi sudah memiliki bracket box)
+        if (isVector) {
+          const textWidth = ctx.measureText(data.nama).width;
+          ctx.strokeStyle = "#1C4BBC55";
+          ctx.lineWidth = Math.max(3, Math.round(effectiveNamaSize * 0.05));
+          ctx.beginPath();
+          const underlineY = 1180 + Math.round(effectiveNamaSize * 0.35);
+          ctx.moveTo(CANVAS_WIDTH / 2 - textWidth / 2, underlineY);
+          ctx.lineTo(CANVAS_WIDTH / 2 + textWidth / 2, underlineY);
+          ctx.stroke();
+        }
       };
 
       // 3. Fallback Template Vektor Elegan (Jika template gambar belum diunggah atau gagal dimuat)
@@ -230,7 +235,7 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
         ctx.fillText("Menteri Komunikasi & Informasi", CANVAS_WIDTH - 800, 2020);
 
         // Render Nomor dan Nama
-        drawTexts();
+        drawTexts(true);
       };
 
       // 4. Finalisasi Ekspor Gambar dengan Mitigasi Tainted Canvas
@@ -242,7 +247,6 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
           setIsRendering(false);
         } catch (err) {
           console.warn("Tainted canvas terdeteksi saat ekspor template luar. Beralih ke vector fallback...", err);
-          // Jika gambar template luar menyebabkan canvas tainted, otomatis beralih ke vector fallback bersih
           drawVectorFallback();
           try {
             const fallbackDataUrl = canvas.toDataURL("image/png", 1.0);
@@ -257,13 +261,14 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       };
 
       // 5. Muat Template Gambar jika Tersedia
-      if (conf.template_url) {
+      const resolvedTemplateUrl = conf.template_url || "/images/event/sertifikat-template-aml.png";
+      if (resolvedTemplateUrl) {
         try {
-          const img = await loadSafeImage(conf.template_url);
+          const img = await loadSafeImage(resolvedTemplateUrl);
           if (isCancelled) return;
           ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
           ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-          drawTexts();
+          drawTexts(false);
           finalizeCanvasExport();
         } catch (imgErr) {
           console.warn("Gagal memuat template gambar resmi. Menggunakan template vektor internal:", imgErr);

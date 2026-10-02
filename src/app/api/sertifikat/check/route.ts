@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 export const dynamic = "force-dynamic";
 
@@ -16,29 +18,43 @@ async function getAdminSupabase() {
   return supabase;
 }
 
+const CONFIG_FILE_PATH = path.join(process.cwd(), "data", "event_sertifikat_config.json");
+
+function getLocalConfig() {
+  try {
+    if (fs.existsSync(CONFIG_FILE_PATH)) {
+      const content = fs.readFileSync(CONFIG_FILE_PATH, "utf-8");
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.warn("Gagal membaca file konfigurasi lokal:", err);
+  }
+  return null;
+}
+
 const DEFAULT_CONFIG = {
-  is_published: false,
-  template_url: "",
-  nomor_format: "{nomor}/DEMA-UIN/AML/X/2026",
+  is_published: true,
+  template_url: "/images/event/sertifikat-template-aml.png",
+  nomor_format: "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026",
   nomor_start: 1,
-  nama_pos_y: 1180,
-  nama_font_size: 82,
-  nama_color: "#1C4BBC",
+  nama_pos_y: 1232,
+  nama_font_size: 86,
+  nama_color: "#FFFFFF",
   nomor_pos_x: 1754,
-  nomor_pos_y: 780,
-  nomor_font_size: 36,
-  nomor_color: "#444444",
-  require_presensi: true,
+  nomor_pos_y: 845,
+  nomor_font_size: 44,
+  nomor_color: "#FFFFFF",
+  require_presensi: false,
 };
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const nim = searchParams.get("nim");
+    const nimParam = searchParams.get("nim");
     const eventSlug = searchParams.get("event") || "antasari-media-lab";
     const isPreview = searchParams.get("preview") === "true";
 
-    if (!nim || !nim.trim()) {
+    if (!nimParam || !nimParam.trim()) {
       return NextResponse.json(
         { eligible: false, message: "NIM wajib diisi untuk memeriksa kelayakan sertifikat." },
         { status: 400 }
@@ -46,10 +62,10 @@ export async function GET(request: Request) {
     }
 
     // Normalisasi NIM: hilangkan spasi dan bersihkan karakter aneh
-    const cleanNim = nim.trim().replace(/\s+/g, "");
+    const cleanNim = nimParam.trim().replace(/\s+/g, "");
     const supabase = await getAdminSupabase();
 
-    // 1. Ambil Pengaturan Sertifikat dari Database
+    // 1. Ambil Pengaturan Sertifikat dari Database atau File Lokal
     let config = { ...DEFAULT_CONFIG };
     try {
       const { data: configData, error: configErr } = await supabase
@@ -63,9 +79,17 @@ export async function GET(request: Request) {
           ...DEFAULT_CONFIG,
           ...configData,
         };
+      } else {
+        const local = getLocalConfig();
+        if (local) {
+          config = { ...DEFAULT_CONFIG, ...local };
+        }
       }
-    } catch (confError) {
-      console.warn("Menggunakan pengaturan default sertifikat:", confError);
+    } catch {
+      const local = getLocalConfig();
+      if (local) {
+        config = { ...DEFAULT_CONFIG, ...local };
+      }
     }
 
     // Jika belum dipublish dan bukan mode preview admin
@@ -78,12 +102,19 @@ export async function GET(request: Request) {
       });
     }
 
-    // 2. Cek apakah NIM terdaftar di event_registrasi (pencarian case-insensitive)
-    const { data: peserta, error: pesertaErr } = await supabase
+    // 2. Cek apakah NIM atau Ticket ID terdaftar di event_registrasi
+    let pesertaQuery = supabase
       .from("event_registrasi")
       .select("id, nama, nim, delegasi, ticket_id, created_at")
-      .eq("event_slug", eventSlug)
-      .ilike("nim", cleanNim)
+      .eq("event_slug", eventSlug);
+
+    if (cleanNim.toUpperCase().startsWith("AML-")) {
+      pesertaQuery = pesertaQuery.ilike("ticket_id", cleanNim);
+    } else {
+      pesertaQuery = pesertaQuery.ilike("nim", cleanNim);
+    }
+
+    const { data: peserta, error: pesertaErr } = await pesertaQuery
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -134,17 +165,21 @@ export async function GET(request: Request) {
       hasAttended = true;
     }
 
-    // 4. Hitung Nomor Urut Sertifikat Konsisten (Berdasarkan urutan registrasi peserta)
+    // 4. Hitung Nomor Urut Sertifikat Konsisten (Berdasarkan urutan registrasi peserta yang unik)
     let sequenceIndex = 1;
     try {
-      const { count } = await supabase
+      const { data: allPeserta } = await supabase
         .from("event_registrasi")
-        .select("id", { count: "exact", head: true })
+        .select("id")
         .eq("event_slug", eventSlug)
-        .lte("created_at", peserta.created_at);
+        .order("created_at", { ascending: true })
+        .order("id", { ascending: true });
 
-      if (count && count > 0) {
-        sequenceIndex = count;
+      if (allPeserta && Array.isArray(allPeserta)) {
+        const foundIdx = allPeserta.findIndex((p) => p.id === peserta.id);
+        if (foundIdx !== -1) {
+          sequenceIndex = foundIdx + 1;
+        }
       }
     } catch {
       sequenceIndex = 1;
@@ -153,7 +188,7 @@ export async function GET(request: Request) {
     const startNum = config.nomor_start || 1;
     const finalNumberVal = (sequenceIndex + startNum - 1).toString().padStart(3, "0");
 
-    const formattedNomor = (config.nomor_format || "{nomor}/DEMA-UIN/AML/X/2026").replace(
+    const formattedNomor = (config.nomor_format || "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026").replace(
       "{nomor}",
       finalNumberVal
     );

@@ -137,18 +137,18 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
 CREATE TABLE IF NOT EXISTS event_sertifikat_config (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     event_slug TEXT NOT NULL UNIQUE DEFAULT 'antasari-media-lab',
-    is_published BOOLEAN NOT NULL DEFAULT false, -- Saklar apakah peserta sudah boleh cek & unduh
-    template_url TEXT, -- URL file gambar template A4 Landscape yang diupload admin
-    nomor_format TEXT NOT NULL DEFAULT '{nomor}/DEMA-UIN/AML/X/2026', -- Format nomor surat/sertifikat
+    is_published BOOLEAN NOT NULL DEFAULT true, -- Saklar apakah peserta sudah boleh cek & unduh
+    template_url TEXT DEFAULT '/images/event/sertifikat-template-aml.png', -- URL file gambar template A4 Landscape
+    nomor_format TEXT NOT NULL DEFAULT '{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026', -- Format nomor surat/sertifikat
     nomor_start INTEGER NOT NULL DEFAULT 1,
-    nama_pos_y INTEGER NOT NULL DEFAULT 1180, -- Posisi Y Nama Peserta (pada kanvas standar A4 3508x2480)
-    nama_font_size INTEGER NOT NULL DEFAULT 82, -- Ukuran font Nama
-    nama_color TEXT NOT NULL DEFAULT '#1C4BBC', -- Warna font Nama
+    nama_pos_y INTEGER NOT NULL DEFAULT 1232, -- Posisi Y Nama Peserta (pada kanvas standar A4 3508x2480)
+    nama_font_size INTEGER NOT NULL DEFAULT 86, -- Ukuran font Nama
+    nama_color TEXT NOT NULL DEFAULT '#FFFFFF', -- Warna font Nama
     nomor_pos_x INTEGER NOT NULL DEFAULT 1754, -- Posisi X Nomor Surat (center=1754)
-    nomor_pos_y INTEGER NOT NULL DEFAULT 780, -- Posisi Y Nomor Surat
-    nomor_font_size INTEGER NOT NULL DEFAULT 36, -- Ukuran font Nomor Surat
-    nomor_color TEXT NOT NULL DEFAULT '#444444',
-    require_presensi BOOLEAN NOT NULL DEFAULT true, -- Syarat wajib sudah presensi
+    nomor_pos_y INTEGER NOT NULL DEFAULT 845, -- Posisi Y Nomor Surat
+    nomor_font_size INTEGER NOT NULL DEFAULT 44, -- Ukuran font Nomor Surat
+    nomor_color TEXT NOT NULL DEFAULT '#FFFFFF',
+    require_presensi BOOLEAN NOT NULL DEFAULT false, -- Syarat wajib sudah presensi
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

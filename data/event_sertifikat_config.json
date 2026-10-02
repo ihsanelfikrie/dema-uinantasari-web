@@ -1,0 +1,16 @@
+{
+  "event_slug": "antasari-media-lab",
+  "is_published": true,
+  "template_url": "/images/event/sertifikat-template-aml.png",
+  "nomor_format": "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026",
+  "nomor_start": 1,
+  "nama_pos_y": 1232,
+  "nama_font_size": 86,
+  "nama_color": "#FFFFFF",
+  "nomor_pos_x": 1754,
+  "nomor_pos_y": 845,
+  "nomor_font_size": 44,
+  "nomor_color": "#FFFFFF",
+  "require_presensi": false,
+  "updated_at": "2026-10-03T05:35:00.000Z"
+}

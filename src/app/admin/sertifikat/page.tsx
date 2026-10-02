@@ -22,6 +22,7 @@ import {
   Info
 } from "lucide-react";
 import Link from "next/link";
+import CertificateCard, { CertificateRenderData } from "@/components/event/CertificateCard";
 
 interface SertifikatConfig {
   event_slug: string;
@@ -62,22 +63,22 @@ export default function AdminSertifikatPage() {
 
   const [config, setConfig] = useState<SertifikatConfig>({
     event_slug: "antasari-media-lab",
-    is_published: false,
-    template_url: "",
-    nomor_format: "{nomor}/DEMA-UIN/AML/X/2026",
+    is_published: true,
+    template_url: "/images/event/sertifikat-template-aml.png",
+    nomor_format: "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026",
     nomor_start: 1,
-    nama_pos_y: 1180,
-    nama_font_size: 84,
-    nama_color: "#1C4BBC",
+    nama_pos_y: 1232,
+    nama_font_size: 86,
+    nama_color: "#FFFFFF",
     nomor_pos_x: 1754,
-    nomor_pos_y: 780,
-    nomor_font_size: 38,
-    nomor_color: "#333333",
-    require_presensi: true,
+    nomor_pos_y: 845,
+    nomor_font_size: 44,
+    nomor_color: "#FFFFFF",
+    require_presensi: false,
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [templatePreviewUrl, setTemplatePreviewUrl] = useState<string>("");
+  const [templatePreviewUrl, setTemplatePreviewUrl] = useState<string>("/images/event/sertifikat-template-aml.png");
 
   // Pratinjau Nama Contoh
   const [sampleNama, setSampleNama] = useState("Muhammad Ihsan El Fikrie");
@@ -88,6 +89,7 @@ export default function AdminSertifikatPage() {
   const [loadingPeserta, setLoadingPeserta] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPresensi, setFilterPresensi] = useState<"all" | "hadir" | "belum">("all");
+  const [previewParticipant, setPreviewParticipant] = useState<CertificateRenderData | null>(null);
 
   // 1. Fetch konfigurasi awal
   useEffect(() => {
@@ -193,46 +195,51 @@ export default function AdminSertifikatPage() {
         }
       }
 
-      const sampleNomor = (config.nomor_format || "{nomor}/DEMA-UIN/AML/X/2026").replace(
+      const sampleNomor = (config.nomor_format || "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026").replace(
         "{nomor}",
         (config.nomor_start || 1).toString().padStart(3, "0")
       );
 
-      const renderText = () => {
+      const renderText = (isVector = false) => {
         // --- 1. Draw Nomor Surat ---
         ctx.textAlign = "center";
-        ctx.fillStyle = config.nomor_color || "#333333";
-        let effNomorSize = config.nomor_font_size || 38;
-        ctx.font = `500 ${effNomorSize}px Poppins, sans-serif`;
-        const fullNomorStr = `Nomor: ${sampleNomor}`;
-        while (ctx.measureText(fullNomorStr).width > 2200 && effNomorSize > 20) {
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = isVector ? "#333333" : (config.nomor_color || "#FFFFFF");
+        let effNomorSize = isVector ? 38 : (config.nomor_font_size || 44);
+        ctx.font = `600 ${effNomorSize}px Poppins, sans-serif`;
+        const fullNomorStr = sampleNomor;
+        while (ctx.measureText(fullNomorStr).width > 1200 && effNomorSize > 20) {
           effNomorSize -= 2;
-          ctx.font = `500 ${effNomorSize}px Poppins, sans-serif`;
+          ctx.font = `600 ${effNomorSize}px Poppins, sans-serif`;
         }
-        ctx.fillText(fullNomorStr, config.nomor_pos_x || 1754, config.nomor_pos_y || 780);
+        ctx.fillText(fullNomorStr, config.nomor_pos_x || 1754, isVector ? 780 : (config.nomor_pos_y || 845));
 
         // --- 2. Draw Nama Peserta dengan Auto-Scale ---
-        ctx.fillStyle = config.nama_color || "#1C4BBC";
-        let effNamaSize = config.nama_font_size || 84;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = isVector ? "#1C4BBC" : (config.nama_color || "#FFFFFF");
+        let effNamaSize = isVector ? 84 : (config.nama_font_size || 86);
         ctx.font = `bold ${effNamaSize}px Poppins, sans-serif`;
 
-        // Batasi nama agar tidak overflow kanvas A4
-        while (ctx.measureText(sampleNama).width > 2700 && effNamaSize > 38) {
+        // Batasi nama agar pas di dalam bracket box (lebar max 2400px)
+        while (ctx.measureText(sampleNama).width > 2400 && effNamaSize > 38) {
           effNamaSize -= 2;
           ctx.font = `bold ${effNamaSize}px Poppins, sans-serif`;
         }
 
-        ctx.fillText(sampleNama, CANVAS_WIDTH / 2, config.nama_pos_y || 1180);
+        ctx.fillText(sampleNama, CANVAS_WIDTH / 2, isVector ? 1180 : (config.nama_pos_y || 1232));
 
-        // Underline aksen
-        ctx.strokeStyle = (config.nama_color || "#1C4BBC") + "55";
-        ctx.lineWidth = Math.max(3, Math.round(effNamaSize * 0.05));
-        const textWidth = ctx.measureText(sampleNama).width;
-        ctx.beginPath();
-        const underlineY = (config.nama_pos_y || 1180) + Math.round(effNamaSize * 0.22);
-        ctx.moveTo(CANVAS_WIDTH / 2 - textWidth / 2, underlineY);
-        ctx.lineTo(CANVAS_WIDTH / 2 + textWidth / 2, underlineY);
-        ctx.stroke();
+        // Underline aksen hanya saat fallback vector
+        if (isVector) {
+          ctx.strokeStyle = (config.nama_color || "#1C4BBC") + "55";
+          ctx.lineWidth = Math.max(3, Math.round(effNamaSize * 0.05));
+          const textWidth = ctx.measureText(sampleNama).width;
+          ctx.beginPath();
+          const underlineY = 1180 + Math.round(effNamaSize * 0.35);
+          ctx.moveTo(CANVAS_WIDTH / 2 - textWidth / 2, underlineY);
+          ctx.lineTo(CANVAS_WIDTH / 2 + textWidth / 2, underlineY);
+          ctx.stroke();
+        }
       };
 
       const drawFallback = () => {
@@ -291,23 +298,24 @@ export default function AdminSertifikatPage() {
         ctx.fillText("Ketua DEMA UIN Antasari", 800, 2020);
         ctx.fillText("Menteri Komunikasi & Informasi", CANVAS_WIDTH - 800, 2020);
 
-        renderText();
+        renderText(true);
       };
 
-      if (templatePreviewUrl) {
+      const targetUrl = templatePreviewUrl || config.template_url || "/images/event/sertifikat-template-aml.png";
+      if (targetUrl) {
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = () => {
           if (isCancelled) return;
           ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
           ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-          renderText();
+          renderText(false);
         };
         img.onerror = () => {
           if (isCancelled) return;
           drawFallback();
         };
-        img.src = templatePreviewUrl;
+        img.src = targetUrl;
       } else {
         drawFallback();
       }
@@ -845,7 +853,7 @@ export default function AdminSertifikatPage() {
                 <tbody className="divide-y divide-neutral-100">
                   {filteredPeserta.map((peserta, idx) => {
                     const estimatedNumberVal = (idx + (config.nomor_start || 1)).toString().padStart(3, "0");
-                    const formattedNumber = (config.nomor_format || "{nomor}/DEMA-UIN/AML/X/2026").replace(
+                    const formattedNumber = (config.nomor_format || "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026").replace(
                       "{nomor}",
                       estimatedNumberVal
                     );
@@ -873,17 +881,47 @@ export default function AdminSertifikatPage() {
                           {isEligible ? formattedNumber : "-"}
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSampleNama(peserta.nama);
-                              setActiveTab("design");
-                            }}
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1C4BBC] hover:underline cursor-pointer"
-                          >
-                            <span>Uji Desain</span>
-                            <ChevronRight className="w-3 h-3" />
-                          </button>
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSampleNama(peserta.nama);
+                                setActiveTab("design");
+                              }}
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-[#1C4BBC] hover:underline cursor-pointer"
+                              title="Uji nama di studio kanvas"
+                            >
+                              <span>Uji Studio</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPreviewParticipant({
+                                  nama: peserta.nama,
+                                  nim: peserta.nim,
+                                  delegasi: peserta.delegasi,
+                                  ticketId: peserta.ticket_id,
+                                  nomorSertifikat: formattedNumber,
+                                  config: {
+                                    template_url: config.template_url,
+                                    nama_pos_y: config.nama_pos_y,
+                                    nama_font_size: config.nama_font_size,
+                                    nama_color: config.nama_color,
+                                    nomor_pos_x: config.nomor_pos_x,
+                                    nomor_pos_y: config.nomor_pos_y,
+                                    nomor_font_size: config.nomor_font_size,
+                                    nomor_color: config.nomor_color,
+                                  },
+                                });
+                              }}
+                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-[#1C4BBC]/10 text-[#1C4BBC] hover:bg-[#1C4BBC] hover:text-white transition-colors cursor-pointer"
+                              title="Lihat / download sertifikat resmi peserta ini"
+                            >
+                              <Award className="w-3.5 h-3.5" />
+                              <span>Sertifikat</span>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -892,6 +930,18 @@ export default function AdminSertifikatPage() {
               </table>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Modal Pratinjau Sertifikat Peserta */}
+      {previewParticipant && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="max-w-3xl w-full my-8">
+            <CertificateCard
+              data={previewParticipant}
+              onClose={() => setPreviewParticipant(null)}
+            />
+          </div>
         </div>
       )}
     </div>
