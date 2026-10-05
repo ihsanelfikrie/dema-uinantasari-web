@@ -68,7 +68,7 @@ export default function AdminSertifikatPage() {
     nomor_format: "{nomor}/G/PP-AML/DEMA-U/UIN-A/BJM/X/2026",
     nomor_start: 1,
     nama_pos_y: 1232,
-    nama_font_size: 86,
+    nama_font_size: 130,
     nama_color: "#FFFFFF",
     nomor_pos_x: 1754,
     nomor_pos_y: 845,
@@ -189,6 +189,7 @@ export default function AdminSertifikatPage() {
       // Tunggu font siap
       if (typeof document !== "undefined" && document.fonts) {
         try {
+          await document.fonts.load("700 100px Caveat");
           await document.fonts.ready;
         } catch {
           // ignore
@@ -218,13 +219,13 @@ export default function AdminSertifikatPage() {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = isVector ? "#1C4BBC" : (config.nama_color || "#FFFFFF");
-        let effNamaSize = isVector ? 84 : (config.nama_font_size || 86);
-        ctx.font = `bold ${effNamaSize}px Poppins, sans-serif`;
+        let effNamaSize = isVector ? 84 : (config.nama_font_size || 130);
+        ctx.font = `700 ${effNamaSize}px Caveat, cursive`;
 
         // Batasi nama agar pas di dalam bracket box (lebar max 2400px)
         while (ctx.measureText(sampleNama).width > 2400 && effNamaSize > 38) {
           effNamaSize -= 2;
-          ctx.font = `bold ${effNamaSize}px Poppins, sans-serif`;
+          ctx.font = `700 ${effNamaSize}px Caveat, cursive`;
         }
 
         ctx.fillText(sampleNama, CANVAS_WIDTH / 2, isVector ? 1180 : (config.nama_pos_y || 1232));

@@ -37,3 +37,10 @@ body {
 main.min-h-screen.bg-brand-background {
   padding-top: 7.5rem !important; /* ~120px offset to allow breathing room under fixed navbar */
 }
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/Caveat-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+

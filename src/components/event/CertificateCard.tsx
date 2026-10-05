@@ -109,6 +109,7 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       // 1. Mitigasi Font Race Condition: Pastikan font Poppins siap sebelum dirender
       if (typeof document !== "undefined" && document.fonts) {
         try {
+          await document.fonts.load("700 100px Caveat");
           await document.fonts.ready;
         } catch {
           // Abaikan jika browser tidak mendukung
@@ -122,7 +123,7 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       const nomorColor = conf.nomor_color || "#FFFFFF";
 
       const namaY = conf.nama_pos_y ?? 1232;
-      const namaSize = conf.nama_font_size ?? 86;
+      const namaSize = conf.nama_font_size ?? 130;
       const namaColor = conf.nama_color || "#FFFFFF";
 
       // 2. Fungsi Menggambar Teks Dinamis dengan Proteksi Auto-Shrink untuk Nama Panjang
@@ -145,13 +146,13 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
         ctx.textBaseline = "middle";
         ctx.fillStyle = isVector ? "#1C4BBC" : namaColor;
         let effectiveNamaSize = isVector ? 84 : namaSize;
-        ctx.font = `bold ${effectiveNamaSize}px Poppins, sans-serif`;
+        ctx.font = `700 ${effectiveNamaSize}px Caveat, cursive`;
 
         // Batasi lebar maksimum nama agar pas di dalam bracket box (lebar max 2400px)
         const MAX_NAME_WIDTH = 2400;
         while (ctx.measureText(data.nama).width > MAX_NAME_WIDTH && effectiveNamaSize > 38) {
           effectiveNamaSize -= 2;
-          ctx.font = `bold ${effectiveNamaSize}px Poppins, sans-serif`;
+          ctx.font = `700 ${effectiveNamaSize}px Caveat, cursive`;
         }
 
         ctx.fillText(data.nama, CANVAS_WIDTH / 2, isVector ? 1180 : namaY);
