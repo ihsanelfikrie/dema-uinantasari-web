@@ -8,12 +8,19 @@ import {
   Award, 
   X, 
   AlertTriangle, 
-  ExternalLink,
-  ShieldCheck,
-  RefreshCw,
-  Sparkles,
-  Info
+  ExternalLink, 
+  ShieldCheck, 
+  RefreshCw, 
+  Sparkles, 
+  Info,
+  Maximize2,
+  FileDown,
+  Eye,
+  Share2,
+  Check,
+  Smartphone
 } from "lucide-react";
+import jsPDF from "jspdf";
 
 export interface CertificateRenderData {
   nama: string;
@@ -41,13 +48,38 @@ interface CertificateCardProps {
 export default function CertificateCard({ data, onClose }: CertificateCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageBlob, setImageBlob] = useState<Blob | null>(null);
   const [isRendering, setIsRendering] = useState<boolean>(true);
   const [renderError, setRenderError] = useState<boolean>(false);
   const [isFallbackMode, setIsFallbackMode] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState<boolean>(false);
+  const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
+  const [showFullscreen, setShowFullscreen] = useState<boolean>(false);
+  const [isInApp, setIsInApp] = useState<boolean>(false);
+  const activeBlobUrlRef = useRef<string | null>(null);
 
   // Standar Cetak Resmi A4 Landscape (300 DPI) = 3508 x 2480 px
   const CANVAS_WIDTH = 3508;
   const CANVAS_HEIGHT = 2480;
+
+  // Deteksi Webview / In-App Browser (WhatsApp, Instagram, FB)
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      const ua = navigator.userAgent || "";
+      const inApp = /FBAN|FBAV|Instagram|WhatsApp|Line|Telegram|Snapchat|MicroMessenger/i.test(ua);
+      setIsInApp(inApp);
+    }
+  }, []);
+
+  // Cleanup Object URL on unmount
+  useEffect(() => {
+    return () => {
+      if (activeBlobUrlRef.current) {
+        URL.revokeObjectURL(activeBlobUrlRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -106,7 +138,7 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       canvas.width = CANVAS_WIDTH;
       canvas.height = CANVAS_HEIGHT;
 
-      // 1. Mitigasi Font Race Condition: Pastikan font Poppins siap sebelum dirender
+      // 1. Mitigasi Font Race Condition: Pastikan font Poppins & Caveat siap sebelum dirender
       if (typeof document !== "undefined" && document.fonts) {
         try {
           await document.fonts.load("700 100px Caveat");
@@ -222,7 +254,7 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
         ctx.fillStyle = "#333333";
         ctx.font = "500 40px Poppins, sans-serif";
         ctx.fillText(
-          '"Optimalisasi Media Sosial sebagai Wajah Digital Organisasi Mahasiswa"',
+          '\"Optimalisasi Media Sosial sebagai Wajah Digital Organisasi Mahasiswa\"',
           CANVAS_WIDTH / 2,
           1550
         );
@@ -239,20 +271,48 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
         drawTexts(true);
       };
 
-      // 4. Finalisasi Ekspor Gambar dengan Mitigasi Tainted Canvas
+      // 4. Finalisasi Ekspor Gambar dengan Mitigasi Tainted Canvas dan Blob Generation
       const finalizeCanvasExport = () => {
         if (isCancelled) return;
         try {
-          const dataUrl = canvas.toDataURL("image/png", 1.0);
-          setImageUrl(dataUrl);
-          setIsRendering(false);
+          canvas.toBlob((blob) => {
+            if (isCancelled) return;
+            if (blob) {
+              if (activeBlobUrlRef.current) {
+                URL.revokeObjectURL(activeBlobUrlRef.current);
+              }
+              const objectUrl = URL.createObjectURL(blob);
+              activeBlobUrlRef.current = objectUrl;
+              setImageBlob(blob);
+              setImageUrl(objectUrl);
+              setIsRendering(false);
+            } else {
+              const dataUrl = canvas.toDataURL("image/png", 1.0);
+              setImageUrl(dataUrl);
+              setIsRendering(false);
+            }
+          }, "image/png");
         } catch (err) {
           console.warn("Tainted canvas terdeteksi saat ekspor template luar. Beralih ke vector fallback...", err);
           drawVectorFallback();
           try {
-            const fallbackDataUrl = canvas.toDataURL("image/png", 1.0);
-            setImageUrl(fallbackDataUrl);
-            setIsRendering(false);
+            canvas.toBlob((fallbackBlob) => {
+              if (isCancelled) return;
+              if (fallbackBlob) {
+                if (activeBlobUrlRef.current) {
+                  URL.revokeObjectURL(activeBlobUrlRef.current);
+                }
+                const objectUrl = URL.createObjectURL(fallbackBlob);
+                activeBlobUrlRef.current = objectUrl;
+                setImageBlob(fallbackBlob);
+                setImageUrl(objectUrl);
+                setIsRendering(false);
+              } else {
+                const fallbackDataUrl = canvas.toDataURL("image/png", 1.0);
+                setImageUrl(fallbackDataUrl);
+                setIsRendering(false);
+              }
+            }, "image/png");
           } catch (fatalErr) {
             console.error("Gagal total merender canvas:", fatalErr);
             setRenderError(true);
@@ -290,21 +350,223 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
     };
   }, [data]);
 
-  // Handler Download dengan Mitigasi Browser Mobile (iOS / Android)
-  const handleDownload = () => {
-    if (!imageUrl) return;
+  // 1. Download Utama: Simpan ke Galeri (Web Share di Mobile) / Download File (Desktop)
+  const handleDownload = async () => {
+    if (!imageUrl && !imageBlob && !canvasRef.current) return;
+    setIsDownloading(true);
+
     try {
-      const a = document.createElement("a");
-      a.href = imageUrl;
-      const safeName = data.nama.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 35);
-      const safeNim = data.nim.replace(/[^a-zA-Z0-9]/g, "");
-      a.download = `Sertifikat-AML2026-${safeName}-${safeNim}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      const safeName = (data.nama || "Peserta").replace(/[^a-zA-Z0-9]/g, "_").slice(0, 35);
+      const safeNim = (data.nim || "AML").replace(/[^a-zA-Z0-9]/g, "");
+      const fileName = `Sertifikat-AML2026-${safeName}-${safeNim}.png`;
+
+      // Dapatkan Blob
+      let blob = imageBlob;
+      if (!blob && canvasRef.current) {
+        blob = await new Promise<Blob | null>((resolve) => {
+          canvasRef.current?.toBlob((b) => resolve(b), "image/png");
+        });
+      }
+      if (!blob && imageUrl.startsWith("data:")) {
+        const res = await fetch(imageUrl);
+        blob = await res.blob();
+      }
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      // A. Coba Web Share API di perangkat seluler (iPhone / Android)
+      // Ini otomatis memicu action sheet sistem: pilihan pertama di iPhone adalah "Simpan Gambar" langsung ke Galeri Foto
+      if (isMobile && blob && typeof navigator !== "undefined" && navigator.canShare) {
+        try {
+          const file = new File([blob], fileName, { type: "image/png" });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: `E-Sertifikat AML 2026 - ${data.nama}`,
+              text: `E-Sertifikat Resmi Peserta Antasari Media Lab 2026 - ${data.nama}`,
+            });
+            setDownloadSuccess("Sertifikat siap disimpan di perangkat Anda!");
+            setTimeout(() => setDownloadSuccess(null), 4000);
+            setIsDownloading(false);
+            return;
+          }
+        } catch (shareErr: any) {
+          if (shareErr?.name === "AbortError") {
+            // Pengguna menutup / membatalkan dialog share
+            setIsDownloading(false);
+            return;
+          }
+          console.warn("Navigator share gagal, lanjut unduh file biasa:", shareErr);
+        }
+      }
+
+      // B. Fallback: Unduh via Object URL <a> tag
+      if (blob) {
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(downloadUrl);
+        }, 4000);
+      } else if (imageUrl) {
+        const a = document.createElement("a");
+        a.href = imageUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+        }, 1000);
+      }
+
+      setDownloadSuccess("File sertifikat berhasil diunduh!");
+      setTimeout(() => setDownloadSuccess(null), 4000);
+    } catch (err) {
+      console.error("Gagal mendownload sertifikat:", err);
+      // Fallback darurat: buka gambar di tab baru
+      handleOpenNewTab();
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  // 2. Download File PDF Resmi (A4 Landscape) via jsPDF
+  const handleDownloadPdf = async () => {
+    if (!canvasRef.current && !imageUrl) return;
+    setIsDownloadingPdf(true);
+
+    try {
+      const safeName = (data.nama || "Peserta").replace(/[^a-zA-Z0-9]/g, "_").slice(0, 35);
+      const safeNim = (data.nim || "AML").replace(/[^a-zA-Z0-9]/g, "");
+      const fileName = `Sertifikat-AML2026-${safeName}-${safeNim}.pdf`;
+
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4", // 297mm x 210mm
+      });
+
+      if (canvasRef.current) {
+        doc.addImage(canvasRef.current, "PNG", 0, 0, 297, 210, undefined, "FAST");
+      } else {
+        doc.addImage(imageUrl, "PNG", 0, 0, 297, 210, undefined, "FAST");
+      }
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const pdfBlob = doc.output("blob");
+
+      // Coba bagikan / simpan via Web Share jika di HP
+      if (isMobile && typeof navigator !== "undefined" && navigator.canShare) {
+        try {
+          const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
+          if (navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+              files: [pdfFile],
+              title: `E-Sertifikat PDF - ${data.nama}`,
+              text: `Dokumen Resmi E-Sertifikat Antasari Media Lab 2026`,
+            });
+            setDownloadSuccess("File PDF siap disimpan!");
+            setTimeout(() => setDownloadSuccess(null), 4000);
+            setIsDownloadingPdf(false);
+            return;
+          }
+        } catch (shareErr: any) {
+          if (shareErr?.name === "AbortError") {
+            setIsDownloadingPdf(false);
+            return;
+          }
+          console.warn("Share PDF gagal, lanjut download dokumen:", shareErr);
+        }
+      }
+
+      doc.save(fileName);
+      setDownloadSuccess("File PDF berhasil disimpan!");
+      setTimeout(() => setDownloadSuccess(null), 4000);
+    } catch (err) {
+      console.error("Gagal generate PDF:", err);
+      window.print();
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
+
+  // 3. Unduh PNG Langsung (Khusus Pengguna yang Ingin File Langsung ke Folder Unduhan)
+  const handleDirectPngDownload = async () => {
+    try {
+      const safeName = (data.nama || "Peserta").replace(/[^a-zA-Z0-9]/g, "_").slice(0, 35);
+      const safeNim = (data.nim || "AML").replace(/[^a-zA-Z0-9]/g, "");
+      const fileName = `Sertifikat-AML2026-${safeName}-${safeNim}.png`;
+
+      let blob = imageBlob;
+      if (!blob && canvasRef.current) {
+        blob = await new Promise<Blob | null>((resolve) => {
+          canvasRef.current?.toBlob((b) => resolve(b), "image/png");
+        });
+      }
+
+      if (blob) {
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(downloadUrl);
+        }, 4000);
+      } else if (imageUrl) {
+        const a = document.createElement("a");
+        a.href = imageUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+        }, 1000);
+      }
+      setDownloadSuccess("Mengunduh file PNG...");
+      setTimeout(() => setDownloadSuccess(null), 3000);
     } catch {
-      // Jika download attribute diblokir browser mobile, buka tab baru
-      window.open(imageUrl, "_blank");
+      handleOpenNewTab();
+    }
+  };
+
+  // 4. Buka Gambar di Tab Baru untuk Tekan & Tahan
+  const handleOpenNewTab = () => {
+    if (!imageUrl) return;
+    const w = window.open();
+    if (w) {
+      w.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>E-Sertifikat - ${data.nama}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              * { box-sizing: border-box; }
+              body { margin: 0; background: #0c0d12; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px 16px; text-align: center; }
+              img { max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.6); -webkit-touch-callout: default !important; -webkit-user-select: auto !important; user-select: auto !important; }
+              .banner { background: rgba(28, 75, 188, 0.25); border: 1px solid rgba(28, 75, 188, 0.5); padding: 12px 18px; border-radius: 10px; margin-top: 20px; font-size: 13px; line-height: 1.5; max-width: 500px; }
+              .banner strong { color: #60a5fa; }
+            </style>
+          </head>
+          <body>
+            <img src="${imageUrl}" alt="E-Sertifikat ${data.nama}" />
+            <div class="banner">
+              📱 <strong>Pengguna HP / iPhone:</strong><br/>
+              Tekan dan tahan gambar di atas selama 1-2 detik, lalu pilih <strong>"Simpan ke Foto"</strong> / <strong>"Save Image"</strong>.
+            </div>
+          </body>
+        </html>
+      `);
+      w.document.close();
+    } else {
+      window.location.href = imageUrl;
     }
   };
 
@@ -401,6 +663,27 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
         )}
       </div>
 
+      {/* In-App Browser (WhatsApp / Instagram) Friendly Notice */}
+      {isInApp && (
+        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300">
+          <Smartphone className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+          <div className="space-y-1">
+            <strong className="block font-semibold">Membuka di Browser Aplikasi (WhatsApp / Medsos)</strong>
+            <p className="text-[11px] leading-relaxed text-neutral-700 dark:text-neutral-300">
+              Browser WhatsApp sering kali membatasi unduhan otomatis. Gunakan tombol hijau <strong>&quot;Download / Simpan ke Galeri&quot;</strong> di bawah (otomatis memicu dialog simpan foto), atau ketuk titik tiga (<strong>⋮</strong>) di pojok kanan atas layar lalu pilih <strong>&quot;Buka di Browser / Safari / Chrome&quot;</strong>.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Download Success Feedback Toast */}
+      {downloadSuccess && (
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 animate-in fade-in duration-200">
+          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="font-semibold">{downloadSuccess}</span>
+        </div>
+      )}
+
       {/* Participant Meta Chips */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/60 dark:border-neutral-800 text-xs">
         <div>
@@ -425,18 +708,37 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       </div>
 
       {/* Certificate Preview Image (A4 Landscape 3508:2480) */}
-      <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 shadow-inner group">
+      <div 
+        onClick={() => {
+          if (imageUrl) setShowFullscreen(true);
+        }}
+        className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 shadow-inner group cursor-zoom-in"
+        title="Ketuk atau klik untuk melihat pratinjau penuh"
+      >
         {isRendering ? (
           <div className="w-full aspect-[3508/2480] flex flex-col items-center justify-center gap-3">
             <div className="w-8 h-8 border-3 border-[#1C4BBC] border-t-transparent rounded-full animate-spin" />
             <p className="text-xs font-medium text-neutral-500">Menerbitkan E-Sertifikat High-Res 300 DPI...</p>
           </div>
         ) : imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={`Sertifikat ${data.nama}`}
-            className="w-full h-auto block select-none pointer-events-auto transition-transform duration-300"
-          />
+          <>
+            <img
+              src={imageUrl}
+              alt={`Sertifikat ${data.nama}`}
+              className="w-full h-auto block pointer-events-auto transition-transform duration-300 group-hover:scale-[1.008]"
+              style={{
+                WebkitTouchCallout: "default",
+                WebkitUserSelect: "auto",
+                userSelect: "auto",
+                touchAction: "manipulation",
+              }}
+            />
+            {/* Visual Hint Badge */}
+            <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-xs text-white text-[10px] font-medium flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <Maximize2 className="w-3 h-3 text-emerald-400" />
+              <span>Ketuk untuk Perbesar / Tekan & Tahan untuk Simpan</span>
+            </div>
+          </>
         ) : (
           <div className="w-full aspect-[3508/2480] flex flex-col items-center justify-center p-6 text-center gap-2">
             <AlertTriangle className="w-6 h-6 text-amber-500" />
@@ -446,39 +748,190 @@ export default function CertificateCard({ data, onClose }: CertificateCardProps)
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
-        <button
-          type="button"
-          onClick={handleDownload}
-          disabled={!imageUrl || isRendering}
-          className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 shadow-md shadow-emerald-600/20 transition-all cursor-pointer disabled:opacity-50"
-        >
-          <Download className="w-4 h-4" />
-          <span>Download Sertifikat (PNG 300 DPI)</span>
-        </button>
+      <div className="space-y-2.5 pt-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={!imageUrl || isRendering || isDownloading}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 shadow-md shadow-emerald-600/20 transition-all cursor-pointer disabled:opacity-50"
+          >
+            {isDownloading ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Menyiapkan Sertifikat...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                <span>Download / Simpan ke Galeri (PNG 300 DPI)</span>
+              </>
+            )}
+          </button>
 
-        <button
-          type="button"
-          onClick={handlePrint}
-          disabled={!imageUrl || isRendering}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
-        >
-          <Printer className="w-4 h-4" />
-          <span>Cetak / Simpan PDF</span>
-        </button>
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={!imageUrl || isRendering || isDownloadingPdf}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
+          >
+            {isDownloadingPdf ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Membuat Dokumen PDF...</span>
+              </>
+            ) : (
+              <>
+                <FileDown className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                <span>Unduh File PDF (A4)</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Secondary Auxiliary Actions: Direct download, Fullscreen, Print, New Tab */}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+          <button
+            type="button"
+            onClick={() => setShowFullscreen(true)}
+            disabled={!imageUrl || isRendering}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+            <span>Buka Layar Penuh</span>
+          </button>
+
+          <span className="text-neutral-300 dark:text-neutral-700 hidden sm:inline">•</span>
+
+          <button
+            type="button"
+            onClick={handleDirectPngDownload}
+            disabled={!imageUrl || isRendering}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Unduh PNG Langsung</span>
+          </button>
+
+          <span className="text-neutral-300 dark:text-neutral-700 hidden sm:inline">•</span>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            disabled={!imageUrl || isRendering}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Cetak Printer</span>
+          </button>
+
+          <span className="text-neutral-300 dark:text-neutral-700 hidden sm:inline">•</span>
+
+          <button
+            type="button"
+            onClick={handleOpenNewTab}
+            disabled={!imageUrl || isRendering}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Buka di Tab Baru</span>
+          </button>
+        </div>
       </div>
 
       {/* Guidance Notes */}
-      <div className="space-y-2 pt-1">
+      <div className="space-y-2.5 pt-1">
         <div className="flex items-center gap-2 text-[11px] text-neutral-400">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
           <span>E-Sertifikat ini sah dan diterbitkan secara digital oleh Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin.</span>
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-900/50 p-2.5 rounded-lg border border-neutral-200/50 dark:border-neutral-800">
-          <Info className="w-3.5 h-3.5 text-[#1C4BBC] shrink-0" />
-          <span>Pengguna Smartphone / iPhone: Jika tombol download tidak langsung membuka dialog simpan, Anda juga dapat menekan & tahan gambar sertifikat di atas lalu pilih <strong>&quot;Simpan ke Foto / Galeri&quot;</strong>.</span>
+
+        {/* Foolproof Mobile Guide */}
+        <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800 space-y-2 text-xs">
+          <div className="flex items-center gap-2 font-bold text-neutral-800 dark:text-neutral-200">
+            <Info className="w-4 h-4 text-[#1C4BBC] shrink-0" />
+            <span>Panduan Mudah Menyimpan Sertifikat di HP / Smartphone:</span>
+          </div>
+          <ol className="space-y-1.5 text-[11px] text-neutral-600 dark:text-neutral-400 pl-4 list-decimal leading-relaxed">
+            <li>
+              <strong>Pilihan 1 (Otomatis ke Galeri):</strong> Ketuk tombol hijau <strong>&quot;Download / Simpan ke Galeri&quot;</strong>. Di iPhone atau Android akan muncul menu berbagi sistem &rarr; ketuk opsi <strong>&quot;Simpan Gambar&quot; (Save Image)</strong>.
+            </li>
+            <li>
+              <strong>Pilihan 2 (Format Dokumen PDF):</strong> Ketuk tombol <strong>&quot;Unduh File PDF (A4)&quot;</strong> untuk menyimpan dokumen PDF resmi siap cetak.
+            </li>
+            <li>
+              <strong>Pilihan 3 (Tekan &amp; Tahan):</strong> Ketuk gambar sertifikat di atas untuk memperbesar, lalu <strong>tekan &amp; tahan gambar selama 1-2 detik</strong> hingga muncul menu pop-up &rarr; pilih <strong>&quot;Simpan Gambar&quot;</strong>.
+            </li>
+          </ol>
         </div>
       </div>
+
+      {/* Fullscreen Lightbox Modal untuk Pratinjau & Simpan Gambar */}
+      {showFullscreen && imageUrl && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          <div className="w-full max-w-4xl mx-auto flex items-center justify-between pb-3 border-b border-white/10 text-white">
+            <div className="flex items-center gap-2">
+              <Eye className="w-4 h-4 text-emerald-400" />
+              <span className="font-bold text-sm">Pratinjau E-Sertifikat Penuh (300 DPI)</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowFullscreen(false)}
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              title="Tutup pratinjau"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="w-full max-w-4xl mx-auto my-auto py-4 flex flex-col items-center gap-3">
+            <div className="w-full rounded-xl overflow-hidden shadow-2xl bg-black border border-white/10">
+              <img
+                src={imageUrl}
+                alt={`Sertifikat ${data.nama}`}
+                className="w-full h-auto block select-text pointer-events-auto"
+                style={{
+                  WebkitTouchCallout: "default",
+                  WebkitUserSelect: "auto",
+                  userSelect: "auto",
+                  touchAction: "manipulation",
+                }}
+              />
+            </div>
+            <div className="p-3 rounded-xl bg-white/10 text-white text-center text-xs w-full max-w-md border border-white/10">
+              📱 <strong>Pengguna HP / iPhone:</strong> Tekan &amp; tahan gambar di atas selama 1-2 detik, lalu pilih <strong>&quot;Simpan Gambar&quot;</strong> untuk menyimpan langsung ke Galeri Foto.
+            </div>
+          </div>
+
+          <div className="w-full max-w-4xl mx-auto pt-3 border-t border-white/10 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
+            >
+              {isDownloading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+              <span>Simpan ke Galeri / Download</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isDownloadingPdf}
+              className="px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all cursor-pointer flex items-center gap-2"
+            >
+              {isDownloadingPdf ? <RefreshCw className="w-4 h-4 animate-spin" /> : <FileDown className="w-4 h-4" />}
+              <span>Unduh PDF</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowFullscreen(false)}
+              className="px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm text-neutral-300 hover:text-white transition-colors cursor-pointer"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

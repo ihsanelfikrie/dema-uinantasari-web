@@ -424,26 +424,68 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
     };
   }, [data, retryCount]);
 
-  // Download Trigger: Full Ticket
-  const handleDownloadTicket = () => {
+  // Download Trigger: Full Ticket (Optimized for Mobile & Web Share)
+  const handleDownloadTicket = async () => {
     if (!ticketImageUrl) return;
-    const a = document.createElement("a");
-    a.href = ticketImageUrl;
-    a.download = `tiket-antasari-media-lab-${data.nim.trim()}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const fileName = `tiket-antasari-media-lab-${data.nim.trim()}.png`;
+    try {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile && typeof navigator !== "undefined" && navigator.canShare) {
+        const res = await fetch(ticketImageUrl);
+        const blob = await res.blob();
+        const file = new File([blob], fileName, { type: "image/png" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: `Tiket AML 2026 - ${data.nama}`,
+          });
+          return;
+        }
+      }
+      const res = await fetch(ticketImageUrl);
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(downloadUrl);
+      }, 3000);
+    } catch {
+      window.open(ticketImageUrl, "_blank");
+    }
   };
 
   // Download Trigger: Standalone QR Code
-  const handleDownloadQrOnly = () => {
+  const handleDownloadQrOnly = async () => {
     if (!standaloneQrUrl) return;
-    const a = document.createElement("a");
-    a.href = standaloneQrUrl;
-    a.download = `qr-checkin-${data.nim.trim()}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const fileName = `qr-checkin-${data.nim.trim()}.png`;
+    try {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile && typeof navigator !== "undefined" && navigator.canShare) {
+        const res = await fetch(standaloneQrUrl);
+        const blob = await res.blob();
+        const file = new File([blob], fileName, { type: "image/png" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: `QR Presensi AML 2026 - ${data.nama}`,
+          });
+          return;
+        }
+      }
+      const a = document.createElement("a");
+      a.href = standaloneQrUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {
+      window.open(standaloneQrUrl, "_blank");
+    }
   };
 
   // Retry canvas generation
