@@ -27,21 +27,21 @@ export default function HeroSection() {
         { opacity: 0.25, scale: 1, duration: 1.2, ease: "power2.out" }
       )
         .fromTo(
-          ".hero-badge",
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          "-=0.8"
-        )
-        .fromTo(
           ".hero-title-serif",
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.4"
+          "-=0.8"
         )
         .fromTo(
           ".hero-title-sans",
           { opacity: 0, y: 24 },
           { opacity: 1, y: 0, duration: 0.8 },
+          "-=0.5"
+        )
+        .fromTo(
+          ".hero-title-year",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.6 },
           "-=0.5"
         )
         .fromTo(
@@ -119,32 +119,29 @@ export default function HeroSection() {
           {/* ── LEFT COLUMN: Typography, Tagline & CTAs ────────────────────────── */}
           <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col items-start">
             
-            {/* Pill Badge */}
-            <div className="hero-badge opacity-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/15 mb-5 sm:mb-6">
-              <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-brand-primary font-poppins">
-                Kabinet Laskar Purnama Antasari &bull; 2026/2027
-              </span>
-            </div>
-
-            {/* Editorial Headline with Font Pairing: Times New Roman Condensed Italic + Akzidenz-Grotesk Black */}
-            <h1 className="flex flex-col items-start select-none text-left leading-none">
-              {/* Top Line: Times New Roman Condensed Italic */}
-              <span className="hero-title-serif opacity-0 font-times italic font-normal text-3xl sm:text-5xl lg:text-6xl text-neutral-800 tracking-tight block z-10">
+            {/* Editorial Headline with Golden Ratio (φ = 1.618) Typography & Font Pairing */}
+            <h1 className="flex flex-col items-start select-none text-left leading-none mb-2">
+              {/* Golden Ratio Level 2 (~42px): Times New Roman Condensed Italic */}
+              <span className="hero-title-serif opacity-0 font-times italic font-normal text-[26px] sm:text-[34px] lg:text-[42px] text-neutral-800 tracking-tight block z-10 leading-none">
                 Laskar Purnama Antasari
               </span>
 
-              {/* Bottom Line: Akzidenz-Grotesk Black Uppercase Italic — Jarak rapat (tight tracking & negative margin) */}
-              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tighter uppercase text-neutral-950 block -mt-1 sm:-mt-2 lg:-mt-3">
+              {/* Golden Ratio Level 3 (~68px): Akzidenz-Grotesk Black Italic Uppercase — 1 Baris Rapih */}
+              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-[28px] xs:text-[34px] sm:text-[48px] lg:text-[68px] whitespace-nowrap tracking-tighter uppercase text-neutral-950 block -mt-1 sm:-mt-2 lg:-mt-3 leading-none">
                 DEMA UIN ANTASARI
+              </span>
+
+              {/* Golden Ratio Level 1 (~26px): Tahun 2026/2027 tepat di bawah DEMA UIN ANTASARI */}
+              <span className="hero-title-year opacity-0 font-akzidenz font-bold text-[16px] sm:text-[20px] lg:text-[26px] tracking-[0.2em] uppercase text-brand-primary block mt-2.5 sm:mt-3 lg:mt-3.5 leading-none">
+                2026/2027
               </span>
             </h1>
 
             {/* Minimal thin accent line */}
-            <div className="hero-line w-20 h-[2.5px] bg-brand-primary/70 rounded-full my-5 origin-left scale-x-0" />
+            <div className="hero-line w-16 sm:w-20 h-[2px] bg-brand-primary/70 rounded-full my-5 origin-left scale-x-0" />
 
-            {/* Philosophy Tagline */}
-            <p className="hero-tagline opacity-0 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 max-w-xl font-normal font-poppins text-left">
+            {/* Philosophy Tagline (Golden Ratio Level 0: 16px, line-height φ = 1.618) */}
+            <p className="hero-tagline opacity-0 text-[15px] sm:text-[16px] leading-[1.618] text-neutral-600 max-w-xl font-normal font-poppins text-left">
               Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
             </p>
 
