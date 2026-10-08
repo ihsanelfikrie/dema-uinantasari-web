@@ -134,8 +134,8 @@ export default function HeroSection() {
                 Laskar Purnama
               </span>
 
-              {/* Bottom Line: Akzidenz-Grotesk Black Uppercase */}
-              <span className="hero-title-sans opacity-0 font-akzidenz font-black text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight uppercase text-neutral-950 block mt-1 sm:mt-2">
+              {/* Bottom Line: Akzidenz-Grotesk Black Uppercase Italic */}
+              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight uppercase text-neutral-950 block mt-1 sm:mt-2">
                 DEMA UIN ANTASARI
               </span>
             </h1>

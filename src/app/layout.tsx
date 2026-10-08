@@ -40,9 +40,19 @@ const akzidenzGrotesk = localFont({
       style: "normal",
     },
     {
+      path: "../../public/fonts/akzidenz-grotesk-bold-italic.ttf",
+      weight: "700",
+      style: "italic",
+    },
+    {
       path: "../../public/fonts/akzidenz-grotesk-black.ttf",
       weight: "900",
       style: "normal",
+    },
+    {
+      path: "../../public/fonts/akzidenz-grotesk-bold-italic.ttf",
+      weight: "900",
+      style: "italic",
     },
   ],
   variable: "--font-akzidenz",
