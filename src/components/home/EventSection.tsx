@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import EventCard from "@/components/event/EventCard";
 import FestivalAntasariCard from "@/components/event/FestivalAntasariCard";
-import EventCountdown from "@/components/home/EventCountdown";
 
 export default function EventSection() {
   return (
@@ -31,9 +30,6 @@ export default function EventSection() {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-
-      {/* Realtime Event Countdown Banner */}
-      <EventCountdown />
 
       {/* Events List */}
       <div className="space-y-10">
