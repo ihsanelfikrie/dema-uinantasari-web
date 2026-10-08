@@ -63,16 +63,10 @@ export default function HeroSection() {
           "-=0.4"
         )
         .fromTo(
-          ".hero-stats",
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          "-=0.3"
-        )
-        .fromTo(
           ".hero-leaders",
           { opacity: 0, y: 30, scale: 0.98 },
           { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power2.out" },
-          "-=0.7"
+          "-=0.5"
         );
 
       // ── Subtle scroll parallax ─────────────────────────────────────────────
@@ -161,22 +155,6 @@ export default function HeroSection() {
               >
                 <span>Layanan Mahasiswa</span>
               </Link>
-            </div>
-
-            {/* Quick Pillars Info */}
-            <div className="hero-stats opacity-0 mt-8 pt-6 border-t border-neutral-200/60 w-full max-w-lg grid grid-cols-2 sm:grid-cols-3 gap-4 text-left">
-              <div>
-                <span className="block text-lg sm:text-xl font-extrabold text-brand-primary font-poppins">3 Kanal</span>
-                <span className="block text-[11px] text-neutral-500 font-medium font-poppins">Layanan Mahasiswa</span>
-              </div>
-              <div>
-                <span className="block text-lg sm:text-xl font-extrabold text-neutral-900 font-poppins">100%</span>
-                <span className="block text-[11px] text-neutral-500 font-medium font-poppins">Aspiratif &amp; Terbuka</span>
-              </div>
-              <div className="col-span-2 sm:col-span-1">
-                <span className="block text-lg sm:text-xl font-extrabold text-brand-secondary font-poppins">2026/2027</span>
-                <span className="block text-[11px] text-neutral-500 font-medium font-poppins">Masa Khidmat</span>
-              </div>
             </div>
 
           </div>
