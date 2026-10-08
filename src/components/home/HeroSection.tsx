@@ -184,53 +184,50 @@ export default function HeroSection() {
 
           </div>
 
-          {/* ── RIGHT COLUMN: Duo Leadership Presentation ─────────────────────── */}
+          {/* ── RIGHT COLUMN: Duo Leadership Presentation (Tanpa Box) ─────────── */}
           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end">
-            <div className="hero-leaders opacity-0 relative w-full max-w-[460px] lg:max-w-[500px] flex flex-col items-center justify-end mt-4 lg:mt-0">
+            <div className="hero-leaders opacity-0 relative w-full max-w-[480px] lg:max-w-[520px] flex flex-col items-center justify-end mt-6 lg:mt-0">
               
-              {/* Subtle architectural backdrop card behind both leaders */}
-              <div className="absolute inset-x-2 sm:inset-x-4 bottom-0 top-10 bg-gradient-to-b from-white/60 to-white/90 rounded-3xl border border-neutral-200/70 shadow-sm pointer-events-none -z-1" />
-
-              {/* Duo Leadership Cutouts */}
-              <div className="relative flex items-end justify-center w-full pt-4 px-2 sm:px-4">
-                {/* Ketua Umum (Ahmad Munawir Sazali) */}
+              {/* Duo Leadership Cutouts — Berdiri bebas tanpa box */}
+              <div className="relative flex items-end justify-center w-full pt-4">
+                {/* Ahmad Munawir Sazali — Ketua Umum */}
                 <div className="relative -mr-6 sm:-mr-8 z-10 flex-1 max-w-[240px] sm:max-w-[270px]">
                   <img
-                    src="/images/kabinet/ketua.png"
+                    src="/images/kabinet/munawir-ketua.png"
                     alt="Ahmad Munawir Sazali - Ketua Umum DEMA UIN Antasari"
-                    className="w-full h-auto max-h-[460px] sm:max-h-[510px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
+                    className="w-full h-auto max-h-[460px] sm:max-h-[520px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
                 </div>
 
-                {/* Wakil Ketua Umum (Khairul Fikri) */}
+                {/* Khairul Fikri — Wakil Ketua Umum */}
                 <div className="relative z-0 flex-1 max-w-[230px] sm:max-w-[255px]">
                   <img
-                    src="/images/kabinet/wakil.png"
+                    src="/images/kabinet/fikri-wakil.png"
                     alt="Khairul Fikri - Wakil Ketua Umum DEMA UIN Antasari"
-                    className="w-full h-auto max-h-[440px] sm:max-h-[490px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
+                    className="w-full h-auto max-h-[440px] sm:max-h-[495px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
                 </div>
               </div>
 
-              {/* Grounded dual name tag at bottom */}
-              <div className="relative z-20 -mt-3 mb-2 w-[90%] sm:w-[92%] py-2.5 px-4 rounded-2xl bg-white/95 backdrop-blur-md border border-neutral-200/80 shadow-md flex items-center justify-between text-left">
-                <div>
-                  <span className="block text-xs sm:text-sm font-bold text-neutral-900 font-poppins leading-tight">
+              {/* Label Nama Minimalis — Langsung di atas latar tanpa box */}
+              <div className="mt-4 w-full flex items-center justify-between px-3 sm:px-6">
+                <div className="text-left">
+                  <span className="block text-sm sm:text-base font-bold text-neutral-900 font-poppins leading-snug">
                     Ahmad Munawir Sazali
                   </span>
-                  <span className="block text-[10px] sm:text-[11px] text-brand-primary font-semibold font-poppins">
-                    Ketua Umum
+                  <span className="block text-xs font-semibold text-brand-primary font-poppins">
+                    Ketua Umum DEMA
                   </span>
                 </div>
-                <div className="h-7 w-[1px] bg-neutral-200 mx-2 sm:mx-3" />
+
                 <div className="text-right">
-                  <span className="block text-xs sm:text-sm font-bold text-neutral-900 font-poppins leading-tight">
+                  <span className="block text-sm sm:text-base font-bold text-neutral-900 font-poppins leading-snug">
                     Khairul Fikri
                   </span>
-                  <span className="block text-[10px] sm:text-[11px] text-brand-primary font-semibold font-poppins">
-                    Wakil Ketua Umum
+                  <span className="block text-xs font-semibold text-brand-primary font-poppins">
+                    Wakil Ketua Umum DEMA
                   </span>
                 </div>
               </div>
