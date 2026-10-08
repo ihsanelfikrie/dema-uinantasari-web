@@ -130,12 +130,12 @@ export default function HeroSection() {
             {/* Editorial Headline with Font Pairing: Times New Roman Condensed Italic + Akzidenz-Grotesk Black */}
             <h1 className="flex flex-col items-start select-none text-left leading-none">
               {/* Top Line: Times New Roman Condensed Italic */}
-              <span className="hero-title-serif opacity-0 font-times italic font-normal text-3xl sm:text-5xl lg:text-6xl text-neutral-800 tracking-tight block -mb-1 sm:-mb-2 z-10">
-                Laskar Purnama
+              <span className="hero-title-serif opacity-0 font-times italic font-normal text-3xl sm:text-5xl lg:text-6xl text-neutral-800 tracking-tight block z-10">
+                Laskar Purnama Antasari
               </span>
 
-              {/* Bottom Line: Akzidenz-Grotesk Black Uppercase Italic */}
-              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight uppercase text-neutral-950 block mt-1 sm:mt-2">
+              {/* Bottom Line: Akzidenz-Grotesk Black Uppercase Italic — Jarak rapat (tight tracking & negative margin) */}
+              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tighter uppercase text-neutral-950 block -mt-1 sm:-mt-2 lg:-mt-3">
                 DEMA UIN ANTASARI
               </span>
             </h1>
