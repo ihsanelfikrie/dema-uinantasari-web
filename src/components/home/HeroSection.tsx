@@ -3,342 +3,113 @@
 import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ArrowDown } from "lucide-react";
+import { ArrowRight, ArrowDown } from "lucide-react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const splitText = (text: string) => {
-    return text.split("").map((char, index) => (
-      <span
-        key={index}
-        className="animate-char inline-block opacity-0"
-        style={{ transformOrigin: "center center" }}
-      >
-        {char === " " ? "\u00A0" : char}
-      </span>
-    ));
-  };
-
   useGSAP(
     () => {
-      // ── Master timeline ──────────────────────────────────────────────────────
+      // ── Entrance animation timeline ─────────────────────────────────────────
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
       });
 
-      // ── 1. Background fade-in ──────────────────────────────────────────────
       tl.fromTo(
         ".hero-bg",
-        { scale: 1.06, autoAlpha: 0 },
-        { scale: 1, autoAlpha: 0.65, duration: 1.6, ease: "power2.out" },
-        0
-      );
+        { opacity: 0, scale: 1.04 },
+        { opacity: 0.28, scale: 1, duration: 1.2, ease: "power2.out" }
+      )
+        .fromTo(
+          ".hero-badge",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "-=0.8"
+        )
+        .fromTo(
+          ".hero-title-serif",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7 },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-title-sans",
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          "-=0.5"
+        )
+        .fromTo(
+          ".hero-line",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.6, ease: "power2.inOut" },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-tagline",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.7 },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-cta",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-portrait",
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" },
+          "-=0.6"
+        )
+        .fromTo(
+          ".hero-scroll",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5 },
+          "-=0.2"
+        );
 
-      // ── 2. Entrance for geometric shapes ───────────────────────────────────
-      tl.fromTo(
-        ".hero-geo-shape",
-        { scale: 0.8, autoAlpha: 0, rotation: "random(-20, 20)" },
-        { scale: 1, autoAlpha: 0.3, rotation: 0, duration: 1.4, ease: "power3.out", stagger: 0.1 },
-        0.1
-      );
-
-      // ── 2.5. Stroke drawing animation for solid shapes ─────────────────────
-      tl.fromTo(
-        ".hero-stroke-solid, .hero-stroke-rect-1, .hero-stroke-circle-2, .hero-stroke-rect-2",
-        { strokeDashoffset: (i: number, el: any) => parseFloat(el.getAttribute("stroke-dasharray") || "0") },
-        {
-          strokeDashoffset: 0,
-          duration: 1.6,
-          ease: "power2.out",
-          stagger: 0.1,
-        },
-        0.15
-      );
-
-      // ── 3. Badge: clip-path reveal (wipe from left) ────────────────────────
-      tl.fromTo(
-        ".hero-badge",
-        { clipPath: "inset(0 100% 0 0)", autoAlpha: 0 },
-        { clipPath: "inset(0 0% 0 0)", autoAlpha: 1, duration: 0.7, ease: "power2.inOut" },
-        0.3
-      );
-
-      // ── 4. Character-by-character headline entry ───────────────────────────
-      tl.fromTo(
-        ".animate-char",
-        { y: 40, rotationX: -80, autoAlpha: 0, scale: 0.8 },
-        {
-          y: 0,
-          rotationX: 0,
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.02,
-          ease: "back.out(1.5)",
-        },
-        0.4
-      );
-
-      // ── 5. Line under headline: horizontal draw ───────────────────────────
-      tl.fromTo(
-        ".hero-headline-line",
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.8, ease: "power3.inOut" },
-        "-=0.1"
-      );
-
-      // ── 6. Paragraph lines: clip-path wipe up (line masking) ──────────────
-      tl.fromTo(
-        ".animate-paragraph-line",
-        { yPercent: 110, autoAlpha: 0 },
-        {
-          yPercent: 0,
-          autoAlpha: 1,
-          duration: 0.9,
-          stagger: 0.09,
-          ease: "power3.out",
-        },
-        "-=0.4"
-      );
-
-      // ── 7. Mobile paragraph ────────────────────────────────────────────────
-      tl.fromTo(
-        ".hero-mobile-para",
-        { y: 20, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.7 },
-        "<"
-      );
-
-      // ── 8. CTA buttons: scale-in staggered ────────────────────────────────
-      tl.fromTo(
-        ".hero-cta-btn",
-        { scale: 0.82, autoAlpha: 0, y: 12 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.55,
-          stagger: 0.12,
-          ease: "back.out(1.5)",
-        },
-        "-=0.3"
-      );
-
-      // ── 9. Scroll indicator: fade + bounce-in ─────────────────────────────
-      tl.fromTo(
-        ".hero-scroll-indicator",
-        { autoAlpha: 0, y: 16 },
-        { autoAlpha: 1, y: 0, duration: 0.5 },
-        "-=0.1"
-      );
-
-      // ── 10. Leader portraits: slide-in from sides + scale ─────────────────
-      tl.fromTo(
-        ".hero-portrait-left",
-        { x: -80, autoAlpha: 0, scale: 0.92 },
-        { x: 0, autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" },
-        0.2
-      );
-      tl.fromTo(
-        ".hero-portrait-right",
-        { x: 80, autoAlpha: 0, scale: 0.92 },
-        { x: 0, autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" },
-        "<"
-      );
-
-      // ── 11. Subtle slow breathe on portraits ──────────────────────────────
-      gsap.to(".hero-portrait-left", {
-        y: -10,
-        duration: 4.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1.5,
-      });
-      gsap.to(".hero-portrait-right", {
-        y: -10,
-        duration: 4.0,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 2.0,
-      });
-
-      // ── 12. Mousemove parallax ─────────────────────────────────────────────
-      const handleMouseMove = (e: MouseEvent) => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        const relX = (e.clientX - rect.left) / rect.width - 0.5;
-        const relY = (e.clientY - rect.top) / rect.height - 0.5;
-
-        // Geometric shapes parallax
-        const geoShapes = containerRef.current.querySelectorAll(".hero-geo-shape");
-        geoShapes.forEach((shape) => {
-          const factor = parseFloat(shape.getAttribute("data-factor") || "0.05");
-          gsap.to(shape, {
-            x: relX * rect.width * factor,
-            y: relY * rect.height * factor,
-            duration: 1.2,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
+      // ── Subtle background & portrait parallax during scroll ────────────────
+      if (typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.to(".hero-bg", {
+          yPercent: 12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         });
 
-        // Subtle tilt on portraits
         gsap.to(".hero-portrait-left", {
-          x: relX * -18,
-          duration: 1.2,
-          ease: "power2.out",
-          overwrite: "auto",
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         });
+
         gsap.to(".hero-portrait-right", {
-          x: relX * 18,
-          duration: 1.2,
-          ease: "power2.out",
-          overwrite: "auto",
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         });
-
-        // Subtle title float
-        gsap.to(".hero-title", {
-          x: relX * -6,
-          y: relY * -4,
-          duration: 1.0,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-      };
-
-      const handleMouseLeave = () => {
-        gsap.to(".hero-portrait-left, .hero-portrait-right, .hero-title, .hero-geo-shape", {
-          x: 0,
-          y: 0,
-          duration: 1.4,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      };
-
-      const container = containerRef.current;
-      if (!container) return;
-
-      container.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("mouseleave", handleMouseLeave);
-
-      // ── 15. Dynamic Loop Character Rotation & Hover ────────────────────────
-      const titleRotationLoop = gsap.to(".animate-char", {
-        rotationX: "+=360",
-        duration: 1.2,
-        ease: "power2.inOut",
-        stagger: {
-          each: 0.04,
-          repeat: -1,
-          repeatDelay: 5.0,
-        },
-        delay: 2.0,
-      });
-
-      const charElements = container.querySelectorAll(".animate-char");
-      const hoverHandlers: Array<{ el: Element; enterHandler: () => void; leaveHandler: () => void }> = [];
-
-      charElements.forEach((el) => {
-        let timeoutId: NodeJS.Timeout | null = null;
-
-        const enterHandler = () => {
-          if (timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
-          }
-          gsap.to(el, {
-            rotationX: "+=360",
-            duration: 0.8,
-            ease: "back.out(1.2)",
-            overwrite: "auto",
-          });
-        };
-
-        const leaveHandler = () => {
-          if (timeoutId) clearTimeout(timeoutId);
-          timeoutId = setTimeout(() => {
-            gsap.to(el, {
-              rotationX: 0,
-              duration: 1.0,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }, 3000);
-        };
-
-        el.addEventListener("mouseenter", enterHandler);
-        el.addEventListener("mouseleave", leaveHandler);
-        hoverHandlers.push({ el, enterHandler, leaveHandler });
-      });
-
-      // ── 16. CTA Magnetic Button Hover Ala GSAP ─────────────────────────────
-      const buttons = container.querySelectorAll(".hero-cta-btn");
-      const btnHandlers: Array<{ el: Element; enter: () => void; move: (e: Event) => void; leave: () => void }> = [];
-
-      buttons.forEach((btn) => {
-        const enter = () => {
-          gsap.to(btn, {
-            scale: 1.08,
-            boxShadow: "0 10px 25px -5px rgba(153, 8, 8, 0.3)",
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        };
-
-        const move = (e: Event) => {
-          const mouseEvent = e as MouseEvent;
-          const rect = btn.getBoundingClientRect();
-          const relX = mouseEvent.clientX - (rect.left + rect.width / 2);
-          const relY = mouseEvent.clientY - (rect.top + rect.height / 2);
-
-          gsap.to(btn, {
-            x: relX * 0.35,
-            y: relY * 0.35,
-            rotation: relX * 0.05,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        };
-
-        const leave = () => {
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            scale: 1,
-            rotation: 0,
-            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
-            duration: 0.8,
-            ease: "elastic.out(1.1, 0.4)",
-            overwrite: "auto",
-          });
-        };
-
-        btn.addEventListener("mouseenter", enter);
-        btn.addEventListener("mousemove", move);
-        btn.addEventListener("mouseleave", leave);
-        btnHandlers.push({ el: btn, enter, move, leave });
-      });
-
-      return () => {
-        container.removeEventListener("mousemove", handleMouseMove);
-        container.removeEventListener("mouseleave", handleMouseLeave);
-        hoverHandlers.forEach(({ el, enterHandler, leaveHandler }) => {
-          el.removeEventListener("mouseenter", enterHandler);
-          el.removeEventListener("mouseleave", leaveHandler);
-        });
-        btnHandlers.forEach(({ el, enter, move, leave }) => {
-          el.removeEventListener("mouseenter", enter);
-          el.removeEventListener("mousemove", move);
-          el.removeEventListener("mouseleave", leave);
-        });
-        titleRotationLoop.kill();
-      };
+      }
     },
     { scope: containerRef }
   );
@@ -346,191 +117,107 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-brand-background pt-32 sm:pt-40 pb-20 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-200/60 transition-colors duration-300 min-h-[85vh] perspective-1000"
+      className="relative overflow-hidden bg-brand-background pt-32 sm:pt-40 pb-16 sm:pb-24 flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 border-b border-neutral-200/60 min-h-[85vh]"
     >
-      {/* Background grid texture */}
-      <div className="absolute inset-0 z-[1] opacity-[0.05] pointer-events-none select-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#990808_1px,transparent_1px),linear-gradient(to_bottom,#990808_1px,transparent_1px)] bg-[size:4.5rem_4.5rem]" />
-        {/* Intersection crosses */}
-        <div className="absolute top-20 left-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-        <div className="absolute top-20 right-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-        <div className="absolute bottom-20 left-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-        <div className="absolute bottom-20 right-20 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-        <div className="absolute top-1/2 right-10 -translate-y-1/2 text-brand-primary/40 font-light text-sm font-poppins">+</div>
-      </div>
-
-      {/* Decorative Minimal Geometric Outlines with SVG Stroke Drawing */}
-      <div className="absolute inset-0 z-[2] pointer-events-none select-none opacity-40">
-        <svg
-          viewBox="0 0 1600 800"
-          className="absolute inset-0 w-full h-full"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          {/* Large Outer Thin Dashed Circle */}
-          <circle
-            className="hero-geo-shape text-brand-primary/30"
-            cx="800"
-            cy="400"
-            r="280"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="8 8"
-            data-factor="0.04"
-          />
-          {/* Medium Inner Thin Circle */}
-          <circle
-            className="hero-geo-shape hero-stroke-solid text-brand-primary/20"
-            cx="800"
-            cy="400"
-            r="180"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="1131"
-            strokeDashoffset="1131"
-            data-factor="-0.02"
-          />
-          {/* Left decorative box */}
-          <rect
-            className="hero-geo-shape hero-stroke-rect-1 text-brand-primary/20"
-            x="250"
-            y="200"
-            width="60"
-            height="60"
-            rx="10"
-            transform="rotate(12 280 230)"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="240"
-            strokeDashoffset="240"
-            data-factor="0.06"
-          />
-          {/* Right decorative circle */}
-          <circle
-            className="hero-geo-shape hero-stroke-circle-2 text-brand-primary/10"
-            cx="1350"
-            cy="500"
-            r="40"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="252"
-            strokeDashoffset="252"
-            data-factor="-0.08"
-          />
-          {/* Upper right decorative small box */}
-          <rect
-            className="hero-geo-shape hero-stroke-rect-2 text-brand-primary/30"
-            x="1300"
-            y="300"
-            width="40"
-            height="40"
-            rx="6"
-            transform="rotate(45 1320 320)"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="160"
-            strokeDashoffset="160"
-            data-factor="0.03"
-          />
-        </svg>
-      </div>
-
-      {/* Background image */}
-      <div className="hero-bg absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-[0.65] pointer-events-none select-none transition-all duration-300 z-0" />
-
-      {/* Left Leader Portrait */}
-      <img
-        src="/images/kabinet/ketua.png"
-        alt="Ahmad Munawir Sazali - Ketua Umum"
-        className="hero-portrait-left absolute bottom-0 left-0 lg:left-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block opacity-0"
+      {/* Background authentic graphic with subtle overlay */}
+      <div
+        className="hero-bg absolute inset-0 bg-[url('/images/kabinet/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-0 pointer-events-none select-none transition-opacity duration-500 z-0"
       />
 
-      {/* Right Leader Portrait */}
-      <img
-        src="/images/kabinet/wakil.png"
-        alt="Khairul Fikri - Wakil Ketua Umum"
-        className="hero-portrait-right absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block opacity-0"
-      />
+      {/* Left Leader Portrait — Desktop Flanking */}
+      <div className="hero-portrait hero-portrait-left absolute bottom-0 left-0 xl:left-4 2xl:left-12 z-10 pointer-events-none select-none hidden xl:flex flex-col items-center opacity-0">
+        <div className="relative">
+          <img
+            src="/images/kabinet/ketua.png"
+            alt="Ahmad Munawir Sazali - Ketua Umum DEMA UIN Antasari"
+            className="h-[55vh] max-h-[520px] 2xl:max-h-[580px] w-auto object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)]"
+            loading="eager"
+          />
+        </div>
+        <div className="absolute bottom-6 left-6 px-3.5 py-1.5 rounded-xl bg-white/90 backdrop-blur-xs border border-neutral-200/80 shadow-xs text-left">
+          <span className="block text-xs font-semibold text-neutral-900 font-poppins">
+            Ahmad Munawir Sazali
+          </span>
+          <span className="block text-[10px] text-brand-primary font-medium font-poppins">
+            Ketua Umum DEMA UIN Antasari
+          </span>
+        </div>
+      </div>
 
+      {/* Right Leader Portrait — Desktop Flanking */}
+      <div className="hero-portrait hero-portrait-right absolute bottom-0 right-0 xl:right-4 2xl:right-12 z-10 pointer-events-none select-none hidden xl:flex flex-col items-center opacity-0">
+        <div className="relative">
+          <img
+            src="/images/kabinet/wakil.png"
+            alt="Khairul Fikri - Wakil Ketua Umum DEMA UIN Antasari"
+            className="h-[55vh] max-h-[520px] 2xl:max-h-[580px] w-auto object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)]"
+            loading="eager"
+          />
+        </div>
+        <div className="absolute bottom-6 right-6 px-3.5 py-1.5 rounded-xl bg-white/90 backdrop-blur-xs border border-neutral-200/80 shadow-xs text-right">
+          <span className="block text-xs font-semibold text-neutral-900 font-poppins">
+            Khairul Fikri
+          </span>
+          <span className="block text-[10px] text-brand-primary font-medium font-poppins">
+            Wakil Ketua Umum DEMA UIN Antasari
+          </span>
+        </div>
+      </div>
 
+      {/* Main Hero Centerpiece */}
+      <div className="max-w-3xl sm:max-w-4xl flex flex-col items-center relative z-20 mx-auto">
+        {/* Pill Badge */}
+        <div className="hero-badge opacity-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/15 mb-6">
+          <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-brand-primary font-poppins">
+            Kabinet Laskar Purnama Antasari &bull; 2026/2027
+          </span>
+        </div>
 
-      {/* Hero Content */}
-      <div className="max-w-4xl flex flex-col items-center relative z-20">
-        {/* Badge */}
-        <span className="hero-badge opacity-0 text-xs sm:text-sm font-semibold tracking-wider text-brand-primary uppercase bg-brand-primary/10 border border-brand-primary/15 px-4 py-1.5 rounded-full mb-5">
-          Dewan Eksekutif Mahasiswa &bull; UIN Antasari Banjarmasin
-        </span>
-
-        {/* Headline with font pairing: Times New Roman Condensed (Italic) + Akzidenz-Grotesk (Black) */}
-        <h1 className="hero-title flex flex-col items-center select-none text-center leading-none">
-          {/* Top Line: Times New Roman Condensed Italic (like "team" in reference) */}
-          <span className="font-times italic font-normal text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-800 dark:text-neutral-200 tracking-tight block -mb-1 sm:-mb-2 z-10">
-            {splitText("Laskar Purnama")}
+        {/* Editorial Headline with Font Pairing: Times New Roman Condensed Italic + Akzidenz-Grotesk Black */}
+        <h1 className="flex flex-col items-center select-none text-center leading-none">
+          {/* Top Line: Times New Roman Condensed Italic */}
+          <span className="hero-title-serif opacity-0 font-times italic font-normal text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-800 tracking-tight block -mb-1 sm:-mb-2 z-10">
+            Laskar Purnama
           </span>
 
-          {/* Bottom Line: Akzidenz-Grotesk Black Uppercase (like "SYNC" in reference) */}
-          <span className="font-akzidenz font-black text-[28px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight uppercase text-neutral-950 dark:text-white block mt-1 sm:mt-2">
-            {splitText("DEMA UIN ANTASARI")}
-          </span>
-
-          {/* Sub / Period in Akzidenz-Grotesk */}
-          <span className="font-akzidenz font-extrabold text-xs sm:text-sm md:text-base tracking-[0.25em] uppercase text-brand-primary mt-3 sm:mt-4 block">
-            {splitText("2026 / 2027")}
+          {/* Bottom Line: Akzidenz-Grotesk Black Uppercase */}
+          <span className="hero-title-sans opacity-0 font-akzidenz font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight uppercase text-neutral-950 block mt-1 sm:mt-2">
+            DEMA UIN ANTASARI
           </span>
         </h1>
 
-        {/* Clean minimal separator line under header */}
-        <div className="hero-headline-line w-24 h-[3px] bg-brand-primary rounded-full mt-6 origin-center" />
+        {/* Minimal thin accent line */}
+        <div className="hero-line w-20 h-[2px] bg-brand-primary/60 rounded-full mt-6 mb-6 origin-center scale-x-0" />
 
-        {/* Paragraph Desktop */}
-        <p className="mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-neutral-600 max-w-3xl font-normal hidden sm:flex flex-col items-center select-none">
-          <span className="inline-block overflow-hidden py-0.5">
-            <span className="animate-paragraph-line inline-block opacity-0">
-              Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
-            </span>
-          </span>
-          <span className="inline-block overflow-hidden py-0.5">
-            <span className="animate-paragraph-line inline-block opacity-0">
-              sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
-            </span>
-          </span>
-          <span className="inline-block overflow-hidden py-0.5">
-            <span className="animate-paragraph-line inline-block opacity-0">
-              berdampak bagi civitas akademika dan masyarakat luas.
-            </span>
-          </span>
+        {/* Subtitle / Philosophy Tagline */}
+        <p className="hero-tagline opacity-0 text-sm sm:text-base md:text-lg leading-relaxed text-neutral-600 max-w-2xl mx-auto font-normal font-poppins">
+          Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
         </p>
 
-        {/* Paragraph Mobile */}
-        <p className="hero-mobile-para opacity-0 mt-6 text-sm leading-relaxed text-neutral-600 max-w-2xl font-normal block sm:hidden">
-          Membawa terwujudnya Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin
-          sebagai pelopor kepemimpinan yang bersinar, aspiratif, solutif, dan
-          berdampak bagi civitas akademika dan masyarakat luas.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="mt-10 flex items-center justify-center gap-4">
+        {/* CTA Button Group */}
+        <div className="hero-cta opacity-0 mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           <Link
             href="/profil"
-            className="hero-cta-btn opacity-0 rounded-lg bg-brand-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
           >
-            Tentang Kabinet
+            <span>Tentang Kabinet</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
+
           <Link
             href="/layanan"
-            className="hero-cta-btn opacity-0 rounded-lg border border-neutral-300 bg-white/80 hover:bg-white px-6 py-3 text-sm font-semibold text-neutral-800 shadow-sm transition-colors duration-200"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 bg-white/80 hover:bg-white border border-neutral-200/90 hover:border-neutral-300 shadow-xs hover:shadow-sm transition-all active:scale-[0.98]"
           >
-            Layanan Portal
+            <span>Layanan Mahasiswa</span>
           </Link>
         </div>
 
         {/* Scroll indicator */}
-        <div className="hero-scroll-indicator opacity-0 mt-16 flex justify-center">
+        <div className="hero-scroll opacity-0 mt-12 sm:mt-16 flex flex-col items-center gap-1.5">
+          <span className="text-[11px] uppercase tracking-widest text-neutral-400 font-medium font-poppins">
+            Jelajahi Portal
+          </span>
           <button
             onClick={() => {
               window.scrollTo({
@@ -538,10 +225,10 @@ export default function HeroSection() {
                 behavior: "smooth",
               });
             }}
-            className="p-3.5 rounded-full bg-brand-primary dark:bg-brand-secondary text-white dark:text-neutral-950 hover:bg-brand-accent dark:hover:bg-yellow-400 transition-all duration-300 cursor-pointer shadow-lg"
-            aria-label="Scroll Down"
+            className="p-2 rounded-full text-neutral-500 hover:text-brand-primary hover:bg-neutral-200/40 transition-colors cursor-pointer"
+            aria-label="Scroll ke konten selanjutnya"
           >
-            <ArrowDown className="h-5 w-5 animate-bounce" />
+            <ArrowDown className="h-4 w-4 animate-bounce" />
           </button>
         </div>
       </div>
