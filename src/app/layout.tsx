@@ -19,6 +19,11 @@ const timesNewRoman = localFont({
       style: "normal",
     },
     {
+      path: "../../public/fonts/Times New Roman MT Condensed Italic.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
       path: "../../public/fonts/Times New Roman MT Condensed Bold.otf",
       weight: "700",
       style: "normal",

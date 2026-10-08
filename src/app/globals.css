@@ -12,6 +12,16 @@
   --color-aml-powder: #CAD3E6;
   --color-aml-dark: #0F2B75;
   --font-poppins: var(--font-poppins), sans-serif;
+  --font-times: var(--font-times), "Times New Roman", Times, serif;
+  --font-akzidenz: var(--font-akzidenz), "Akzidenz-Grotesk", "Helvetica Neue", Arial, sans-serif;
+}
+
+.font-times {
+  font-family: var(--font-times), "Times New Roman", Times, serif;
+}
+
+.font-akzidenz {
+  font-family: var(--font-akzidenz), "Akzidenz-Grotesk", "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Enforce dark variant to a selector that is never matched, completely disabling dark mode */

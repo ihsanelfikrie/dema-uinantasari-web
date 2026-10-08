@@ -541,19 +541,25 @@ export default function HeroSection() {
       {/* Hero Content */}
       <div className="max-w-4xl flex flex-col items-center relative z-20">
         {/* Badge */}
-        <span className="hero-badge opacity-0 text-xs sm:text-sm font-bold tracking-wider text-brand-primary uppercase bg-brand-primary/10 px-4 py-1.5 rounded-full mb-6">
-          Kabinet Laskar Purnama Antasari
+        <span className="hero-badge opacity-0 text-xs sm:text-sm font-semibold tracking-wider text-brand-primary uppercase bg-brand-primary/10 border border-brand-primary/15 px-4 py-1.5 rounded-full mb-5">
+          Dewan Eksekutif Mahasiswa &bull; UIN Antasari Banjarmasin
         </span>
 
-        {/* Headline with dynamic split character reveal */}
-        <h1 className="hero-title text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl lg:text-7xl font-poppins select-none leading-[1.1] flex flex-col items-center gap-2">
-          <div className="flex flex-wrap justify-center gap-x-3 sm:gap-x-4">
-            <span className="inline-block">{splitText("DEMA")}</span>
-            <span className="inline-block">{splitText("UIN")}</span>
-            <span className="inline-block">{splitText("Antasari")}</span>
-          </div>
-          <span className="text-brand-primary inline-block">
-            {splitText("2026/2027")}
+        {/* Headline with font pairing: Times New Roman Condensed (Italic) + Akzidenz-Grotesk (Black) */}
+        <h1 className="hero-title flex flex-col items-center select-none text-center leading-none">
+          {/* Top Line: Times New Roman Condensed Italic (like "team" in reference) */}
+          <span className="font-times italic font-normal text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-800 dark:text-neutral-200 tracking-tight block -mb-1 sm:-mb-2 z-10">
+            {splitText("Laskar Purnama")}
+          </span>
+
+          {/* Bottom Line: Akzidenz-Grotesk Black Uppercase (like "SYNC" in reference) */}
+          <span className="font-akzidenz font-black text-[28px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight uppercase text-neutral-950 dark:text-white block mt-1 sm:mt-2">
+            {splitText("DEMA UIN ANTASARI")}
+          </span>
+
+          {/* Sub / Period in Akzidenz-Grotesk */}
+          <span className="font-akzidenz font-extrabold text-xs sm:text-sm md:text-base tracking-[0.25em] uppercase text-brand-primary mt-3 sm:mt-4 block">
+            {splitText("2026 / 2027")}
           </span>
         </h1>
 
