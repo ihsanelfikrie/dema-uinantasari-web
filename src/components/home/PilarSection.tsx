@@ -35,8 +35,8 @@ export default function PilarSection() {
     },
     {
       href: "/berita",
-      title: "Informasi & Kajian",
-      desc: "Ikuti pengumuman resmi, berita terbaru kampus, dan kajian isu terkini.",
+      title: "Kabar & Kegiatan",
+      desc: "Ikuti rilis berita resmi, pengumuman kampus, dan dokumentasi agenda kegiatan.",
       icon: Newspaper,
     },
     {

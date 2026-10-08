@@ -27,10 +27,10 @@ export default async function BeritaTerbaru() {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl font-poppins">
-            Kabar & Kajian Terbaru
+            Kabar & Kegiatan Terbaru
           </h2>
           <p className="mt-3 text-sm text-neutral-500 max-w-md">
-            Ikuti rilis berita, kajian isu strategis, dan dokumentasi kegiatan DEMA UIN
+            Ikuti rilis berita, pengumuman, dan dokumentasi kegiatan DEMA UIN
             Antasari.
           </p>
         </div>
@@ -38,7 +38,7 @@ export default async function BeritaTerbaru() {
           href="/berita"
           className="mt-4 sm:mt-0 text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors flex items-center"
         >
-          Lihat Semua Informasi & Kajian &rarr;
+          Lihat Semua Kabar & Kegiatan &rarr;
         </Link>
       </div>
 

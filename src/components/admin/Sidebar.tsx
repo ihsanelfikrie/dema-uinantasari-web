@@ -41,7 +41,7 @@ export default function Sidebar() {
     { name: "Scan Presensi QR", href: "/admin/presensi", icon: QrCode, badge: "Live" },
     { name: "Sertifikat Event", href: "/admin/sertifikat", icon: Award },
     { name: "Modul & Materi", href: "/admin/materi", icon: FolderDown },
-    { name: "Info & Kajian", href: "/admin/berita", icon: Newspaper },
+    { name: "Kabar & Kegiatan", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Kegiatan", href: "/admin/kegiatan", icon: Calendar },
     { name: "Kelola Dokumen", href: "/admin/dokumen", icon: FileText },
     { name: "Surat Masuk", href: "/admin/permohonan", icon: Inbox },

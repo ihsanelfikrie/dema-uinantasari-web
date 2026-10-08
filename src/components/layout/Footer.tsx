@@ -54,7 +54,7 @@ export default function Footer() {
     { href: "/profil", label: "Profil Kabinet" },
     { href: "/struktur", label: "Struktur Organisasi" },
     { href: "/layanan", label: "Layanan Digital" },
-    { href: "/berita", label: "Informasi & Kajian" },
+    { href: "/berita", label: "Kabar & Kegiatan DEMA" },
     { href: "/program-kerja", label: "Program Kerja" },
   ];
 

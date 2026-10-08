@@ -87,7 +87,7 @@ export default function Navbar() {
 
   const rightLinks = [
     { href: "/program-unggulan", label: "Program Unggulan" },
-    { href: "/berita", label: "Informasi" },
+    { href: "/berita", label: "Kabar & Kegiatan" },
   ];
 
   // Mobile menu links list (flat list of all links)
@@ -100,7 +100,7 @@ export default function Navbar() {
     { href: "/layanan", label: "Layanan Mahasiswa" },
     { href: "/layanan-persuratan", label: "Layanan Persuratan" },
     { href: "/program-unggulan", label: "Program Unggulan" },
-    { href: "/berita", label: "Informasi & Kajian" },
+    { href: "/berita", label: "Kabar & Kegiatan" },
   ];
 
   const isTentangKamiActive = tentangKamiLinks.some((link) => pathname === link.href);
