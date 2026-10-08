@@ -120,18 +120,18 @@ export default function HeroSection() {
           <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col items-start">
             
             {/* Editorial Headline with Golden Ratio (φ = 1.618) Typography & Font Pairing */}
-            <h1 className="flex flex-col items-start select-none text-left leading-none mb-2">
+            <h1 className="flex flex-col items-start select-none text-left leading-none mb-3">
               {/* Golden Ratio Level 2 (~42px): Times New Roman Condensed Italic */}
               <span className="hero-title-serif opacity-0 font-times italic font-normal text-[26px] sm:text-[34px] lg:text-[42px] text-neutral-800 tracking-normal block z-10 leading-none">
                 Laskar Purnama Antasari
               </span>
 
-              {/* Golden Ratio Level 3 (~68px): Akzidenz-Grotesk Black Italic Uppercase — 1 Baris Rapih dengan tracking normal */}
-              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-[28px] xs:text-[34px] sm:text-[48px] lg:text-[68px] whitespace-nowrap tracking-normal uppercase text-neutral-950 block -mt-1 sm:-mt-2 lg:-mt-2.5 leading-none">
+              {/* Golden Ratio Level 3 (~68px): Akzidenz-Grotesk Black Italic Uppercase — Rapat proporsional (-0.02em) & tidak bertumpuk */}
+              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-[28px] xs:text-[34px] sm:text-[48px] lg:text-[68px] whitespace-nowrap tracking-[-0.02em] uppercase text-neutral-950 block mt-1 sm:mt-1.5 lg:mt-2 leading-none">
                 DEMA UIN ANTASARI
               </span>
 
-              {/* Golden Ratio Level 1 (~26px): Tahun 2026/2027 tepat di bawah DEMA UIN ANTASARI dengan tracking normal */}
+              {/* Golden Ratio Level 1 (~26px): Tahun 2026/2027 tepat di bawah DEMA UIN ANTASARI */}
               <span className="hero-title-year opacity-0 font-akzidenz font-bold text-[16px] sm:text-[20px] lg:text-[26px] tracking-normal uppercase text-brand-primary block mt-2.5 sm:mt-3 lg:mt-3.5 leading-none">
                 2026/2027
               </span>
