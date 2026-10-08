@@ -9,15 +9,6 @@ import { ArrowDown } from "lucide-react";
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const floatingStars = [
-    { id: 1, src: "/images/star-comet.png", size: 48, top: "15%", left: "8%", factor: 0.12 },
-    { id: 2, src: "/images/star-sparkle4.png", size: 36, top: "12%", right: "12%", factor: -0.15 },
-    { id: 3, src: "/images/star-sparkle8.png", size: 42, bottom: "25%", left: "10%", factor: 0.18 },
-    { id: 4, src: "/images/star-comet.png", size: 44, bottom: "15%", right: "8%", factor: -0.12, rotate: 180 },
-    { id: 5, src: "/images/star-sparkle4.png", size: 32, top: "45%", left: "5%", factor: -0.1 },
-    { id: 6, src: "/images/star-sparkle8.png", size: 38, bottom: "45%", right: "14%", factor: 0.15 },
-  ];
-
   const splitText = (text: string) => {
     return text.split("").map((char, index) => (
       <span
@@ -157,37 +148,7 @@ export default function HeroSection() {
         "<"
       );
 
-      // ── 11. Floating stars: fade in staggered ──────────────────────────────
-      tl.fromTo(
-        ".floating-star-container",
-        { autoAlpha: 0, scale: 0.6 },
-        {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.6,
-          stagger: { each: 0.08, from: "random" },
-          ease: "back.out(1.4)",
-        },
-        0.7
-      );
-
-      // ── 12. Idle float for stars ───────────────────────────────────────────
-      const inners = containerRef.current?.querySelectorAll(".floating-star-inner");
-      if (inners) {
-        inners.forEach((inner, idx) => {
-          gsap.to(inner, {
-            y: "random(-14, 14)",
-            rotation: "random(-18, 18)",
-            duration: gsap.utils.random(3.2, 5.0),
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: idx * 0.25,
-          });
-        });
-      }
-
-      // ── 13. Subtle slow breathe on portraits ──────────────────────────────
+      // ── 11. Subtle slow breathe on portraits ──────────────────────────────
       gsap.to(".hero-portrait-left", {
         y: -10,
         duration: 4.5,
@@ -205,25 +166,12 @@ export default function HeroSection() {
         delay: 2.0,
       });
 
-      // ── 14. Mousemove parallax ─────────────────────────────────────────────
+      // ── 12. Mousemove parallax ─────────────────────────────────────────────
       const handleMouseMove = (e: MouseEvent) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const relX = (e.clientX - rect.left) / rect.width - 0.5;
         const relY = (e.clientY - rect.top) / rect.height - 0.5;
-
-        // Stars parallax
-        const starContainers = containerRef.current.querySelectorAll(".floating-star-container");
-        starContainers.forEach((star) => {
-          const factor = parseFloat(star.getAttribute("data-factor") || "0.1");
-          gsap.to(star, {
-            x: relX * rect.width * factor,
-            y: relY * rect.height * factor,
-            duration: 1.0,
-            ease: "power3.out",
-            overwrite: "auto",
-          });
-        });
 
         // Geometric shapes parallax
         const geoShapes = containerRef.current.querySelectorAll(".hero-geo-shape");
@@ -263,7 +211,7 @@ export default function HeroSection() {
       };
 
       const handleMouseLeave = () => {
-        gsap.to(".floating-star-container, .hero-portrait-left, .hero-portrait-right, .hero-title, .hero-geo-shape", {
+        gsap.to(".hero-portrait-left, .hero-portrait-right, .hero-title, .hero-geo-shape", {
           x: 0,
           y: 0,
           duration: 1.4,
@@ -509,34 +457,7 @@ export default function HeroSection() {
         className="hero-portrait-right absolute bottom-0 right-0 lg:right-8 z-10 pointer-events-none select-none h-[70vh] sm:h-[85vh] max-h-[720px] object-contain hidden lg:block opacity-0"
       />
 
-      {/* Floating Stars */}
-      {floatingStars.map((star) => (
-        <div
-          key={star.id}
-          className="floating-star-container absolute pointer-events-none select-none hidden sm:block opacity-0"
-          style={{
-            top: star.top,
-            bottom: star.bottom,
-            left: star.left,
-            right: star.right,
-            zIndex: 10,
-          }}
-          data-factor={star.factor}
-        >
-          <div className="floating-star-inner">
-            <img
-              src={star.src}
-              alt="Star Element"
-              width={star.size}
-              height={star.size}
-              className="opacity-50 md:opacity-75"
-              style={{
-                transform: star.rotate ? `rotate(${star.rotate}deg)` : undefined,
-              }}
-            />
-          </div>
-        </div>
-      ))}
+
 
       {/* Hero Content */}
       <div className="max-w-4xl flex flex-col items-center relative z-20">
