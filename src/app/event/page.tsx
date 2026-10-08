@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import EventCard from "@/components/event/EventCard";
+import FestivalAntasariCard from "@/components/event/FestivalAntasariCard";
 import FadeInSection from "@/components/animations/FadeInSection";
 
 export const metadata: Metadata = {
   title: "Event & Agenda - DEMA UIN Antasari",
   description:
-    "Daftar event resmi, workshop, pelatihan, dan kegiatan kemahasiswaan DEMA UIN Antasari Banjarmasin.",
+    "Daftar event resmi, festival mahasiswa, workshop, pelatihan, dan kegiatan kemahasiswaan DEMA UIN Antasari Banjarmasin.",
 };
 
 export default function EventPage() {
@@ -21,12 +22,31 @@ export default function EventPage() {
             Event DEMA UIN Antasari
           </h1>
           <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
-            Agenda kegiatan akbar, workshop, dan pelatihan resmi kemahasiswaan DEMA UIN Antasari Banjarmasin.
+            Agenda kegiatan akbar, festival kemahasiswaan, dan pelatihan resmi kemahasiswaan DEMA UIN Antasari Banjarmasin.
           </p>
         </div>
 
-        {/* Featured Event Card */}
+        {/* Section 1: Upcoming Event */}
+        <section className="mb-10 sm:mb-12">
+          <div className="flex items-center gap-2 mb-3.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-brand-primary animate-pulse" />
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
+              Agenda Mendatang (Upcoming Event)
+            </span>
+          </div>
+          <FadeInSection>
+            <FestivalAntasariCard />
+          </FadeInSection>
+        </section>
+
+        {/* Section 2: Completed Event Archive */}
         <section className="mb-12">
+          <div className="flex items-center gap-2 mb-3.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-neutral-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 font-poppins">
+              Pelatihan Terlaksana &bull; Unduh Modul & E-Sertifikat
+            </span>
+          </div>
           <FadeInSection>
             <EventCard />
           </FadeInSection>
@@ -39,7 +59,7 @@ export default function EventPage() {
             href="https://instagram.com/dema.uin.antasari"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-600 dark:text-neutral-300 font-medium underline underline-offset-4 hover:text-[#1C4BBC] transition-colors"
+            className="text-neutral-600 dark:text-neutral-300 font-medium underline underline-offset-4 hover:text-brand-primary transition-colors"
           >
             @dema.uin.antasari
           </a>

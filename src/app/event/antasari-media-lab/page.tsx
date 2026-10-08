@@ -47,7 +47,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 
 export default function AntasariMediaLabPage() {
   // Navigation Section State (pendaftaran | lokasi | materi | sertifikat)
-  const [activeSection, setActiveSection] = useState<"pendaftaran" | "lokasi" | "materi" | "sertifikat">("pendaftaran");
+  const [activeSection, setActiveSection] = useState<"pendaftaran" | "lokasi" | "materi" | "sertifikat">("materi");
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
   const [hideFeedback, setHideFeedback] = useState(false);
@@ -519,35 +519,6 @@ export default function AntasariMediaLabPage() {
         <div className="bg-white/95 dark:bg-[#140606]/95 backdrop-blur-md p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-1.5 sticky top-16 md:top-20 z-20">
           <button
             type="button"
-            onClick={() => switchSection("pendaftaran")}
-            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
-              activeSection === "pendaftaran"
-                ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
-                : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
-            }`}
-          >
-            <FileText className="w-4 h-4 shrink-0" />
-            <span>Pendaftaran</span>
-            {isMounted && ticketData && (
-              <span className="hidden sm:inline-block w-2 h-2 rounded-full bg-emerald-400" title="Tiket Aktif" />
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => switchSection("lokasi")}
-            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
-              activeSection === "lokasi"
-                ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
-                : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
-            }`}
-          >
-            <MapPin className="w-4 h-4 shrink-0" />
-            <span>Lokasi & Rute</span>
-          </button>
-
-          <button
-            type="button"
             onClick={() => switchSection("materi")}
             className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "materi"
@@ -564,12 +535,39 @@ export default function AntasariMediaLabPage() {
             onClick={() => switchSection("sertifikat")}
             className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
               activeSection === "sertifikat"
-                ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
+                ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20"
                 : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
             }`}
           >
             <Award className="w-4 h-4 shrink-0" />
             <span>E-Sertifikat</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => switchSection("lokasi")}
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
+              activeSection === "lokasi"
+                ? "bg-[#1C4BBC] text-white shadow-md shadow-[#1C4BBC]/20"
+                : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            }`}
+          >
+            <MapPin className="w-4 h-4 shrink-0" />
+            <span>Lokasi Acara</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => switchSection("pendaftaran")}
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer select-none ${
+              activeSection === "pendaftaran"
+                ? "bg-neutral-800 text-white shadow-md"
+                : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            }`}
+          >
+            <FileText className="w-4 h-4 shrink-0" />
+            <span>Info Tiket</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-normal">Tutup</span>
           </button>
         </div>
 
@@ -629,13 +627,36 @@ export default function AntasariMediaLabPage() {
             ) : (
               /* FORMULIR REGISTRASI BARU */
               <div className="space-y-4">
-                <div className="bg-white dark:bg-[#140606] p-5 sm:p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs">
+                <div className="bg-white dark:bg-[#140606] p-6 sm:p-8 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 text-amber-600 mb-3.5">
+                    <AlertCircle className="w-6 h-6" />
+                  </div>
                   <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white font-poppins">
-                    Formulir Pendaftaran Antasari Media Lab
+                    Pendaftaran Telah Resmi Ditutup
                   </h2>
-                  <p className="mt-1 text-xs text-neutral-500 leading-relaxed">
-                    Silakan isi data diri Anda secara lengkap dan benar. Setelah pendaftaran terkirim, tiket QR digital Anda akan langsung diterbitkan secara otomatis.
+                  <p className="mt-2 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
+                    Kegiatan Antasari Media Lab 2026 telah selesai diselenggarakan pada Sabtu, 3 Oktober 2026. Terima kasih atas partisipasi aktif seluruh perwakilan ormawa dan lembaga mahasiswa.
                   </p>
+
+                  {/* Direct Action Buttons to Materi & Sertifikat */}
+                  <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+                    <button
+                      type="button"
+                      onClick={() => switchSection("materi")}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#1C4BBC] hover:bg-[#14378f] transition-all cursor-pointer shadow-sm"
+                    >
+                      <FolderDown className="w-4 h-4" />
+                      <span>Buka Materi & Modul</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => switchSection("sertifikat")}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-all cursor-pointer shadow-sm"
+                    >
+                      <Award className="w-4 h-4" />
+                      <span>Klaim E-Sertifikat</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Error Message Alert */}
@@ -697,7 +718,17 @@ export default function AntasariMediaLabPage() {
                   )}
                 </div>
 
-                {/* Form Elements */}
+                {/* Status Form Ditutup */}
+                <div className="bg-neutral-50 dark:bg-[#160808] rounded-2xl p-6 sm:p-8 border border-neutral-200/80 dark:border-neutral-800 text-center space-y-2.5">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                    Formulir Registrasi Baru Nonaktif
+                  </span>
+                  <p className="text-xs text-neutral-500 max-w-sm mx-auto">
+                    Seluruh sesi pelatihan telah rampung. Silakan akses materi presentasi & modul pada tab <strong>Materi & Modul</strong> dan unduh dokumen e-sertifikat Anda pada tab <strong>E-Sertifikat</strong>.
+                  </p>
+                </div>
+
+                {false && (
                 <form onSubmit={handleSubmit} className="bg-white dark:bg-[#160808] rounded-2xl p-5 sm:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-sm space-y-4">
                   {/* Email */}
                   <div className="space-y-1">
@@ -923,6 +954,7 @@ export default function AntasariMediaLabPage() {
                     </a>
                   </div>
                 </form>
+                )}
               </div>
             )}
           </div>

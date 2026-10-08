@@ -19,9 +19,9 @@ export default function EventCard() {
 
         {/* Clean status badge */}
         <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-[#82BE3B] text-white shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-white" />
-            Pendaftaran Dibuka
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-neutral-900/80 text-neutral-200 border border-neutral-700/60 shadow-sm backdrop-blur-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-neutral-400" />
+            Pendaftaran Ditutup
           </span>
         </div>
       </Link>
@@ -78,7 +78,7 @@ export default function EventCard() {
               <div>
                 <span className="text-neutral-400 text-[10px] sm:text-[11px] block">Waktu Pelaksanaan</span>
                 <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                  Sabtu, 3 Oktober 2026 • 08.00 WITA
+                  Sabtu, 3 Oktober 2026 &bull; Selesai
                 </span>
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function EventCard() {
                   className="font-semibold text-neutral-800 dark:text-neutral-200 hover:text-[#1C4BBC] dark:hover:text-[#82BE3B] transition-colors inline-flex items-center gap-1 group/loc"
                   title="Lihat detail lokasi & peta rute"
                 >
-                  <span className="truncate">Aula Sasangga Banua (Eks Kantor Gubernur)</span>
+                  <span className="truncate">Aula Sasangga Banua</span>
                   <ExternalLink className="w-3 h-3 text-neutral-400 group-hover/loc:text-[#1C4BBC] shrink-0" />
                 </Link>
               </div>
@@ -102,37 +102,23 @@ export default function EventCard() {
 
         {/* Section Quick Jump Links & Action Button */}
         <div className="mt-6 sm:mt-8 pt-4 sm:pt-5 border-t border-neutral-100 dark:border-neutral-800 flex flex-col gap-3">
-          {/* Quick Section Jump Pills: 2-Cols on Mobile for Tap Comfort */}
+          {/* Quick Section Jump Pills: Only Materi & Sertifikat */}
           <div>
-            <span className="text-[10px] sm:text-[11px] text-neutral-400 font-medium block mb-1.5">Menu Navigasi Event:</span>
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
-              <Link
-                href="/event/antasari-media-lab?tab=pendaftaran"
-                className="inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
-              >
-                <FileText className="w-3.5 h-3.5 shrink-0" />
-                <span>Pendaftaran</span>
-              </Link>
-              <Link
-                href="/event/antasari-media-lab?tab=lokasi"
-                className="inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
-              >
-                <MapPin className="w-3.5 h-3.5 shrink-0" />
-                <span>Lokasi & Rute</span>
-              </Link>
+            <span className="text-[10px] sm:text-[11px] text-neutral-400 font-medium block mb-1.5">Akses Pasca Acara:</span>
+            <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/event/antasari-media-lab?tab=materi"
-                className="inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-[#1C4BBC] hover:text-white dark:hover:bg-[#1C4BBC] text-xs font-semibold transition-colors"
               >
-                <FolderDown className="w-3.5 h-3.5 shrink-0" />
+                <FolderDown className="w-3.5 h-3.5 shrink-0 text-[#1C4BBC]" />
                 <span>Materi & Modul</span>
               </Link>
               <Link
                 href="/event/antasari-media-lab?tab=sertifikat"
-                className="inline-flex items-center justify-center sm:justify-start gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 text-xs font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 text-xs font-semibold transition-colors"
               >
-                <Award className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
-                <span>E-Sertifikat</span>
+                <Award className="w-3.5 h-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                <span>E-Sertifikat Peserta</span>
               </Link>
             </div>
           </div>
@@ -140,13 +126,13 @@ export default function EventCard() {
           {/* Main Action Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
             <span className="text-[11px] sm:text-xs text-neutral-400 text-center sm:text-left">
-              Pendaftaran gratis khusus mahasiswa UIN Antasari
+              Pendaftaran telah ditutup &bull; Akses modul & e-sertifikat peserta
             </span>
             <Link
-              href="/event/antasari-media-lab"
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl font-bold text-sm text-white bg-[#1C4BBC] hover:bg-[#14378f] shadow-md shadow-[#1C4BBC]/20 transition-all cursor-pointer"
+              href="/event/antasari-media-lab?tab=materi"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#1C4BBC] hover:bg-[#14378f] shadow-md shadow-[#1C4BBC]/20 transition-all cursor-pointer"
             >
-              <span>Buka Halaman Acara</span>
+              <span>Akses Materi & Sertifikat</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
