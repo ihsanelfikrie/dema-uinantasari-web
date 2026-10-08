@@ -30,14 +30,14 @@ export default async function BeritaPage() {
   }
 
   return (
-    <main className="min-h-screen bg-brand-background py-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-brand-background py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Title */}
-        <div className="text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-5xl font-poppins">
+        <div className="text-center mb-8 sm:mb-14">
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-5xl font-poppins">
             Informasi & Kajian
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-neutral-500 max-w-md mx-auto">
+          <p className="mt-2.5 sm:mt-4 text-xs sm:text-base text-neutral-500 max-w-md mx-auto">
             Dapatkan rilis pers resmi, informasi terupdate, kajian isu, dan dokumentasi
             kegiatan dari Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari.
           </p>

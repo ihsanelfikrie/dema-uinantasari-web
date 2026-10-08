@@ -7,6 +7,8 @@ import EventSection from "@/components/home/EventSection";
 import BeritaTerbaru from "@/components/home/BeritaTerbaru";
 import FadeInSection from "@/components/animations/FadeInSection";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-brand-background dark:bg-brand-dark-bg transition-colors duration-300">

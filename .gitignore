@@ -8,3 +8,5 @@ build/
 .env.*.local
 .env*
 *.tsbuildinfo
+scratch/
+.DS_Store

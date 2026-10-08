@@ -47,6 +47,45 @@ CREATE TABLE IF NOT EXISTS sambat (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- RLS untuk Berita
+ALTER TABLE berita ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Akses publik baca berita published" ON berita;
+CREATE POLICY "Akses publik baca berita published" ON berita
+    FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Akses penuh berita untuk admin" ON berita;
+CREATE POLICY "Akses penuh berita untuk admin" ON berita
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- RLS untuk Kegiatan
+ALTER TABLE kegiatan ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Akses publik baca kegiatan" ON kegiatan;
+CREATE POLICY "Akses publik baca kegiatan" ON kegiatan
+    FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Akses penuh kegiatan untuk admin" ON kegiatan;
+CREATE POLICY "Akses penuh kegiatan untuk admin" ON kegiatan
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- RLS untuk Dokumen
+ALTER TABLE dokumen ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Akses publik baca dokumen" ON dokumen;
+CREATE POLICY "Akses publik baca dokumen" ON dokumen
+    FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Akses penuh dokumen untuk admin" ON dokumen;
+CREATE POLICY "Akses penuh dokumen untuk admin" ON dokumen
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- RLS untuk Sambat
+ALTER TABLE sambat ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Akses publik kirim sambat" ON sambat;
+CREATE POLICY "Akses publik kirim sambat" ON sambat
+    FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Akses publik baca sambat approved" ON sambat;
+CREATE POLICY "Akses publik baca sambat approved" ON sambat
+    FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Akses penuh sambat untuk admin" ON sambat;
+CREATE POLICY "Akses penuh sambat untuk admin" ON sambat
+    FOR ALL USING (auth.role() = 'authenticated');
+
 -- 5. event_registrasi: untuk pendaftaran event (Antasari Media Lab, dll.)
 CREATE TABLE IF NOT EXISTS event_registrasi (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -33,27 +33,76 @@ export default async function BeritaDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Simple text renderer that formats basic markdown paragraphs and lists
+  // Simple text renderer that formats basic markdown paragraphs, headings, lists, and images
   const renderContent = (content: string) => {
     return content.split("\n\n").map((para, index) => {
-      if (para.startsWith("- ") || para.startsWith("* ")) {
+      const trimmed = para.trim();
+      if (!trimmed) return null;
+
+      // Inline image support: ![alt](url)
+      const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (imgMatch) {
+        const alt = imgMatch[1];
+        const src = imgMatch[2];
+        return (
+          <figure key={index} className="my-6">
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-neutral-100 bg-neutral-100 shadow-sm">
+              <img
+                src={src}
+                alt={alt}
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+            {alt && (
+              <figcaption className="mt-2.5 text-center text-xs text-neutral-500 italic font-poppins">
+                {alt}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
+
+      if (trimmed.startsWith("### ")) {
+        return (
+          <h3
+            key={index}
+            className="text-lg sm:text-xl font-semibold text-neutral-800 mt-6 mb-3 font-poppins"
+          >
+            {trimmed.substring(4)}
+          </h3>
+        );
+      }
+
+      if (trimmed.startsWith("## ")) {
+        return (
+          <h2
+            key={index}
+            className="text-xl sm:text-2xl font-bold text-neutral-900 mt-8 mb-4 font-poppins"
+          >
+            {trimmed.substring(3)}
+          </h2>
+        );
+      }
+
+      if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
         return (
           <ul
             key={index}
             className="list-disc pl-5 space-y-2 my-4 text-sm sm:text-base leading-relaxed text-neutral-600"
           >
-            {para.split("\n").map((line, idx) => (
-              <li key={idx}>{line.substring(2)}</li>
+            {trimmed.split("\n").map((line, idx) => (
+              <li key={idx}>{line.replace(/^[-*]\s+/, "")}</li>
             ))}
           </ul>
         );
       }
+
       return (
         <p
           key={index}
           className="text-sm sm:text-base leading-relaxed text-neutral-600 mb-4 font-normal whitespace-pre-line"
         >
-          {para}
+          {trimmed}
         </p>
       );
     });
@@ -72,11 +121,8 @@ export default async function BeritaDetailPage({ params }: PageProps) {
         </Link>
 
         {/* Meta Info */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-xs font-semibold text-brand-primary">
-            {berita.kategori}
-          </span>
-          <span className="text-xs text-neutral-400">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xs text-neutral-400 font-medium">
             {formatTanggal(berita.created_at)}
           </span>
         </div>

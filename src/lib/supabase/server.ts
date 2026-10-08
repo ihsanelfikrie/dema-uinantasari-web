@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 const mockQueryBuilder: any = new Proxy(
@@ -35,20 +36,44 @@ const mockSupabase = {
   auth: mockAuth,
 } as any;
 
+if (typeof globalThis.WebSocket === "undefined") {
+  (globalThis as any).WebSocket = class {};
+}
+
+let cachedAdminClient: any = null;
+
+function getAdminClient() {
+  if (cachedAdminClient) return cachedAdminClient;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) return null;
+
+  cachedAdminClient = createSupabaseClient(url, serviceKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  });
+  return cachedAdminClient;
+}
 
 export async function createClient() {
   const cookieStore = await cookies();
 
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && !process.env.SUPABASE_SERVICE_ROLE_KEY)
   ) {
     return mockSupabase;
   }
 
-  return createServerClient(
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+  const authClient = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseKey,
     {
       cookies: {
         getAll() {
@@ -68,4 +93,27 @@ export async function createClient() {
       },
     }
   );
+
+  const admin = getAdminClient();
+  if (admin) {
+    return new Proxy(authClient, {
+      get(target, prop, receiver) {
+        if (prop === "auth") {
+          return authClient.auth;
+        }
+        if (prop === "from") {
+          return admin.from.bind(admin);
+        }
+        if (prop === "storage") {
+          return admin.storage;
+        }
+        if (prop === "rpc") {
+          return admin.rpc.bind(admin);
+        }
+        return Reflect.get(target, prop, receiver);
+      },
+    });
+  }
+
+  return authClient;
 }
