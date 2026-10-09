@@ -15,7 +15,7 @@ export default function EventCard({ variant = "full" }: EventCardProps) {
           {/* Cover Poster with badges */}
           <Link
             href="/event/antasari-media-lab"
-            className="relative aspect-[16/9] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 block"
+            className="relative aspect-[21/9] sm:aspect-[16/9] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 block"
           >
             <img
               src="/images/event/antasari-media-lab-poster.jpg"
@@ -26,58 +26,58 @@ export default function EventCard({ variant = "full" }: EventCardProps) {
             {/* Subtle Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
 
-            <div className="absolute top-3 left-3 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-neutral-900/85 text-neutral-200 border border-neutral-700/60 shadow-xs backdrop-blur-xs font-poppins">
+            <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 flex items-center gap-1.5 sm:gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-neutral-900/85 text-neutral-200 border border-neutral-700/60 shadow-xs backdrop-blur-xs font-poppins">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 Pelatihan Terlaksana
               </span>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/60 text-white backdrop-blur-xs font-poppins border border-white/10">
+              <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-semibold bg-black/60 text-white backdrop-blur-xs font-poppins border border-white/10">
                 Arsip &bull; E-Sertifikat
               </span>
             </div>
 
-            <span className="absolute bottom-2.5 right-3 text-[10px] font-semibold text-white/90 drop-shadow-xs font-poppins">
+            <span className="absolute bottom-2 right-2.5 sm:bottom-2.5 sm:right-3 text-[9px] sm:text-[10px] font-semibold text-white/90 drop-shadow-xs font-poppins">
               Kemenkominfo DEMA
             </span>
           </Link>
 
           {/* Main Info */}
-          <div className="p-5 sm:p-6">
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1 font-poppins">
+          <div className="p-3.5 sm:p-6">
+            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-0.5 sm:mb-1 font-poppins">
               Pelatihan Media Digital
             </span>
             <Link href="/event/antasari-media-lab" className="block group/title">
-              <h3 className="text-lg sm:text-xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight group-hover/title:text-brand-primary transition-colors line-clamp-1">
+              <h3 className="text-base sm:text-xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight group-hover/title:text-brand-primary transition-colors line-clamp-1">
                 Antasari Media Lab
               </h3>
             </Link>
-            <p className="mt-1 text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-300 font-poppins line-clamp-1">
+            <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-300 font-poppins line-clamp-1">
               Optimalisasi Media Sosial sebagai Wajah Ormawa
             </p>
-            <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400 font-poppins line-clamp-2 leading-relaxed">
+            <p className="mt-1.5 sm:mt-2 text-xs text-neutral-500 dark:text-neutral-400 font-poppins line-clamp-1 sm:line-clamp-2 leading-relaxed">
               Program pelatihan intensif media kreatif digital untuk ormawa se-UIN Antasari. Akses materi presentasi dan verifikasi e-sertifikat peserta.
             </p>
 
             {/* Quick jump pills: Materi & Sertifikat */}
-            <div className="grid grid-cols-2 gap-2 mt-4 pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 font-poppins">
+            <div className="grid grid-cols-2 gap-2 mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 font-poppins">
               <Link
                 href="/event/antasari-media-lab?tab=materi"
-                className="flex items-center gap-2 p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-brand-primary hover:text-white transition-colors"
+                className="flex items-center gap-2 p-1.5 sm:p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-brand-primary hover:text-white transition-colors"
               >
                 <FolderDown className="w-3.5 h-3.5 text-brand-primary shrink-0" />
-                <span className="text-[11px] font-semibold truncate">Materi &amp; Modul</span>
+                <span className="text-[10px] sm:text-[11px] font-semibold truncate">Materi &amp; Modul</span>
               </Link>
               <Link
                 href="/event/antasari-media-lab?tab=sertifikat"
-                className="flex items-center gap-2 p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition-colors"
+                className="flex items-center gap-2 p-1.5 sm:p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition-colors"
               >
                 <Award className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="text-[11px] font-semibold truncate">E-Sertifikat</span>
+                <span className="text-[10px] sm:text-[11px] font-semibold truncate">E-Sertifikat</span>
               </Link>
             </div>
 
             {/* Schedule & Location */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3.5 pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 font-poppins text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2.5 mt-2.5 sm:mt-3.5 pt-2.5 sm:pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 font-poppins text-xs">
               <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
                 <Calendar className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                 <span className="text-[11px] font-medium">3 Okt 2026 &bull; Selesai</span>
@@ -91,14 +91,14 @@ export default function EventCard({ variant = "full" }: EventCardProps) {
         </div>
 
         {/* Action Bar */}
-        <div className="p-5 sm:p-6 pt-0 mt-2">
-          <div className="pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3 font-poppins">
-            <span className="text-[11px] text-neutral-400 truncate">
+        <div className="p-3.5 sm:p-6 pt-0 mt-1 sm:mt-2">
+          <div className="pt-2.5 sm:pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3 font-poppins">
+            <span className="text-[10px] sm:text-[11px] text-neutral-400 truncate">
               Unduh modul &amp; sertifikat
             </span>
             <Link
               href="/event/antasari-media-lab"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl font-bold text-xs text-white bg-brand-primary hover:bg-brand-accent shadow-xs transition-all shrink-0 cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs text-white bg-brand-primary hover:bg-brand-accent shadow-xs transition-all shrink-0 cursor-pointer"
             >
               <span>Buka Arsip</span>
               <ArrowRight className="w-3 h-3" />
