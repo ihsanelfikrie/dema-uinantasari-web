@@ -96,110 +96,116 @@ export default function VisiMisiSection() {
       ref={containerRef}
       className="relative bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 transition-colors duration-300 overflow-hidden"
     >
-      <div className="relative z-10 w-full">
-        {/* Section Header (Rata Tengah) */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 flex flex-col items-center visi-misi-text">
-          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
-            Arah Gerak Organisasi
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins text-center">
-            Visi &amp; Misi DEMA
-          </h2>
-          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto font-poppins text-center leading-relaxed">
-            Landasan cita-cita dan komitmen gerak Kabinet Laskar Purnama Antasari dalam mengabdi dan membawa kemajuan nyata.
-          </p>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-10 lg:gap-12 items-center relative z-10">
+        {/* Left Column (Heading, Visi, & Mobile Stack) */}
+        <div className="lg:col-span-4 space-y-3.5 sm:space-y-6 visi-misi-text">
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-center sm:text-left w-full sm:w-auto">
+              <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1 font-poppins">
+                Arah Gerak Organisasi
+              </span>
+              <h2 className="text-xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins">
+                Visi &amp; Misi DEMA
+              </h2>
+            </div>
 
-        {/* Kotak Visi Terpusat (Rata Tengah) */}
-        <div className="max-w-3xl mx-auto mb-6 sm:mb-10 p-4 sm:p-6 rounded-2xl bg-white border border-neutral-200/80 shadow-xs text-center visi-misi-text">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1.5 text-center">
-            Visi Utama Kabinet
-          </span>
-          <p className="text-neutral-900 font-semibold leading-relaxed text-xs sm:text-base max-w-2xl mx-auto text-center">
-            &ldquo;Optimalisasi DEMA UIN Antasari Sebagai Platform Aktualisasi Mahasiswa yang Berdampak dalam Kemajuan Antasari dan Indonesia.&rdquo;
-          </p>
-        </div>
+            {/* Desktop Navigation Buttons (hidden on mobile) */}
+            <div className="hidden sm:flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => scroll("left")}
+                className="w-8 h-8 sm:w-11 sm:h-11 border border-neutral-300 rounded-lg sm:rounded-xl bg-white hover:bg-neutral-50 text-neutral-700 hover:text-brand-primary hover:border-brand-primary/40 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                aria-label="Geser ke kiri"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll("right")}
+                className="w-8 h-8 sm:w-11 sm:h-11 border border-neutral-300 rounded-lg sm:rounded-xl bg-white hover:bg-neutral-50 text-neutral-700 hover:text-brand-primary hover:border-brand-primary/40 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                aria-label="Geser ke kanan"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
-        {/* 5 Pilar Misi Header & Controls (Rata Tengah) */}
-        <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6 text-center">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-primary font-poppins flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-            5 Pilar Misi Strategis
-          </span>
-          {/* Desktop Navigation Buttons */}
-          <div className="hidden sm:flex items-center gap-1.5 ml-3">
-            <button
-              type="button"
-              onClick={() => scroll("left")}
-              className="w-8 h-8 border border-neutral-300 rounded-lg bg-white hover:bg-neutral-50 text-neutral-700 hover:text-brand-primary flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
-              aria-label="Geser ke kiri"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll("right")}
-              className="w-8 h-8 border border-neutral-300 rounded-lg bg-white hover:bg-neutral-50 text-neutral-700 hover:text-brand-primary flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
-              aria-label="Geser ke kanan"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
+          <div className="space-y-3 text-xs sm:text-sm text-neutral-600 font-poppins leading-relaxed">
+            <div className="p-3.5 sm:p-4 rounded-xl bg-white border border-neutral-200/80 shadow-2xs text-center sm:text-left">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                Visi Kabinet
+              </span>
+              <p className="text-neutral-800 font-medium leading-relaxed text-xs sm:text-sm">
+                Optimalisasi DEMA UIN Antasari Sebagai Platform Aktualisasi Mahasiswa yang Berdampak dalam Kemajuan Antasari dan Indonesia.
+              </p>
+            </div>
+            <p className="hidden sm:block text-neutral-500 text-xs sm:text-sm">
+              Guna merealisasikan visi besar tersebut, Kabinet Laskar Purnama Antasari berkomitmen
+              menjalankan lima pilar misi strategis.
+            </p>
+          </div>
+
+          {/* Mobile Only: 5 Pilar Misi Bertumpuk & Rata Tengah */}
+          <div className="sm:hidden space-y-2 pt-1">
+            <div className="flex items-center justify-center pb-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary font-poppins flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+                5 Pilar Misi Strategis
+              </span>
+            </div>
+
+            {missions.map((mission) => (
+              <div
+                key={mission.no}
+                className="p-3.5 rounded-xl bg-white border border-neutral-200/80 shadow-xs flex flex-col items-center text-center transition-colors hover:border-brand-primary/30"
+              >
+                <div className="w-7 h-7 rounded-lg bg-brand-primary/10 flex items-center justify-center mb-1 mx-auto">
+                  <span className="font-mono text-xs font-extrabold text-brand-primary">
+                    {mission.no}
+                  </span>
+                </div>
+                <div className="w-full">
+                  <h3 className="text-xs font-bold text-neutral-900 font-poppins leading-snug text-center">
+                    {mission.title}
+                  </h3>
+                  <p className="text-[11px] text-neutral-600 font-poppins mt-0.5 leading-relaxed text-center">
+                    {mission.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Mobile Only: 5 Pilar Misi Bertumpuk & Rata Tengah */}
-        <div className="sm:hidden space-y-2.5 pt-1">
-          {missions.map((mission) => (
-            <div
-              key={mission.no}
-              className="p-3.5 rounded-xl bg-white border border-neutral-200/80 shadow-xs flex flex-col items-center text-center transition-colors hover:border-brand-primary/30"
-            >
-              <div className="w-7 h-7 rounded-lg bg-brand-primary/10 flex items-center justify-center mb-1.5 mx-auto">
-                <span className="font-mono text-xs font-extrabold text-brand-primary">
-                  {mission.no}
-                </span>
-              </div>
-              <h3 className="text-xs font-bold text-neutral-900 font-poppins leading-snug text-center">
-                {mission.title}
-              </h3>
-              <p className="text-[11px] text-neutral-600 font-poppins mt-1 leading-relaxed text-center">
-                {mission.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Desktop/Tablet Carousel (Rata Tengah) */}
-        <div className="hidden sm:block overflow-hidden relative">
+        {/* Right Column (Mission Carousel - Desktop Only) */}
+        <div className="hidden sm:block lg:col-span-8 overflow-hidden relative">
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto gap-5 pb-6 pt-2 scrollbar-none snap-x snap-mandatory justify-start"
+            className="flex overflow-x-auto gap-5 pb-6 pt-2 scrollbar-none snap-x snap-mandatory"
             style={{ scrollbarWidth: "none" }}
           >
             {missions.map((mission) => (
               <div
                 key={mission.no}
-                className="mission-card snap-start shrink-0 w-[290px] bg-white rounded-2xl p-6 flex flex-col justify-between min-h-[270px] border border-neutral-200/80 shadow-xs hover:border-brand-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative group select-none items-center text-center"
+                className="mission-card snap-start shrink-0 w-[300px] bg-white rounded-2xl p-7 flex flex-col justify-between min-h-[290px] border border-neutral-200/80 shadow-xs hover:border-brand-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative group select-none"
               >
-                <div className="flex flex-col items-center w-full">
-                  <span className="text-[10px] font-semibold text-neutral-500 font-poppins border border-neutral-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-neutral-50 mb-3 mx-auto">
-                    Pilar Misi
-                  </span>
-                  <span className="text-3xl font-extrabold text-brand-primary font-mono tracking-tight text-center">
+                <div className="flex justify-between items-start">
+                  <span className="text-3xl font-extrabold text-brand-primary font-mono tracking-tight">
                     {mission.no}
+                  </span>
+                  <span className="text-[10px] font-semibold text-neutral-500 font-poppins border border-neutral-200 px-2 py-0.5 rounded-full uppercase tracking-wider bg-neutral-50">
+                    Misi
                   </span>
                 </div>
 
-                <div className="my-auto space-y-2 text-center w-full">
-                  <h3 className="text-base font-bold text-neutral-900 font-poppins group-hover:text-brand-primary transition-colors leading-snug text-center">
+                <div className="mt-8 space-y-2">
+                  <h3 className="text-lg font-bold text-neutral-900 font-poppins group-hover:text-brand-primary transition-colors leading-snug">
                     {mission.title}
                   </h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed font-poppins text-center">
+                  <p className="text-sm text-neutral-600 leading-relaxed font-poppins">
                     {mission.desc}
                   </p>
                 </div>
-
-                <div className="w-10 h-0.5 bg-brand-primary/20 rounded-full mx-auto mt-4" />
               </div>
             ))}
           </div>

@@ -42,62 +42,77 @@ export default function AgendaTerkini() {
     <section
       className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      {/* Section Header (Rata Tengah) */}
-      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12 flex flex-col items-center">
-        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
-          Aspirasi &amp; Advokasi Digital
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight text-center">
-          Layanan Mahasiswa Terpadu
-        </h2>
-        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto font-poppins text-center leading-relaxed">
-          DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
-          penanganan kasus, dan permohonan persuratan secara langsung.
-        </p>
+      {/* Section Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-10 gap-3 sm:gap-4 text-center sm:text-left items-center sm:items-end">
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+            Aspirasi &amp; Advokasi Digital
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
+            Layanan Mahasiswa Terpadu
+          </h2>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
+            DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
+            penanganan kasus, dan permohonan persuratan secara langsung.
+          </p>
 
-        <div className="mt-3 sm:mt-3.5 flex justify-center">
-          <Link
-            href="/layanan"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-xs sm:text-sm font-semibold text-brand-primary transition-all font-poppins border border-brand-primary/20"
-          >
-            <span>Buka Semua Layanan</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          {/* Mobile Badge */}
+          <div className="flex sm:hidden items-center justify-center gap-1.5 mt-2 text-[11px] font-semibold font-poppins text-brand-primary">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+            3 Layanan Utama DEMA
+          </div>
         </div>
+
+        <Link
+          href="/layanan"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-center sm:self-auto shrink-0 font-poppins"
+        >
+          <span>Buka Semua Layanan</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
 
-      {/* Cards: 3-Column Grid on Tablet/Desktop, Clean Centered Cards on Mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5 md:gap-6 items-stretch">
-        {portals.map((portal) => {
+      {/* Cards: Centered on Mobile, Original 3-Column on Tablet/Desktop */}
+      <div className="flex flex-col md:grid md:grid-cols-3 gap-3.5 sm:gap-4 md:gap-6 items-stretch">
+        {portals.map((portal, index) => {
           const Icon = portal.icon;
           return (
             <Link
               key={portal.id}
               href={portal.href}
-              className="portal-card-item group relative bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 rounded-2xl p-4 sm:p-5 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full text-center items-center"
+              className="portal-card-item group relative bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 rounded-2xl md:rounded-2xl p-4 sm:p-5 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
             >
-              <div className="flex flex-col items-center w-full">
-                {/* Icon & Kicker Badge */}
-                <div className={`p-3 sm:p-3.5 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105 mb-3`}>
-                  <Icon className="h-5 w-5 sm:h-6 sm:w-6 stroke-[1.5]" />
+              <div>
+                {/* Header Row: Centered on mobile, spacious on desktop */}
+                <div className="flex flex-col md:flex-row items-center md:justify-between gap-2.5 mb-2.5 md:mb-5">
+                  <div className="flex flex-col md:flex-row items-center gap-2.5 md:gap-3">
+                    <div className={`p-2.5 sm:p-3 md:p-3 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105 shrink-0`}>
+                      <Icon className="h-5 w-5 md:h-6 md:w-6 stroke-[1.5]" />
+                    </div>
+                    {/* Desktop Counter */}
+                    <span className="hidden md:inline font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors">
+                      0{index + 1}
+                    </span>
+                  </div>
+
+                  {/* Kicker Badge */}
+                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${portal.badgeColor}`}>
+                    {portal.kicker}
+                  </span>
                 </div>
 
-                <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${portal.badgeColor} mb-2.5`}>
-                  {portal.kicker}
-                </span>
-
                 {/* Title */}
-                <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins mb-1.5 group-hover:text-brand-primary transition-colors text-center">
+                <h3 className="text-base md:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins mb-1.5 md:mb-2 group-hover:text-brand-primary transition-colors text-center md:text-left">
                   {portal.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-poppins mb-3.5 text-center">
+                <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-poppins mb-3 md:mb-4 text-center md:text-left">
                   {portal.desc}
                 </p>
 
                 {/* Highlights chips */}
-                <div className="flex flex-wrap justify-center gap-1.5 pt-1 w-full">
+                <div className="flex flex-wrap justify-center md:justify-start gap-1.5 pt-0.5 md:pt-1">
                   {portal.highlights.map((chip) => (
                     <span
                       key={chip}
@@ -110,11 +125,17 @@ export default function AgendaTerkini() {
               </div>
 
               {/* Action Bar */}
-              <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-center gap-1.5 w-full">
-                <span className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors font-poppins">
-                  Akses Layanan
+              <div className="mt-4 md:mt-6 pt-3 md:pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-center md:justify-between">
+                <span className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors font-poppins min-h-[36px] md:min-h-[44px] flex items-center gap-1.5">
+                  <span>Akses Layanan</span>
+                  <ArrowRight className="md:hidden h-3.5 w-3.5" />
                 </span>
-                <ArrowRight className="h-3.5 w-3.5 text-brand-primary group-hover:text-brand-accent group-hover:translate-x-1 transition-transform" />
+                <div
+                  aria-label={`Akses ${portal.title}`}
+                  className="hidden md:flex w-10 h-10 md:w-11 md:h-11 rounded-full bg-brand-background dark:bg-neutral-800 group-hover:bg-brand-primary text-brand-primary group-hover:text-white items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </div>
               </div>
 
               {/* Bottom Accent Line */}

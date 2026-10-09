@@ -24,27 +24,26 @@ export default async function BeritaTerbaru() {
 
   return (
     <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden">
-      {/* Section Header (Rata Tengah) */}
-      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12 flex flex-col items-center">
-        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
-          Warta &amp; Publikasi
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins text-center">
-          Kabar &amp; Kegiatan Terbaru
-        </h2>
-        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto font-poppins text-center leading-relaxed">
-          Ikuti rilis berita, pengumuman, dan dokumentasi kegiatan DEMA UIN Antasari.
-        </p>
-
-        <div className="mt-3 sm:mt-3.5 flex justify-center">
-          <Link
-            href="/berita"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-xs sm:text-sm font-semibold text-brand-primary transition-all font-poppins border border-brand-primary/20"
-          >
-            <span>Lihat Semua Kabar &amp; Kegiatan</span>
-            <span aria-hidden="true">&rarr;</span>
-          </Link>
+      {/* Section Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-5 sm:mb-12 gap-3 sm:gap-4 text-center sm:text-left items-center sm:items-end">
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+            Warta &amp; Publikasi
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins">
+            Kabar &amp; Kegiatan Terbaru
+          </h2>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-md font-poppins">
+            Ikuti rilis berita, pengumuman, dan dokumentasi kegiatan DEMA UIN Antasari.
+          </p>
         </div>
+        <Link
+          href="/berita"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-center sm:self-auto shrink-0 font-poppins"
+        >
+          <span>Lihat Semua Kabar &amp; Kegiatan</span>
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
       </div>
 
       {beritaList.length === 0 ? (
