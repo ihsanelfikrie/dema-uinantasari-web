@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -18,6 +18,8 @@ import {
   ArrowDown,
   Building2,
   Briefcase,
+  Eye,
+  X,
 } from "lucide-react";
 
 if (typeof window !== "undefined") {
@@ -26,10 +28,41 @@ if (typeof window !== "undefined") {
 
 type FilterTab = "all" | "bagan" | "bph" | "kemenko" | "teknis" | "logo";
 
+interface SelectedFungsionaris {
+  nama: string;
+  jabatan: string;
+  fotoUrl: string;
+  nim?: string;
+  fakultas?: string;
+  kementerianId?: string;
+  subBranding?: string;
+}
+
 export default function StrukturClient() {
   const containerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
+  const [selectedFungsionaris, setSelectedFungsionaris] = useState<SelectedFungsionaris | null>(null);
+
+  // Close modal on Escape key & lock body scroll
+  useEffect(() => {
+    if (!selectedFungsionaris) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedFungsionaris(null);
+      }
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedFungsionaris]);
 
   const bphMembers = useMemo(
     () => [
@@ -635,29 +668,71 @@ export default function StrukturClient() {
                           {kemen.sekretaris || kemen.anggota.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                               {kemen.sekretaris && (
-                                <div className="kemen-staff-item flex items-center gap-3.5 p-3.5 border border-brand-primary/15 rounded-2xl bg-brand-background/40 hover:border-brand-primary/30 transition-colors">
-                                  {renderAvatar(
-                                    kemen.sekretaris.fotoUrl,
-                                    kemen.sekretaris.nama,
-                                    "circle-sm"
-                                  )}
-                                  <div className="min-w-0">
-                                    <h5 className="text-xs font-bold text-neutral-900 truncate font-poppins">
-                                      {kemen.sekretaris.nama}
-                                    </h5>
-                                    {kemen.sekretaris.nim && (
-                                      <span className="text-[9px] text-neutral-400 block font-poppins">
-                                        NIM. {kemen.sekretaris.nim}
+                                <div
+                                  onClick={() =>
+                                    setSelectedFungsionaris({
+                                      nama: kemen.sekretaris!.nama,
+                                      jabatan: kemen.sekretaris!.jabatan,
+                                      fotoUrl: kemen.sekretaris!.fotoUrl,
+                                      nim: kemen.sekretaris!.nim,
+                                      fakultas: kemen.sekretaris!.fakultas,
+                                      kementerianId: kemen.id,
+                                      subBranding: kemen.nama,
+                                    })
+                                  }
+                                  role="button"
+                                  tabIndex={0}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                      e.preventDefault();
+                                      setSelectedFungsionaris({
+                                        nama: kemen.sekretaris!.nama,
+                                        jabatan: kemen.sekretaris!.jabatan,
+                                        fotoUrl: kemen.sekretaris!.fotoUrl,
+                                        nim: kemen.sekretaris!.nim,
+                                        fakultas: kemen.sekretaris!.fakultas,
+                                        kementerianId: kemen.id,
+                                        subBranding: kemen.nama,
+                                      });
+                                    }
+                                  }}
+                                  className="kemen-staff-item group/staff flex items-center justify-between gap-3.5 p-3.5 border border-brand-primary/15 rounded-2xl bg-brand-background/40 hover:bg-white hover:border-brand-primary/40 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] transition-all cursor-pointer"
+                                  title={`Klik untuk melihat ID Card ${kemen.sekretaris.nama}`}
+                                >
+                                  <div className="flex items-center gap-3.5 min-w-0">
+                                    <div className="relative shrink-0">
+                                      {renderAvatar(
+                                        kemen.sekretaris.fotoUrl,
+                                        kemen.sekretaris.nama,
+                                        "circle-sm"
+                                      )}
+                                      <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-brand-primary text-white flex items-center justify-center text-[8px] opacity-0 group-hover/staff:opacity-100 transition-opacity shadow-xs">
+                                        <Eye className="w-2.5 h-2.5" />
                                       </span>
-                                    )}
-                                    <span className="text-[10px] text-brand-primary font-semibold block mt-0.5 font-poppins">
-                                      {kemen.sekretaris.jabatan}
-                                    </span>
-                                    {kemen.sekretaris.fakultas && (
-                                      <span className="text-[9px] text-neutral-500 block truncate font-poppins font-light">
-                                        {kemen.sekretaris.fakultas}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <h5 className="text-xs font-bold text-neutral-900 truncate font-poppins group-hover/staff:text-brand-primary transition-colors">
+                                        {kemen.sekretaris.nama}
+                                      </h5>
+                                      {kemen.sekretaris.nim && (
+                                        <span className="text-[9px] text-neutral-400 block font-poppins">
+                                          NIM. {kemen.sekretaris.nim}
+                                        </span>
+                                      )}
+                                      <span className="text-[10px] text-brand-primary font-semibold block mt-0.5 font-poppins">
+                                        {kemen.sekretaris.jabatan}
                                       </span>
-                                    )}
+                                      {kemen.sekretaris.fakultas && (
+                                        <span className="text-[9px] text-neutral-500 block truncate font-poppins font-light">
+                                          {kemen.sekretaris.fakultas}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="shrink-0 flex items-center gap-1 text-[10px] font-semibold text-neutral-400 group-hover/staff:text-brand-primary transition-colors pr-1">
+                                    <span className="hidden sm:inline text-[9px] font-poppins">ID Card</span>
+                                    <Eye className="w-3.5 h-3.5" />
                                   </div>
                                 </div>
                               )}
@@ -665,26 +740,66 @@ export default function StrukturClient() {
                               {kemen.anggota.map((staf) => (
                                 <div
                                   key={staf.id}
-                                  className="kemen-staff-item flex items-center gap-3.5 p-3.5 border border-neutral-100 rounded-2xl bg-brand-background/25 hover:border-neutral-200 transition-colors"
+                                  onClick={() =>
+                                    setSelectedFungsionaris({
+                                      nama: staf.nama,
+                                      jabatan: staf.jabatan,
+                                      fotoUrl: staf.fotoUrl,
+                                      nim: staf.nim,
+                                      fakultas: staf.fakultas,
+                                      kementerianId: kemen.id,
+                                      subBranding: kemen.nama,
+                                    })
+                                  }
+                                  role="button"
+                                  tabIndex={0}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                      e.preventDefault();
+                                      setSelectedFungsionaris({
+                                        nama: staf.nama,
+                                        jabatan: staf.jabatan,
+                                        fotoUrl: staf.fotoUrl,
+                                        nim: staf.nim,
+                                        fakultas: staf.fakultas,
+                                        kementerianId: kemen.id,
+                                        subBranding: kemen.nama,
+                                      });
+                                    }
+                                  }}
+                                  className="kemen-staff-item group/staff flex items-center justify-between gap-3.5 p-3.5 border border-neutral-100 rounded-2xl bg-brand-background/25 hover:bg-white hover:border-brand-primary/30 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] transition-all cursor-pointer"
+                                  title={`Klik untuk melihat ID Card ${staf.nama}`}
                                 >
-                                  {renderAvatar(staf.fotoUrl, staf.nama, "circle-sm")}
-                                  <div className="min-w-0">
-                                    <h5 className="text-xs font-semibold text-neutral-900 truncate font-poppins">
-                                      {staf.nama}
-                                    </h5>
-                                    {staf.nim && (
-                                      <span className="text-[9px] text-neutral-400 block font-poppins">
-                                        NIM. {staf.nim}
+                                  <div className="flex items-center gap-3.5 min-w-0">
+                                    <div className="relative shrink-0">
+                                      {renderAvatar(staf.fotoUrl, staf.nama, "circle-sm")}
+                                      <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-brand-primary text-white flex items-center justify-center text-[8px] opacity-0 group-hover/staff:opacity-100 transition-opacity shadow-xs">
+                                        <Eye className="w-2.5 h-2.5" />
                                       </span>
-                                    )}
-                                    <span className="text-[10px] text-neutral-500 font-medium block mt-0.5 font-poppins">
-                                      {staf.jabatan}
-                                    </span>
-                                    {staf.fakultas && (
-                                      <span className="text-[9px] text-neutral-500 block truncate font-poppins font-light">
-                                        {staf.fakultas}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <h5 className="text-xs font-semibold text-neutral-900 truncate font-poppins group-hover/staff:text-brand-primary transition-colors">
+                                        {staf.nama}
+                                      </h5>
+                                      {staf.nim && (
+                                        <span className="text-[9px] text-neutral-400 block font-poppins">
+                                          NIM. {staf.nim}
+                                        </span>
+                                      )}
+                                      <span className="text-[10px] text-neutral-500 font-medium block mt-0.5 font-poppins">
+                                        {staf.jabatan}
                                       </span>
-                                    )}
+                                      {staf.fakultas && (
+                                        <span className="text-[9px] text-neutral-500 block truncate font-poppins font-light">
+                                          {staf.fakultas}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="shrink-0 flex items-center gap-1 text-[10px] font-semibold text-neutral-400 group-hover/staff:text-brand-primary transition-colors pr-1">
+                                    <span className="hidden sm:inline text-[9px] font-poppins">ID Card</span>
+                                    <Eye className="w-3.5 h-3.5" />
                                   </div>
                                 </div>
                               ))}
@@ -709,6 +824,51 @@ export default function StrukturClient() {
           </section>
         </div>
       </main>
+
+      {/* Pop-up Modal ID Card Fungsionaris */}
+      {selectedFungsionaris && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setSelectedFungsionaris(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative max-w-sm w-full mx-auto flex flex-col items-center animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Floating Close Button */}
+            <div className="w-full flex justify-end mb-2">
+              <button
+                type="button"
+                onClick={() => setSelectedFungsionaris(null)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white border border-white/30 text-xs font-semibold backdrop-blur-md transition-all cursor-pointer font-poppins shadow-lg"
+                aria-label="Tutup ID Card"
+              >
+                <span>Tutup</span>
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* The Full ID Card */}
+            <FungsionarisIdCard
+              nama={selectedFungsionaris.nama}
+              jabatan={selectedFungsionaris.jabatan}
+              fotoUrl={selectedFungsionaris.fotoUrl}
+              nim={selectedFungsionaris.nim}
+              fakultas={selectedFungsionaris.fakultas}
+              kementerianId={selectedFungsionaris.kementerianId}
+              subBranding={selectedFungsionaris.subBranding}
+              className="shadow-2xl"
+            />
+
+            {/* Dismissal Instruction Hint */}
+            <p className="mt-3 text-[11px] text-white/70 font-poppins text-center">
+              Klik di luar kartu atau tekan <kbd className="px-1.5 py-0.5 bg-white/20 rounded text-[10px] text-white font-mono">ESC</kbd> untuk menutup
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

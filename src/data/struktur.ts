@@ -986,7 +986,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri KIS",
       tupoksi:
         "Melakukan kajian berkala, bedah isu strategis daerah maupun nasional, dan menyediakan data rekomendasi kebijakan.",
-      fotoUrl: "/images/kabinet/menteri-kis.jpg",
+      fotoUrl: "",
     },
     sekretaris: {
       id: "sekmen-kis",
