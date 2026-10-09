@@ -54,10 +54,10 @@ export default function LeadersProfiles() {
     <section
       ref={containerRef}
       id="bph-gallery-section"
-      className="bg-brand-background py-10 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
+      className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
       {/* Section Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4">
         <div>
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Fungsionaris Inti Organisasi
@@ -65,26 +65,37 @@ export default function LeadersProfiles() {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
             Badan Pengurus Harian (BPH)
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
             Jajaran kepemimpinan inti Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin Periode 2026/2027.
           </p>
+
+          {/* Mobile Swipe Hint */}
+          <div className="flex sm:hidden items-center justify-between mt-3 pt-2 border-t border-neutral-200/60 text-[11px] font-semibold font-poppins">
+            <span className="text-brand-primary flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+              6 Fungsionaris
+            </span>
+            <span className="text-neutral-400">
+              Geser ke samping &rarr;
+            </span>
+          </div>
         </div>
 
         <Link
           href="/struktur"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0 font-poppins"
         >
           <span>Lihat Semua Struktur Organisasi</span>
           <ArrowUpRight className="w-4 h-4" />
         </Link>
       </div>
 
-      {/* Responsive Grid of 6 BPH Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 sm:gap-8 pt-4">
+      {/* Responsive Cards: Horizontal Snap Carousel on Mobile, 2/3-Col Grid on Tablet/Desktop */}
+      <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 pt-2 sm:pt-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory -mx-3.5 px-3.5 sm:mx-0 sm:px-0 scrollbar-none pb-4 sm:pb-0 items-stretch">
         {bphMembers.map((member) => (
           <div
             key={member.id}
-            className="bph-card-item opacity-0 flex flex-col items-center group"
+            className="bph-card-item opacity-0 flex flex-col items-center group w-[78vw] max-w-[290px] sm:w-full sm:max-w-none shrink-0 sm:shrink snap-center"
           >
             {/* Lanyard Ribbon & Metallic Clasp Hook */}
             <div className="flex flex-col items-center -mb-3 z-10 relative pointer-events-none group-hover:-translate-y-1 transition-transform duration-300">
@@ -186,6 +197,11 @@ export default function LeadersProfiles() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Mobile Subtle Indicator Bar */}
+      <div className="flex sm:hidden justify-center items-center gap-1.5 mt-3">
+        <span className="text-[10px] text-neutral-400 font-poppins">← Geser untuk melihat semua fungsionaris BPH →</span>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function CTASection() {
   return (
-    <section className="bg-brand-background py-10 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
       <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-12 shadow-xs hover:border-brand-primary/20 hover:shadow-md transition-all duration-300">
         <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
           Ruang Aspirasi &amp; Bantuan Mahasiswa

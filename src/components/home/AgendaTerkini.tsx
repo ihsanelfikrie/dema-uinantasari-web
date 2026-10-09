@@ -79,45 +79,56 @@ export default function AgendaTerkini() {
   return (
     <section
       ref={sectionRef}
-      className="bg-brand-background py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
+      className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4">
         <div>
-          <span className="text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-2 font-poppins">
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Aspirasi &amp; Advokasi Digital
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
             Layanan Mahasiswa Terpadu
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
             DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
             penanganan kasus, dan permohonan persuratan secara langsung.
           </p>
+
+          {/* Mobile Swipe Hint */}
+          <div className="flex sm:hidden items-center justify-between mt-3 pt-2 border-t border-neutral-200/60 text-[11px] font-semibold font-poppins">
+            <span className="text-brand-primary flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+              3 Layanan Terpadu
+            </span>
+            <span className="text-neutral-400">
+              Geser ke samping &rarr;
+            </span>
+          </div>
         </div>
 
         <Link
           href="/layanan"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0 font-poppins"
         >
           <span>Buka Semua Layanan</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
 
-      {/* 3-Column Grid for portals */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+      {/* Responsive Cards: Horizontal Snap Carousel on Mobile, 3-Column Grid on Tablet/Desktop */}
+      <div className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-3.5 px-3.5 md:mx-0 md:px-0 scrollbar-none pb-4 md:pb-0 items-stretch">
         {portals.map((portal, index) => {
           const Icon = portal.icon;
           return (
             <div
               key={portal.id}
-              className="portal-card-item opacity-0 group relative bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              className="portal-card-item opacity-0 group relative bg-white border border-neutral-200/80 rounded-2xl p-5 sm:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden w-[82vw] max-w-[320px] md:w-auto md:max-w-none shrink-0 md:shrink snap-center"
             >
               <div>
-                <div className="flex items-center justify-between gap-2 mb-5">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105`}>
-                      <Icon className="h-6 w-6 stroke-[1.5]" />
+                <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className={`p-2.5 sm:p-3 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105`}>
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 stroke-[1.5]" />
                     </div>
                     <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors">
                       0{index + 1}
@@ -128,10 +139,10 @@ export default function AgendaTerkini() {
                   </span>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins mb-2 group-hover:text-brand-primary transition-colors">
+                <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins mb-1.5 sm:mb-2 group-hover:text-brand-primary transition-colors">
                   {portal.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-poppins mb-4">
+                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-poppins mb-3.5 sm:mb-4 line-clamp-3 md:line-clamp-none">
                   {portal.desc}
                 </p>
 
@@ -148,7 +159,7 @@ export default function AgendaTerkini() {
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
+              <div className="mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-neutral-100 flex items-center justify-between">
                 <Link
                   href={portal.href}
                   className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors cursor-pointer font-poppins min-h-[44px] flex items-center"
@@ -158,7 +169,7 @@ export default function AgendaTerkini() {
                 <Link
                   href={portal.href}
                   aria-label={`Akses ${portal.title}`}
-                  className="w-11 h-11 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
                 >
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -169,6 +180,11 @@ export default function AgendaTerkini() {
             </div>
           );
         })}
+      </div>
+
+      {/* Mobile Subtle Indicator */}
+      <div className="flex sm:hidden justify-center items-center gap-1.5 mt-2">
+        <span className="text-[10px] text-neutral-400 font-poppins">← Geser untuk melihat 3 layanan utama →</span>
       </div>
     </section>
   );

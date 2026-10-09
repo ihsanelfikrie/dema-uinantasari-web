@@ -48,10 +48,13 @@ export default function BeritaListAnimated({ beritaList }: BeritaListAnimatedPro
   return (
     <div
       ref={containerRef}
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory -mx-3.5 px-3.5 sm:mx-0 sm:px-0 scrollbar-none pb-2 sm:pb-0"
     >
       {beritaList.map((berita) => (
-        <div key={berita.id} className="news-card-wrapper opacity-0">
+        <div
+          key={berita.id}
+          className="news-card-wrapper opacity-0 w-[82vw] max-w-[320px] sm:w-auto shrink-0 sm:shrink snap-center flex flex-col"
+        >
           <BeritaCard berita={berita} />
         </div>
       ))}
