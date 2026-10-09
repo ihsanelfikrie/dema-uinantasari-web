@@ -61,6 +61,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/linktree",
+        destination: "/links",
+        permanent: true,
+      },
+      {
+        source: "/tautan",
+        destination: "/links",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

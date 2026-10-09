@@ -38,7 +38,12 @@ const YoutubeIcon = (props: any) => (
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin")) {
+  if (
+    pathname.startsWith("/admin") ||
+    pathname === "/links" ||
+    pathname === "/tautan" ||
+    pathname === "/linktree"
+  ) {
     return null;
   }
 
@@ -55,6 +60,7 @@ export default function Footer() {
     { href: "/layanan", label: "Layanan Digital" },
     { href: "/berita", label: "Kabar & Kegiatan DEMA" },
     { href: "/program-kerja", label: "Program Kerja" },
+    { href: "/links", label: "Tautan Bio (Linktree)" },
   ];
 
   const serviceLinks = [

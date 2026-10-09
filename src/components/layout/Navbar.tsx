@@ -40,8 +40,13 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  // Don't render public navbar on admin pages
-  if (pathname.startsWith("/admin")) {
+  // Don't render public navbar on admin pages or bio-link page
+  if (
+    pathname.startsWith("/admin") ||
+    pathname === "/links" ||
+    pathname === "/tautan" ||
+    pathname === "/linktree"
+  ) {
     return null;
   }
 
