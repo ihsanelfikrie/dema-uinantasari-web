@@ -600,7 +600,7 @@ export default function StrukturClient() {
               <div className="relative">
                 <select
                   aria-label="Pilih Kementerian"
-                  className="w-full bg-white dark:bg-neutral-900 border border-neutral-200/90 dark:border-neutral-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-neutral-800 dark:text-neutral-200 font-poppins shadow-xs appearance-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  className="w-full bg-white dark:bg-neutral-900 border border-neutral-200/90 dark:border-neutral-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-neutral-800 dark:text-neutral-200 font-poppins shadow-xs appearance-none focus:outline-none focus:ring-2 focus:ring-brand-primary text-center"
                   onChange={(e) => {
                     if (e.target.value) {
                       const el = document.getElementById(e.target.value);
@@ -658,10 +658,10 @@ export default function StrukturClient() {
                     />
 
                     {/* Ministry Card Header */}
-                    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-3 sm:pb-4 mb-4 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
-                      <div className="flex items-center gap-3">
+                    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-3 sm:pb-4 mb-4 sm:mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between text-center sm:text-left gap-2.5 sm:gap-3">
+                      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
                         <div
-                          className={`kemen-logo-badge w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border ${
+                          className={`kemen-logo-badge w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border ${
                             isCoordinating
                               ? "bg-amber-500/10 border-amber-500/20 text-amber-700"
                               : "bg-brand-primary/10 border-brand-primary/15 text-brand-primary"
@@ -669,17 +669,17 @@ export default function StrukturClient() {
                         >
                           <MinistryLogo
                             kementerianId={kemen.id}
-                            className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                            className={`w-6 h-6 ${
                               isCoordinating ? "text-amber-700" : "text-brand-primary"
                             }`}
                           />
                         </div>
 
-                        <div className="kemen-title-text min-w-0">
+                        <div className="kemen-title-text min-w-0 text-center sm:text-left">
                           <h3 className="text-sm sm:text-xl font-bold text-neutral-900 dark:text-neutral-100 font-poppins tracking-tight">
                             {kemen.nama}
                           </h3>
-                          <span className="text-[10px] sm:text-[11px] text-neutral-500 font-poppins block">
+                          <span className="text-[10px] sm:text-[11px] text-neutral-500 font-poppins block mt-0.5 sm:mt-0">
                             {isCoordinating
                               ? "Kementerian Koordinator Bidang"
                               : "Kementerian Teknis Pelaksana"}
@@ -687,7 +687,7 @@ export default function StrukturClient() {
                         </div>
                       </div>
 
-                      <div className="kemen-cat-badge flex items-center gap-2 self-start sm:self-auto">
+                      <div className="kemen-cat-badge flex items-center justify-center gap-2 self-center sm:self-auto">
                         {isCoordinating ? (
                           <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-amber-800 bg-amber-50 dark:bg-amber-950/40 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-amber-200/80 dark:border-amber-900/40 font-poppins">
                             Kemenko
@@ -977,11 +977,11 @@ export default function StrukturClient() {
                           {/* Sekretaris & Staf: 2-Column ID Card Grid */}
                           {kemen.sekretaris || kemen.anggota.length > 0 ? (
                             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                              <div className="flex items-center justify-between mb-3 px-1">
+                              <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between mb-3 px-1 text-center">
                                 <span className="text-[10px] sm:text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider font-poppins">
                                   Sekretaris &amp; Staf ({(kemen.sekretaris ? 1 : 0) + kemen.anggota.length})
                                 </span>
-                                <span className="text-[9px] text-brand-primary font-medium font-poppins">
+                                <span className="text-[9px] text-brand-primary font-medium font-poppins mt-0.5 sm:mt-0">
                                   ID Card Fungsionaris
                                 </span>
                               </div>

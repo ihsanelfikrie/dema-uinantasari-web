@@ -89,8 +89,8 @@ export default function FungsionarisIdCard({
       {/* ID Card Badge Base */}
       <div
         className={`w-full bg-white dark:bg-[#140606] border border-neutral-200/90 dark:border-neutral-800 ${
-          isCompact ? "rounded-[22px] p-2.5 sm:p-3 pt-2" : "rounded-[28px] p-4 sm:p-5 pt-3.5"
-        } shadow-md group-hover:shadow-2xl group-hover:shadow-brand-primary/10 group-hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden text-left h-full`}
+          isCompact ? "rounded-[22px] p-2.5 sm:p-3 pt-2 text-center" : "rounded-[28px] p-4 sm:p-5 pt-3.5 text-center sm:text-left"
+        } shadow-md group-hover:shadow-2xl group-hover:shadow-brand-primary/10 group-hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden h-full`}
       >
         <div>
           {/* Top Header: Badge Slot & Branding */}
@@ -193,18 +193,22 @@ export default function FungsionarisIdCard({
           </div>
 
           {/* Name & Role */}
-          <div className={isCompact ? "pt-2 pb-0.5" : "pt-4 pb-1"}>
+          <div className={isCompact ? "pt-2 pb-0.5 text-center flex flex-col items-center" : "pt-4 pb-1 text-center sm:text-left"}>
             <h3
               className={`${
-                isCompact ? "text-[11px] min-h-[26px]" : "text-base sm:text-lg min-h-[38px] sm:min-h-[44px]"
-              } font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.2] line-clamp-2 flex items-center`}
+                isCompact
+                  ? "text-[11px] min-h-[26px] text-center justify-center"
+                  : "text-base sm:text-lg min-h-[38px] sm:min-h-[44px] text-center sm:text-left justify-center sm:justify-start"
+              } font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.2] line-clamp-2 flex items-center w-full`}
             >
               {nama}
             </h3>
             <p
               className={`${
-                isCompact ? "text-[9.5px] mt-0.5 min-h-[16px]" : "text-xs sm:text-sm mt-1 min-h-[36px]"
-              } font-semibold text-neutral-700 dark:text-neutral-300 font-poppins line-clamp-2 leading-tight flex items-center`}
+                isCompact
+                  ? "text-[9.5px] mt-0.5 min-h-[16px] text-center justify-center"
+                  : "text-xs sm:text-sm mt-1 min-h-[36px] text-center sm:text-left justify-center sm:justify-start"
+              } font-semibold text-neutral-700 dark:text-neutral-300 font-poppins line-clamp-2 leading-tight flex items-center w-full`}
             >
               {jabatan}
             </p>
@@ -221,11 +225,13 @@ export default function FungsionarisIdCard({
 
           {/* Footer Credentials */}
           <div
-            className={`flex items-center justify-between ${
-              isCompact ? "text-[8.5px]" : "text-[11px]"
-            } font-poppins gap-1`}
+            className={`flex items-center ${
+              isCompact
+                ? "flex-col justify-center text-center gap-0.5 text-[8px]"
+                : "justify-between text-[11px]"
+            } font-poppins w-full`}
           >
-            <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-[62%]">
+            <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-full">
               {fakultas || "UIN Antasari"}
             </span>
             <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0">
