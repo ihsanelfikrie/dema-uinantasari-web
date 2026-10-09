@@ -531,60 +531,27 @@ export default function StrukturClient() {
             <div className="bph-cards-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-8 pt-2">
               {bphMembers.map((member) => (
                 <div key={member.id} className="bph-idcard-anim w-full">
-                  {/* Mobile Compact Card */}
-                  <div
-                    onClick={() =>
-                      setSelectedFungsionaris({
-                        nama: member.nama,
-                        jabatan: member.jabatan,
-                        fotoUrl: member.fotoUrl,
-                        nim: member.nim,
-                        fakultas: member.fakultas,
-                        subBranding: "BPH DEMA UIN Antasari",
-                      })
-                    }
-                    className="sm:hidden group/bph flex flex-col justify-between bg-white dark:bg-[#140606] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl p-2 sm:p-2.5 shadow-xs hover:border-brand-primary/40 hover:shadow-md active:scale-[0.98] transition-all cursor-pointer h-full"
-                  >
-                    <div>
-                      {/* Top ID Card Notch & Badge */}
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[8px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-1.5 py-0.5 rounded font-poppins">
-                          BPH
-                        </span>
-                        <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 group-hover/bph:text-brand-primary transition-colors">
-                          <Eye className="w-3 h-3" />
-                        </div>
-                      </div>
-
-                      {/* Photo */}
-                      <div className="relative aspect-[4/5] w-full rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 mb-2">
-                        {member.fotoUrl && member.fotoUrl.trim() !== "" ? (
-                          <img
-                            src={member.fotoUrl}
-                            alt={member.nama}
-                            className="w-full h-full object-cover object-top group-hover/bph:scale-105 transition-transform duration-300"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-neutral-400">
-                            <Users className="w-6 h-6" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Name & Role */}
-                      <h3 className="text-[11px] font-black uppercase text-brand-primary line-clamp-2 leading-tight font-poppins min-h-[26px]">
-                        {member.nama}
-                      </h3>
-                      <p className="text-[10px] font-semibold text-neutral-700 dark:text-neutral-300 line-clamp-1 leading-tight font-poppins mt-0.5">
-                        {member.jabatan}
-                      </p>
-                    </div>
-
-                    <div className="pt-1.5 mt-1 border-t border-neutral-100 flex items-center justify-between text-[9px] text-neutral-400 font-poppins">
-                      <span className="truncate">{member.fakultas || "UIN Antasari"}</span>
-                      <span className="text-brand-primary font-bold">Detail ↗</span>
-                    </div>
+                  {/* Mobile Compact ID Card */}
+                  <div className="sm:hidden w-full">
+                    <FungsionarisIdCard
+                      nama={member.nama}
+                      jabatan={member.jabatan}
+                      fotoUrl={member.fotoUrl}
+                      nim={member.nim}
+                      fakultas={member.fakultas}
+                      subBranding="BPH DEMA UIN Antasari"
+                      size="compact"
+                      onClick={() =>
+                        setSelectedFungsionaris({
+                          nama: member.nama,
+                          jabatan: member.jabatan,
+                          fotoUrl: member.fotoUrl,
+                          nim: member.nim,
+                          fakultas: member.fakultas,
+                          subBranding: "BPH DEMA UIN Antasari",
+                        })
+                      }
+                    />
                   </div>
 
                   {/* Desktop Full ID Card */}
@@ -596,6 +563,17 @@ export default function StrukturClient() {
                       nim={member.nim}
                       fakultas={member.fakultas}
                       subBranding="BPH DEMA UIN Antasari"
+                      size="full"
+                      onClick={() =>
+                        setSelectedFungsionaris({
+                          nama: member.nama,
+                          jabatan: member.jabatan,
+                          fotoUrl: member.fotoUrl,
+                          nim: member.nim,
+                          fakultas: member.fakultas,
+                          subBranding: "BPH DEMA UIN Antasari",
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -753,50 +731,37 @@ export default function StrukturClient() {
                           ))}
                         </div>
 
-                        {/* Mobile 2-Column Compact Grid for Coordinators */}
-                        <div className="sm:hidden grid grid-cols-2 gap-2 pt-1">
+                        {/* Mobile ID Card Grid for Coordinators */}
+                        <div
+                          className={`sm:hidden ${
+                            coordinators.length === 1
+                              ? "max-w-[210px] mx-auto"
+                              : "grid grid-cols-2 gap-2.5"
+                          } pt-1`}
+                        >
                           {coordinators.map((coord) => (
-                            <div
-                              key={coord.id}
-                              onClick={() =>
-                                setSelectedFungsionaris({
-                                  nama: coord.nama,
-                                  jabatan: coord.jabatan,
-                                  fotoUrl: coord.fotoUrl,
-                                  nim: coord.nim,
-                                  fakultas: coord.fakultas,
-                                  kementerianId: kemen.id,
-                                  subBranding: kemen.nama,
-                                })
-                              }
-                              className="group/coord flex flex-col justify-between bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/50 rounded-2xl p-2 shadow-xs active:scale-[0.98] transition-all cursor-pointer h-full"
-                            >
-                              <div>
-                                <div className="relative aspect-[4/5] w-full rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-amber-300/60 dark:border-amber-800 mb-1.5">
-                                  {coord.fotoUrl && coord.fotoUrl.trim() !== "" ? (
-                                    <img
-                                      src={coord.fotoUrl}
-                                      alt={coord.nama}
-                                      className="w-full h-full object-cover object-top"
-                                      loading="lazy"
-                                    />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-amber-700">
-                                      <Users className="w-5 h-5" />
-                                    </div>
-                                  )}
-                                </div>
-                                <span className="text-[8px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-900/40 px-1.5 py-0.5 rounded font-poppins inline-block mb-1">
-                                  {coord.jabatan}
-                                </span>
-                                <h4 className="text-[11px] font-bold text-neutral-900 dark:text-neutral-100 line-clamp-2 leading-tight font-poppins min-h-[26px]">
-                                  {coord.nama}
-                                </h4>
-                              </div>
-                              <div className="pt-1.5 mt-1 border-t border-amber-200/50 dark:border-amber-900/40 flex items-center justify-between text-[9px] text-amber-700 dark:text-amber-400 font-poppins">
-                                <span className="truncate">{coord.fakultas || "Koordinator"}</span>
-                                <span className="font-bold">ID Card ↗</span>
-                              </div>
+                            <div key={coord.id} className="w-full">
+                              <FungsionarisIdCard
+                                nama={coord.nama}
+                                jabatan={coord.jabatan}
+                                fotoUrl={coord.fotoUrl}
+                                nim={coord.nim}
+                                fakultas={coord.fakultas}
+                                kementerianId={kemen.id}
+                                subBranding={kemen.nama}
+                                size="compact"
+                                onClick={() =>
+                                  setSelectedFungsionaris({
+                                    nama: coord.nama,
+                                    jabatan: coord.jabatan,
+                                    fotoUrl: coord.fotoUrl,
+                                    nim: coord.nim,
+                                    fakultas: coord.fakultas,
+                                    kementerianId: kemen.id,
+                                    subBranding: kemen.nama,
+                                  })
+                                }
+                              />
                             </div>
                           ))}
                         </div>
@@ -977,114 +942,99 @@ export default function StrukturClient() {
                           </div>
                         </div>
 
-                        {/* Mobile Compact View (< lg screens) */}
-                        <div className="lg:hidden space-y-3">
-                          {/* Menteri Compact Horizontal Hero Card */}
-                          <div
-                            onClick={() =>
-                              setSelectedFungsionaris({
-                                nama: kemen.menteri.nama,
-                                jabatan: kemen.menteri.jabatan,
-                                fotoUrl: kemen.menteri.fotoUrl,
-                                nim: kemen.menteri.nim,
-                                fakultas: kemen.menteri.fakultas,
-                                kementerianId: kemen.id,
-                                subBranding: kemen.nama,
-                              })
-                            }
-                            className="flex items-center gap-3 p-2.5 bg-brand-background/60 dark:bg-neutral-900/60 border border-brand-primary/20 dark:border-brand-primary/30 rounded-2xl active:scale-[0.99] transition-all cursor-pointer shadow-2xs hover:bg-white dark:hover:bg-neutral-800"
-                          >
-                            <div className="relative w-14 h-[72px] shrink-0 rounded-xl overflow-hidden bg-neutral-200 dark:bg-neutral-800 border border-brand-primary/25 shadow-2xs">
-                              {kemen.menteri.fotoUrl && kemen.menteri.fotoUrl.trim() !== "" ? (
-                                <img
-                                  src={kemen.menteri.fotoUrl}
-                                  alt={kemen.menteri.nama}
-                                  className="w-full h-full object-cover object-top"
-                                  loading="lazy"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-neutral-400">
-                                  <Users className="w-5 h-5" />
-                                </div>
-                              )}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded-full inline-block font-poppins mb-1">
-                                {kemen.menteri.jabatan}
-                              </span>
-                              <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 truncate font-poppins">
-                                {kemen.menteri.nama}
-                              </h4>
-                              <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-poppins">
-                                {kemen.menteri.nim ? `NIM. ${kemen.menteri.nim}` : kemen.menteri.fakultas || "Fungsionaris"}
-                              </span>
-                            </div>
-                            <div className="shrink-0 p-1.5 rounded-full bg-white dark:bg-neutral-800 text-brand-primary border border-brand-primary/15 shadow-2xs">
-                              <Eye className="w-3.5 h-3.5" />
+                        {/* Mobile ID Card View (< lg screens) */}
+                        <div className="lg:hidden space-y-5 pt-1">
+                          {/* Menteri ID Card */}
+                          <div className="flex flex-col items-center">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-2.5 py-0.5 rounded-full font-poppins mb-2">
+                              Menteri
+                            </span>
+                            <div className="w-full max-w-[210px] mx-auto">
+                              <FungsionarisIdCard
+                                nama={kemen.menteri.nama}
+                                jabatan={kemen.menteri.jabatan}
+                                fotoUrl={kemen.menteri.fotoUrl}
+                                nim={kemen.menteri.nim}
+                                fakultas={kemen.menteri.fakultas}
+                                kementerianId={kemen.id}
+                                subBranding={kemen.nama}
+                                size="compact"
+                                onClick={() =>
+                                  setSelectedFungsionaris({
+                                    nama: kemen.menteri.nama,
+                                    jabatan: kemen.menteri.jabatan,
+                                    fotoUrl: kemen.menteri.fotoUrl,
+                                    nim: kemen.menteri.nim,
+                                    fakultas: kemen.menteri.fakultas,
+                                    kementerianId: kemen.id,
+                                    subBranding: kemen.nama,
+                                  })
+                                }
+                              />
                             </div>
                           </div>
 
-                          {/* Sekretaris & Staf: 2-Column Compact Grid on Mobile */}
+                          {/* Sekretaris & Staf: 2-Column ID Card Grid */}
                           {kemen.sekretaris || kemen.anggota.length > 0 ? (
-                            <div>
-                              <div className="flex items-center justify-between mb-1.5 px-0.5">
-                                <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider font-poppins">
+                            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                              <div className="flex items-center justify-between mb-3 px-1">
+                                <span className="text-[10px] sm:text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider font-poppins">
                                   Sekretaris &amp; Staf ({(kemen.sekretaris ? 1 : 0) + kemen.anggota.length})
                                 </span>
-                                <span className="text-[9px] text-neutral-400 font-poppins">Ketuk untuk ID Card</span>
+                                <span className="text-[9px] text-brand-primary font-medium font-poppins">
+                                  ID Card Fungsionaris
+                                </span>
                               </div>
-                              <div className="grid grid-cols-2 gap-1.5">
+
+                              <div className="grid grid-cols-2 gap-2.5">
                                 {kemen.sekretaris && (
-                                  <div
-                                    onClick={() =>
-                                      setSelectedFungsionaris({
-                                        nama: kemen.sekretaris!.nama,
-                                        jabatan: kemen.sekretaris!.jabatan,
-                                        fotoUrl: kemen.sekretaris!.fotoUrl,
-                                        nim: kemen.sekretaris!.nim,
-                                        fakultas: kemen.sekretaris!.fakultas,
-                                        kementerianId: kemen.id,
-                                        subBranding: kemen.nama,
-                                      })
-                                    }
-                                    className="flex items-center gap-2 p-2 border border-brand-primary/20 rounded-xl bg-brand-background/40 hover:bg-white active:scale-[0.98] transition-all cursor-pointer shadow-2xs"
-                                  >
-                                    {renderAvatar(kemen.sekretaris.fotoUrl, kemen.sekretaris.nama, "circle-xs")}
-                                    <div className="min-w-0 flex-1">
-                                      <span className="text-[9px] font-bold text-brand-primary block truncate font-poppins">
-                                        {kemen.sekretaris.jabatan}
-                                      </span>
-                                      <span className="text-[11px] font-bold text-neutral-900 dark:text-neutral-100 block truncate font-poppins">
-                                        {kemen.sekretaris.nama}
-                                      </span>
-                                    </div>
+                                  <div key={`sek-${kemen.id}`} className="w-full">
+                                    <FungsionarisIdCard
+                                      nama={kemen.sekretaris.nama}
+                                      jabatan={kemen.sekretaris.jabatan}
+                                      fotoUrl={kemen.sekretaris.fotoUrl}
+                                      nim={kemen.sekretaris.nim}
+                                      fakultas={kemen.sekretaris.fakultas}
+                                      kementerianId={kemen.id}
+                                      subBranding={kemen.nama}
+                                      size="compact"
+                                      onClick={() =>
+                                        setSelectedFungsionaris({
+                                          nama: kemen.sekretaris!.nama,
+                                          jabatan: kemen.sekretaris!.jabatan,
+                                          fotoUrl: kemen.sekretaris!.fotoUrl,
+                                          nim: kemen.sekretaris!.nim,
+                                          fakultas: kemen.sekretaris!.fakultas,
+                                          kementerianId: kemen.id,
+                                          subBranding: kemen.nama,
+                                        })
+                                      }
+                                    />
                                   </div>
                                 )}
                                 {kemen.anggota.map((staf) => (
-                                  <div
-                                    key={staf.id}
-                                    onClick={() =>
-                                      setSelectedFungsionaris({
-                                        nama: staf.nama,
-                                        jabatan: staf.jabatan,
-                                        fotoUrl: staf.fotoUrl,
-                                        nim: staf.nim,
-                                        fakultas: staf.fakultas,
-                                        kementerianId: kemen.id,
-                                        subBranding: kemen.nama,
-                                      })
-                                    }
-                                    className="flex items-center gap-2 p-2 border border-neutral-100 dark:border-neutral-800 rounded-xl bg-white dark:bg-neutral-900 hover:border-brand-primary/20 active:scale-[0.98] transition-all cursor-pointer shadow-2xs"
-                                  >
-                                    {renderAvatar(staf.fotoUrl, staf.nama, "circle-xs")}
-                                    <div className="min-w-0 flex-1">
-                                      <span className="text-[9px] font-semibold text-neutral-500 block truncate font-poppins">
-                                        {staf.jabatan}
-                                      </span>
-                                      <span className="text-[11px] font-semibold text-neutral-900 dark:text-neutral-100 block truncate font-poppins">
-                                        {staf.nama}
-                                      </span>
-                                    </div>
+                                  <div key={staf.id} className="w-full">
+                                    <FungsionarisIdCard
+                                      nama={staf.nama}
+                                      jabatan={staf.jabatan}
+                                      fotoUrl={staf.fotoUrl}
+                                      nim={staf.nim}
+                                      fakultas={staf.fakultas}
+                                      kementerianId={kemen.id}
+                                      subBranding={kemen.nama}
+                                      size="compact"
+                                      onClick={() =>
+                                        setSelectedFungsionaris({
+                                          nama: staf.nama,
+                                          jabatan: staf.jabatan,
+                                          fotoUrl: staf.fotoUrl,
+                                          nim: staf.nim,
+                                          fakultas: staf.fakultas,
+                                          kementerianId: kemen.id,
+                                          subBranding: kemen.nama,
+                                        })
+                                      }
+                                    />
                                   </div>
                                 ))}
                               </div>
