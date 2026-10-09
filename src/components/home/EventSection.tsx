@@ -39,10 +39,10 @@ export default function EventSection() {
   return (
     <section
       id="event-terbaru"
-      className="py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden"
+      className="py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden box-border"
     >
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-3 sm:gap-4 w-full">
         <div>
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Event &amp; Agenda DEMA
@@ -65,7 +65,7 @@ export default function EventSection() {
       </div>
 
       {/* Mobile Switcher Pills (Two full-width tabs side-by-side, no overflow) */}
-      <div className="sm:hidden mb-4 w-full">
+      <div className="sm:hidden mb-4 w-full max-w-full">
         <div className="grid grid-cols-2 p-1 bg-neutral-200/80 rounded-xl w-full text-xs font-poppins font-semibold border border-neutral-300/60 shadow-2xs">
           <button
             type="button"
@@ -106,10 +106,10 @@ export default function EventSection() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-2 sm:pb-0 scrollbar-none items-stretch w-full"
+        className="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-2 sm:pb-0 scrollbar-none items-stretch w-full max-w-full"
       >
         {/* Card 1: Festival Antasari 2026 */}
-        <div className="w-full min-w-full sm:w-auto sm:min-w-0 shrink-0 sm:shrink snap-start flex flex-col h-full px-0.5">
+        <div className="w-full shrink-0 sm:shrink sm:w-auto snap-start flex flex-col h-full px-0.5">
           <div className="flex items-center justify-between gap-2 mb-2.5 px-0.5">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
@@ -127,7 +127,7 @@ export default function EventSection() {
         </div>
 
         {/* Card 2: Antasari Media Lab */}
-        <div className="w-full min-w-full sm:w-auto sm:min-w-0 shrink-0 sm:shrink snap-start flex flex-col h-full px-0.5">
+        <div className="w-full shrink-0 sm:shrink sm:w-auto snap-start flex flex-col h-full px-0.5">
           <div className="flex items-center justify-between gap-2 mb-2.5 px-0.5">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -145,8 +145,8 @@ export default function EventSection() {
         </div>
       </div>
 
-      {/* Mobile Position Dots Indicator & Hint */}
-      <div className="flex sm:hidden items-center justify-center gap-2 mt-3.5">
+      {/* Mobile Position Dots Indicator & Hint: Guaranteed Dead Center */}
+      <div className="w-full max-w-full flex sm:hidden items-center justify-center gap-2 mt-4 mx-auto text-center">
         <button
           type="button"
           onClick={() => scrollToCard(0)}
@@ -165,8 +165,8 @@ export default function EventSection() {
         />
       </div>
 
-      <div className="flex sm:hidden justify-center items-center gap-1.5 mt-2">
-        <span className="text-[10px] text-neutral-400 font-poppins">
+      <div className="w-full max-w-full flex sm:hidden justify-center items-center gap-1.5 mt-2 mx-auto text-center">
+        <span className="text-[10px] text-neutral-400 font-poppins text-center inline-block">
           ← Geser layar untuk beralih program akbar →
         </span>
       </div>

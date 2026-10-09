@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-brand-background">
+    <div className="flex flex-col min-h-screen bg-brand-background overflow-x-hidden w-full max-w-full">
       <HeroSection />
       <LaunchingVideoSection />
       <EventSection />
