@@ -72,3 +72,31 @@ main.min-h-screen.bg-brand-background {
   font-display: swap;
 }
 
+/* Infinite Marquee Animation untuk BPH di Mobile */
+@keyframes bph-marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-bph-marquee {
+  display: flex;
+  width: max-content;
+  animation: bph-marquee-left 24s linear infinite;
+  will-change: transform;
+}
+
+.animate-bph-marquee:hover,
+.animate-bph-marquee:active {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bph-marquee {
+    animation: none;
+  }
+}
+
