@@ -103,30 +103,30 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center">
           
-          {/* LEFT COLUMN: Typography, Tagline & CTAs */}
-          <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col items-start">
+          {/* LEFT COLUMN: Typography, Tagline & CTAs (Rata Tengah) */}
+          <div className="lg:col-span-7 xl:col-span-7 text-center flex flex-col items-center">
             
             {/* Editorial Headline */}
-            <div className="flex flex-col items-start select-none text-left mb-1.5 sm:mb-2">
-              <div className="hero-title-serif opacity-0 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] sm:text-xs font-semibold mb-2.5 sm:mb-3">
+            <div className="flex flex-col items-center select-none text-center mb-1.5 sm:mb-2 w-full">
+              <div className="hero-title-serif opacity-0 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] sm:text-xs font-semibold mb-2.5 sm:mb-3 mx-auto">
                 <span>KABINET LASKAR PURNAMA ANTASARI • 2026/2027</span>
               </div>
 
-              <h1 className="hero-title-sans opacity-0 font-poppins font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 leading-[1.18] sm:leading-[1.15] text-left">
+              <h1 className="hero-title-sans opacity-0 font-poppins font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 leading-[1.18] sm:leading-[1.15] text-center max-w-2xl mx-auto">
                 Dewan Eksekutif Mahasiswa UIN Antasari
               </h1>
             </div>
 
             {/* Minimal thin accent line */}
-            <div className="hero-line w-14 sm:w-20 h-[2px] bg-brand-primary/70 rounded-full my-3 sm:my-5 origin-left scale-x-0" />
+            <div className="hero-line w-14 sm:w-20 h-[2px] bg-brand-primary/70 rounded-full my-3 sm:my-5 mx-auto origin-center scale-x-0" />
 
             {/* Philosophy Tagline */}
-            <p className="hero-tagline opacity-0 text-[13px] sm:text-[16px] leading-relaxed text-neutral-600 max-w-xl font-normal font-poppins text-left">
+            <p className="hero-tagline opacity-0 text-[13px] sm:text-[16px] leading-relaxed text-neutral-600 max-w-xl font-normal font-poppins text-center mx-auto">
               Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
             </p>
 
             {/* CTA Buttons with side-by-side layout on mobile to save vertical space */}
-            <div className="hero-cta opacity-0 mt-5 sm:mt-8 flex flex-row items-center gap-2.5 sm:gap-4 w-full sm:w-auto">
+            <div className="hero-cta opacity-0 mt-5 sm:mt-8 flex flex-row items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto mx-auto">
               <Link
                 href="/profil"
                 className="flex-1 sm:flex-initial inline-flex items-center justify-center min-h-[42px] sm:min-h-[46px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer text-center"
@@ -171,22 +171,22 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Label Nama Minimalis */}
+              {/* Label Nama Minimalis (Rata Tengah) */}
               <div className="mt-2.5 sm:mt-4 w-full grid grid-cols-2 gap-2 sm:gap-3 px-1 sm:px-2">
-                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2 sm:p-2.5 shadow-xs text-left">
-                  <span className="block text-[11px] sm:text-sm font-bold text-neutral-900 font-poppins truncate">
+                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2 sm:p-2.5 shadow-xs text-center">
+                  <span className="block text-[11px] sm:text-sm font-bold text-neutral-900 font-poppins truncate text-center">
                     Ahmad Munawir Sazali
                   </span>
-                  <span className="block text-[10px] sm:text-[11px] font-semibold text-brand-primary font-poppins">
+                  <span className="block text-[10px] sm:text-[11px] font-semibold text-brand-primary font-poppins text-center">
                     Ketua Umum DEMA
                   </span>
                 </div>
 
-                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2 sm:p-2.5 shadow-xs text-left">
-                  <span className="block text-[11px] sm:text-sm font-bold text-neutral-900 font-poppins truncate">
+                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2 sm:p-2.5 shadow-xs text-center">
+                  <span className="block text-[11px] sm:text-sm font-bold text-neutral-900 font-poppins truncate text-center">
                     Khairul Fikri
                   </span>
-                  <span className="block text-[10px] sm:text-[11px] font-semibold text-brand-primary font-poppins">
+                  <span className="block text-[10px] sm:text-[11px] font-semibold text-brand-primary font-poppins text-center">
                     Wakil Ketua Umum DEMA
                   </span>
                 </div>

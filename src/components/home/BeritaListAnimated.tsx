@@ -48,8 +48,8 @@ export default function BeritaListAnimated({ beritaList }: BeritaListAnimatedPro
     <div ref={containerRef} className="w-full">
       {/* MOBILE INFINITE MARQUEE TO THE LEFT (< sm screens) */}
       <div className="sm:hidden">
-        {/* Mobile Status Bar & Pause Toggle */}
-        <div className="flex items-center justify-between mb-3 text-[11px] font-semibold font-poppins">
+        {/* Mobile Status Bar & Pause Toggle (Rata Tengah) */}
+        <div className="flex items-center justify-center gap-3 mb-3 text-[11px] font-semibold font-poppins text-center">
           <span className="text-brand-primary flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
             {beritaList.length} Warta Terbit • Gerak Otomatis

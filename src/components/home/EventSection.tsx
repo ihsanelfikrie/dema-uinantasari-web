@@ -41,27 +41,27 @@ export default function EventSection() {
       id="event-terbaru"
       className="py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden box-border"
     >
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-3 sm:gap-4 w-full">
-        <div>
-          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
-            Event &amp; Agenda DEMA
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight">
-            Event &amp; Program Akbar
-          </h2>
-          <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl font-poppins">
-            Festival mahasiswa, panggung kreativitas seni budaya, serta arsip pelatihan intensif DEMA UIN Antasari.
-          </p>
-        </div>
+      {/* Section Header (Rata Tengah) */}
+      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 flex flex-col items-center">
+        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
+          Event &amp; Agenda DEMA
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white font-poppins tracking-tight text-center">
+          Event &amp; Program Akbar
+        </h2>
+        <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto font-poppins text-center leading-relaxed">
+          Festival mahasiswa, panggung kreativitas seni budaya, serta arsip pelatihan intensif DEMA UIN Antasari.
+        </p>
 
-        <Link
-          href="/event"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0 font-poppins"
-        >
-          <span>Lihat Semua Event</span>
-          <ArrowUpRight className="w-4 h-4" />
-        </Link>
+        <div className="mt-3 sm:mt-3.5 flex justify-center">
+          <Link
+            href="/event"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-xs sm:text-sm font-semibold text-brand-primary transition-all font-poppins border border-brand-primary/20"
+          >
+            <span>Lihat Semua Event</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* Mobile Switcher Pills (Two full-width tabs side-by-side, no overflow) */}
@@ -110,15 +110,13 @@ export default function EventSection() {
       >
         {/* Card 1: Festival Antasari 2026 */}
         <div className="w-full shrink-0 sm:shrink sm:w-auto snap-start flex flex-col h-full px-0.5">
-          <div className="flex items-center justify-between gap-2 mb-2.5 px-0.5">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
-                Agenda Mendatang
-              </span>
-            </div>
+          <div className="flex items-center justify-center gap-2 mb-2.5 px-0.5 text-center">
+            <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
+              Agenda Mendatang
+            </span>
             <span className="text-[10px] text-neutral-400 font-poppins">
-              Program Akbar 1
+              &bull; Program Akbar 1
             </span>
           </div>
           <div className="flex-1">
@@ -128,15 +126,13 @@ export default function EventSection() {
 
         {/* Card 2: Antasari Media Lab */}
         <div className="w-full shrink-0 sm:shrink sm:w-auto snap-start flex flex-col h-full px-0.5">
-          <div className="flex items-center justify-between gap-2 mb-2.5 px-0.5">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
-                Pelatihan Terlaksana &bull; Arsip
-              </span>
-            </div>
+          <div className="flex items-center justify-center gap-2 mb-2.5 px-0.5 text-center">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
+              Pelatihan Terlaksana
+            </span>
             <span className="text-[10px] text-neutral-400 font-poppins">
-              Program Akbar 2
+              &bull; Program Akbar 2
             </span>
           </div>
           <div className="flex-1">

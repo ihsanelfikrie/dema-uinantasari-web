@@ -105,12 +105,12 @@ function BphCardItem({
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </div>
 
-          {/* Name & Role */}
-          <div className="pt-4 pb-1">
-            <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.15]">
+          {/* Name & Role (Rata Tengah) */}
+          <div className="pt-4 pb-1 text-center">
+            <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.15] text-center">
               {member.nama}
             </h3>
-            <p className="text-xs sm:text-sm font-semibold text-brand-primary/90 dark:text-brand-accent font-poppins mt-1">
+            <p className="text-xs sm:text-sm font-semibold text-brand-primary/90 dark:text-brand-accent font-poppins mt-1 text-center">
               {member.jabatan}
             </p>
           </div>
@@ -118,14 +118,14 @@ function BphCardItem({
 
         <div>
           {/* Red Horizontal Divider Line */}
-          <div className="h-[2px] bg-brand-primary/85 dark:bg-brand-accent/85 w-full my-3" />
+          <div className="h-[2px] bg-brand-primary/85 dark:bg-brand-accent/85 w-16 mx-auto my-3 rounded-full" />
 
-          {/* Footer Credentials */}
-          <div className="flex items-center justify-between text-[11px] font-poppins">
-            <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-[60%]">
+          {/* Footer Credentials (Rata Tengah) */}
+          <div className="flex flex-col items-center justify-center text-[11px] font-poppins text-center gap-0.5">
+            <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-full text-center">
               {member.fakultas || "UIN Antasari"}
             </span>
-            <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0">
+            <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0 text-center">
               {member.nim ? `NIM. ${member.nim}` : "Periode 2026/2027"}
             </span>
           </div>
@@ -167,42 +167,42 @@ export default function LeadersProfiles() {
       id="bph-gallery-section"
       className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden"
     >
-      {/* Section Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4">
-        <div>
-          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
-            Fungsionaris Inti Organisasi
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
-            Badan Pengurus Harian (BPH)
-          </h2>
-          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
-            Jajaran kepemimpinan inti Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin Periode 2026/2027.
-          </p>
+      {/* Section Heading (Rata Tengah) */}
+      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12 flex flex-col items-center">
+        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
+          Fungsionaris Inti Organisasi
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight text-center">
+          Badan Pengurus Harian (BPH)
+        </h2>
+        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto font-poppins text-center leading-relaxed">
+          Jajaran kepemimpinan inti Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin Periode 2026/2027.
+        </p>
 
-          {/* Mobile Status Bar & Pause Toggle */}
-          <div className="flex sm:hidden items-center justify-between mt-3 pt-2 border-t border-neutral-200/60 text-[11px] font-semibold font-poppins">
-            <span className="text-brand-primary flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-              6 Fungsionaris • Gerak Otomatis
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsPaused((prev) => !prev)}
-              className="text-neutral-600 hover:text-brand-primary flex items-center gap-1 bg-white border border-neutral-200/80 px-2.5 py-1 rounded-full shadow-2xs active:scale-95 transition-all"
-            >
-              <span>{isPaused ? "▶ Lanjutkan" : "⏸ Jeda"}</span>
-            </button>
-          </div>
+        <div className="mt-3 sm:mt-3.5 flex justify-center">
+          <Link
+            href="/struktur"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-xs sm:text-sm font-semibold text-brand-primary transition-all font-poppins border border-brand-primary/20"
+          >
+            <span>Lihat Semua Struktur Organisasi</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
-        <Link
-          href="/struktur"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0 font-poppins"
-        >
-          <span>Lihat Semua Struktur Organisasi</span>
-          <ArrowUpRight className="w-4 h-4" />
-        </Link>
+        {/* Mobile Status Bar & Pause Toggle */}
+        <div className="flex sm:hidden items-center justify-center gap-3 mt-3 pt-2 text-[11px] font-semibold font-poppins text-center">
+          <span className="text-brand-primary flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+            6 Fungsionaris • Gerak Otomatis
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsPaused((prev) => !prev)}
+            className="text-neutral-600 hover:text-brand-primary flex items-center gap-1 bg-white border border-neutral-200/80 px-2.5 py-1 rounded-full shadow-2xs active:scale-95 transition-all cursor-pointer"
+          >
+            <span>{isPaused ? "▶ Lanjutkan" : "⏸ Jeda"}</span>
+          </button>
+        </div>
       </div>
 
       {/* MOBILE INFINITE MARQUEE TO THE LEFT (< sm screens) */}

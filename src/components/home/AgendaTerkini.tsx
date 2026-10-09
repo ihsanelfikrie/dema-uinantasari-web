@@ -42,96 +42,66 @@ export default function AgendaTerkini() {
     <section
       className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-10 gap-3 sm:gap-4">
-        <div>
-          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
-            Aspirasi &amp; Advokasi Digital
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
-            Layanan Mahasiswa Terpadu
-          </h2>
-          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
-            DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
-            penanganan kasus, dan permohonan persuratan secara langsung.
-          </p>
+      {/* Section Header (Rata Tengah) */}
+      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12 flex flex-col items-center">
+        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins text-center">
+          Aspirasi &amp; Advokasi Digital
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight text-center">
+          Layanan Mahasiswa Terpadu
+        </h2>
+        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto font-poppins text-center leading-relaxed">
+          DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
+          penanganan kasus, dan permohonan persuratan secara langsung.
+        </p>
 
-          {/* Mobile Badge */}
-          <div className="flex sm:hidden items-center gap-1.5 mt-2 text-[11px] font-semibold font-poppins text-brand-primary">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-            3 Layanan Utama DEMA
-          </div>
+        <div className="mt-3 sm:mt-3.5 flex justify-center">
+          <Link
+            href="/layanan"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-xs sm:text-sm font-semibold text-brand-primary transition-all font-poppins border border-brand-primary/20"
+          >
+            <span>Buka Semua Layanan</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
-
-        <Link
-          href="/layanan"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0 font-poppins"
-        >
-          <span>Buka Semua Layanan</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
       </div>
 
-      {/* Cards: Vertical Flow on Mobile (Sleek & Compact), 3-Column Grid on Tablet/Desktop */}
-      <div className="flex flex-col md:grid md:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6 items-stretch">
-        {portals.map((portal, index) => {
+      {/* Cards: 3-Column Grid on Tablet/Desktop, Clean Centered Cards on Mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5 md:gap-6 items-stretch">
+        {portals.map((portal) => {
           const Icon = portal.icon;
           return (
             <Link
               key={portal.id}
               href={portal.href}
-              className="portal-card-item group relative bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
+              className="portal-card-item group relative bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 rounded-2xl p-4 sm:p-5 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full text-center items-center"
             >
-              <div>
-                {/* Header Row: Compact on mobile, spacious on desktop */}
-                <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-2.5 md:mb-5">
-                  <div className="flex items-center gap-2.5 md:gap-3 min-w-0">
-                    <div className={`p-2 sm:p-2.5 md:p-3 rounded-lg md:rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105 shrink-0`}>
-                      <Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5 md:h-6 md:w-6 stroke-[1.5]" />
-                    </div>
-                    {/* Mobile Title + Kicker */}
-                    <div className="md:hidden min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-neutral-100 font-poppins group-hover:text-brand-primary transition-colors truncate">
-                          {portal.title}
-                        </span>
-                        <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded-full border ${portal.badgeColor} shrink-0`}>
-                          {portal.kicker}
-                        </span>
-                      </div>
-                    </div>
-                    {/* Desktop Counter */}
-                    <span className="hidden md:inline font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors">
-                      0{index + 1}
-                    </span>
-                  </div>
-
-                  {/* Desktop Kicker Badge */}
-                  <span className={`hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${portal.badgeColor}`}>
-                    {portal.kicker}
-                  </span>
-
-                  {/* Mobile Arrow Circle */}
-                  <div className="md:hidden w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-background dark:bg-neutral-800 group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0 shadow-2xs">
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </div>
+              <div className="flex flex-col items-center w-full">
+                {/* Icon & Kicker Badge */}
+                <div className={`p-3 sm:p-3.5 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105 mb-3`}>
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6 stroke-[1.5]" />
                 </div>
 
-                {/* Desktop Title */}
-                <h3 className="hidden md:block text-base md:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins mb-1.5 md:mb-2 group-hover:text-brand-primary transition-colors">
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${portal.badgeColor} mb-2.5`}>
+                  {portal.kicker}
+                </span>
+
+                {/* Title */}
+                <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins mb-1.5 group-hover:text-brand-primary transition-colors text-center">
                   {portal.title}
                 </h3>
 
-                {/* Description: concise 1-line on phone, 2 on tablet, full on desktop */}
-                <p className="text-[11px] sm:text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-snug md:leading-relaxed font-poppins mb-1.5 sm:mb-2 md:mb-4 line-clamp-1 sm:line-clamp-2 md:line-clamp-none">
+                {/* Description */}
+                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-poppins mb-3.5 text-center">
                   {portal.desc}
                 </p>
 
                 {/* Highlights chips */}
-                <div className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5 md:pt-1">
+                <div className="flex flex-wrap justify-center gap-1.5 pt-1 w-full">
                   {portal.highlights.map((chip) => (
                     <span
                       key={chip}
-                      className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-poppins"
+                      className="px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-poppins"
                     >
                       {chip}
                     </span>
@@ -139,17 +109,12 @@ export default function AgendaTerkini() {
                 </div>
               </div>
 
-              {/* Desktop Action Bar */}
-              <div className="hidden md:flex mt-5 md:mt-6 pt-3.5 md:pt-4 border-t border-neutral-100 dark:border-neutral-800 items-center justify-between">
-                <span className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors font-poppins min-h-[44px] flex items-center">
+              {/* Action Bar */}
+              <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-center gap-1.5 w-full">
+                <span className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors font-poppins">
                   Akses Layanan
                 </span>
-                <div
-                  aria-label={`Akses ${portal.title}`}
-                  className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-brand-background dark:bg-neutral-800 group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-brand-primary group-hover:text-brand-accent group-hover:translate-x-1 transition-transform" />
               </div>
 
               {/* Bottom Accent Line */}
