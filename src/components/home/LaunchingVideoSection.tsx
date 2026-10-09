@@ -6,7 +6,7 @@ export default function LaunchingVideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
-    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-6xl mx-auto border-b border-neutral-200/60">
+    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-6xl min-w-0 mx-auto border-b border-neutral-200/60 box-border">
       <div className="text-center mb-5 sm:mb-10 space-y-1.5 sm:space-y-2">
         <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block font-poppins">
           Video Teaser Resmi

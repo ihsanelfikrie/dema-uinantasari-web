@@ -176,15 +176,15 @@ export default function LeadersProfiles() {
     <section
       ref={containerRef}
       id="bph-gallery-section"
-      className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden"
+      className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl min-w-0 mx-auto border-b border-neutral-200/60 overflow-hidden box-border"
     >
       {/* Section Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4 text-center sm:text-left items-center sm:items-end">
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4 w-full text-center sm:text-left items-center sm:items-end">
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full sm:w-auto">
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Fungsionaris Inti Organisasi
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
             Badan Pengurus Harian (BPH)
           </h2>
           <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
@@ -217,7 +217,7 @@ export default function LeadersProfiles() {
       </div>
 
       {/* MOBILE INFINITE MARQUEE TO THE LEFT (< sm screens) */}
-      <div className="sm:hidden relative -mx-3.5 px-0 overflow-hidden py-2 select-none">
+      <div className="sm:hidden relative w-full max-w-full overflow-hidden py-2 select-none">
         {/* Left & Right Subtle Gradient Edge Fades */}
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-20 bg-gradient-to-r from-brand-background to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-20 bg-gradient-to-l from-brand-background to-transparent" />

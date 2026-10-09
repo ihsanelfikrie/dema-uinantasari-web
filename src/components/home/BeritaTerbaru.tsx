@@ -23,10 +23,10 @@ export default async function BeritaTerbaru() {
   }
 
   return (
-    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden">
+    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl min-w-0 mx-auto border-b border-neutral-200/60 overflow-hidden box-border">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-5 sm:mb-12 gap-3 sm:gap-4 text-center sm:text-left items-center sm:items-end">
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-5 sm:mb-12 gap-3 sm:gap-4 w-full text-center sm:text-left items-center sm:items-end">
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full sm:w-auto">
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Warta &amp; Publikasi
           </span>

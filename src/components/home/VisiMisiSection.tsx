@@ -94,7 +94,7 @@ export default function VisiMisiSection() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 transition-colors duration-300 overflow-hidden"
+      className="relative bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl min-w-0 mx-auto border-b border-neutral-200/60 transition-colors duration-300 overflow-hidden box-border"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-10 lg:gap-12 items-center relative z-10">
         {/* Left Column (Heading, Visi, & Mobile Stack) */}

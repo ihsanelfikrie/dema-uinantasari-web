@@ -40,7 +40,7 @@ export default function AgendaTerkini() {
 
   return (
     <section
-      className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
+      className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl min-w-0 mx-auto border-b border-neutral-200/60 box-border"
     >
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-10 gap-3 sm:gap-4 text-center sm:text-left items-center sm:items-end">
