@@ -31,8 +31,14 @@ import {
   ShieldCheck,
   Upload,
   RefreshCw,
+  Settings2,
+  ListPlus,
+  Sliders,
+  Smartphone,
+  EyeOff,
+  UserCheck,
 } from "lucide-react";
-import { FestivalLomba, FestivalPendaftar, FormCustomField } from "@/types";
+import { FestivalLomba, FestivalPendaftar, FormCustomField, FormConfig } from "@/types";
 import { formMakerPresets } from "@/data/festivalStarter";
 
 export default function AdminFestivalAntasariPage() {
@@ -45,6 +51,7 @@ export default function AdminFestivalAntasariPage() {
 
   // Form Maker Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"builder" | "preview">("builder");
   const [editingLombaId, setEditingLombaId] = useState<string | null>(null);
 
   // Pendaftar Modal / Detail State
@@ -56,7 +63,8 @@ export default function AdminFestivalAntasariPage() {
   const [searchPendaftar, setSearchPendaftar] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Form State
+  // ==================== FORM BUILDER STATES ====================
+  // Info Dasar Lomba
   const [namaLomba, setNamaLomba] = useState("");
   const [slug, setSlug] = useState("");
   const [kategori, setKategori] = useState("Media & Kreatif");
@@ -69,16 +77,37 @@ export default function AdminFestivalAntasariPage() {
   const [kontakPj, setKontakPj] = useState("");
   const [statusLomba, setStatusLomba] = useState<"open" | "closed" | "upcoming">("open");
 
-  // Form Config
+  // Kustomisasi Kolom Identitas Standar
+  const [labelNama, setLabelNama] = useState("Nama Lengkap Ketua / Peserta");
+  const [enableNim, setEnableNim] = useState(true);
+  const [labelNim, setLabelNim] = useState("NIM (Nomor Induk Mahasiswa)");
+  const [enableInstansi, setEnableInstansi] = useState(true);
+  const [labelInstansi, setLabelInstansi] = useState("Instansi / Fakultas / Kampus");
+  const [enableEmail, setEnableEmail] = useState(true);
+  const [enableWhatsapp, setEnableWhatsapp] = useState(true);
+
+  // Kustomisasi Kolom Tim / Beregu
+  const [labelNamaTim, setLabelNamaTim] = useState("Nama Tim / Squad");
+  const [labelAnggotaTim, setLabelAnggotaTim] = useState("Daftar Nama & NIM Anggota Tim");
+  const [maxAnggotaTim, setMaxAnggotaTim] = useState<number>(5);
+
+  // Kustomisasi Berkas & Upload
   const [requireKtm, setRequireKtm] = useState(true);
+  const [labelKtm, setLabelKtm] = useState("Kartu Tanda Mahasiswa (KTM)");
   const [requireBuktiTransfer, setRequireBuktiTransfer] = useState(false);
+  const [labelBuktiTransfer, setLabelBuktiTransfer] = useState("Bukti Transfer / Pembayaran");
   const [requireBuktiFollow, setRequireBuktiFollow] = useState(true);
+  const [labelBuktiFollow, setLabelBuktiFollow] = useState("Bukti Follow Instagram @dema.uin.antasari");
   const [requireLinkKarya, setRequireLinkKarya] = useState(false);
   const [labelLinkKarya, setLabelLinkKarya] = useState("Tautan Berkas Karya (Google Drive)");
-  const [maxAnggotaTim, setMaxAnggotaTim] = useState<number>(5);
+
+  // Rekening & WhatsApp & Pesan
   const [nomorRekening, setNomorRekening] = useState("");
   const [catatanPembayaran, setCatatanPembayaran] = useState("");
   const [linkGroupWa, setLinkGroupWa] = useState("");
+  const [pesanSukses, setPesanSukses] = useState("Pendaftaran berhasil! Silakan gabung ke grup WhatsApp resmi.");
+
+  // Pertanyaan Kustom
   const [customFields, setCustomFields] = useState<FormCustomField[]>([]);
 
   // Feedback notifications
@@ -146,9 +175,31 @@ export default function AdminFestivalAntasariPage() {
     showAlert("success", `Preset "${preset.nama_preset}" berhasil diterapkan!`);
   };
 
+  // Quick helper to insert popular questions
+  const addQuickField = (preset: {
+    label: string;
+    type: "text" | "textarea" | "select" | "number" | "link";
+    placeholder?: string;
+    options?: string[];
+    help_text?: string;
+  }) => {
+    const newField: FormCustomField = {
+      id: `field_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 5)}`,
+      label: preset.label,
+      type: preset.type,
+      required: true,
+      placeholder: preset.placeholder || "",
+      options: preset.options || [],
+      help_text: preset.help_text || "",
+    };
+    setCustomFields((prev) => [...prev, newField]);
+    showAlert("success", `Kolom "${preset.label}" ditambahkan!`);
+  };
+
   // Reset form to clean state
   const resetForm = () => {
     setEditingLombaId(null);
+    setModalMode("builder");
     setNamaLomba("");
     setSlug("");
     setKategori("Media & Kreatif");
@@ -160,15 +211,36 @@ export default function AdminFestivalAntasariPage() {
     setLinkJuknis("");
     setKontakPj("");
     setStatusLomba("open");
+
+    // Standard fields
+    setLabelNama("Nama Lengkap Ketua / Peserta");
+    setEnableNim(true);
+    setLabelNim("NIM (Nomor Induk Mahasiswa)");
+    setEnableInstansi(true);
+    setLabelInstansi("Instansi / Fakultas / Kampus");
+    setEnableEmail(true);
+    setEnableWhatsapp(true);
+
+    // Tim
+    setLabelNamaTim("Nama Tim / Squad");
+    setLabelAnggotaTim("Daftar Nama & NIM Anggota Tim");
+    setMaxAnggotaTim(5);
+
+    // Berkas
     setRequireKtm(true);
+    setLabelKtm("Kartu Tanda Mahasiswa (KTM)");
     setRequireBuktiTransfer(false);
+    setLabelBuktiTransfer("Bukti Transfer / Pembayaran");
     setRequireBuktiFollow(true);
+    setLabelBuktiFollow("Bukti Follow Instagram @dema.uin.antasari");
     setRequireLinkKarya(false);
     setLabelLinkKarya("Tautan Berkas Karya (Google Drive)");
-    setMaxAnggotaTim(5);
+
+    // Info
     setNomorRekening("");
     setCatatanPembayaran("");
     setLinkGroupWa("");
+    setPesanSukses("Pendaftaran berhasil! Silakan gabung ke grup WhatsApp resmi.");
     setCustomFields([]);
   };
 
@@ -179,6 +251,7 @@ export default function AdminFestivalAntasariPage() {
 
   const openEditModal = (lomba: FestivalLomba) => {
     setEditingLombaId(lomba.id);
+    setModalMode("builder");
     setNamaLomba(lomba.nama_lomba);
     setSlug(lomba.slug);
     setKategori(lomba.kategori);
@@ -192,21 +265,37 @@ export default function AdminFestivalAntasariPage() {
     setStatusLomba(lomba.status);
 
     const cfg = lomba.form_config || {};
+    setLabelNama(cfg.label_nama || "Nama Lengkap Ketua / Peserta");
+    setEnableNim(cfg.enable_nim ?? true);
+    setLabelNim(cfg.label_nim || "NIM (Nomor Induk Mahasiswa)");
+    setEnableInstansi(cfg.enable_instansi ?? true);
+    setLabelInstansi(cfg.label_instansi || "Instansi / Fakultas / Kampus");
+    setEnableEmail(cfg.enable_email ?? true);
+    setEnableWhatsapp(cfg.enable_whatsapp ?? true);
+
+    setLabelNamaTim(cfg.label_nama_tim || "Nama Tim / Squad");
+    setLabelAnggotaTim(cfg.label_anggota_tim || "Daftar Nama & NIM Anggota Tim");
+    setMaxAnggotaTim(cfg.max_anggota_tim || 5);
+
     setRequireKtm(cfg.require_ktm ?? true);
+    setLabelKtm(cfg.label_ktm || "Kartu Tanda Mahasiswa (KTM)");
     setRequireBuktiTransfer(cfg.require_bukti_transfer ?? false);
+    setLabelBuktiTransfer(cfg.label_bukti_transfer || "Bukti Transfer / Pembayaran");
     setRequireBuktiFollow(cfg.require_bukti_follow ?? true);
+    setLabelBuktiFollow(cfg.label_bukti_follow || "Bukti Follow Instagram @dema.uin.antasari");
     setRequireLinkKarya(cfg.require_link_karya ?? false);
     setLabelLinkKarya(cfg.label_link_karya || "Tautan Berkas Karya (Google Drive)");
-    setMaxAnggotaTim(cfg.max_anggota_tim || 5);
+
     setNomorRekening(cfg.nomor_rekening || "");
     setCatatanPembayaran(cfg.catatan_pembayaran || "");
     setLinkGroupWa(cfg.link_group_wa || "");
+    setPesanSukses(cfg.pesan_sukses || "Pendaftaran berhasil! Silakan gabung ke grup WhatsApp resmi.");
     setCustomFields(cfg.custom_fields || []);
 
     setIsModalOpen(true);
   };
 
-  // Add custom question
+  // Add blank custom question
   const addCustomField = () => {
     const newField: FormCustomField = {
       id: `field_${Date.now().toString(36)}`,
@@ -214,6 +303,8 @@ export default function AdminFestivalAntasariPage() {
       type: "text",
       required: true,
       placeholder: "",
+      options: [],
+      help_text: "",
     };
     setCustomFields((prev) => [...prev, newField]);
   };
@@ -252,15 +343,28 @@ export default function AdminFestivalAntasariPage() {
       kontak_pj: kontakPj.trim() || null,
       status: statusLomba,
       form_config: {
+        label_nama: labelNama.trim(),
+        enable_nim: enableNim,
+        label_nim: labelNim.trim(),
+        enable_instansi: enableInstansi,
+        label_instansi: labelInstansi.trim(),
+        enable_email: enableEmail,
+        enable_whatsapp: enableWhatsapp,
+        label_nama_tim: labelNamaTim.trim(),
+        label_anggota_tim: labelAnggotaTim.trim(),
+        max_anggota_tim: tipePeserta === "tim" ? Number(maxAnggotaTim) : 1,
         require_ktm: requireKtm,
+        label_ktm: labelKtm.trim(),
         require_bukti_transfer: requireBuktiTransfer,
+        label_bukti_transfer: labelBuktiTransfer.trim(),
         require_bukti_follow: requireBuktiFollow,
+        label_bukti_follow: labelBuktiFollow.trim(),
         require_link_karya: requireLinkKarya,
         label_link_karya: labelLinkKarya.trim(),
-        max_anggota_tim: tipePeserta === "tim" ? Number(maxAnggotaTim) : 1,
         nomor_rekening: nomorRekening.trim(),
         catatan_pembayaran: catatanPembayaran.trim(),
         link_group_wa: linkGroupWa.trim(),
+        pesan_sukses: pesanSukses.trim(),
         custom_fields: customFields.filter((f) => f.label.trim().length > 0),
       },
     };
@@ -603,7 +707,7 @@ export default function AdminFestivalAntasariPage() {
               <button
                 onClick={loadData}
                 disabled={isLoading}
-                className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-brand-primary font-medium"
+                className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-brand-primary font-medium cursor-pointer"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
                 <span>Refresh</span>
@@ -624,7 +728,7 @@ export default function AdminFestivalAntasariPage() {
                 </p>
                 <button
                   onClick={openCreateModal}
-                  className="mt-4 px-4 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold inline-flex items-center gap-1.5"
+                  className="mt-4 px-4 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Buat Form Pertama</span>
@@ -712,7 +816,7 @@ export default function AdminFestivalAntasariPage() {
                           )}
                           {item.form_config?.require_bukti_transfer && (
                             <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-50 text-amber-700">
-                              Bukti Transfer
+                              Bukti Bayar
                             </span>
                           )}
                           {item.form_config?.require_link_karya && (
@@ -759,7 +863,7 @@ export default function AdminFestivalAntasariPage() {
 
                           <button
                             onClick={() => openEditModal(item)}
-                            title="Edit Formulir"
+                            title="Edit & Kustomisasi Formulir"
                             className="p-1.5 rounded-lg text-neutral-500 hover:text-blue-600 hover:bg-neutral-100 transition-colors cursor-pointer"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -1002,426 +1106,945 @@ export default function AdminFestivalAntasariPage() {
         )}
       </div>
 
-      {/* ==================== MODAL FORM MAKER (MUDAH & CEPAT) ==================== */}
+      {/* ==================== MODAL FORM MAKER KUSTOMISASI PENUH ==================== */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-neutral-100 max-h-[92vh] flex flex-col my-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="px-6 py-4.5 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/70">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
-                  <Trophy className="w-4 h-4" />
+          <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-neutral-100 max-h-[94vh] flex flex-col my-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Top Header with Mode Tabs */}
+            <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/80">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                  <Sliders className="w-4.5 h-4.5" />
                 </div>
                 <div>
                   <h3 className="text-base font-extrabold text-neutral-900 leading-tight">
-                    {editingLombaId ? "Edit Form Perlombaan" : "Form Maker — Buat Lomba Baru"}
+                    {editingLombaId ? "Edit & Kustomisasi Formulir" : "Form Maker & Kustomisasi Lomba"}
                   </h3>
                   <p className="text-[11px] text-neutral-500">
-                    Bisa pakai 1-klik preset cepat atau isi konfigurasi kustom sendiri.
+                    Sesuaikan kolom identitas, berkas syarat, dan pertanyaan kustom sesuai kebutuhan cabang lomba.
                   </p>
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-xl text-neutral-400 hover:bg-neutral-200 transition-colors cursor-pointer"
-              >
-                <XCircle className="w-5 h-5" />
-              </button>
+              {/* Toggle Tab Builder vs Live Preview */}
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center bg-neutral-200/70 p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setModalMode("builder")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      modalMode === "builder" ? "bg-white text-brand-primary shadow-xs" : "text-neutral-600 hover:text-neutral-900"
+                    }`}
+                  >
+                    <Settings2 className="w-3.5 h-3.5" />
+                    <span>Pengaturan Form</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalMode("preview")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      modalMode === "preview" ? "bg-white text-brand-primary shadow-xs" : "text-neutral-600 hover:text-neutral-900"
+                    }`}
+                  >
+                    <Smartphone className="w-3.5 h-3.5" />
+                    <span>Pratinjau Live</span>
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-1.5 rounded-xl text-neutral-400 hover:bg-neutral-200 transition-colors cursor-pointer"
+                >
+                  <XCircle className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            {/* Modal Body */}
-            <form onSubmit={handleSaveLomba} className="flex-1 overflow-y-auto p-6 space-y-6">
-              {/* SECTION: 1-KLIK PRESET CEPAT */}
-              {!editingLombaId && (
-                <div className="p-4 rounded-2xl bg-brand-primary/5 border border-brand-primary/20">
-                  <div className="flex items-center gap-1.5 mb-2.5">
-                    <Sparkles className="w-4 h-4 text-brand-primary" />
-                    <span className="text-xs font-bold text-brand-primary font-poppins">
-                      1-Klik Preset Cepat (Instan Form)
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-neutral-600 mb-3">
-                    Pilih jenis perlombaan di bawah untuk langsung mengisi deskripsi, berkas syarat, dan opsi form secara otomatis:
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {formMakerPresets.map((preset, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => applyPreset(preset)}
-                        className="flex items-start justify-between p-2.5 rounded-xl bg-white hover:bg-neutral-50 border border-neutral-200 text-left transition-all hover:border-brand-primary cursor-pointer group shadow-2xs"
-                      >
-                        <div>
-                          <span className="text-xs font-bold text-neutral-900 group-hover:text-brand-primary block leading-tight">
-                            {preset.nama_preset}
-                          </span>
-                          <span className="text-[10px] text-neutral-500 mt-0.5 block">
-                            {preset.kategori} &bull; {preset.tipe_peserta}
-                          </span>
-                        </div>
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-100 text-neutral-700">
-                          {preset.badge}
+            {/* Modal Body Container */}
+            <div className="flex-1 overflow-y-auto">
+              {/* MODE 1: BUILDER & CUSTOMIZATION */}
+              {modalMode === "builder" ? (
+                <form id="form-maker-builder" onSubmit={handleSaveLomba} className="p-6 space-y-7">
+                  {/* SECTION 1: 1-KLIK PRESET CEPAT UNTUK ORANG AWAM */}
+                  {!editingLombaId && (
+                    <div className="p-4 rounded-2xl bg-brand-primary/5 border border-brand-primary/20">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Sparkles className="w-4 h-4 text-brand-primary" />
+                        <span className="text-xs font-bold text-brand-primary font-poppins">
+                          1-Klik Preset Cepat (Paling Mudah untuk Pemula)
                         </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* SECTION: INFORMASI DASAR LOMBA */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Informasi Dasar Lomba</span>
-                </h4>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Nama Cabang Lomba <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Contoh: Lomba Desain Poster Digital Festival Antasari"
-                      value={namaLomba}
-                      onChange={(e) => setNamaLomba(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Kategori Perlombaan
-                    </label>
-                    <select
-                      value={kategori}
-                      onChange={(e) => setKategori(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-neutral-200 text-xs bg-white focus:outline-none focus:border-brand-primary cursor-pointer font-medium"
-                    >
-                      <option value="Media & Kreatif">Media &amp; Kreatif</option>
-                      <option value="Olahraga & E-Sport">Olahraga &amp; E-Sport</option>
-                      <option value="Keagamaan">Keagamaan</option>
-                      <option value="Seni & Budaya">Seni &amp; Budaya</option>
-                      <option value="Ilmiah & Debat">Ilmiah &amp; Debat</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Tipe Peserta
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setTipePeserta("individu")}
-                        className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                          tipePeserta === "individu"
-                            ? "bg-brand-primary text-white border-brand-primary"
-                            : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
-                        }`}
-                      >
-                        Individu / Perorangan
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTipePeserta("tim")}
-                        className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                          tipePeserta === "tim"
-                            ? "bg-brand-primary text-white border-brand-primary"
-                            : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
-                        }`}
-                      >
-                        Beregu / Tim
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Biaya Registrasi
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Contoh: Gratis atau Rp 35.000 / tim"
-                      value={biayaRegistrasi}
-                      onChange={(e) => setBiayaRegistrasi(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Kuota Maksimal (Opsional)
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="Contoh: 32 (kosongkan jika tanpa batas)"
-                      value={kuotaMaksimal}
-                      onChange={(e) => setKuotaMaksimal(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Tautan Juknis / Petunjuk Teknis (Drive/PDF)
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://drive.google.com/..."
-                      value={linkJuknis}
-                      onChange={(e) => setLinkJuknis(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Kontak PJ Lomba (WhatsApp)
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Contoh: 0812-3456-7890 (Kak Sarah)"
-                      value={kontakPj}
-                      onChange={(e) => setKontakPj(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Deskripsi Singkat Lomba
-                    </label>
-                    <textarea
-                      rows={2}
-                      placeholder="Jelaskan gambaran umum perlombaan..."
-                      value={deskripsi}
-                      onChange={(e) => setDeskripsi(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="text-xs font-semibold text-neutral-700 block mb-1">
-                      Persyaratan &amp; Ketentuan Lomba
-                    </label>
-                    <textarea
-                      rows={3}
-                      placeholder="1. Mahasiswa aktif se-Kalsel&#10;2. Menyerahkan karya sebelum batas waktu..."
-                      value={persyaratan}
-                      onChange={(e) => setPersyaratan(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary leading-relaxed"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* SECTION: PENGATURAN BERKAS & FORM TOGGLES */}
-              <div className="pt-4 border-t border-neutral-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Pengaturan Berkas &amp; Formulir</span>
-                </h4>
-
-                <div className="space-y-3 bg-neutral-50 p-4 rounded-2xl border border-neutral-100 text-xs">
-                  {/* Toggle KTM */}
-                  <label className="flex items-center justify-between p-2 rounded-xl bg-white border border-neutral-200/80 cursor-pointer">
-                    <div>
-                      <span className="font-bold text-neutral-800 block">Wajib Upload KTM (Kartu Tanda Mahasiswa)</span>
-                      <span className="text-[11px] text-neutral-500">
-                        Memastikan peserta berstatus mahasiswa aktif.
-                      </span>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={requireKtm}
-                      onChange={(e) => setRequireKtm(e.target.checked)}
-                      className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
-                    />
-                  </label>
-
-                  {/* Toggle Bukti Follow IG */}
-                  <label className="flex items-center justify-between p-2 rounded-xl bg-white border border-neutral-200/80 cursor-pointer">
-                    <div>
-                      <span className="font-bold text-neutral-800 block">Wajib Screenshot Follow IG @dema.uin.antasari</span>
-                      <span className="text-[11px] text-neutral-500">
-                        Syarat administratif media &amp; publikasi resmi.
-                      </span>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={requireBuktiFollow}
-                      onChange={(e) => setRequireBuktiFollow(e.target.checked)}
-                      className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
-                    />
-                  </label>
-
-                  {/* Toggle Bukti Bayar */}
-                  <label className="flex items-center justify-between p-2 rounded-xl bg-white border border-neutral-200/80 cursor-pointer">
-                    <div>
-                      <span className="font-bold text-neutral-800 block">Wajib Upload Bukti Pembayaran / Transfer</span>
-                      <span className="text-[11px] text-neutral-500">
-                        Aktifkan jika cabang lomba memiliki biaya pendaftaran.
-                      </span>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={requireBuktiTransfer}
-                      onChange={(e) => setRequireBuktiTransfer(e.target.checked)}
-                      className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
-                    />
-                  </label>
-
-                  {requireBuktiTransfer && (
-                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2 mt-2">
-                      <div>
-                        <label className="text-[11px] font-bold text-amber-900 block mb-0.5">
-                          Nomor Rekening / E-Wallet Panitia
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="BSI: 7123456789 a.n Panitia Festival Antasari"
-                          value={nomorRekening}
-                          onChange={(e) => setNomorRekening(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg border border-amber-300 text-xs bg-white focus:outline-none"
-                        />
                       </div>
-                      <div>
-                        <label className="text-[11px] font-bold text-amber-900 block mb-0.5">
-                          Catatan / Berita Transfer
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Sertakan format: [Nama Lomba] - [Nama Tim/Peserta]"
-                          value={catatanPembayaran}
-                          onChange={(e) => setCatatanPembayaran(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg border border-amber-300 text-xs bg-white focus:outline-none"
-                        />
+                      <p className="text-[11px] text-neutral-600 mb-3">
+                        Pilih jenis perlombaan di bawah untuk otomatis mengisi deskripsi, berkas syarat, dan opsi form:
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {formMakerPresets.map((preset, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => applyPreset(preset)}
+                            className="flex items-start justify-between p-2.5 rounded-xl bg-white hover:bg-neutral-50 border border-neutral-200 text-left transition-all hover:border-brand-primary cursor-pointer group shadow-2xs"
+                          >
+                            <div>
+                              <span className="text-xs font-bold text-neutral-900 group-hover:text-brand-primary block leading-tight">
+                                {preset.nama_preset}
+                              </span>
+                              <span className="text-[10px] text-neutral-500 mt-0.5 block">
+                                {preset.kategori} &bull; {preset.tipe_peserta}
+                              </span>
+                            </div>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-100 text-neutral-700">
+                              {preset.badge}
+                            </span>
+                          </button>
+                        ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Toggle Link Karya */}
-                  <label className="flex items-center justify-between p-2 rounded-xl bg-white border border-neutral-200/80 cursor-pointer">
-                    <div>
-                      <span className="font-bold text-neutral-800 block">Wajib Link Berkas Karya (Google Drive)</span>
-                      <span className="text-[11px] text-neutral-500">
-                        Untuk lomba poster, video, esai, atau karya digital yang dikumpul online.
-                      </span>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={requireLinkKarya}
-                      onChange={(e) => setRequireLinkKarya(e.target.checked)}
-                      className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
-                    />
-                  </label>
+                  {/* SECTION 2: INFORMASI DASAR LOMBA */}
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>1. Informasi Pokok Perlombaan</span>
+                    </h4>
 
-                  {/* Group WA */}
-                  <div className="p-2 rounded-xl bg-white border border-neutral-200/80">
-                    <label className="font-bold text-neutral-800 block mb-0.5">
-                      Link Grup WhatsApp Peserta (Auto Tampil Pasca-Daftar)
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://chat.whatsapp.com/..."
-                      value={linkGroupWa}
-                      onChange={(e) => setLinkGroupWa(e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
-                    />
-                  </div>
-                </div>
-              </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Nama Cabang Lomba <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Contoh: Lomba Desain Poster Digital Festival Antasari"
+                          value={namaLomba}
+                          onChange={(e) => setNamaLomba(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                        />
+                      </div>
 
-              {/* SECTION: CUSTOM FIELDS (PERTANYAAN KHUSUS) */}
-              <div className="pt-4 border-t border-neutral-100">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
-                    <HelpCircle className="w-3.5 h-3.5" />
-                    <span>Pertanyaan Tambahan Khusus (Form Fields)</span>
-                  </h4>
-                  <button
-                    type="button"
-                    onClick={addCustomField}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-brand-primary hover:text-brand-accent cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Tambah Kolom Pertanyaan</span>
-                  </button>
-                </div>
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Kategori Perlombaan
+                        </label>
+                        <select
+                          value={kategori}
+                          onChange={(e) => setKategori(e.target.value)}
+                          className="w-full px-3 py-2.5 rounded-xl border border-neutral-200 text-xs bg-white focus:outline-none focus:border-brand-primary cursor-pointer font-medium"
+                        >
+                          <option value="Media & Kreatif">Media &amp; Kreatif</option>
+                          <option value="Olahraga & E-Sport">Olahraga &amp; E-Sport</option>
+                          <option value="Keagamaan">Keagamaan</option>
+                          <option value="Seni & Budaya">Seni &amp; Budaya</option>
+                          <option value="Ilmiah & Debat">Ilmiah &amp; Debat</option>
+                        </select>
+                      </div>
 
-                {customFields.length === 0 ? (
-                  <p className="text-xs text-neutral-400 italic bg-neutral-50 p-3 rounded-xl border border-dashed border-neutral-200 text-center">
-                    Belum ada pertanyaan tambahan. (Opsional — misal ID Game, Judul Karya, atau Maqra Surah).
-                  </p>
-                ) : (
-                  <div className="space-y-2.5">
-                    {customFields.map((field, idx) => (
-                      <div
-                        key={field.id || idx}
-                        className="p-3 bg-white border border-neutral-200 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 text-xs"
-                      >
-                        <div className="flex-1">
-                          <input
-                            type="text"
-                            placeholder="Label Pertanyaan (misal: ID Game Kapten)"
-                            value={field.label}
-                            onChange={(e) => updateCustomField(idx, { label: e.target.value })}
-                            className="w-full px-2.5 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                          />
-                        </div>
-
-                        <div className="w-32">
-                          <select
-                            value={field.type}
-                            onChange={(e) => updateCustomField(idx, { type: e.target.value as any })}
-                            className="w-full px-2 py-1.5 rounded-lg border border-neutral-200 text-xs bg-white focus:outline-none"
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Tipe Peserta
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setTipePeserta("individu")}
+                            className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                              tipePeserta === "individu"
+                                ? "bg-brand-primary text-white border-brand-primary"
+                                : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
+                            }`}
                           >
-                            <option value="text">Teks Singkat</option>
-                            <option value="textarea">Paragraf / Uraian</option>
-                            <option value="number">Angka</option>
-                          </select>
+                            Individu / Perorangan
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setTipePeserta("tim")}
+                            className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                              tipePeserta === "tim"
+                                ? "bg-brand-primary text-white border-brand-primary"
+                                : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
+                            }`}
+                          >
+                            Beregu / Tim
+                          </button>
                         </div>
+                      </div>
 
-                        <label className="flex items-center gap-1 text-[11px] text-neutral-600 px-2 cursor-pointer">
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Biaya Registrasi
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Contoh: Gratis atau Rp 35.000 / tim"
+                          value={biayaRegistrasi}
+                          onChange={(e) => setBiayaRegistrasi(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Kuota Maksimal (Opsional)
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Contoh: 32 (kosongkan jika tanpa batas)"
+                          value={kuotaMaksimal}
+                          onChange={(e) => setKuotaMaksimal(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Tautan Juknis / Petunjuk Teknis (Drive/PDF)
+                        </label>
+                        <input
+                          type="url"
+                          placeholder="https://drive.google.com/..."
+                          value={linkJuknis}
+                          onChange={(e) => setLinkJuknis(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Kontak PJ Lomba (WhatsApp)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Contoh: 0812-3456-7890 (Kak Sarah)"
+                          value={kontakPj}
+                          onChange={(e) => setKontakPj(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Deskripsi Singkat Lomba
+                        </label>
+                        <textarea
+                          rows={2}
+                          placeholder="Jelaskan gambaran umum perlombaan..."
+                          value={deskripsi}
+                          onChange={(e) => setDeskripsi(e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-xs font-semibold text-neutral-700 block mb-1">
+                          Persyaratan &amp; Ketentuan Lomba
+                        </label>
+                        <textarea
+                          rows={3}
+                          placeholder="1. Mahasiswa aktif se-Kalsel&#10;2. Menyerahkan karya sebelum batas waktu..."
+                          value={persyaratan}
+                          onChange={(e) => setPersyaratan(e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 3: KUSTOMISASI KOLOM IDENTITAS STANDAR */}
+                  <div className="pt-4 border-t border-neutral-100">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
+                      <UserCheck className="w-3.5 h-3.5" />
+                      <span>2. Kustomisasi Kolom Identitas Peserta</span>
+                    </h4>
+
+                    <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-200/80 space-y-3.5 text-xs">
+                      {/* Label Nama Lengkap */}
+                      <div className="p-3 bg-white rounded-xl border border-neutral-200">
+                        <label className="font-bold text-neutral-800 block mb-1">
+                          Teks Label Kolom Nama Lengkap
+                        </label>
+                        <input
+                          type="text"
+                          value={labelNama}
+                          onChange={(e) => setLabelNama(e.target.value)}
+                          placeholder="Nama Lengkap Ketua / Peserta"
+                          className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                        />
+                      </div>
+
+                      {/* Toggle & Label NIM */}
+                      <div className="p-3 bg-white rounded-xl border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajibkan Kolom NIM / Nomor Identitas</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Matikan jika lomba terbuka untuk umum / siswa tanpa NIM.
+                            </span>
+                          </div>
                           <input
                             type="checkbox"
-                            checked={field.required}
-                            onChange={(e) => updateCustomField(idx, { required: e.target.checked })}
-                            className="w-3.5 h-3.5 rounded text-brand-primary accent-brand-primary"
+                            checked={enableNim}
+                            onChange={(e) => setEnableNim(e.target.checked)}
+                            className="w-4 h-4 rounded text-brand-primary accent-brand-primary cursor-pointer"
                           />
-                          <span>Wajib</span>
+                        </div>
+                        {enableNim && (
+                          <input
+                            type="text"
+                            value={labelNim}
+                            onChange={(e) => setLabelNim(e.target.value)}
+                            placeholder="Label (contoh: NIM / NISN / No. Identitas)"
+                            className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                          />
+                        )}
+                      </div>
+
+                      {/* Toggle & Label Asal Instansi */}
+                      <div className="p-3 bg-white rounded-xl border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajibkan Kolom Asal Instansi / Kampus</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Asal universitas, fakultas, atau sekolah peserta.
+                            </span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={enableInstansi}
+                            onChange={(e) => setEnableInstansi(e.target.checked)}
+                            className="w-4 h-4 rounded text-brand-primary accent-brand-primary cursor-pointer"
+                          />
+                        </div>
+                        {enableInstansi && (
+                          <input
+                            type="text"
+                            value={labelInstansi}
+                            onChange={(e) => setLabelInstansi(e.target.value)}
+                            placeholder="Label (contoh: Instansi / Fakultas / Kampus)"
+                            className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                          />
+                        )}
+                      </div>
+
+                      {/* Jika Tipe Tim: Kustomisasi Label Tim */}
+                      {tipePeserta === "tim" && (
+                        <div className="p-3 bg-purple-50/70 border border-purple-200 rounded-xl space-y-2">
+                          <span className="text-[11px] uppercase font-bold text-purple-900 block">
+                            Pengaturan Khusus Tim / Beregu
+                          </span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] text-neutral-600 block mb-0.5">Label Nama Tim</label>
+                              <input
+                                type="text"
+                                value={labelNamaTim}
+                                onChange={(e) => setLabelNamaTim(e.target.value)}
+                                className="w-full px-2.5 py-1.5 rounded-lg border border-purple-300 text-xs bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-neutral-600 block mb-0.5">Batas Maksimal Anggota</label>
+                              <input
+                                type="number"
+                                min={2}
+                                max={20}
+                                value={maxAnggotaTim}
+                                onChange={(e) => setMaxAnggotaTim(Number(e.target.value))}
+                                className="w-full px-2.5 py-1.5 rounded-lg border border-purple-300 text-xs bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* SECTION 4: KUSTOMISASI BERKAS PERSYARATAN */}
+                  <div className="pt-4 border-t border-neutral-100">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>3. Kustomisasi Berkas &amp; Dokumen Persyaratan</span>
+                    </h4>
+
+                    <div className="space-y-3 bg-neutral-50 p-4 rounded-2xl border border-neutral-200/80 text-xs">
+                      {/* KTM */}
+                      <div className="p-3 rounded-xl bg-white border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajib Upload KTM (Kartu Mahasiswa)</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Memastikan keaktifan status mahasiswa peserta.
+                            </span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={requireKtm}
+                            onChange={(e) => setRequireKtm(e.target.checked)}
+                            className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
+                          />
+                        </div>
+                        {requireKtm && (
+                          <input
+                            type="text"
+                            value={labelKtm}
+                            onChange={(e) => setLabelKtm(e.target.value)}
+                            placeholder="Label (contoh: Kartu Tanda Mahasiswa / Kartu Pelajar)"
+                            className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none"
+                          />
+                        )}
+                      </div>
+
+                      {/* Bukti Bayar */}
+                      <div className="p-3 rounded-xl bg-white border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajib Upload Bukti Transfer / Pembayaran</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Aktifkan jika cabang lomba memiliki biaya pendaftaran.
+                            </span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={requireBuktiTransfer}
+                            onChange={(e) => setRequireBuktiTransfer(e.target.checked)}
+                            className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
+                          />
+                        </div>
+
+                        {requireBuktiTransfer && (
+                          <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2 mt-2">
+                            <div>
+                              <label className="text-[11px] font-bold text-amber-900 block mb-0.5">
+                                Nomor Rekening / E-Wallet Panitia
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="BSI: 7123456789 a.n Panitia Festival Antasari"
+                                value={nomorRekening}
+                                onChange={(e) => setNomorRekening(e.target.value)}
+                                className="w-full px-3 py-1.5 rounded-lg border border-amber-300 text-xs bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[11px] font-bold text-amber-900 block mb-0.5">
+                                Catatan / Berita Transfer
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Sertakan berita transfer: [Nama Lomba] - [Nama Tim]"
+                                value={catatanPembayaran}
+                                onChange={(e) => setCatatanPembayaran(e.target.value)}
+                                className="w-full px-3 py-1.5 rounded-lg border border-amber-300 text-xs bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Follow IG */}
+                      <div className="p-3 rounded-xl bg-white border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajib Screenshot Follow IG @dema.uin.antasari</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Syarat publikasi dan administratif resmi.
+                            </span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={requireBuktiFollow}
+                            onChange={(e) => setRequireBuktiFollow(e.target.checked)}
+                            className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Link Karya */}
+                      <div className="p-3 rounded-xl bg-white border border-neutral-200 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-bold text-neutral-800 block">Wajib Tautan Berkas Karya (Google Drive)</span>
+                            <span className="text-[11px] text-neutral-500">
+                              Untuk lomba poster, video, esai, atau karya digital online.
+                            </span>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={requireLinkKarya}
+                            onChange={(e) => setRequireLinkKarya(e.target.checked)}
+                            className="w-4 h-4 text-brand-primary rounded cursor-pointer accent-brand-primary"
+                          />
+                        </div>
+                        {requireLinkKarya && (
+                          <input
+                            type="text"
+                            value={labelLinkKarya}
+                            onChange={(e) => setLabelLinkKarya(e.target.value)}
+                            placeholder="Label (contoh: Tautan Berkas Karya Google Drive / YouTube)"
+                            className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none"
+                          />
+                        )}
+                      </div>
+
+                      {/* Group WA */}
+                      <div className="p-3 rounded-xl bg-white border border-neutral-200">
+                        <label className="font-bold text-neutral-800 block mb-1">
+                          Tautan Grup WhatsApp Peserta (Auto Tampil di Tiket Pendaftaran)
                         </label>
+                        <input
+                          type="url"
+                          placeholder="https://chat.whatsapp.com/..."
+                          value={linkGroupWa}
+                          onChange={(e) => setLinkGroupWa(e.target.value)}
+                          className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 5: PEMBUAT PERTANYAAN KUSTOM (CUSTOM FIELDS BUILDER) */}
+                  <div className="pt-4 border-t border-neutral-100">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
+                          <HelpCircle className="w-3.5 h-3.5" />
+                          <span>4. Pertanyaan Tambahan Khusus Cabang Lomba</span>
+                        </h4>
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Tambahkan pertanyaan kustom bebas: teks singkat, pilihan dropdown, angka, atau link.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={addCustomField}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-brand-primary text-white text-xs font-bold hover:bg-brand-accent transition-colors cursor-pointer shrink-0"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ Tambah Kolom Kustom</span>
+                      </button>
+                    </div>
+
+                    {/* Quick Suggestions for Orang Awam */}
+                    <div className="mb-4 p-3 bg-neutral-50 rounded-2xl border border-neutral-200/80">
+                      <span className="text-[10px] uppercase font-bold text-neutral-400 block mb-1.5">
+                        Pilihan Cepat Pertanyaan Populer (Klik untuk tambah langsung):
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addQuickField({
+                              label: "Program Studi / Jurusan",
+                              type: "text",
+                              placeholder: "Contoh: Pendidikan Agama Islam (PAI)",
+                              help_text: "Tuliskan program studi aktif Anda",
+                            })
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white border border-neutral-200 text-[11px] font-semibold text-neutral-700 hover:border-brand-primary cursor-pointer shadow-2xs"
+                        >
+                          + Program Studi
+                        </button>
 
                         <button
                           type="button"
-                          onClick={() => removeCustomField(idx)}
-                          className="p-1.5 text-neutral-400 hover:text-red-600 transition-colors cursor-pointer"
+                          onClick={() =>
+                            addQuickField({
+                              label: "Semester Saat Ini",
+                              type: "select",
+                              options: ["Semester 1", "Semester 3", "Semester 5", "Semester 7", "Lainnya"],
+                              help_text: "Pilih semester Anda saat ini",
+                            })
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white border border-neutral-200 text-[11px] font-semibold text-neutral-700 hover:border-brand-primary cursor-pointer shadow-2xs"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          + Semester (Dropdown)
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addQuickField({
+                              label: "Ukuran Kaos / Baju",
+                              type: "select",
+                              options: ["S", "M", "L", "XL", "XXL", "XXXL"],
+                              help_text: "Untuk kelengkapan atribut kegiatan",
+                            })
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white border border-neutral-200 text-[11px] font-semibold text-neutral-700 hover:border-brand-primary cursor-pointer shadow-2xs"
+                        >
+                          + Ukuran Kaos (S-XXL)
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addQuickField({
+                              label: "ID & Server Game",
+                              type: "text",
+                              placeholder: "Contoh: 12345678 (2045) - Nickname: Player1",
+                              help_text: "Khusus cabang lomba E-Sport",
+                            })
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white border border-neutral-200 text-[11px] font-semibold text-neutral-700 hover:border-brand-primary cursor-pointer shadow-2xs"
+                        >
+                          + ID &amp; Server Game
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addQuickField({
+                              label: "Judul / Tema Karya",
+                              type: "text",
+                              placeholder: "Masukkan judul karya Anda...",
+                              help_text: "Sesuai dengan petunjuk teknis",
+                            })
+                          }
+                          className="px-2.5 py-1 rounded-lg bg-white border border-neutral-200 text-[11px] font-semibold text-neutral-700 hover:border-brand-primary cursor-pointer shadow-2xs"
+                        >
+                          + Judul Karya
                         </button>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </div>
 
-              {/* Modal Footer Actions */}
-              <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2.5">
+                    {/* Custom Question Cards */}
+                    {customFields.length === 0 ? (
+                      <p className="text-xs text-neutral-400 italic bg-neutral-50 p-4 rounded-xl border border-dashed border-neutral-200 text-center">
+                        Belum ada pertanyaan tambahan khusus. Anda dapat menambahkan pertanyaan seperti ID Game, Semester, atau Ukuran Kaos di atas.
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {customFields.map((field, idx) => (
+                          <div
+                            key={field.id || idx}
+                            className="p-4 bg-white border border-neutral-200 rounded-2xl shadow-2xs space-y-3 text-xs"
+                          >
+                            <div className="flex items-center justify-between gap-2 border-b border-neutral-100 pb-2">
+                              <span className="font-bold text-neutral-500 text-[11px]">
+                                Pertanyaan #{idx + 1}
+                              </span>
+
+                              <div className="flex items-center gap-3">
+                                <label className="flex items-center gap-1 text-[11px] font-semibold text-neutral-700 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={field.required}
+                                    onChange={(e) => updateCustomField(idx, { required: e.target.checked })}
+                                    className="w-3.5 h-3.5 rounded text-brand-primary accent-brand-primary"
+                                  />
+                                  <span>Wajib Diisi</span>
+                                </label>
+
+                                <button
+                                  type="button"
+                                  onClick={() => removeCustomField(idx)}
+                                  className="p-1 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                                  title="Hapus Pertanyaan Ini"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                              <div className="sm:col-span-2">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase block mb-1">
+                                  Label Pertanyaan
+                                </label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="Contoh: ID Game & Server Kapten"
+                                  value={field.label}
+                                  onChange={(e) => updateCustomField(idx, { label: e.target.value })}
+                                  className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase block mb-1">
+                                  Tipe Input
+                                </label>
+                                <select
+                                  value={field.type}
+                                  onChange={(e) => updateCustomField(idx, { type: e.target.value as any })}
+                                  className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs bg-white focus:outline-none"
+                                >
+                                  <option value="text">Teks Singkat</option>
+                                  <option value="textarea">Paragraf / Uraian</option>
+                                  <option value="select">Dropdown Pilihan</option>
+                                  <option value="number">Angka / Nominal</option>
+                                  <option value="link">Tautan Link URL</option>
+                                </select>
+                              </div>
+
+                              <div className="sm:col-span-2">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase block mb-1">
+                                  Placeholder (Teks Petunjuk Pengisian)
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="Contoh: Masukkan jawaban Anda..."
+                                  value={field.placeholder || ""}
+                                  onChange={(e) => updateCustomField(idx, { placeholder: e.target.value })}
+                                  className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase block mb-1">
+                                  Teks Bantuan (Kecil di Bawah)
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="Opsional, misal: Khusus kategori A"
+                                  value={field.help_text || ""}
+                                  onChange={(e) => updateCustomField(idx, { help_text: e.target.value })}
+                                  className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs focus:outline-none"
+                                />
+                              </div>
+
+                              {/* Jika Tipe Dropdown (Select): Input Opsi */}
+                              {field.type === "select" && (
+                                <div className="sm:col-span-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200/80">
+                                  <label className="text-[11px] font-bold text-neutral-800 block mb-0.5">
+                                    Daftar Opsi Pilihan (Pisahkan dengan Koma)
+                                  </label>
+                                  <p className="text-[10px] text-neutral-500 mb-1.5">
+                                    Contoh: <code className="text-brand-primary">Kategori A, Kategori B, Kategori C</code> atau <code className="text-brand-primary">S, M, L, XL, XXL</code>
+                                  </p>
+                                  <input
+                                    type="text"
+                                    placeholder="Opsi 1, Opsi 2, Opsi 3..."
+                                    value={(field.options || []).join(", ")}
+                                    onChange={(e) =>
+                                      updateCustomField(idx, {
+                                        options: e.target.value
+                                          .split(",")
+                                          .map((s) => s.trim())
+                                          .filter((s) => s.length > 0),
+                                      })
+                                    }
+                                    className="w-full px-3 py-1.5 rounded-lg border border-neutral-200 text-xs bg-white focus:outline-none"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </form>
+              ) : (
+                /* ==================== MODE 2: LIVE PREVIEW INTERAKTIF ==================== */
+                <div className="p-6 bg-neutral-100/70 min-h-[500px]">
+                  <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200 space-y-6">
+                    <div className="text-center pb-4 border-b border-neutral-100">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-primary/10 text-brand-primary">
+                        {kategori}
+                      </span>
+                      <h2 className="text-xl font-extrabold text-neutral-900 mt-2 font-poppins">
+                        {namaLomba || "[Nama Cabang Lomba]"}
+                      </h2>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        Biaya: <span className="font-bold text-brand-primary">{biayaRegistrasi}</span> &bull; Tipe:{" "}
+                        <span className="capitalize font-semibold">{tipePeserta}</span>
+                      </p>
+                    </div>
+
+                    {/* Pratinjau Identitas */}
+                    <div className="space-y-3 text-xs">
+                      <span className="text-[10px] uppercase font-bold text-neutral-400 block">
+                        Bagian 1: Identitas Peserta
+                      </span>
+                      <div>
+                        <label className="font-semibold text-neutral-700 block mb-1">
+                          {labelNama} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          disabled
+                          placeholder="Masukkan nama lengkap..."
+                          className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                        />
+                      </div>
+
+                      {enableNim && (
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">
+                            {labelNim} <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            disabled
+                            placeholder="Contoh: 220101030012"
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                      )}
+
+                      {enableInstansi && (
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">
+                            {labelInstansi} <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            disabled
+                            placeholder="UIN Antasari Banjarmasin"
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">Email Aktif</label>
+                          <input
+                            disabled
+                            placeholder="nama@student.uin-antasari.ac.id"
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">WhatsApp</label>
+                          <input
+                            disabled
+                            placeholder="0812-3456-7890"
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Pratinjau Tim */}
+                    {tipePeserta === "tim" && (
+                      <div className="space-y-3 pt-3 border-t border-neutral-100 text-xs">
+                        <span className="text-[10px] uppercase font-bold text-neutral-400 block">
+                          Bagian 2: Data Beregu / Tim
+                        </span>
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">
+                            {labelNamaTim} <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            disabled
+                            placeholder="Nama squad..."
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-semibold text-neutral-700 block mb-1">
+                            {labelAnggotaTim} (Maks {maxAnggotaTim} Orang) <span className="text-red-500">*</span>
+                          </label>
+                          <textarea
+                            disabled
+                            rows={2}
+                            placeholder="1. Kapten&#10;2. Anggota..."
+                            className="w-full px-3 py-1.5 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Pratinjau Pertanyaan Kustom */}
+                    {customFields.length > 0 && (
+                      <div className="space-y-3 pt-3 border-t border-neutral-100 text-xs">
+                        <span className="text-[10px] uppercase font-bold text-neutral-400 block">
+                          Bagian 3: Pertanyaan Khusus
+                        </span>
+                        {customFields.map((f, i) => (
+                          <div key={i}>
+                            <label className="font-semibold text-neutral-700 block mb-1">
+                              {f.label || `[Pertanyaan #${i + 1}]`} {f.required && <span className="text-red-500">*</span>}
+                            </label>
+                            {f.type === "select" ? (
+                              <select disabled className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50">
+                                <option>-- Pilih {(f.options || []).length} Pilihan Tersedia --</option>
+                              </select>
+                            ) : (
+                              <input
+                                disabled
+                                placeholder={f.placeholder || "Jawaban..."}
+                                className="w-full px-3 py-2 rounded-xl border border-neutral-200 text-xs bg-neutral-50"
+                              />
+                            )}
+                            {f.help_text && <span className="text-[10px] text-neutral-400 block mt-0.5">{f.help_text}</span>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Pratinjau Berkas */}
+                    <div className="space-y-2 pt-3 border-t border-neutral-100 text-xs">
+                      <span className="text-[10px] uppercase font-bold text-neutral-400 block mb-1">
+                        Persyaratan Berkas Upload
+                      </span>
+                      {requireKtm && (
+                        <div className="p-2.5 rounded-xl bg-neutral-50 border border-neutral-200 flex items-center justify-between text-[11px]">
+                          <span>Upload {labelKtm}</span>
+                          <span className="text-[10px] font-bold text-brand-primary">Wajib</span>
+                        </div>
+                      )}
+                      {requireBuktiFollow && (
+                        <div className="p-2.5 rounded-xl bg-neutral-50 border border-neutral-200 flex items-center justify-between text-[11px]">
+                          <span>Upload {labelBuktiFollow}</span>
+                          <span className="text-[10px] font-bold text-brand-primary">Wajib</span>
+                        </div>
+                      )}
+                      {requireBuktiTransfer && (
+                        <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between text-[11px] text-amber-900">
+                          <span>Upload {labelBuktiTransfer}</span>
+                          <span className="text-[10px] font-bold text-amber-800">Wajib</span>
+                        </div>
+                      )}
+                      {requireLinkKarya && (
+                        <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between text-[11px] text-blue-900">
+                          <span>{labelLinkKarya}</span>
+                          <span className="text-[10px] font-bold text-blue-800">Wajib Link</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Bottom Footer */}
+            <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-100 flex items-center justify-between">
+              {/* Toggle Preview Button for Mobile */}
+              <button
+                type="button"
+                onClick={() => setModalMode((prev) => (prev === "builder" ? "preview" : "builder"))}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-brand-primary cursor-pointer"
+              >
+                {modalMode === "builder" ? (
+                  <>
+                    <Eye className="w-4 h-4" />
+                    <span>Lihat Pratinjau Tampilan Peserta</span>
+                  </>
+                ) : (
+                  <>
+                    <Settings2 className="w-4 h-4" />
+                    <span>Kembali ke Editor Pengaturan</span>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-neutral-200 text-xs font-semibold text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-neutral-200 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
+                  form="form-maker-builder"
                   disabled={isSaving}
-                  className="px-5 py-2 rounded-xl bg-brand-primary hover:bg-brand-accent text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-brand-primary hover:bg-brand-accent text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-50 active:scale-95"
                 >
                   {isSaving ? (
                     <>
@@ -1431,12 +2054,12 @@ export default function AdminFestivalAntasariPage() {
                   ) : (
                     <>
                       <Check className="w-4 h-4" />
-                      <span>{editingLombaId ? "Simpan Perubahan" : "Terbitkan Form Lomba"}</span>
+                      <span>{editingLombaId ? "Simpan Perubahan Form" : "Terbitkan Form Lomba"}</span>
                     </>
                   )}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
@@ -1534,7 +2157,7 @@ export default function AdminFestivalAntasariPage() {
                 <div className="flex items-center gap-1.5 mb-3 border-b border-neutral-100 pb-2">
                   <button
                     onClick={() => setActiveProofTab("ktm")}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       activeProofTab === "ktm"
                         ? "bg-brand-primary text-white"
                         : "bg-neutral-100 text-neutral-600"
@@ -1544,7 +2167,7 @@ export default function AdminFestivalAntasariPage() {
                   </button>
                   <button
                     onClick={() => setActiveProofTab("bayar")}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       activeProofTab === "bayar"
                         ? "bg-brand-primary text-white"
                         : "bg-neutral-100 text-neutral-600"
@@ -1554,7 +2177,7 @@ export default function AdminFestivalAntasariPage() {
                   </button>
                   <button
                     onClick={() => setActiveProofTab("follow")}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       activeProofTab === "follow"
                         ? "bg-brand-primary text-white"
                         : "bg-neutral-100 text-neutral-600"

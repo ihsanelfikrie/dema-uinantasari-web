@@ -66,12 +66,16 @@ export async function POST(request: Request) {
       custom_answers = {};
     }
 
-    if (!nama_ketua || !nim_ketua || !email || !whatsapp || !instansi) {
+    if (!nama_ketua || !whatsapp) {
       return NextResponse.json(
-        { error: "Nama, NIM, Email, WhatsApp, dan Instansi/Fakultas wajib diisi." },
+        { error: "Nama dan nomor WhatsApp wajib diisi." },
         { status: 400 }
       );
     }
+
+    const finalNim = nim_ketua.trim() || "-";
+    const finalInstansi = instansi.trim() || "UIN Antasari Banjarmasin";
+    const finalEmail = email.trim() || `${nama_ketua.toLowerCase().replace(/[^a-z0-9]/g, "")}@peserta.festival`;
 
     // Find the corresponding competition to fetch WhatsApp group link and configs
     const lombaInfo = festivalStore.getLombaBySlugOrId(lomba_slug || lomba_id);
@@ -142,10 +146,10 @@ export async function POST(request: Request) {
       lomba_nama: lomba_nama || lombaInfo?.nama_lomba || "Festival Antasari 2026",
       kode_pendaftaran,
       nama_ketua: nama_ketua.trim(),
-      nim_ketua: cleanNim,
-      email: email.trim(),
+      nim_ketua: finalNim,
+      email: finalEmail,
       whatsapp: whatsapp.trim(),
-      instansi: instansi.trim(),
+      instansi: finalInstansi,
       nama_tim: nama_tim ? nama_tim.trim() : null,
       anggota_tim: anggota_tim ? anggota_tim.trim() : null,
       file_ktm_url,

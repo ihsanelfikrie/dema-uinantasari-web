@@ -307,6 +307,24 @@ CREATE TABLE IF NOT EXISTS festival_lomba (
     link_juknis TEXT,
     kontak_pj TEXT,
     status TEXT NOT NULL DEFAULT 'open', -- 'open' | 'closed' | 'upcoming'
+    -- form_config JSONB: Pengaturan fleksibel & kustomisasi formulir pendaftaran:
+    -- {
+    --   "label_nama": "Nama Lengkap Peserta",
+    --   "enable_nim": true, "label_nim": "NIM Mahasiswa",
+    --   "enable_instansi": true, "label_instansi": "Asal Kampus / Sekolah",
+    --   "enable_email": true, "enable_whatsapp": true,
+    --   "label_nama_tim": "Nama Tim / Squad", "label_anggota_tim": "Daftar Anggota Tim", "max_anggota_tim": 5,
+    --   "require_ktm": true, "label_ktm": "Unggah KTM",
+    --   "require_bukti_transfer": false, "label_bukti_transfer": "Bukti Pembayaran",
+    --   "require_bukti_follow": true, "label_bukti_follow": "Screenshot Follow IG",
+    --   "require_link_karya": false, "label_link_karya": "Link Karya Drive",
+    --   "catatan_pembayaran": "Transfer BCA a.n DEMA", "nomor_rekening": "1234567890",
+    --   "link_group_wa": "https://chat.whatsapp.com/...", "pesan_sukses": "Terima kasih telah mendaftar!",
+    --   "custom_fields": [
+    --     {"id":"prodi","label":"Program Studi","type":"text","required":true,"placeholder":"Contoh: PAI"},
+    --     {"id":"kaos","label":"Ukuran Baju Kaos","type":"select","options":["S","M","L","XL","XXL"],"required":true}
+    --   ]
+    -- }
     form_config JSONB DEFAULT '{"require_ktm":true,"require_bukti_transfer":false,"require_bukti_follow":true,"require_link_karya":false}'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

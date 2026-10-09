@@ -45,22 +45,47 @@ export interface Sambat {
 export interface FormCustomField {
   id: string;
   label: string;
-  type: "text" | "textarea" | "select" | "link" | "number";
+  type: "text" | "textarea" | "select" | "link" | "number" | "file";
   required: boolean;
   placeholder?: string;
   options?: string[];
+  help_text?: string;
 }
 
 export interface FormConfig {
+  // Pengaturan Label & Keaktifan Kolom Identitas Standar
+  label_nama?: string;
+  enable_nim?: boolean;
+  label_nim?: string;
+  enable_instansi?: boolean;
+  label_instansi?: string;
+  enable_email?: boolean;
+  enable_whatsapp?: boolean;
+
+  // Pengaturan Kolom Tim / Beregu
+  label_nama_tim?: string;
+  label_anggota_tim?: string;
+  max_anggota_tim?: number;
+
+  // Pengaturan Berkas Persyaratan
   require_ktm: boolean;
+  label_ktm?: string;
   require_bukti_transfer: boolean;
+  label_bukti_transfer?: string;
   require_bukti_follow: boolean;
+  label_bukti_follow?: string;
   require_link_karya: boolean;
   label_link_karya?: string;
-  max_anggota_tim?: number;
+
+  // Catatan Pembayaran & Rekening
   catatan_pembayaran?: string;
   nomor_rekening?: string;
+
+  // Pasca Pendaftaran
   link_group_wa?: string;
+  pesan_sukses?: string;
+
+  // Kolom Pertanyaan Kustom
   custom_fields?: FormCustomField[];
 }
 

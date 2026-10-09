@@ -115,10 +115,10 @@ export default function DynamicDaftarLombaPage({
       formData.append("lomba_slug", lomba.slug);
       formData.append("lomba_nama", lomba.nama_lomba);
       formData.append("nama_ketua", namaKetua.trim());
-      formData.append("nim_ketua", nimKetua.trim());
-      formData.append("email", email.trim());
-      formData.append("whatsapp", whatsapp.trim());
-      formData.append("instansi", instansi.trim());
+      formData.append("nim_ketua", (cfg.enable_nim !== false ? nimKetua : "-").trim());
+      formData.append("email", (cfg.enable_email !== false ? email : "peserta@festivalantasari.id").trim());
+      formData.append("whatsapp", (cfg.enable_whatsapp !== false ? whatsapp : "-").trim());
+      formData.append("instansi", (cfg.enable_instansi !== false ? instansi : "Umum").trim());
 
       if (lomba.tipe_peserta === "tim") {
         formData.append("nama_tim", namaTim.trim());
@@ -192,6 +192,14 @@ export default function DynamicDaftarLombaPage({
 
   const cfg = lomba.form_config || {};
 
+  // Step indices
+  let stepIndex = 1;
+  const step1 = stepIndex++;
+  const stepTim = lomba.tipe_peserta === "tim" ? stepIndex++ : null;
+  const stepCustom = cfg.custom_fields && cfg.custom_fields.length > 0 ? stepIndex++ : null;
+  const hasFiles = cfg.require_ktm || cfg.require_bukti_follow || cfg.require_bukti_transfer || cfg.require_link_karya;
+  const stepFiles = hasFiles ? stepIndex++ : null;
+
   // ==================== TAMPILAN BERHASIL (DIGITAL TICKET) ====================
   if (registrationSuccess) {
     return (
@@ -209,7 +217,7 @@ export default function DynamicDaftarLombaPage({
               </span>
               <h2 className="text-xl sm:text-2xl font-black">Pendaftaran Berhasil Dikirim!</h2>
               <p className="text-xs sm:text-sm text-white/90 mt-1 max-w-md mx-auto">
-                Berkas formulir Anda telah tersimpan dan masuk antrean verifikasi panitia.
+                {cfg.pesan_sukses || "Berkas formulir Anda telah tersimpan dan masuk antrean verifikasi panitia."}
               </p>
             </div>
 
@@ -248,17 +256,33 @@ export default function DynamicDaftarLombaPage({
                   <span className="font-bold text-neutral-900">{lomba.nama_lomba}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-neutral-400 block">Nama Peserta / Tim</span>
+                  <span className="text-[10px] text-neutral-400 block">
+                    {cfg.label_nama || (lomba.tipe_peserta === "tim" ? "Nama Tim / Ketua" : "Nama Peserta")}
+                  </span>
                   <span className="font-bold text-neutral-900">
                     {namaTim ? `${namaTim} (${namaKetua})` : namaKetua}
                   </span>
                 </div>
-                <div>
-                  <span className="text-[10px] text-neutral-400 block">NIM &bull; Instansi</span>
-                  <span className="font-semibold text-neutral-700">
-                    {nimKetua} &bull; {instansi}
-                  </span>
-                </div>
+                {(cfg.enable_nim !== false || cfg.enable_instansi !== false) && (
+                  <div>
+                    <span className="text-[10px] text-neutral-400 block">
+                      {[
+                        cfg.enable_nim !== false ? (cfg.label_nim || "NIM") : null,
+                        cfg.enable_instansi !== false ? (cfg.label_instansi || "Instansi") : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" • ")}
+                    </span>
+                    <span className="font-semibold text-neutral-700">
+                      {[
+                        cfg.enable_nim !== false ? nimKetua : null,
+                        cfg.enable_instansi !== false ? instansi : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" • ")}
+                    </span>
+                  </div>
+                )}
                 <div>
                   <span className="text-[10px] text-neutral-400 block">Waktu Pendaftaran</span>
                   <span className="font-semibold text-neutral-700">
@@ -397,7 +421,7 @@ export default function DynamicDaftarLombaPage({
           <div>
             <div className="flex items-center gap-2 mb-4 pb-2 border-b border-neutral-100">
               <div className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
-                1
+                {step1}
               </div>
               <h3 className="text-sm font-bold text-neutral-900">
                 Identitas {lomba.tipe_peserta === "tim" ? "Ketua Tim" : "Peserta"}
@@ -407,7 +431,8 @@ export default function DynamicDaftarLombaPage({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="sm:col-span-2">
                 <label className="font-semibold text-neutral-700 block mb-1">
-                  Nama Lengkap <span className="text-red-500">*</span>
+                  {cfg.label_nama || (lomba.tipe_peserta === "tim" ? "Nama Lengkap Ketua Tim" : "Nama Lengkap")}{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -419,61 +444,69 @@ export default function DynamicDaftarLombaPage({
                 />
               </div>
 
-              <div>
-                <label className="font-semibold text-neutral-700 block mb-1">
-                  NIM (Nomor Induk Mahasiswa) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: 220101030012"
-                  value={nimKetua}
-                  onChange={(e) => setNimKetua(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                />
-              </div>
+              {cfg.enable_nim !== false && (
+                <div>
+                  <label className="font-semibold text-neutral-700 block mb-1">
+                    {cfg.label_nim || "NIM (Nomor Induk Mahasiswa)"} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: 220101030012"
+                    value={nimKetua}
+                    onChange={(e) => setNimKetua(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                  />
+                </div>
+              )}
 
-              <div>
-                <label className="font-semibold text-neutral-700 block mb-1">
-                  Instansi / Fakultas / Kampus <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: UIN Antasari Banjarmasin"
-                  value={instansi}
-                  onChange={(e) => setInstansi(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                />
-              </div>
+              {cfg.enable_instansi !== false && (
+                <div className={cfg.enable_nim === false ? "sm:col-span-2" : ""}>
+                  <label className="font-semibold text-neutral-700 block mb-1">
+                    {cfg.label_instansi || "Instansi / Fakultas / Kampus"} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: UIN Antasari Banjarmasin"
+                    value={instansi}
+                    onChange={(e) => setInstansi(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                  />
+                </div>
+              )}
 
-              <div>
-                <label className="font-semibold text-neutral-700 block mb-1">
-                  Alamat Email Aktif <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="nama@student.uin-antasari.ac.id"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                />
-              </div>
+              {cfg.enable_email !== false && (
+                <div className={cfg.enable_nim === false && cfg.enable_instansi === false ? "sm:col-span-2" : ""}>
+                  <label className="font-semibold text-neutral-700 block mb-1">
+                    Alamat Email Aktif <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="nama@student.uin-antasari.ac.id"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                  />
+                </div>
+              )}
 
-              <div>
-                <label className="font-semibold text-neutral-700 block mb-1">
-                  Nomor WhatsApp Aktif <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="0812-3456-7890"
-                  value={whatsapp}
-                  onChange={(e) => setWhatsapp(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
-                />
-              </div>
+              {cfg.enable_whatsapp !== false && (
+                <div className={cfg.enable_email === false ? "sm:col-span-2" : ""}>
+                  <label className="font-semibold text-neutral-700 block mb-1">
+                    Nomor WhatsApp Aktif <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="0812-3456-7890"
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary font-medium"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -482,7 +515,7 @@ export default function DynamicDaftarLombaPage({
             <div>
               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-neutral-100">
                 <div className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
-                  2
+                  {stepTim}
                 </div>
                 <h3 className="text-sm font-bold text-neutral-900">
                   Data Tim &amp; Rincian Anggota
@@ -492,7 +525,7 @@ export default function DynamicDaftarLombaPage({
               <div className="space-y-4 text-xs">
                 <div>
                   <label className="font-semibold text-neutral-700 block mb-1">
-                    Nama Tim / Squad <span className="text-red-500">*</span>
+                    {cfg.label_nama_tim || "Nama Tim / Squad"} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -506,7 +539,7 @@ export default function DynamicDaftarLombaPage({
 
                 <div>
                   <label className="font-semibold text-neutral-700 block mb-1">
-                    Daftar Nama &amp; NIM Anggota Tim (Maksimal {cfg.max_anggota_tim || 5} Orang){" "}
+                    {cfg.label_anggota_tim || `Daftar Nama & NIM Anggota Tim (Maksimal ${cfg.max_anggota_tim || 5} Orang)`}{" "}
                     <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -527,19 +560,24 @@ export default function DynamicDaftarLombaPage({
             <div>
               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-neutral-100">
                 <div className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
-                  {lomba.tipe_peserta === "tim" ? "3" : "2"}
+                  {stepCustom}
                 </div>
                 <h3 className="text-sm font-bold text-neutral-900">
                   Kuesioner Khusus Cabang Lomba
                 </h3>
               </div>
 
-              <div className="space-y-3.5 text-xs">
+              <div className="space-y-4 text-xs">
                 {cfg.custom_fields.map((field) => (
-                  <div key={field.id}>
-                    <label className="font-semibold text-neutral-700 block mb-1">
+                  <div key={field.id} className="bg-neutral-50/60 p-3.5 rounded-2xl border border-neutral-100">
+                    <label className="font-semibold text-neutral-800 block mb-1">
                       {field.label} {field.required && <span className="text-red-500">*</span>}
                     </label>
+                    {field.help_text && (
+                      <p className="text-[11px] text-neutral-500 mb-2 leading-relaxed">
+                        {field.help_text}
+                      </p>
+                    )}
 
                     {field.type === "textarea" ? (
                       <textarea
@@ -548,9 +586,9 @@ export default function DynamicDaftarLombaPage({
                         placeholder={field.placeholder || "Masukkan jawaban Anda..."}
                         value={customAnswers[field.id] || ""}
                         onChange={(e) => handleCustomChange(field.id, e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                        className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 bg-white text-xs focus:outline-none focus:border-brand-primary"
                       />
-                    ) : field.type === "select" && field.options ? (
+                    ) : field.type === "select" && field.options && field.options.length > 0 ? (
                       <select
                         required={field.required}
                         value={customAnswers[field.id] || ""}
@@ -564,6 +602,15 @@ export default function DynamicDaftarLombaPage({
                           </option>
                         ))}
                       </select>
+                    ) : field.type === "link" ? (
+                      <input
+                        type="url"
+                        required={field.required}
+                        placeholder={field.placeholder || "https://..."}
+                        value={customAnswers[field.id] || ""}
+                        onChange={(e) => handleCustomChange(field.id, e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 bg-white text-xs focus:outline-none focus:border-brand-primary"
+                      />
                     ) : (
                       <input
                         type={field.type === "number" ? "number" : "text"}
@@ -571,7 +618,7 @@ export default function DynamicDaftarLombaPage({
                         placeholder={field.placeholder || "Masukkan jawaban Anda..."}
                         value={customAnswers[field.id] || ""}
                         onChange={(e) => handleCustomChange(field.id, e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-xs focus:outline-none focus:border-brand-primary"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 bg-white text-xs focus:outline-none focus:border-brand-primary"
                       />
                     )}
                   </div>
@@ -581,111 +628,111 @@ export default function DynamicDaftarLombaPage({
           )}
 
           {/* SECTION 4: UNGGAH BERKAS PERSYARATAN */}
-          <div>
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-neutral-100">
-              <div className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
-                {lomba.tipe_peserta === "tim"
-                  ? (cfg.custom_fields?.length ? "4" : "3")
-                  : (cfg.custom_fields?.length ? "3" : "2")}
+          {hasFiles && (
+            <div>
+              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-neutral-100">
+                <div className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center">
+                  {stepFiles}
+                </div>
+                <h3 className="text-sm font-bold text-neutral-900">
+                  Unggah Berkas Persyaratan Administratif
+                </h3>
               </div>
-              <h3 className="text-sm font-bold text-neutral-900">
-                Unggah Berkas Persyaratan Administratif
-              </h3>
-            </div>
 
-            <div className="space-y-4 text-xs">
-              {/* Berkas KTM */}
-              {cfg.require_ktm && (
-                <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
-                  <label className="font-bold text-neutral-800 block mb-1">
-                    Unggah Kartu Tanda Mahasiswa (KTM) <span className="text-red-500">*</span>
-                  </label>
-                  <p className="text-[11px] text-neutral-500 mb-2.5">
-                    Format gambar (JPG, PNG) atau PDF. Pastikan foto dan nama/NIM terlihat jelas.
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    required
-                    onChange={(e) => setKtmFile(e.target.files?.[0] || null)}
-                    className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-neutral-200 file:text-neutral-800 hover:file:bg-neutral-300 file:cursor-pointer cursor-pointer"
-                  />
-                </div>
-              )}
+              <div className="space-y-4 text-xs">
+                {/* Berkas KTM */}
+                {cfg.require_ktm && (
+                  <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
+                    <label className="font-bold text-neutral-800 block mb-1">
+                      {cfg.label_ktm || "Unggah Kartu Tanda Mahasiswa (KTM)"} <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-[11px] text-neutral-500 mb-2.5">
+                      Format gambar (JPG, PNG) atau PDF. Pastikan foto dan nama/NIM terlihat jelas.
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*,.pdf"
+                      required
+                      onChange={(e) => setKtmFile(e.target.files?.[0] || null)}
+                      className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-neutral-200 file:text-neutral-800 hover:file:bg-neutral-300 file:cursor-pointer cursor-pointer"
+                    />
+                  </div>
+                )}
 
-              {/* Bukti Follow Sosmed */}
-              {cfg.require_bukti_follow && (
-                <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
-                  <label className="font-bold text-neutral-800 block mb-1">
-                    Bukti Follow Instagram @dema.uin.antasari <span className="text-red-500">*</span>
-                  </label>
-                  <p className="text-[11px] text-neutral-500 mb-2.5">
-                    Unggah tangkapan layar (screenshot) bukti telah mengikuti akun Instagram resmi DEMA UIN Antasari.
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    required
-                    onChange={(e) => setFollowFile(e.target.files?.[0] || null)}
-                    className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-neutral-200 file:text-neutral-800 hover:file:bg-neutral-300 file:cursor-pointer cursor-pointer"
-                  />
-                </div>
-              )}
+                {/* Bukti Follow Sosmed */}
+                {cfg.require_bukti_follow && (
+                  <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
+                    <label className="font-bold text-neutral-800 block mb-1">
+                      {cfg.label_bukti_follow || "Bukti Follow Instagram @dema.uin.antasari"} <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-[11px] text-neutral-500 mb-2.5">
+                      Unggah tangkapan layar (screenshot) bukti telah mengikuti akun Instagram resmi panitia / DEMA UIN Antasari.
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      required
+                      onChange={(e) => setFollowFile(e.target.files?.[0] || null)}
+                      className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-neutral-200 file:text-neutral-800 hover:file:bg-neutral-300 file:cursor-pointer cursor-pointer"
+                    />
+                  </div>
+                )}
 
-              {/* Bukti Bayar */}
-              {cfg.require_bukti_transfer && (
-                <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
-                  <label className="font-bold text-amber-950 block mb-1">
-                    Bukti Pembayaran Registrasi ({lomba.biaya_registrasi}){" "}
-                    <span className="text-red-500">*</span>
-                  </label>
-                  {cfg.nomor_rekening && (
-                    <div className="p-2.5 rounded-xl bg-white border border-amber-200 text-xs mb-2">
-                      <span className="text-[10px] uppercase font-bold text-amber-800 block">
-                        Tujuan Transfer Panitia:
-                      </span>
-                      <span className="font-mono font-bold text-neutral-900 block mt-0.5">
-                        {cfg.nomor_rekening}
-                      </span>
-                      {cfg.catatan_pembayaran && (
-                        <span className="text-[11px] text-amber-700 block mt-1">
-                          Catatan: {cfg.catatan_pembayaran}
+                {/* Bukti Bayar */}
+                {cfg.require_bukti_transfer && (
+                  <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
+                    <label className="font-bold text-amber-950 block mb-1">
+                      {cfg.label_bukti_transfer || `Bukti Pembayaran Registrasi (${lomba.biaya_registrasi})`}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    {cfg.nomor_rekening && (
+                      <div className="p-2.5 rounded-xl bg-white border border-amber-200 text-xs mb-2">
+                        <span className="text-[10px] uppercase font-bold text-amber-800 block">
+                          Tujuan Transfer Panitia:
                         </span>
-                      )}
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    required
-                    onChange={(e) => setBayarFile(e.target.files?.[0] || null)}
-                    className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-200 file:text-amber-900 hover:file:bg-amber-300 file:cursor-pointer cursor-pointer"
-                  />
-                </div>
-              )}
+                        <span className="font-mono font-bold text-neutral-900 block mt-0.5">
+                          {cfg.nomor_rekening}
+                        </span>
+                        {cfg.catatan_pembayaran && (
+                          <span className="text-[11px] text-amber-700 block mt-1">
+                            Catatan: {cfg.catatan_pembayaran}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*,.pdf"
+                      required
+                      onChange={(e) => setBayarFile(e.target.files?.[0] || null)}
+                      className="w-full text-xs text-neutral-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-200 file:text-amber-900 hover:file:bg-amber-300 file:cursor-pointer cursor-pointer"
+                    />
+                  </div>
+                )}
 
-              {/* Link Karya Google Drive */}
-              {cfg.require_link_karya && (
-                <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200">
-                  <label className="font-bold text-blue-950 block mb-1">
-                    {cfg.label_link_karya || "Tautan Berkas Karya (Google Drive)"}{" "}
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <p className="text-[11px] text-blue-700 mb-2">
-                    Pastikan tautan Google Drive telah diatur izin aksesnya menjadi &quot;Siapa saja yang memiliki link dapat melihat (Viewer)&quot;.
-                  </p>
-                  <input
-                    type="url"
-                    required
-                    placeholder="https://drive.google.com/file/d/..."
-                    value={linkKarya}
-                    onChange={(e) => setLinkKarya(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-blue-300 text-xs bg-white focus:outline-none focus:border-brand-primary"
-                  />
-                </div>
-              )}
+                {/* Link Karya Google Drive */}
+                {cfg.require_link_karya && (
+                  <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200">
+                    <label className="font-bold text-blue-950 block mb-1">
+                      {cfg.label_link_karya || "Tautan Berkas Karya (Google Drive)"}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-[11px] text-blue-700 mb-2">
+                      Pastikan tautan Google Drive telah diatur izin aksesnya menjadi &quot;Siapa saja yang memiliki link dapat melihat (Viewer)&quot;.
+                    </p>
+                    <input
+                      type="url"
+                      required
+                      placeholder="https://drive.google.com/file/d/..."
+                      value={linkKarya}
+                      onChange={(e) => setLinkKarya(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-blue-300 text-xs bg-white focus:outline-none focus:border-brand-primary"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* SECTION: PERNYATAAN & SUBMIT */}
           <div className="pt-4 border-t border-neutral-100 space-y-4">
