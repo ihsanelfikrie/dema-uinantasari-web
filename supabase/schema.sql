@@ -291,6 +291,88 @@ DROP POLICY IF EXISTS "Izinkan hapus materi" ON storage.objects;
 CREATE POLICY "Izinkan hapus materi" ON storage.objects
     FOR DELETE USING (bucket_id = 'event-materi');
 
+-- 11. festival_lomba: Form Maker & Pengaturan Cabang Lomba Festival Antasari
+CREATE TABLE IF NOT EXISTS festival_lomba (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama_lomba TEXT NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
+    kategori TEXT NOT NULL DEFAULT 'Seni & Budaya', -- 'Seni & Budaya' | 'Olahraga & E-Sport' | 'Keagamaan' | 'Media & Kreatif' | 'Ilmiah & Debat'
+    tipe_peserta TEXT NOT NULL DEFAULT 'individu', -- 'individu' | 'tim'
+    deskripsi TEXT,
+    persyaratan TEXT,
+    kuota_maksimal INTEGER,
+    biaya_registrasi TEXT DEFAULT 'Gratis',
+    tanggal_buka TIMESTAMP WITH TIME ZONE,
+    tanggal_tutup TIMESTAMP WITH TIME ZONE,
+    link_juknis TEXT,
+    kontak_pj TEXT,
+    status TEXT NOT NULL DEFAULT 'open', -- 'open' | 'closed' | 'upcoming'
+    form_config JSONB DEFAULT '{"require_ktm":true,"require_bukti_transfer":false,"require_bukti_follow":true,"require_link_karya":false}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE festival_lomba ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Akses publik baca festival_lomba" ON festival_lomba;
+CREATE POLICY "Akses publik baca festival_lomba" ON festival_lomba 
+    FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Akses penuh festival_lomba untuk admin" ON festival_lomba;
+CREATE POLICY "Akses penuh festival_lomba untuk admin" ON festival_lomba 
+    FOR ALL USING (true);
+
+-- 12. festival_pendaftar: Data Peserta Pendaftaran Lomba Masuk
+CREATE TABLE IF NOT EXISTS festival_pendaftar (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lomba_id UUID NOT NULL REFERENCES festival_lomba(id) ON DELETE CASCADE,
+    lomba_slug TEXT NOT NULL,
+    kode_pendaftaran TEXT NOT NULL UNIQUE,
+    nama_ketua TEXT NOT NULL,
+    nim_ketua TEXT NOT NULL,
+    email TEXT NOT NULL,
+    whatsapp TEXT NOT NULL,
+    instansi TEXT NOT NULL,
+    nama_tim TEXT,
+    anggota_tim TEXT,
+    file_ktm_url TEXT,
+    file_pembayaran_url TEXT,
+    file_follow_url TEXT,
+    link_karya TEXT,
+    custom_answers JSONB DEFAULT '{}'::jsonb,
+    status TEXT NOT NULL DEFAULT 'pending', -- 'pending' | 'verified' | 'rejected'
+    catatan_admin TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE festival_pendaftar ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Izinkan publik daftar festival" ON festival_pendaftar;
+CREATE POLICY "Izinkan publik daftar festival" ON festival_pendaftar 
+    FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Akses publik cek pendaftaran sendiri" ON festival_pendaftar;
+CREATE POLICY "Akses publik cek pendaftaran sendiri" ON festival_pendaftar 
+    FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Akses penuh festival_pendaftar untuk admin" ON festival_pendaftar;
+CREATE POLICY "Akses penuh festival_pendaftar untuk admin" ON festival_pendaftar 
+    FOR ALL USING (true);
+
+-- Storage bucket untuk bukti festival (KTM, Pembayaran, Follow)
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('festival-berkas', 'festival-berkas', true)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Izinkan publik lihat berkas festival" ON storage.objects;
+CREATE POLICY "Izinkan publik lihat berkas festival" ON storage.objects
+    FOR SELECT USING (bucket_id = 'festival-berkas');
+
+DROP POLICY IF EXISTS "Izinkan upload berkas festival" ON storage.objects;
+CREATE POLICY "Izinkan upload berkas festival" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'festival-berkas');
+
+
 
 
 

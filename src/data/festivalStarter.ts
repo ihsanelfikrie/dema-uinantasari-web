@@ -1,0 +1,298 @@
+import { FestivalLomba } from "@/types";
+
+export const initialFestivalLomba: FestivalLomba[] = [
+  {
+    id: "fl-poster-2026",
+    nama_lomba: "Lomba Desain Poster Digital",
+    slug: "desain-poster",
+    kategori: "Media & Kreatif",
+    tipe_peserta: "individu",
+    deskripsi:
+      "Kompetisi karya visual poster digital bertemakan 'Harmoni Mahasiswa untuk Kemajuan Banua'. Terbuka untuk seluruh mahasiswa aktif se-Kalimantan Selatan.",
+    persyaratan:
+      "1. Mahasiswa aktif perguruan tinggi (dibuktikan dengan KTM).\n2. Karya orisinal, belum pernah dipublikasikan atau diikutsertakan lomba lain.\n3. Ukuran kanvas A3, format JPG/PNG dengan resolusi minimal 300 DPI.\n4. Wajib mengunggah karya ke Google Drive (akses publik/view-only).\n5. Wajib follow akun Instagram @dema.uin.antasari.",
+    kuota_maksimal: 50,
+    biaya_registrasi: "Gratis",
+    tanggal_buka: "2026-10-15T00:00:00Z",
+    tanggal_tutup: "2026-11-10T23:59:59Z",
+    link_juknis: "https://drive.google.com",
+    kontak_pj: "0812-3456-7890 (Kak Sarah)",
+    status: "open",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: false,
+      require_bukti_follow: true,
+      require_link_karya: true,
+      label_link_karya: "Tautan Karya Poster (Google Drive)",
+      link_group_wa: "https://chat.whatsapp.com",
+      custom_fields: [
+        {
+          id: "judul_karya",
+          label: "Judul / Tema Desain Poster",
+          type: "text",
+          required: true,
+          placeholder: "Contoh: Sinergi Muda Menjaga Budaya Banjar",
+        },
+        {
+          id: "deskripsi_singkat_karya",
+          label: "Makna Filosofis Singkat (1-2 Paragraf)",
+          type: "textarea",
+          required: true,
+          placeholder: "Jelaskan pesan visual dan makna elemen desain Anda...",
+        },
+      ],
+    },
+    pendaftar_count: 14,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "fl-esport-2026",
+    nama_lomba: "Turnamen E-Sport Mobile Legends",
+    slug: "mlbb-championship",
+    kategori: "Olahraga & E-Sport",
+    tipe_peserta: "tim",
+    deskripsi:
+      "Ajang unjuk strategi dan kekompakan tim mahasiswa dalam turnamen resmi MLBB Festival Antasari 2026 dengan sistem eliminasi ganda dan live casting.",
+    persyaratan:
+      "1. Satu tim terdiri dari 5 pemain inti dan maksimal 1 pemain cadangan.\n2. Minimal 3 pemain berstatus mahasiswa aktif UIN Antasari.\n3. Dilarang menggunakan cheat, simulator PC, atau kata-kata provokatif berbau SARA.\n4. Biaya registrasi komitmen Rp 35.000 / tim.\n5. Ketua tim wajib bergabung ke grup WhatsApp teknis.",
+    kuota_maksimal: 32,
+    biaya_registrasi: "Rp 35.000 / tim",
+    tanggal_buka: "2026-10-15T00:00:00Z",
+    tanggal_tutup: "2026-11-05T23:59:59Z",
+    link_juknis: "https://drive.google.com",
+    kontak_pj: "0853-9876-5432 (Bang Fikri)",
+    status: "open",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: true,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      max_anggota_tim: 6,
+      nomor_rekening: "BSI: 7123456789 a.n Panitia Festival Antasari",
+      catatan_pembayaran: "Sertakan berita transfer: MLBB - [Nama Tim]",
+      link_group_wa: "https://chat.whatsapp.com",
+      custom_fields: [
+        {
+          id: "id_server_kapten",
+          label: "ID & Server MLBB Kapten Tim",
+          type: "text",
+          required: true,
+          placeholder: "Contoh: 12345678 (2045)",
+        },
+      ],
+    },
+    pendaftar_count: 22,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "fl-mtq-2026",
+    nama_lomba: "Musabaqah Tilawatil Qur'an (MTQ)",
+    slug: "mtq-mahasiswa",
+    kategori: "Keagamaan",
+    tipe_peserta: "individu",
+    deskripsi:
+      "Syiar ayat-ayat suci Al-Qur'an dan penguatan karakter religius mahasiswa melalui seni baca Al-Qur'an dengan lantunan irama indah dan tajwid tepat.",
+    persyaratan:
+      "1. Terbuka untuk seluruh mahasiswa muslim aktif UIN Antasari.\n2. Peserta membawakan maqra' yang telah ditentukan dalam petunjuk teknis.\n3. Durasi penampilan 5-7 menit.\n4. Pendaftaran 100% Bebas Biaya.",
+    kuota_maksimal: 40,
+    biaya_registrasi: "Gratis",
+    tanggal_buka: "2026-10-15T00:00:00Z",
+    tanggal_tutup: "2026-11-12T23:59:59Z",
+    link_juknis: "https://drive.google.com",
+    kontak_pj: "0821-4455-6677 (Ust. Syarif)",
+    status: "open",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: false,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      link_group_wa: "https://chat.whatsapp.com",
+      custom_fields: [
+        {
+          id: "pilihan_maqra",
+          label: "Pilihan Maqra' Surah",
+          type: "select",
+          required: true,
+          options: [
+            "QS. Al-Baqarah: 183-188",
+            "QS. Ali 'Imran: 144-148",
+            "QS. An-Nisa: 1-6",
+            "QS. Al-Isra: 1-9",
+          ],
+        },
+      ],
+    },
+    pendaftar_count: 9,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "fl-vokal-2026",
+    nama_lomba: "Lomba Vokal Solo Akustik",
+    slug: "vokal-solo",
+    kategori: "Seni & Budaya",
+    tipe_peserta: "individu",
+    deskripsi:
+      "Panggung ekspresi musikalitas vokal solo dengan iringan musik akustik. Menampilkan aransemen lagu daerah Banjar atau lagu pop inspiratif.",
+    persyaratan:
+      "1. Mahasiswa aktif perguruan tinggi se-Kalsel.\n2. Menampilkan 1 lagu wajib (Lagu Banjar) dan 1 lagu bebas pilihan.\n3. Alat musik disediakan panitia (gitar akustik/keyboard) atau membawa instrumen sendiri.\n4. Penilaian meliputi vokal, penghayatan, artikulasi, dan penguasaan panggung.",
+    kuota_maksimal: 30,
+    biaya_registrasi: "Rp 20.000 / peserta",
+    tanggal_buka: "2026-10-15T00:00:00Z",
+    tanggal_tutup: "2026-11-08T23:59:59Z",
+    link_juknis: "https://drive.google.com",
+    kontak_pj: "0896-1122-3344 (Kak Nabila)",
+    status: "open",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: true,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      nomor_rekening: "BSI: 7123456789 a.n Panitia Festival Antasari",
+      catatan_pembayaran: "Sertakan berita transfer: VOKAL - [Nama Peserta]",
+      link_group_wa: "https://chat.whatsapp.com",
+      custom_fields: [
+        {
+          id: "lagu_pilihan",
+          label: "Judul Lagu Pilihan Bebas",
+          type: "text",
+          required: true,
+          placeholder: "Contoh: Manusia Kuat - Tulus",
+        },
+      ],
+    },
+    pendaftar_count: 11,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "fl-debat-2026",
+    nama_lomba: "Debat Ilmiah Mahasiswa",
+    slug: "debat-ilmiah",
+    kategori: "Ilmiah & Debat",
+    tipe_peserta: "tim",
+    deskripsi:
+      "Adu argumentasi kritis berbasis data dan etika intelektual mahasiswa dalam merespons isu-isu pendidikan, ekonomi, serta sosial kemasyarakatan terkini.",
+    persyaratan:
+      "1. Tim terdiri dari 3 orang mahasiswa aktif.\n2. Format debat menggunakan sistem Parliamentary British / Asian Style.\n3. Motion akan dirilis saat technical meeting dan 15 menit sebelum babak penyisihan.\n4. Gratis biaya pendaftaran.",
+    kuota_maksimal: 16,
+    biaya_registrasi: "Gratis",
+    tanggal_buka: "2026-10-15T00:00:00Z",
+    tanggal_tutup: "2026-11-06T23:59:59Z",
+    link_juknis: "https://drive.google.com",
+    kontak_pj: "0878-5566-7788 (Kak Ryan)",
+    status: "open",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: false,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      max_anggota_tim: 3,
+      link_group_wa: "https://chat.whatsapp.com",
+      custom_fields: [],
+    },
+    pendaftar_count: 8,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+];
+
+// Presets template 1-klik untuk Form Maker Cepat di Admin
+export const formMakerPresets = [
+  {
+    nama_preset: "Lomba Karya Digital / Media",
+    badge: "Populer",
+    kategori: "Media & Kreatif",
+    tipe_peserta: "individu" as const,
+    biaya_registrasi: "Gratis",
+    deskripsi_template:
+      "Kompetisi karya visual/media digital bertemakan kreativitas pemuda. Peserta mengunggah file portofolio/desain ke Google Drive.",
+    persyaratan_template:
+      "1. Mahasiswa aktif perguruan tinggi (wajib KTM).\n2. Karya orisinal dan belum pernah dilombakan.\n3. Mengunggah file ke Google Drive (view-only).\n4. Wajib follow Instagram resmi @dema.uin.antasari.",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: false,
+      require_bukti_follow: true,
+      require_link_karya: true,
+      label_link_karya: "Tautan Berkas Karya (Google Drive)",
+      custom_fields: [
+        {
+          id: "judul_karya",
+          label: "Judul Karya",
+          type: "text" as const,
+          required: true,
+          placeholder: "Masukkan judul karya Anda...",
+        },
+      ],
+    },
+  },
+  {
+    nama_preset: "Turnamen E-Sport / Olahraga Tim",
+    badge: "Beregu",
+    kategori: "Olahraga & E-Sport",
+    tipe_peserta: "tim" as const,
+    biaya_registrasi: "Rp 35.000 / tim",
+    deskripsi_template:
+      "Turnamen beregu kompetitif antar mahasiswa dengan sistem bracket eliminasi dan hadiah trofi + e-sertifikat.",
+    persyaratan_template:
+      "1. Satu tim terdiri dari 5-6 orang mahasiswa aktif.\n2. Membayar biaya pendaftaran komitmen tim.\n3. Menjunjung tinggi sportivitas dan fairplay.\n4. Ketua tim wajib standby di grup WhatsApp.",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: true,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      max_anggota_tim: 6,
+      nomor_rekening: "BSI: 7123456789 a.n Panitia Festival Antasari",
+      catatan_pembayaran: "Sertakan berita transfer: [Nama Lomba] - [Nama Tim]",
+      custom_fields: [
+        {
+          id: "id_game_kapten",
+          label: "ID & Nickname Kapten Tim",
+          type: "text" as const,
+          required: true,
+          placeholder: "Contoh: Nickname (12345678)",
+        },
+      ],
+    },
+  },
+  {
+    nama_preset: "Lomba Keagamaan & Syiar",
+    badge: "Syiar",
+    kategori: "Keagamaan",
+    tipe_peserta: "individu" as const,
+    biaya_registrasi: "Gratis",
+    deskripsi_template:
+      "Ajang syiar dan pengembangan bakat keagamaan mahasiswa kampus dalam lantunan tilawah, tartil, atau dakwah.",
+    persyaratan_template:
+      "1. Mahasiswa muslim aktif.\n2. Membawakan materi/ayat sesuai juknis.\n3. Durasi tampil 5-7 menit.\n4. Busana muslim rapi dan sopan.",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: false,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      custom_fields: [],
+    },
+  },
+  {
+    nama_preset: "Lomba Seni Panggung & Akustik",
+    badge: "Seni",
+    kategori: "Seni & Budaya",
+    tipe_peserta: "individu" as const,
+    biaya_registrasi: "Rp 20.000 / peserta",
+    deskripsi_template:
+      "Pentas apresiasi seni vokal, tari, atau instrumen musik akustik di panggung Festival Antasari.",
+    persyaratan_template:
+      "1. Mahasiswa aktif perguruan tinggi.\n2. Membawakan 1 lagu daerah dan 1 lagu pilihan.\n3. Mengikuti gladi resik sesuai jadwal panitia.",
+    form_config: {
+      require_ktm: true,
+      require_bukti_transfer: true,
+      require_bukti_follow: true,
+      require_link_karya: false,
+      nomor_rekening: "BSI: 7123456789 a.n Panitia Festival Antasari",
+      catatan_pembayaran: "Kirim bukti transfer ke form pendaftaran",
+      custom_fields: [],
+    },
+  },
+];

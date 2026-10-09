@@ -11,6 +11,7 @@ import {
   Users,
   QrCode,
   ExternalLink,
+  Trophy,
 } from "lucide-react";
 
 export const revalidate = 0; // Always load latest statistics
@@ -121,6 +122,12 @@ export default async function AdminDashboardPage() {
   ];
 
   const quickActions = [
+    {
+      title: "Form Maker Festival",
+      desc: "Bikin & kelola form registrasi cabang lomba",
+      icon: Trophy,
+      href: "/admin/festival-antasari",
+    },
     {
       title: "Scan Presensi QR",
       desc: "Verifikasi tiket dan kehadiran peserta",

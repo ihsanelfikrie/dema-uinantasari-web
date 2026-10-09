@@ -18,7 +18,8 @@ import {
   FolderDown,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  Trophy,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -37,6 +38,7 @@ export default function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Form Festival", href: "/admin/festival-antasari", icon: Trophy, badge: "Lomba" },
     { name: "Peserta Event", href: "/admin/peserta", icon: Users },
     { name: "Scan Presensi QR", href: "/admin/presensi", icon: QrCode, badge: "Live" },
     { name: "Sertifikat Event", href: "/admin/sertifikat", icon: Award },
