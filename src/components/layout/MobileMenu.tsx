@@ -37,7 +37,7 @@ export default function MobileMenu({
       links: [
         { href: "/", label: "Beranda", icon: Home },
         { href: "/event", label: "Event & Program Akbar", icon: Calendar, badge: "Populer" },
-        { href: "/berita", label: "Kabar & Kegiatan", icon: Newspaper },
+        { href: "/berita", label: "Berita", icon: Newspaper },
       ],
     },
     {
