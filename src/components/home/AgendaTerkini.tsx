@@ -1,19 +1,7 @@
-"use client";
-
-import { useRef } from "react";
 import Link from "next/link";
 import { AlertCircle, FileText, HeartHandshake, ArrowRight } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function AgendaTerkini() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
   const portals = [
     {
       id: "p3",
@@ -23,7 +11,7 @@ export default function AgendaTerkini() {
       href: "/layanan/p3",
       icon: AlertCircle,
       highlights: ["100% Rahasia", "Satgas Khusus", "Pendampingan"],
-      badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
+      badgeColor: "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900/50",
       iconColor: "text-brand-primary bg-brand-primary/10",
     },
     {
@@ -34,8 +22,8 @@ export default function AgendaTerkini() {
       href: "/layanan/advokasi",
       icon: HeartHandshake,
       highlights: ["Banding UKT", "Kendala Kuliah", "Fasilitas Kampus"],
-      badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
-      iconColor: "text-amber-700 bg-amber-500/10",
+      badgeColor: "bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50",
+      iconColor: "text-amber-700 dark:text-amber-400 bg-amber-500/10",
     },
     {
       id: "persuratan",
@@ -45,33 +33,13 @@ export default function AgendaTerkini() {
       href: "/layanan/persuratan",
       icon: FileText,
       highlights: ["Rekomendasi DEMA", "Media Partner", "Disposisi Cepat"],
-      badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
-      iconColor: "text-emerald-700 bg-emerald-600/10",
+      badgeColor: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/50",
+      iconColor: "text-emerald-700 dark:text-emerald-400 bg-emerald-600/10",
     },
   ];
 
-  useGSAP(
-    () => {
-      // Animate portals cards staggered on scroll safely with gsap.from
-      gsap.from(".portal-card-item", {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 92%",
-          once: true,
-        },
-      });
-    },
-    { scope: sectionRef }
-  );
-
   return (
     <section
-      ref={sectionRef}
       className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-10 gap-3 sm:gap-4">
@@ -111,7 +79,7 @@ export default function AgendaTerkini() {
             <Link
               key={portal.id}
               href={portal.href}
-              className="portal-card-item group relative bg-white border border-neutral-200/80 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
+              className="portal-card-item group relative bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
             >
               <div>
                 {/* Header Row: Compact on mobile, spacious on desktop */}
@@ -123,7 +91,7 @@ export default function AgendaTerkini() {
                     {/* Mobile Title + Kicker */}
                     <div className="md:hidden min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs sm:text-sm font-bold text-neutral-900 font-poppins group-hover:text-brand-primary transition-colors truncate">
+                        <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-neutral-100 font-poppins group-hover:text-brand-primary transition-colors truncate">
                           {portal.title}
                         </span>
                         <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded-full border ${portal.badgeColor} shrink-0`}>
@@ -143,18 +111,18 @@ export default function AgendaTerkini() {
                   </span>
 
                   {/* Mobile Arrow Circle */}
-                  <div className="md:hidden w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0 shadow-2xs">
+                  <div className="md:hidden w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-background dark:bg-neutral-800 group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0 shadow-2xs">
                     <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </div>
 
                 {/* Desktop Title */}
-                <h3 className="hidden md:block text-base md:text-lg font-bold text-neutral-900 font-poppins mb-1.5 md:mb-2 group-hover:text-brand-primary transition-colors">
+                <h3 className="hidden md:block text-base md:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins mb-1.5 md:mb-2 group-hover:text-brand-primary transition-colors">
                   {portal.title}
                 </h3>
 
                 {/* Description: concise 1-line on phone, 2 on tablet, full on desktop */}
-                <p className="text-[11px] sm:text-xs md:text-sm text-neutral-600 leading-snug md:leading-relaxed font-poppins mb-1.5 sm:mb-2 md:mb-4 line-clamp-1 sm:line-clamp-2 md:line-clamp-none">
+                <p className="text-[11px] sm:text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-snug md:leading-relaxed font-poppins mb-1.5 sm:mb-2 md:mb-4 line-clamp-1 sm:line-clamp-2 md:line-clamp-none">
                   {portal.desc}
                 </p>
 
@@ -163,7 +131,7 @@ export default function AgendaTerkini() {
                   {portal.highlights.map((chip) => (
                     <span
                       key={chip}
-                      className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium bg-neutral-100 text-neutral-600 font-poppins"
+                      className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-poppins"
                     >
                       {chip}
                     </span>
@@ -172,13 +140,13 @@ export default function AgendaTerkini() {
               </div>
 
               {/* Desktop Action Bar */}
-              <div className="hidden md:flex mt-5 md:mt-6 pt-3.5 md:pt-4 border-t border-neutral-100 items-center justify-between">
+              <div className="hidden md:flex mt-5 md:mt-6 pt-3.5 md:pt-4 border-t border-neutral-100 dark:border-neutral-800 items-center justify-between">
                 <span className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors font-poppins min-h-[44px] flex items-center">
                   Akses Layanan
                 </span>
                 <div
                   aria-label={`Akses ${portal.title}`}
-                  className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
+                  className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-brand-background dark:bg-neutral-800 group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
                 >
                   <ArrowRight className="h-4 w-4" />
                 </div>
