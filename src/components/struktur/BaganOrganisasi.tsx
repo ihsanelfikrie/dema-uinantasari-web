@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { bph, kementerianList, Fungsionaris } from "@/data/struktur";
 import { X, ChevronDown } from "lucide-react";
 
@@ -85,6 +85,47 @@ function ArrowDown() {
 // Main component
 export default function BaganOrganisasi() {
   const [selected, setSelected] = useState<Fungsionaris | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollToPosition = (pos: "left" | "center" | "right") => {
+    if (!scrollRef.current) return;
+    const { scrollWidth, clientWidth } = scrollRef.current;
+    if (pos === "left") {
+      scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (pos === "center") {
+      scrollRef.current.scrollTo({
+        left: Math.max(0, (scrollWidth - clientWidth) / 2),
+        behavior: "smooth",
+      });
+    } else {
+      scrollRef.current.scrollTo({
+        left: Math.max(0, scrollWidth - clientWidth),
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const centerDiagram = () => {
+      if (scrollRef.current) {
+        const { scrollWidth, clientWidth } = scrollRef.current;
+        if (scrollWidth > clientWidth) {
+          scrollRef.current.scrollLeft = (scrollWidth - clientWidth) / 2;
+        }
+      }
+    };
+
+    centerDiagram();
+    const timer1 = setTimeout(centerDiagram, 60);
+    const timer2 = setTimeout(centerDiagram, 300);
+
+    window.addEventListener("resize", centerDiagram);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      window.removeEventListener("resize", centerDiagram);
+    };
+  }, []);
 
   const renderLargeAvatar = (fotoUrl?: string, nama?: string) => {
     if (fotoUrl && fotoUrl.trim() !== "") {
@@ -117,20 +158,53 @@ export default function BaganOrganisasi() {
   };
 
   return (
-    <div className="w-full py-8 px-4 bg-white border border-neutral-100 rounded-2xl shadow-sm mb-12 overflow-x-auto">
+    <div className="w-full py-6 sm:py-8 px-3 sm:px-6 bg-white dark:bg-[#140606] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl shadow-sm mb-12">
+      {/* Header - Stays Centered */}
       <div className="text-center mb-6 sm:mb-8">
-        <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins">
+        <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-neutral-100 font-poppins">
           Bagan Hierarki Kabinet
         </h3>
-        <p className="text-xs text-neutral-400 mt-1">
+        <p className="text-xs text-neutral-400 mt-1 font-poppins">
           Klik pada posisi pengurus untuk melihat detail tugas pokok dan fungsi (Tupoksi).
         </p>
-        <div className="sm:hidden mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-[10px] font-semibold text-neutral-500 font-poppins">
-          <span>Geser bagan ke samping untuk melihat struktur penuh &rarr;</span>
+
+        {/* Mobile Quick Alignment Buttons */}
+        <div className="sm:hidden mt-3 flex flex-col items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800/80 text-[10px] font-semibold text-neutral-500 dark:text-neutral-400 font-poppins">
+            <span>Geser bagan atau klik tombol posisi berikut:</span>
+          </div>
+          <div className="flex items-center justify-center gap-1.5 flex-wrap">
+            <button
+              type="button"
+              onClick={() => scrollToPosition("left")}
+              className="px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 text-[10px] font-semibold text-neutral-600 dark:text-neutral-300 transition-all cursor-pointer font-poppins"
+            >
+              &larr; Sisi Kiri
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToPosition("center")}
+              className="px-3.5 py-1 rounded-full bg-brand-primary text-white active:scale-95 text-[10px] font-bold transition-all cursor-pointer font-poppins shadow-xs"
+            >
+              &bull; Pimpinan Inti (Tengah) &bull;
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToPosition("right")}
+              className="px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 text-[10px] font-semibold text-neutral-600 dark:text-neutral-300 transition-all cursor-pointer font-poppins"
+            >
+              Sisi Kanan &rarr;
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="min-w-[900px] mx-auto max-w-6xl px-4">
+      {/* Scrollable Diagram Canvas with Centered Container */}
+      <div
+        ref={scrollRef}
+        className="w-full overflow-x-auto scroll-smooth pb-4 pt-1 -mx-3 sm:mx-0 px-3 sm:px-0"
+      >
+        <div className="min-w-[960px] mx-auto max-w-6xl px-4">
         {/* ── Level 1: Ketua Umum ── */}
         <div className="flex justify-center mb-0">
           <div className="w-48">
@@ -275,9 +349,10 @@ export default function BaganOrganisasi() {
           ))}
         </div>
       </div>
+    </div>
 
       {/* ── Legend ── */}
-      <div className="flex flex-wrap justify-center gap-4 mt-10 pt-6 border-t border-neutral-100">
+      <div className="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-brand-primary" />
           <span className="text-[10px] text-neutral-500 font-poppins">Badan Pengurus Harian</span>
