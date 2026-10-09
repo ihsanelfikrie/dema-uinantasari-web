@@ -23,6 +23,23 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   // Don't render public navbar on admin pages
   if (pathname.startsWith("/admin")) {
     return null;
@@ -101,161 +118,163 @@ export default function Navbar() {
   const isLayananActive = layananLinks.some((link) => pathname === link.href);
 
   return (
-    <header
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "bg-[#F4F2EF]/90 dark:bg-brand-dark-bg/90 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm md:bg-transparent md:backdrop-blur-none md:border-b-0 md:shadow-none"
-          : "bg-transparent border-transparent"
-      }`}
-      suppressHydrationWarning
-    >
-      <div
-        className={`mx-auto flex w-full max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 relative transition-all duration-300 md:rounded-full md:px-10 md:bg-white/95 md:dark:bg-brand-darkCard/95 md:backdrop-blur-md md:border md:border-neutral-200/50 md:dark:border-red-950/20 md:shadow-md ${
-          isScrolled
-            ? "md:max-w-5xl md:shadow-lg md:mt-2"
-            : "md:max-w-6xl md:mt-4"
+    <>
+      <header
+        className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
+          isScrolled || isOpen
+            ? "bg-[#F4F2EF]/95 dark:bg-brand-dark-bg/95 backdrop-blur-md border-b border-neutral-200 dark:border-red-950/20 shadow-sm md:bg-transparent md:backdrop-blur-none md:border-b-0 md:shadow-none"
+            : "bg-transparent border-transparent"
         }`}
         suppressHydrationWarning
       >
-        {/* Desktop Left Nav Links */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-end pr-10 lg:pr-14">
-          {leftLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
-                  isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
+        <div
+          className={`mx-auto flex w-full max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 relative transition-all duration-300 md:rounded-full md:px-10 md:bg-white/95 md:dark:bg-brand-darkCard/95 md:backdrop-blur-md md:border md:border-neutral-200/50 md:dark:border-red-950/20 md:shadow-md ${
+            isScrolled
+              ? "md:max-w-5xl md:shadow-lg md:mt-2"
+              : "md:max-w-6xl md:mt-4"
+          }`}
+          suppressHydrationWarning
+        >
+          {/* Desktop Left Nav Links */}
+          <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-end pr-10 lg:pr-14">
+            {leftLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent ${
+                    isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+
+            {/* Tentang Kami Dropdown Trigger */}
+            <div className="relative group py-2" suppressHydrationWarning>
+              <button
+                className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
+                  isTentangKamiActive
+                    ? "text-brand-primary dark:text-brand-secondary"
+                    : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
-                {link.label}
-              </Link>
-            );
-          })}
+                Tentang Kami
+                <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
+              </button>
 
-          {/* Tentang Kami Dropdown Trigger */}
-          <div className="relative group py-2" suppressHydrationWarning>
-            <button
-              className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
-                isTentangKamiActive
-                  ? "text-brand-primary dark:text-brand-secondary"
-                  : "text-neutral-700 dark:text-neutral-300"
-              }`}
-            >
-              Tentang Kami
-              <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
-            </button>
-
-            {/* Dropdown Menu Panel */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
-              {tentangKamiLinks.map((subLink) => {
-                const isSubActive = pathname === subLink.href;
-                return (
-                  <Link
-                    key={subLink.href}
-                    href={subLink.href}
-                    className={`block px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 hover:text-brand-accent ${
-                      isSubActive
-                        ? "text-brand-primary dark:text-brand-secondary bg-brand-primary/5 dark:bg-brand-secondary/5"
-                        : "text-neutral-700 dark:text-neutral-300"
-                    }`}
-                  >
-                    {subLink.label}
-                  </Link>
-                );
-              })}
+              {/* Dropdown Menu Panel */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
+                {tentangKamiLinks.map((subLink) => {
+                  const isSubActive = pathname === subLink.href;
+                  return (
+                    <Link
+                      key={subLink.href}
+                      href={subLink.href}
+                      className={`block px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 hover:text-brand-accent ${
+                        isSubActive
+                          ? "text-brand-primary dark:text-brand-secondary bg-brand-primary/5 dark:bg-brand-secondary/5"
+                          : "text-neutral-700 dark:text-neutral-300"
+                      }`}
+                    >
+                      {subLink.label}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
 
-        {/* Center Logo */}
-        <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2" suppressHydrationWarning>
-          <Link
-            href="/"
-            onClick={handleLogoClick}
-            className="flex flex-col items-center justify-center text-center group py-1 select-none cursor-pointer"
-            title="DEMA UIN Antasari"
-          >
-            <img
-              src="/images/logo/logo-light.png"
-              alt="DEMA UIN Antasari Logo"
-              className="h-[28px] sm:h-[32px] w-auto object-contain block dark:hidden transition-all duration-300"
-            />
-            <img
-              src="/images/logo/logo-dark.png"
-              alt="DEMA UIN Antasari Logo"
-              className="h-[28px] sm:h-[32px] w-auto object-contain hidden dark:block transition-all duration-300"
-            />
-          </Link>
-        </div>
-
-        {/* Desktop Right Nav Links */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-start pl-10 lg:pl-14">
-          {/* Layanan Dropdown Trigger */}
-          <div className="relative group py-2" suppressHydrationWarning>
-            <button
-              className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
-                isLayananActive
-                  ? "text-brand-primary dark:text-brand-secondary"
-                  : "text-neutral-700 dark:text-neutral-300"
-              }`}
+          {/* Center Logo */}
+          <div className="flex justify-center items-center md:w-[12%] md:absolute md:left-1/2 md:-translate-x-1/2" suppressHydrationWarning>
+            <Link
+              href="/"
+              onClick={handleLogoClick}
+              className="flex flex-col items-center justify-center text-center group py-1 select-none cursor-pointer"
+              title="DEMA UIN Antasari"
             >
-              Layanan
-              <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
-            </button>
-
-            {/* Dropdown Menu Panel */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
-              {layananLinks.map((subLink) => {
-                const isSubActive = pathname === subLink.href;
-                return (
-                  <Link
-                    key={subLink.href}
-                    href={subLink.href}
-                    className={`block px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 hover:text-brand-accent ${
-                      isSubActive
-                        ? "text-brand-primary dark:text-brand-secondary bg-brand-primary/5 dark:bg-brand-secondary/5"
-                        : "text-neutral-700 dark:text-neutral-300"
-                    }`}
-                  >
-                    {subLink.label}
-                  </Link>
-                );
-              })}
-            </div>
+              <img
+                src="/images/logo/logo-light.png"
+                alt="DEMA UIN Antasari Logo"
+                className="h-[28px] sm:h-[32px] w-auto object-contain block dark:hidden transition-all duration-300"
+              />
+              <img
+                src="/images/logo/logo-dark.png"
+                alt="DEMA UIN Antasari Logo"
+                className="h-[28px] sm:h-[32px] w-auto object-contain hidden dark:block transition-all duration-300"
+              />
+            </Link>
           </div>
 
-          {rightLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent shrink-0 ${
-                  isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
+          {/* Desktop Right Nav Links */}
+          <nav className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 w-[44%] justify-start pl-10 lg:pl-14">
+            {/* Layanan Dropdown Trigger */}
+            <div className="relative group py-2" suppressHydrationWarning>
+              <button
+                className={`flex items-center gap-1 text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent cursor-pointer bg-transparent border-none ${
+                  isLayananActive
+                    ? "text-brand-primary dark:text-brand-secondary"
+                    : "text-neutral-700 dark:text-neutral-300"
                 }`}
               >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+                Layanan
+                <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
+              </button>
 
-        {/* Mobile Action Area */}
-        <div className="flex md:hidden items-center gap-2 ml-auto" suppressHydrationWarning>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-11 h-11 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors focus:outline-none active:scale-95"
-            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+              {/* Dropdown Menu Panel */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 rounded-xl bg-white/95 dark:bg-brand-darkCard/95 border border-neutral-200/60 dark:border-red-950/20 shadow-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md" suppressHydrationWarning>
+                {layananLinks.map((subLink) => {
+                  const isSubActive = pathname === subLink.href;
+                  return (
+                    <Link
+                      key={subLink.href}
+                      href={subLink.href}
+                      className={`block px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-lg transition-colors hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 hover:text-brand-accent ${
+                        isSubActive
+                          ? "text-brand-primary dark:text-brand-secondary bg-brand-primary/5 dark:bg-brand-secondary/5"
+                          : "text-neutral-700 dark:text-neutral-300"
+                      }`}
+                    >
+                      {subLink.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            {rightLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-[10px] lg:text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-colors hover:text-brand-accent shrink-0 ${
+                    isActive ? "text-brand-primary dark:text-brand-secondary" : "text-neutral-700 dark:text-neutral-300"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Mobile Action Area */}
+          <div className="flex md:hidden items-center gap-2 ml-auto" suppressHydrationWarning>
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-11 h-11 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors focus:outline-none active:scale-95 cursor-pointer"
+              aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
+            >
+              {isOpen ? <X className="h-6 w-6 text-brand-primary" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile navigation menu overlay */}
+      {/* Mobile navigation menu overlay: Outside <header> to prevent backdrop-filter containing block trap */}
       <MobileMenu
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -279,6 +298,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

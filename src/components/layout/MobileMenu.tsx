@@ -63,7 +63,14 @@ export default function MobileMenu({
   ];
 
   return (
-    <div className="md:hidden fixed inset-0 top-16 z-40 bg-black/40 backdrop-blur-xs flex flex-col justify-start animate-fadeIn">
+    <div
+      className="md:hidden fixed inset-0 top-16 z-[49] bg-black/40 backdrop-blur-xs flex flex-col justify-start animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <div className="bg-[#F4F2EF] dark:bg-brand-dark-bg border-b border-neutral-200 dark:border-neutral-800 shadow-2xl max-h-[calc(100dvh-4rem)] overflow-y-auto flex flex-col justify-between">
         <div className="p-4 sm:p-6 space-y-6">
           {sections.map((sec, secIdx) => (
