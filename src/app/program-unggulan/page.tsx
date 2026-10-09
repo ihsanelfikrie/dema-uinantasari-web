@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Image as ImageIcon, Sparkles, HeartHandshake, Award, Users, Globe } from "lucide-react";
+import { Image as ImageIcon, Music, HeartHandshake, Award, Users, Globe } from "lucide-react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -50,7 +50,7 @@ export default function ProgramUnggulanPage() {
       dept: "Kementerian Pemuda dan Olahraga & Kementerian Pendidikan dan Budaya",
       kegelisahan: "Festival Antasari lahir dari keresahan atas terpinggirkannya minat dan bakat mahasiswa akibat minimnya ruang ekspresi yang berkelanjutan. Potensi seni, olahraga, dan kreativitas mahasiswa sering kali terhenti karena tidak adanya agenda besar yang mampu menghimpun dan merayakan keberagaman potensi tersebut.",
       desc: "Program ini dirancang sebagai ajang pekan olahraga dan seni (PORSENI) yang ditutup dengan AntasariFest dengan menghadirkan guest star yang mumpuni di bidangnya. Festival Antasari bukan sekadar hiburan, tetapi ruang ekspresi, perayaan, dan kebersamaan. Melalui festival ini, kampus dihidupkan kembali sebagai ruang ekspresi, perayaan, dan kebersamaan.",
-      icon: Sparkles,
+      icon: Music,
     },
   ];
 
@@ -59,24 +59,24 @@ export default function ProgramUnggulanPage() {
       const container = containerRef.current;
       if (!container) return;
 
-      // ── Register ScrollTrigger ─────────────────────────────────────────────
+      // Register ScrollTrigger
       gsap.registerPlugin(ScrollTrigger);
 
-      // ── 1. Page Header entry animations ────────────────────────────────────
+      // 1. Page Header entry animations
       gsap.fromTo(
         ".unggulan-header-item",
         { y: 35, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
       );
 
-      // ── 2. Navigation bar entry ─────────────────────────────────────────────
+      // 2. Navigation bar entry
       gsap.fromTo(
         ".unggulan-nav",
         { y: 15, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.45 }
       );
 
-      // ── 3. Scroll triggered sections animations & Active state toggles ─────
+      // 3. Scroll triggered sections animations and active state toggles
       const sections = gsap.utils.toArray<HTMLElement>(".unggulan-section");
 
       sections.forEach((sec) => {
@@ -168,7 +168,7 @@ export default function ProgramUnggulanPage() {
         });
       });
 
-      // ── 4. Interactive 3D Hover Tilt and Parallax Effect on Cards ─────────
+      // 4. Interactive hover tilt and parallax effect on cards
       const imageContainers = container.querySelectorAll(".unggulan-image");
       const tiltHandlers: Array<{ el: Element; move: (e: Event) => void; leave: () => void }> = [];
 
@@ -267,26 +267,26 @@ export default function ProgramUnggulanPage() {
     >
       {/* Header Section */}
       <section className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center border-b border-neutral-200/50 dark:border-red-950/20">
-        <span className="unggulan-header-item opacity-0 text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 font-akzidenz">
+        <span className="unggulan-header-item opacity-0 text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 font-poppins">
           Program Prioritas Kerja
         </span>
-        <h1 className="unggulan-header-item opacity-0 text-3xl sm:text-5xl font-bold uppercase tracking-tight text-neutral-900 dark:text-white leading-none font-times">
+        <h1 className="unggulan-header-item opacity-0 text-3xl sm:text-5xl font-bold uppercase tracking-tight text-neutral-900 dark:text-white leading-none font-poppins">
           Program Unggulan
         </h1>
-        <p className="unggulan-header-item opacity-0 mt-4 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto font-normal leading-relaxed">
+        <p className="unggulan-header-item opacity-0 mt-4 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto font-normal leading-relaxed">
           Kumpulan inisiasi strategis dan program kerja akselerasi Kabinet Laskar Purnama Antasari 2026/2027 untuk melayani mahasiswa dan masyarakat.
         </p>
       </section>
 
       {/* Sticky Sub-Navigation Pills */}
-      <nav className="unggulan-nav opacity-0 sticky top-16 z-40 bg-brand-background/80 dark:bg-brand-dark-bg/80 backdrop-blur-md border-b border-neutral-200/50 dark:border-red-950/20 py-4 px-4 overflow-x-auto scrollbar-none flex justify-center gap-3">
+      <nav className="unggulan-nav opacity-0 sticky top-16 z-40 bg-brand-background/80 dark:bg-brand-dark-bg/80 backdrop-blur-md border-b border-neutral-200/50 dark:border-red-950/20 py-3 sm:py-4 px-4 overflow-x-auto scrollbar-none flex sm:justify-center justify-start gap-2 sm:gap-3">
         {programs.map((p) => {
           const isActive = activeAnchor === p.id;
           return (
             <button
               key={p.id}
               onClick={() => scrollToSection(p.id)}
-              className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer font-akzidenz ${
+              className={`px-3.5 sm:px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer font-poppins shrink-0 ${
                 isActive
                   ? "bg-brand-primary dark:bg-brand-secondary text-white dark:text-neutral-950 shadow-md"
                   : "bg-white dark:bg-brand-darkCard text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-red-950/15 hover:bg-neutral-100 dark:hover:bg-neutral-800"
@@ -300,7 +300,7 @@ export default function ProgramUnggulanPage() {
 
       {/* Program Details Layout Container */}
       <div 
-        className="unggulan-container relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-24 sm:space-y-32"
+        className="unggulan-container relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-16 space-y-16 sm:space-y-24 lg:space-y-32"
         suppressHydrationWarning
       >
         {programs.map((p, index) => {
@@ -327,13 +327,13 @@ export default function ProgramUnggulanPage() {
                   suppressHydrationWarning
                 >
                   <Icon className="h-3.5 w-3.5 text-brand-primary dark:text-brand-secondary" />
-                  <span className="text-[9px] sm:text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-wider font-akzidenz">
+                  <span className="text-[9px] sm:text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-wider font-poppins">
                     {p.dept}
                   </span>
                 </div>
 
                 {/* Program Title */}
-                <h2 className="unggulan-title opacity-0 text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white leading-snug uppercase font-times">
+                <h2 className="unggulan-title opacity-0 text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white leading-snug uppercase font-poppins">
                   {p.title}
                 </h2>
 
@@ -347,7 +347,7 @@ export default function ProgramUnggulanPage() {
                       suppressHydrationWarning
                     />
                     <p 
-                      className="unggulan-quote-text opacity-0 text-xs sm:text-sm leading-relaxed text-neutral-500 dark:text-neutral-400 font-normal italic pl-4"
+                      className="unggulan-quote-text opacity-0 text-xs sm:text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 font-normal italic pl-4"
                       suppressHydrationWarning
                     >
                       &ldquo;{p.kegelisahan}&rdquo;
@@ -356,7 +356,7 @@ export default function ProgramUnggulanPage() {
 
                   {/* Rencana Gerakan */}
                   <div className="unggulan-plan-wrapper opacity-0 space-y-1" suppressHydrationWarning>
-                    <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block font-akzidenz">
+                    <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block font-poppins">
                       Rencana Gerakan
                     </span>
                     <p className="text-xs sm:text-sm leading-relaxed text-neutral-700 dark:text-neutral-300 font-normal">

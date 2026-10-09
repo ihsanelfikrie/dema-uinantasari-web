@@ -11,7 +11,6 @@ import {
   ExternalLink, 
   ShieldCheck, 
   RefreshCw, 
-  Sparkles, 
   Info,
   Maximize2,
   FileDown,

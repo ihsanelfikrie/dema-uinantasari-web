@@ -4,7 +4,7 @@ import { useState } from "react";
 import { bph, kementerianList, Fungsionaris } from "@/data/struktur";
 import { X, ChevronDown } from "lucide-react";
 
-// ─── Mapping: kemenko ID → array kementerian IDs ──────────────────────────────
+// Mapping: kemenko ID -> array kementerian IDs
 // kemenkoma (Kemahasiswaan) dihapus dari bagan
 const kemenkoMap: Record<string, string[]> = {
   kemenspi: ["kemenkvd", "kemempsdmo"],
@@ -20,7 +20,7 @@ const kemenkos = kementerianList.filter((k) => Object.keys(kemenkoMap).includes(
 // Helper: get kementerian by id
 const getKemenById = (id: string) => kementerianList.find((k) => k.id === id);
 
-// ─── Node Card component ───────────────────────────────────────────────────────
+// Node Card component
 function NodeCard({
   label,
   sublabel,
@@ -54,7 +54,7 @@ function NodeCard({
       {sublabel && (
         <span
           className={`block text-[9px] mt-0.5 font-poppins leading-snug ${
-            variant === "primary" ? "text-white/70" : "text-neutral-500"
+            variant === "primary" ? "text-white/70" : "text-neutral-600"
           }`}
         >
           {sublabel}
@@ -64,7 +64,7 @@ function NodeCard({
   );
 }
 
-// ─── Vertical connector ────────────────────────────────────────────────────────
+// Vertical connector
 function VConnector() {
   return (
     <div className="flex justify-center">
@@ -73,7 +73,7 @@ function VConnector() {
   );
 }
 
-// ─── Arrow down icon ───────────────────────────────────────────────────────────
+// Arrow down icon
 function ArrowDown() {
   return (
     <div className="flex justify-center">
@@ -82,36 +82,52 @@ function ArrowDown() {
   );
 }
 
-// ─── Main component ────────────────────────────────────────────────────────────
+// Main component
 export default function BaganOrganisasi() {
   const [selected, setSelected] = useState<Fungsionaris | null>(null);
 
-  const renderLargeAvatar = () => (
-    <div className="h-20 w-20 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-4">
-      <svg
-        className="h-10 w-10 stroke-[1.2]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-        />
-      </svg>
-    </div>
-  );
+  const renderLargeAvatar = (fotoUrl?: string, nama?: string) => {
+    if (fotoUrl && fotoUrl.trim() !== "") {
+      return (
+        <div className="h-20 w-20 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 mb-4 shadow-xs shrink-0">
+          <img
+            src={fotoUrl}
+            alt={nama || "Foto Pengurus"}
+            className="h-full w-full object-cover object-top"
+          />
+        </div>
+      );
+    }
+    return (
+      <div className="h-20 w-20 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-4 shrink-0">
+        <svg
+          className="h-10 w-10 stroke-[1.2]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+          />
+        </svg>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full py-8 px-4 bg-white border border-neutral-100 rounded-2xl shadow-sm mb-12 overflow-x-auto">
-      <div className="text-center mb-8">
-        <h3 className="text-lg font-bold text-neutral-900 font-poppins">
+      <div className="text-center mb-6 sm:mb-8">
+        <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins">
           Bagan Hierarki Kabinet
         </h3>
         <p className="text-xs text-neutral-400 mt-1">
           Klik pada posisi pengurus untuk melihat detail tugas pokok dan fungsi (Tupoksi).
         </p>
+        <div className="sm:hidden mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-[10px] font-semibold text-neutral-500 font-poppins">
+          <span>Geser bagan ke samping untuk melihat struktur penuh &rarr;</span>
+        </div>
       </div>
 
       <div className="min-w-[900px] mx-auto max-w-6xl px-4">
@@ -288,7 +304,7 @@ export default function BaganOrganisasi() {
             </button>
 
             <div className="flex flex-col items-center text-center mt-2">
-              {renderLargeAvatar()}
+              {renderLargeAvatar(selected.fotoUrl, selected.nama)}
               <h4 className="text-base font-semibold text-neutral-900 font-poppins">
                 {selected.nama}
               </h4>

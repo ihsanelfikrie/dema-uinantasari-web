@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 
 export default function PersuratanLayananPage() {
   return (
-    <main className="min-h-screen bg-brand-background py-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-brand-background py-10 sm:py-16 px-3.5 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* Title */}
-        <div className="text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-5xl font-poppins">
+        <div className="text-center mb-10 sm:mb-16">
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-4xl md:text-5xl font-poppins">
             Persuratan & Kerja Sama
           </h1>
-          <p className="mt-4 text-sm text-neutral-500 max-w-md mx-auto">
+          <p className="mt-2.5 sm:mt-4 text-xs sm:text-base text-neutral-500 max-w-md mx-auto leading-relaxed">
             Layanan pengajuan surat resmi kemahasiswaan, rekomendasi kegiatan,
             dan permohonan kerja sama publikasi Media Partner DEMA UIN Antasari.
           </p>
@@ -25,12 +25,12 @@ export default function PersuratanLayananPage() {
 
         {/* Info Persuratan */}
         <FadeInSection>
-          <div className="bg-white border border-neutral-100 rounded-2xl p-6 sm:p-8 shadow-sm mb-8 flex gap-4 sm:gap-6 items-start">
+          <div className="bg-white border border-neutral-100 rounded-2xl p-5 sm:p-8 shadow-sm mb-6 sm:mb-8 flex gap-3.5 sm:gap-6 items-start">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary">
               <FileText className="h-5 w-5 stroke-[1.5]" />
             </div>
             <div>
-              <h2 className="text-sm sm:text-base font-bold text-neutral-900 font-poppins mb-2">
+              <h2 className="text-sm sm:text-base font-bold text-neutral-900 font-poppins mb-1.5 sm:mb-2">
                 Kerja Sama Media Partner & Administrasi
               </h2>
               <p className="text-xs sm:text-sm leading-relaxed text-neutral-500 font-normal">
@@ -46,8 +46,8 @@ export default function PersuratanLayananPage() {
 
         {/* Alur Persuratan */}
         <FadeInSection>
-          <div className="bg-white border border-neutral-100 rounded-2xl p-8 shadow-sm mb-12">
-            <h2 className="text-base font-bold text-neutral-900 font-poppins mb-6">
+          <div className="bg-white border border-neutral-100 rounded-2xl p-5 sm:p-8 shadow-sm mb-8 sm:mb-12">
+            <h2 className="text-sm sm:text-base font-bold text-neutral-900 font-poppins mb-4 sm:mb-6">
               Alur Pengajuan Persuratan / Media Partner:
             </h2>
             <div className="space-y-4 text-xs sm:text-sm text-neutral-600">

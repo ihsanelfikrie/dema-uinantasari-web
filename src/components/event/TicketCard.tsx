@@ -533,7 +533,7 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
             </div>
             <div>
               <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 Langkah Wajib Selanjutnya
               </span>
               <h4 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white font-poppins">
@@ -617,9 +617,9 @@ export default function TicketCard({ data, onReset }: TicketCardProps) {
 
           {/* HTML Official Pass Card */}
           <div className="bg-gradient-to-br from-[#0B1A3A] via-[#1C4BBC] to-[#0D2561] text-white rounded-2xl p-6 sm:p-8 shadow-md relative overflow-hidden">
-            {/* Background Accents */}
-            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#82BE3B]/20 blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+            {/* Subtle background geometric accent */}
+            <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full border border-white/10 pointer-events-none" />
+            <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full border border-[#82BE3B]/20 pointer-events-none" />
 
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Left Side: Information */}

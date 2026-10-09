@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { User, Users, FileText, Newspaper, Calendar } from "lucide-react";
+import { User, Users, FileText, Newspaper, Calendar, ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -18,7 +18,7 @@ export default function PilarSection() {
     {
       href: "/profil",
       title: "Profil Kabinet",
-      desc: "Pelajari visi, misi, serta makna filosofis dari kabinet Laskar Purnama Antasari.",
+      desc: "Pelajari visi, misi, serta makna filosofis dari Kabinet Laskar Purnama Antasari.",
       icon: User,
     },
     {
@@ -30,7 +30,7 @@ export default function PilarSection() {
     {
       href: "/layanan",
       title: "Layanan Mahasiswa",
-      desc: "Akses layanan pengaduan advokasi, pelaporan P3, dan pengurusan surat.",
+      desc: "Akses layanan pengaduan advokasi, pelaporan P3, dan permohonan persuratan.",
       icon: FileText,
     },
     {
@@ -42,7 +42,7 @@ export default function PilarSection() {
     {
       href: "/program-kerja",
       title: "Program Kerja",
-      desc: "Pantau agenda kegiatan dan kalender kerja seluruh kementerian DEMA.",
+      desc: "Pantau agenda kegiatan dan kalender proker seluruh kementerian DEMA.",
       icon: Calendar,
     },
   ];
@@ -53,7 +53,7 @@ export default function PilarSection() {
         ".animate-pilar-card",
         {
           opacity: 0,
-          y: 25,
+          y: 30,
         },
         {
           opacity: 1,
@@ -75,41 +75,58 @@ export default function PilarSection() {
   return (
     <section
       ref={containerRef}
-      className="bg-brand-background py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100"
+      className="bg-brand-background py-10 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      <div className="text-center mb-16">
-        <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl font-poppins">
-          Pilar Navigasi
+      <div className="text-center mb-8 sm:mb-12">
+        <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+          Pusat Informasi &amp; Navigasi
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins">
+          Pilar Navigasi Resmi
         </h2>
-        <p className="mt-4 text-sm text-neutral-500 max-w-md mx-auto">
-          Akses informasi dan layanan utama Dewan Eksekutif Mahasiswa melalui
-          pilar navigasi resmi kami.
+        <p className="mt-2 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto font-poppins leading-relaxed">
+          Akses informasi, tata kelola, dan layanan utama Dewan Eksekutif Mahasiswa melalui pilar navigasi resmi kami.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {pilars.map((pilar) => {
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {pilars.map((pilar, index) => {
           const IconComponent = pilar.icon;
           return (
             <Link
               key={pilar.href}
               href={pilar.href}
-              className="animate-pilar-card opacity-0 group flex flex-col justify-between p-6 bg-white border border-neutral-100 rounded-xl hover:border-brand-primary/20 hover:shadow-sm transition-all duration-200"
+              className="animate-pilar-card opacity-0 group relative flex flex-col justify-between p-5 sm:p-7 bg-white border border-neutral-200/80 rounded-2xl shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <div>
-                <div className="inline-flex p-3 rounded-lg bg-[#F4F2EF] text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors duration-200 mb-5">
-                  <IconComponent className="h-6 w-6 stroke-[1.5]" />
+                {/* Header: Icon container and Index Stamp */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-brand-background border border-neutral-200/80 group-hover:bg-brand-primary group-hover:border-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:shadow-brand-primary/20">
+                    <IconComponent className="h-6 w-6 stroke-[1.5]" />
+                  </div>
+                  <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors tracking-widest">
+                    0{index + 1}
+                  </span>
                 </div>
-                <h3 className="text-lg font-semibold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200">
+
+                <h3 className="text-base sm:text-lg font-bold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200 font-poppins">
                   {pilar.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-neutral-500 font-normal">
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-neutral-600 font-poppins">
                   {pilar.desc}
                 </p>
               </div>
-              <div className="mt-6 flex items-center text-xs font-semibold text-brand-primary group-hover:text-brand-accent transition-colors duration-200">
-                Selengkapnya &rarr;
+
+              {/* Action Footer */}
+              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between text-xs font-bold text-neutral-800 group-hover:text-brand-primary transition-colors duration-200">
+                <span className="font-poppins">Buka Pilar</span>
+                <div className="w-6 h-6 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs">
+                  <ArrowRight className="h-3 w-3" />
+                </div>
               </div>
+
+              {/* Bottom Micro Accent Line */}
+              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-brand-primary via-brand-accent to-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
           );
         })}

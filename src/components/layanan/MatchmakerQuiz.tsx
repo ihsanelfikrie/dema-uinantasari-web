@@ -3,14 +3,11 @@
 import React, { useState, useRef } from "react";
 import { gsap } from "gsap";
 import {
-  Sparkles, ArrowRight, RotateCcw, MessageCircle, FileText,
+  Compass, RotateCcw, MessageCircle, FileText,
   Trophy, Award, Medal, Brain, Zap, Heart, Shield, Palette, Target, BookOpen,
   ChevronDown,
 } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────
-//  TIPE DATA
-// ─────────────────────────────────────────────────────────
 interface Organization {
   name: string;
   cluster: string;
@@ -33,7 +30,7 @@ interface Option {
   text: string;
   points: Record<string, number>;
   personalityHints: string[];
-  insight: string; // Penjabaran apa yang terungkap dari jawaban ini
+  insight: string;
 }
 
 interface Question {
@@ -44,7 +41,6 @@ interface Question {
   options: Option[];
 }
 
-// Rekam jawaban user per soal untuk penjabaran di akhir
 interface AnswerRecord {
   questionNumber: number;
   questionText: string;
@@ -52,40 +48,34 @@ interface AnswerRecord {
   insight: string;
 }
 
-// ─────────────────────────────────────────────────────────
-//  DATA ORGANISASI
-// ─────────────────────────────────────────────────────────
 const ORGS: Record<string, Organization> = {
-  menwa: { name: "Resimen Mahasiswa (MENWA) Mahanata", cluster: "Unit Kegiatan Khusus (UKK)", description: "Melatih kedisiplinan fisik, mental baja, wawasan kebangsaan, dan bela negara dalam balutan semi-militer kemahasiswaan.", waLink: "https://wa.me/6289532145678?text=Halo%20Kak%20MENWA,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  kopma: { name: "Koperasi Mahasiswa (Kopma) UIN Antasari", cluster: "Unit Kegiatan Khusus (UKK)", description: "Pusat kewirausahaan mahasiswa: bisnis ritel, ekonomi kreatif, manajemen keuangan, koperasi, dan kemitraan usaha.", waLink: "https://wa.me/6289532145679?text=Halo%20Kak%20KOPMA,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  mapala: { name: "Mahasiswa Pecinta Alam (Mapala) Meratus", cluster: "Unit Kegiatan Khusus (UKK)", description: "Petualang alam bebas: navigasi darat, panjat tebing, susur gua, arung jeram, konservasi, dan survival.", waLink: "https://wa.me/6289532145680?text=Halo%20Kak%20MAPALA,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  ksrpmi: { name: "KSR-PMI UIN Antasari", cluster: "Unit Kegiatan Khusus (UKK)", description: "Kerelawanan kemanusiaan & medis: P3K, donor darah, mitigasi bencana, kesehatan, dan bakti sosial.", waLink: "https://wa.me/6289532145681?text=Halo%20Kak%20KSR-PMI,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  bahana: { name: "Sanggar Bahana Antasari", cluster: "UKM Seni & Budaya", description: "Teater drama, tari tradisional, dan musik etnik — wadah pelestarian & ekspresi seni budaya daerah.", waLink: "https://wa.me/6289532145682?text=Halo%20Kak%20Sanggar%20Bahana,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  sanggarmusik: { name: "Sanggar Musik Antasari", cluster: "UKM Seni & Budaya", description: "Aransemen band modern, paduan suara, akustik, dan manajemen pertunjukan panggung.", waLink: "https://wa.me/6289532145683?text=Halo%20Kak%20Sanggar%20Musik,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  sslk: { name: "SSLK Albanjary (Kaligrafi)", cluster: "UKM Seni & Budaya", description: "Seni kaligrafi Al-Quran (Khat), dekorasi ornamen Islami, pameran rupa, dan desain visual keislaman.", waLink: "https://wa.me/6289532145684?text=Halo%20Kak%20SSLK%20Albanjary,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  olahraga: { name: "Bidang Olahraga Umum UIN Antasari", cluster: "UKM Olahraga", description: "Futsal, Bola Voli, Basket, Bulu Tangkis, Tenis Meja — wadah atlet beregu & individu berprestasi.", waLink: "https://wa.me/6289532145685?text=Halo%20Kak%20Olahraga%20Umum,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  psht: { name: "Persaudaraan Setia Hati Terate (PSHT)", cluster: "UKM Bela Diri", description: "Pencak silat legendaris: ketangkasan pertahanan fisik, nilai budaya, budi pekerti, dan persaudaraan sejati.", waLink: "https://wa.me/6289532145686?text=Halo%20Kak%20PSHT,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  taekwondo: { name: "Taekwondo UIN Antasari", cluster: "UKM Bela Diri", description: "Kecepatan tendangan (kyorugi), poomsae jurus keindahan, dan ketahanan mental atlet bela diri Korea.", waLink: "https://wa.me/6289532145687?text=Halo%20Kak%20Taekwondo,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  kempo: { name: "Shorinji Kempo, Mardha Yudha & Al-Wahiid", cluster: "UKM Bela Diri", description: "Pertahanan taktis, kuncian mematahkan serangan, dan pernapasan tenaga dalam.", waLink: "https://wa.me/6289532145688?text=Halo%20Kak%20Kempo,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  lpmsukma: { name: "Lembaga Pers Mahasiswa (LPM) Sukma", cluster: "UKM Jurnalistik & Pers", description: "Jurnalisme investigasi, peliputan online, fotografi media massa, majalah opini, dan kepenulisan kritis.", waLink: "https://wa.me/6289532145689?text=Halo%20Kak%20LPM%20Sukma,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  cendekia: { name: "Antasari Cendekia (Penelitian & Riset)", cluster: "UKM Keilmuan", description: "Riset ilmiah, karya tulis ilmiah (KTI) nasional, esai, debat konstitusi, dan forum logika penalaran.", waLink: "https://wa.me/6289532145690?text=Halo%20Kak%20Antasari%20Cendekia,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  lppq: { name: "LPPQ (Lembaga Pengajian & Pengkajian Al-Quran)", cluster: "UKM Kajian Keagamaan", description: "Tilawah qira'ah, tahfidz Al-Quran, kajian tafsir, syarhil Quran, dan pembinaan qari.", waLink: "https://wa.me/6289532145691?text=Halo%20Kak%20LPPQ,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  ldkamal: { name: "LDK (Lembaga Dakwah Kampus) Amal", cluster: "UKM Syiar & Sosial", description: "Dakwah kreatif, bakti sosial keagamaan, syiar media sosial Islami, dan kajian keislaman kampus.", waLink: "https://wa.me/6289532145692?text=Halo%20Kak%20LDK%20Amal,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  annisa: { name: "LPP Islam An-Nisa", cluster: "UKM Kajian Keperempuanan", description: "Kepemimpinan muslimah, kajian fikih wanita, entrepreneurship kreatif, dan literasi keperempuanan Islam.", waLink: "https://wa.me/6289532145693?text=Halo%20Kak%20An-Nisa,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
-  pramuka: { name: "UKM Pramuka (Gugusdepan Antasari & Saranti)", cluster: "UKM Kepanduan", description: "Pioneering tali-temali, sandi navigasi, survival alam bebas, perkemahan bakti, dan kepemimpinan kepanduan.", waLink: "https://wa.me/6289532145694?text=Halo%20Kak%20Pramuka,%20saya%20tertarik%20bergabung%20dari%20kuis%20Matchmaker%20DEMA.", formLink: "https://forms.google.com" },
+  menwa: { name: "Resimen Mahasiswa (MENWA) Mahanata", cluster: "Unit Kegiatan Khusus (UKK)", description: "Melatih kedisiplinan fisik, mental baja, wawasan kebangsaan, dan bela negara dalam balutan semi-militer kemahasiswaan.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20MENWA.", formLink: "/layanan" },
+  kopma: { name: "Koperasi Mahasiswa (Kopma) UIN Antasari", cluster: "Unit Kegiatan Khusus (UKK)", description: "Pusat kewirausahaan mahasiswa: bisnis ritel, ekonomi kreatif, manajemen keuangan, koperasi, dan kemitraan usaha.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20KOPMA.", formLink: "/layanan" },
+  mapala: { name: "Mahasiswa Pecinta Alam (Mapala) Meratus", cluster: "Unit Kegiatan Khusus (UKK)", description: "Petualang alam bebas: navigasi darat, panjat tebing, susur gua, arung jeram, konservasi, dan survival.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20MAPALA.", formLink: "/layanan" },
+  ksrpmi: { name: "KSR-PMI UIN Antasari", cluster: "Unit Kegiatan Khusus (UKK)", description: "Kerelawanan kemanusiaan & medis: P3K, donor darah, mitigasi bencana, kesehatan, dan bakti sosial.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20KSR-PMI.", formLink: "/layanan" },
+  bahana: { name: "Sanggar Bahana Antasari", cluster: "UKM Seni & Budaya", description: "Teater drama, tari tradisional, dan musik etnik: wadah pelestarian & ekspresi seni budaya daerah.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Sanggar%20Bahana.", formLink: "/layanan" },
+  sanggarmusik: { name: "Sanggar Musik Antasari", cluster: "UKM Seni & Budaya", description: "Aransemen band modern, paduan suara, akustik, dan manajemen pertunjukan panggung.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Sanggar%20Musik.", formLink: "/layanan" },
+  sslk: { name: "SSLK Albanjary (Kaligrafi)", cluster: "UKM Seni & Budaya", description: "Seni kaligrafi Al-Quran (Khat), dekorasi ornamen Islami, pameran rupa, dan desain visual keislaman.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20SSLK%20Albanjary.", formLink: "/layanan" },
+  olahraga: { name: "Bidang Olahraga Umum UIN Antasari", cluster: "UKM Olahraga", description: "Futsal, Bola Voli, Basket, Bulu Tangkis, Tenis Meja: wadah atlet beregu & individu berprestasi.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Olahraga%20Umum.", formLink: "/layanan" },
+  psht: { name: "Persaudaraan Setia Hati Terate (PSHT)", cluster: "UKM Bela Diri", description: "Pencak silat legendaris: ketangkasan pertahanan fisik, nilai budaya, budi pekerti, dan persaudaraan sejati.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20PSHT.", formLink: "/layanan" },
+  taekwondo: { name: "Taekwondo UIN Antasari", cluster: "UKM Bela Diri", description: "Kecepatan tendangan (kyorugi), poomsae jurus keindahan, dan ketahanan mental atlet bela diri Korea.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Taekwondo.", formLink: "/layanan" },
+  kempo: { name: "Shorinji Kempo, Mardha Yudha & Al-Wahiid", cluster: "UKM Bela Diri", description: "Pertahanan taktis, kuncian mematahkan serangan, dan pernapasan tenaga dalam.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Kempo.", formLink: "/layanan" },
+  lpmsukma: { name: "Lembaga Pers Mahasiswa (LPM) Sukma", cluster: "UKM Jurnalistik & Pers", description: "Jurnalisme investigasi, peliputan online, fotografi media massa, majalah opini, dan kepenulisan kritis.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20LPM%20Sukma.", formLink: "/layanan" },
+  cendekia: { name: "Antasari Cendekia (Penelitian & Riset)", cluster: "UKM Keilmuan", description: "Riset ilmiah, karya tulis ilmiah (KTI) nasional, esai, debat konstitusi, dan forum logika penalaran.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Antasari%20Cendekia.", formLink: "/layanan" },
+  lppq: { name: "LPPQ (Lembaga Pengajian & Pengkajian Al-Quran)", cluster: "UKM Kajian Keagamaan", description: "Tilawah qira'ah, tahfidz Al-Quran, kajian tafsir, syarhil Quran, dan pembinaan qari.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20LPPQ.", formLink: "/layanan" },
+  ldkamal: { name: "LDK (Lembaga Dakwah Kampus) Amal", cluster: "UKM Syiar & Sosial", description: "Dakwah kreatif, bakti sosial keagamaan, syiar media sosial Islami, dan kajian keislaman kampus.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20LDK%20Amal.", formLink: "/layanan" },
+  annisa: { name: "LPP Islam An-Nisa", cluster: "UKM Kajian Keperempuanan", description: "Kepemimpinan muslimah, kajian fikih wanita, entrepreneurship kreatif, dan literasi keperempuanan Islam.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20An-Nisa.", formLink: "/layanan" },
+  pramuka: { name: "UKM Pramuka (Gugusdepan Antasari & Saranti)", cluster: "UKM Kepanduan", description: "Pioneering tali-temali, sandi navigasi, survival alam bebas, perkemahan bakti, dan kepemimpinan kepanduan.", waLink: "https://wa.me/6282162138655?text=Halo%20Admin%20DEMA,%20saya%20tertarik%20bergabung%20dengan%20Pramuka.", formLink: "/layanan" },
 };
 
-// ─────────────────────────────────────────────────────────
-//  TIPE KEPRIBADIAN
-// ─────────────────────────────────────────────────────────
 const PERSONALITY_TYPES: Record<string, PersonalityType> = {
-  pemimpin: { id: "pemimpin", label: "Pemimpin Lapangan", emoji: "🦅", tagline: "Dilahirkan untuk memimpin di garis depan.", description: "Kamu tipikal yang nggak bisa diam kalau lihat sesuatu yang perlu dibenahi. Suka ambil kendali, nggak takut ambil risiko, dan punya aura yang bikin orang lain mau ikut.", icon: Shield, color: "border-red-200 bg-red-50 text-brand-primary" },
-  humanis: { id: "humanis", label: "Si Peka & Peduli", emoji: "🤝", tagline: "Empati adalah kekuatan terbesarmu.", description: "Kamu selalu nyadarin kalau ada yang butuh bantuan, bahkan sebelum mereka minta. Kamu lebih puas waktu orang lain bahagia daripada waktu kamu sendiri menang.", icon: Heart, color: "border-rose-200 bg-rose-50 text-rose-700" },
-  seniman: { id: "seniman", label: "Kreator & Seniman", emoji: "🎨", tagline: "Kamu punya cara sendiri untuk melihat dunia.", description: "Kamu berpikir dan berekspresi lewat karya — bisa musik, visual, tulisan, atau gerak. Kamu butuh ruang untuk berkreasi, dan di sana kamu paling hidup.", icon: Palette, color: "border-purple-200 bg-purple-50 text-purple-700" },
-  intelektual: { id: "intelektual", label: "Si Pemikir Kritis", emoji: "🔬", tagline: "Kamu selalu punya pertanyaan satu lapis lebih dalam.", description: "Kamu nggak puas dengan jawaban permukaan. Suka riset, nulis, analisis, dan debat berbasis data. Kalau ada isu, kamu pengennya paham dulu sebelum bereaksi.", icon: Brain, color: "border-blue-200 bg-blue-50 text-blue-700" },
-  spiritual: { id: "spiritual", label: "Penjaga Nilai & Agama", emoji: "🌙", tagline: "Hati yang bersih adalah kompasmu.", description: "Nilai dan agama bukan sekadar formalitas bagimu — itu panduan hidup nyata. Kamu paling nyaman di lingkungan yang menghargai kedalaman spiritual dan kejujuran akhlak.", icon: BookOpen, color: "border-emerald-200 bg-emerald-50 text-emerald-700" },
-  atlet: { id: "atlet", label: "Si Kompetitor Ulet", emoji: "⚡", tagline: "Keringat adalah bukti, bukan bahan cerita.", description: "Kamu suka tantangan yang terukur dan bisa dimenangkan. Latihan rutin, disiplin fisik, dan persaingan sehat adalah zona nyamanmu — kamu tumbuh paling cepat di tekanan.", icon: Zap, color: "border-amber-200 bg-amber-50 text-amber-700" },
-  wirausaha: { id: "wirausaha", label: "Si Pencipta Peluang", emoji: "💡", tagline: "Kamu lihat potensi di tempat orang lain lihat masalah.", description: "Kamu pragmatis, berorientasi hasil, dan suka membangun sesuatu dari nol. Mengelola orang, ide, dan sumber daya adalah hal yang bikin kamu bersemangat.", icon: Target, color: "border-orange-200 bg-orange-50 text-orange-700" },
+  pemimpin: { id: "pemimpin", label: "Pemimpin Lapangan", emoji: "🦅", tagline: "Dilahirkan untuk memimpin di garis depan.", description: "Kamu tipikal yang aktif ketika melihat sesuatu yang perlu dibenahi. Suka mengambil inisiatif, tidak ragu menghadapi tantangan, dan memiliki pengaruh yang menggerakkan orang lain.", icon: Shield, color: "border-red-200 bg-red-50 text-brand-primary" },
+  humanis: { id: "humanis", label: "Si Peka & Peduli", emoji: "🤝", tagline: "Empati adalah kekuatan terbesarmu.", description: "Kamu selalu menyadari ketika ada yang butuh bantuan sebelum mereka meminta. Kamu termotivasi saat lingkungan sekitarmu terbantu dan merasa nyaman.", icon: Heart, color: "border-rose-200 bg-rose-50 text-rose-700" },
+  seniman: { id: "seniman", label: "Kreator & Seniman", emoji: "🎨", tagline: "Kamu punya cara sendiri untuk melihat dunia.", description: "Kamu berpikir dan berekspresi lewat karya: bisa musik, visual, tulisan, atau gerak. Kamu butuh ruang untuk berkreasi, dan di sana potensimu paling berkembang.", icon: Palette, color: "border-purple-200 bg-purple-50 text-purple-700" },
+  intelektual: { id: "intelektual", label: "Si Pemikir Kritis", emoji: "🔬", tagline: "Kamu selalu punya pertanyaan satu lapis lebih dalam.", description: "Kamu tidak puas dengan jawaban permukaan. Suka riset, menulis, analisis, dan diskusi berbasis data untuk memahami akar masalah secara mendalam.", icon: Brain, color: "border-blue-200 bg-blue-50 text-blue-700" },
+  spiritual: { id: "spiritual", label: "Penjaga Nilai & Agama", emoji: "🌙", tagline: "Hati yang bersih adalah kompasmu.", description: "Nilai dan agama bukan sekadar formalitas bagimu, melainkan panduan hidup nyata. Kamu paling nyaman di lingkungan yang mengedepankan kedalaman spiritual dan kejujuran akhlak.", icon: BookOpen, color: "border-emerald-200 bg-emerald-50 text-emerald-700" },
+  atlet: { id: "atlet", label: "Si Kompetitor Ulet", emoji: "⚡", tagline: "Keringat adalah bukti, bukan bahan cerita.", description: "Kamu suka tantangan yang terukur dan kompetitif. Latihan rutin, disiplin fisik, dan sportivitas adalah zona berkembang terbaik bagimu.", icon: Zap, color: "border-amber-200 bg-amber-50 text-amber-700" },
+  wirausaha: { id: "wirausaha", label: "Si Pencipta Peluang", emoji: "💡", tagline: "Kamu lihat potensi di tempat orang lain lihat masalah.", description: "Kamu pragmatis, berorientasi hasil, dan suka membangun proyek dari awal. Mengelola orang, ide, dan sumber daya adalah hal yang membuatmu bersemangat.", icon: Target, color: "border-orange-200 bg-orange-50 text-orange-700" },
 };
 
 const ORG_PERSONALITY_MAP: Record<string, string> = {
@@ -98,179 +88,173 @@ const ORG_PERSONALITY_MAP: Record<string, string> = {
   kopma: "wirausaha",
 };
 
-// ─────────────────────────────────────────────────────────
-//  15 PERTANYAAN — setiap opsi punya insight penjabaran
-// ─────────────────────────────────────────────────────────
 const QUESTIONS: Question[] = [
   {
     id: 1,
-    text: "Hai! Kalau lagi ada waktu bebas dan nggak ada kewajiban apapun, kamu paling sering ngapain?",
+    text: "Kalau lagi ada waktu bebas dan tidak ada kewajiban, kamu paling sering melakukan apa?",
     short: true,
     options: [
-      { text: "Olahraga atau gerak fisik", points: { olahraga: 3, mapala: 2, taekwondo: 2, psht: 2 }, personalityHints: ["atlet", "pemimpin"], insight: "Kamu mengisi energi lewat gerakan tubuh — ini menandakan kamu adalah tipe yang butuh aksi nyata, bukan sekadar refleksi. Tubuh aktif biasanya cerminan dari pikiran yang juga selalu bergerak." },
-      { text: "Main musik atau berkarya", points: { sanggarmusik: 3, bahana: 2, sslk: 2 }, personalityHints: ["seniman"], insight: "Berkarya adalah cara kamu memproses dunia di sekitarmu. Kamu butuh saluran ekspresi, dan ini tanda kuat bahwa sisi kreatif adalah inti dari kepribadianmu." },
-      { text: "Baca, nulis, atau nonton", points: { cendekia: 3, lpmsukma: 2, lppq: 2 }, personalityHints: ["intelektual", "spiritual"], insight: "Kesenangan menyerap informasi dan narasi menunjukkan kamu adalah pemikir — kamu mengisi energi dengan memperluas perspektif, bukan menghabiskan tenaga fisik." },
-      { text: "Ngumpul atau jalan bareng teman", points: { kopma: 3, ldkamal: 2, ksrpmi: 2 }, personalityHints: ["humanis", "wirausaha"], insight: "Interaksi sosial adalah sumber energimu. Kamu bersinar paling terang ketika ada orang lain di sekitarmu — ini menunjukkan jiwa kolaboratif yang kuat." },
+      { text: "Olahraga atau gerak fisik", points: { olahraga: 3, mapala: 2, taekwondo: 2, psht: 2 }, personalityHints: ["atlet", "pemimpin"], insight: "Kamu mengisi energi lewat gerakan tubuh. Ini menandakan kamu adalah tipe yang butuh aksi nyata, bukan sekadar refleksi." },
+      { text: "Main musik atau berkarya", points: { sanggarmusik: 3, bahana: 2, sslk: 2 }, personalityHints: ["seniman"], insight: "Berkarya adalah caramu memproses dunia sekitar. Kamu butuh saluran ekspresi, dan ini tanda kuat bahwa sisi kreatif adalah inti kepribadianmu." },
+      { text: "Membaca, menulis, atau menonton", points: { cendekia: 3, lpmsukma: 2, lppq: 2 }, personalityHints: ["intelektual", "spiritual"], insight: "Kesenangan menyerap informasi dan narasi menunjukkan kamu adalah pemikir yang mengisi energi dengan memperluas perspektif." },
+      { text: "Berkumpul atau jalan bersama teman", points: { kopma: 3, ldkamal: 2, ksrpmi: 2 }, personalityHints: ["humanis", "wirausaha"], insight: "Interaksi sosial adalah sumber energimu. Kamu bersinar paling terang ketika berkolaborasi dengan orang lain." },
     ],
   },
   {
     id: 2,
-    leadIn: "Oke, ngerti. Nah dari kegiatan tadi —",
-    text: "Biasanya kamu lebih enak ngelakuinnya sama orang lain atau sendirian?",
+    leadIn: "Dari kegiatan tadi,",
+    text: "Biasanya kamu lebih nyaman melakukannya bersama orang lain atau sendirian?",
     short: true,
     options: [
-      { text: "Bareng orang lain, lebih seru!", points: { olahraga: 2, bahana: 2, kopma: 2, ldkamal: 2, menwa: 2 }, personalityHints: ["humanis", "pemimpin", "wirausaha"], insight: "Kamu adalah ekstrover dalam hal energi — kehadiran orang lain justru memperkuat performa dan semangatmu. Lingkungan ramai bukan hambatan, tapi bahan bakar." },
-      { text: "Sendiri, lebih fokus dan bebas", points: { cendekia: 2, lpmsukma: 2, lppq: 2, sslk: 2 }, personalityHints: ["intelektual", "spiritual", "seniman"], insight: "Kamu membutuhkan ruang personal untuk masuk ke zona terbaik. Bukan berarti kamu antisosial — justru kesoloan itu yang membuatmu menghasilkan karya atau pemikiran paling berkualitas." },
+      { text: "Bersama orang lain, lebih bersemangat!", points: { olahraga: 2, bahana: 2, kopma: 2, ldkamal: 2, menwa: 2 }, personalityHints: ["humanis", "pemimpin", "wirausaha"], insight: "Kamu terdorong oleh energi sosial. Kehadiran orang lain memperkuat performa dan semangat kerjamu." },
+      { text: "Sendiri, lebih fokus dan leluasa", points: { cendekia: 2, lpmsukma: 2, lppq: 2, sslk: 2 }, personalityHints: ["intelektual", "spiritual", "seniman"], insight: "Kamu membutuhkan ruang personal untuk masuk ke performa terbaik dalam menghasilkan karya berkualitas." },
     ],
   },
   {
     id: 3,
-    leadIn: "Sip! Masuk akal banget.",
-    text: "Waktu SMA, kamu paling aktif di kegiatan apa?",
+    leadIn: "Latar belakang kegiatan sekolah",
+    text: "Saat masa sekolah menengah, kegiatan apa yang paling berkesan bagimu?",
     short: true,
     options: [
-      { text: "Olahraga atau Pramuka", points: { olahraga: 4, pramuka: 4, mapala: 3, menwa: 3 }, personalityHints: ["atlet", "pemimpin"], insight: "Masa remajamu dibentuk oleh disiplin fisik dan kerja tim. Fondasi ini membuat kamu terbiasa dengan hierarki, etos kerja keras, dan tantangan yang terukur." },
-      { text: "Seni, musik, atau teater", points: { bahana: 4, sanggarmusik: 4, sslk: 3 }, personalityHints: ["seniman"], insight: "Seni adalah rumah pertamamu di dunia kegiatan ekstrakurikuler. Ini bukan kebetulan — kreativitas dan kepekaan estetika sudah terbentuk jauh sebelum kuliah." },
-      { text: "OSIS, organisasi, atau rohis", points: { menwa: 3, ldkamal: 3, lppq: 3, annisa: 3, kopma: 2 }, personalityHints: ["pemimpin", "spiritual", "wirausaha"], insight: "Kamu sudah terbiasa mengelola orang dan program sejak dini. Jiwa kepemimpinan dan nilai-nilai keorganisasian sudah menjadi bagian dari identitasmu." },
-      { text: "Jurnalistik, olimpiade, atau karya ilmiah", points: { lpmsukma: 4, cendekia: 4 }, personalityHints: ["intelektual"], insight: "Kamu memilih arena yang menguji ketajaman berpikir, bukan sekadar kekuatan fisik. Ini menandakan dorongan intelektual yang sudah ada jauh sebelum masuk kampus." },
-      { text: "Bela diri atau kesenian beladiri", points: { psht: 4, taekwondo: 4, kempo: 3 }, personalityHints: ["atlet"], insight: "Kamu memilih disiplin yang melatih ketahanan fisik sekaligus mental. Bela diri mengajarkan bahwa perjuangan nyata itu bukan soal menang kalah, tapi soal konsistensi." },
+      { text: "Olahraga atau Pramuka", points: { olahraga: 4, pramuka: 4, mapala: 3, menwa: 3 }, personalityHints: ["atlet", "pemimpin"], insight: "Karaktermu dibentuk oleh disiplin fisik dan kerja sama tim yang terbiasa dengan tantangan terukur." },
+      { text: "Seni, musik, atau teater", points: { bahana: 4, sanggarmusik: 4, sslk: 3 }, personalityHints: ["seniman"], insight: "Seni adalah ruang ekspresi awalmu. Kreativitas dan kepekaan estetika sudah terbentuk konsisten sejak lama." },
+      { text: "OSIS, organisasi kepemudaan, atau rohis", points: { menwa: 3, ldkamal: 3, lppq: 3, annisa: 3, kopma: 2 }, personalityHints: ["pemimpin", "spiritual", "wirausaha"], insight: "Kamu sudah terbiasa mengelola program dan berkoordinasi dengan banyak pihak sejak dini." },
+      { text: "Jurnalistik, olimpiade, atau karya ilmiah", points: { lpmsukma: 4, cendekia: 4 }, personalityHints: ["intelektual"], insight: "Kamu memilih ruang yang menguji ketajaman berpikir dan argumentasi logis berbasis fakta." },
+      { text: "Bela diri dan ketangkasan", points: { psht: 4, taekwondo: 4, kempo: 3 }, personalityHints: ["atlet"], insight: "Kamu memilih disiplin yang melatih ketahanan fisik sekaligus mental sportivitas yang kuat." },
     ],
   },
   {
     id: 4,
-    leadIn: "Wah, itu pasti banyak ceritanya ya!",
-    text: "Dari pengalaman itu, hal apa yang paling kamu kangenin?",
+    leadIn: "Refleksi pengalaman",
+    text: "Dari pengalaman berkegiatan itu, hal apa yang paling kamu rindukan?",
     short: true,
     options: [
-      { text: "Serunya latihan dan kompetisi", points: { olahraga: 3, taekwondo: 3, psht: 3, mapala: 2 }, personalityHints: ["atlet"], insight: "Yang kamu rindukan adalah adrenalin dari kompetisi yang jelas hasilnya — kamu bergerak paling baik ketika ada target yang bisa dikejar dan dimenangkan." },
-      { text: "Momen pentas atau tampil di depan orang", points: { bahana: 3, sanggarmusik: 3, sslk: 2 }, personalityHints: ["seniman"], insight: "Ada kebutuhan dalam dirimu untuk dilihat dan diakui lewat karya. Bukan soal ego — tapi soal momen ketika ekspresimu berhasil terhubung dengan audiens." },
-      { text: "Solidaritas dan kekompakan tim", points: { menwa: 3, pramuka: 3, ksrpmi: 3, ldkamal: 2 }, personalityHints: ["pemimpin", "humanis"], insight: "Bukan prestasinya yang paling kamu rindu, tapi rasa berjuang bersama-sama. Ini menandakan bahwa hubungan manusia adalah motivasi terdalammu dalam berorganisasi." },
-      { text: "Ketika ide atau tulisanku punya dampak nyata", points: { lpmsukma: 3, cendekia: 3, kopma: 2 }, personalityHints: ["intelektual", "wirausaha"], insight: "Kepuasanmu datang dari melihat pemikiranmu memengaruhi sesuatu — bukan dari sorak sorai, tapi dari perubahan yang terasa nyata karena kontribusimu." },
+      { text: "Suasana latihan dan kompetisi", points: { olahraga: 3, taekwondo: 3, psht: 3, mapala: 2 }, personalityHints: ["atlet"], insight: "Yang kamu rindukan adalah dinamika kompetisi terarah di mana ada target jelas yang dapat dicapai." },
+      { text: "Momen pentas atau tampil di depan umum", points: { bahana: 3, sanggarmusik: 3, sslk: 2 }, personalityHints: ["seniman"], insight: "Ada kepuasan saat karyamu dinikmati dan berhasil membangun hubungan emosional dengan audiens." },
+      { text: "Solidaritas dan kekompakan tim", points: { menwa: 3, pramuka: 3, ksrpmi: 3, ldkamal: 2 }, personalityHints: ["pemimpin", "humanis"], insight: "Bukan hanya prestasi, melainkan rasa berjuang bersama yang menjadi motivasi intimu." },
+      { text: "Ketika ide atau tulisan memberi dampak nyata", points: { lpmsukma: 3, cendekia: 3, kopma: 2 }, personalityHints: ["intelektual", "wirausaha"], insight: "Kepuasan terbesarmu hadir saat gagasanmu mendorong perubahan konkret bagi lingkungan sekitar." },
     ],
   },
   {
     id: 5,
-    leadIn: "Paham, itu yang jadi motivasimu!",
-    text: "Kalau kamu jujur, kamu tipe yang lebih suka aturan yang jelas atau kebebasan bergerak?",
+    leadIn: "Gaya kerja",
+    text: "Secara alami, kamu lebih menyukai sistem dengan aturan terstruktur atau fleksibilitas penuh?",
     short: true,
     options: [
-      { text: "Aturan jelas lebih baik buat saya", points: { menwa: 4, pramuka: 3, lppq: 2 }, personalityHints: ["pemimpin"], insight: "Kamu bekerja optimal dalam sistem yang terstruktur. Aturan bukan penjara bagimu — justru itu yang memberi kamu arah dan membuatmu bisa bergerak dengan percaya diri." },
-      { text: "Campuran, tergantung situasinya", points: { ksrpmi: 3, cendekia: 3, kopma: 3, bahana: 2 }, personalityHints: ["humanis", "intelektual", "wirausaha"], insight: "Kamu adalah adaptator — fleksibel secara konteks tapi tetap punya prinsip. Kemampuan membaca situasi ini adalah aset besar di dunia organisasi yang dinamis." },
-      { text: "Bebas bergerak, saya lebih kreatif", points: { bahana: 4, sanggarmusik: 3, sslk: 3, mapala: 3 }, personalityHints: ["seniman", "atlet"], insight: "Aturan yang terlalu rigid membuatmu sesak. Kamu butuh ruang untuk berimprovisasi — dan di sanalah ide-ide terbaikmu lahir." },
+      { text: "Aturan terstruktur lebih jelas bagi saya", points: { menwa: 4, pramuka: 3, lppq: 2 }, personalityHints: ["pemimpin"], insight: "Kamu bekerja optimal dalam alur kerja yang tertib, memberikan arah yang tegas dan terukur." },
+      { text: "Kombinasi adaptif tergantung situasi", points: { ksrpmi: 3, cendekia: 3, kopma: 3, bahana: 2 }, personalityHints: ["humanis", "intelektual", "wirausaha"], insight: "Kamu fleksibel dalam membaca situasi namun tetap memegang prinsip kerja yang jelas." },
+      { text: "Ruang leluasa agar ide segar dapat berkembang", points: { bahana: 4, sanggarmusik: 3, sslk: 3, mapala: 3 }, personalityHints: ["seniman", "atlet"], insight: "Struktur yang terlalu kaku membatasi potensimu; kamu memerlukan keleluasaan dalam bereksperimen." },
     ],
   },
   {
     id: 6,
-    leadIn: "Oke, sekarang masuk ke hal yang lebih konkret ya.",
-    text: "Kalau ada kegiatan kampus yang menarik tapi waktunya bentrok sama jam kuliah, kamu bakal gimana?",
+    leadIn: "Manajemen prioritas",
+    text: "Jika agenda organisasi bentrok dengan jadwal perkuliahan penting, bagaimana sikapmu?",
     options: [
-      { text: "Tetap prioritaskan kuliah, kegiatan bisa lain waktu.", points: { cendekia: 4, lppq: 3, annisa: 2 }, personalityHints: ["intelektual", "spiritual"], insight: "Kamu adalah tipe yang tidak mudah tergoda impuls — kamu tahu mana prioritas jangka panjang dan cukup disiplin untuk menjalankannya. Ini kematangan yang tidak semua orang punya di usia muda." },
-      { text: "Usahain hadir keduanya — minta dispensasi atau atur jadwal kreatif.", points: { kopma: 3, bahana: 3, lpmsukma: 3 }, personalityHints: ["wirausaha", "seniman"], insight: "Kamu nggak suka pilihan hitam-putih — kamu selalu mencari cara ketiga. Ini tanda mentalitas wirausaha: keterbatasan dilihat sebagai teka-teki yang bisa dipecahkan." },
-      { text: "Hadir ke kegiatan. Kalau sudah komitmen, ya harus dijalankan.", points: { menwa: 4, mapala: 4, ksrpmi: 3, pramuka: 3 }, personalityHints: ["pemimpin", "humanis"], insight: "Buat kamu, komitmen kepada orang lain adalah hal yang sakral. Kamu lebih memilih menanggung risikonya sendiri daripada mengecewakan tim — ini ciri pemimpin yang bisa diandalkan." },
+      { text: "Tetap memprioritaskan kuliah, kegiatan disesuaikan kemudian.", points: { cendekia: 4, lppq: 3, annisa: 2 }, personalityHints: ["intelektual", "spiritual"], insight: "Kamu konsisten menjaga komitmen utama akademik dengan kedewasaan memilah prioritas." },
+      { text: "Mencari solusi adaptif: koordinasi dispensasi atau penyesuaian jadwal.", points: { kopma: 3, bahana: 3, lpmsukma: 3 }, personalityHints: ["wirausaha", "seniman"], insight: "Kamu mencari jalan keluar solutif tanpa mengorbankan kedua tanggung jawab yang diemban." },
+      { text: "Hadir menjalankan komitmen kegiatan yang sudah disepakati.", points: { menwa: 4, mapala: 4, ksrpmi: 3, pramuka: 3 }, personalityHints: ["pemimpin", "humanis"], insight: "Integritas terhadap kesepakatan bersama adalah prinsip penting yang kamu pegang teguh." },
     ],
   },
   {
     id: 7,
-    leadIn: "Nah, ngomongin kegiatan —",
-    text: "Kalau kamu bergabung di sebuah organisasi, peran yang paling alami buat kamu itu yang mana?",
+    leadIn: "Peran dalam organisasi",
+    text: "Dalam dinamika kepengurusan, peran mana yang paling natural untukmu?",
     options: [
-      { text: "Yang di depan: ketua, koordinator, atau juru bicara.", points: { menwa: 5, pramuka: 4, olahraga: 3, kopma: 3 }, personalityHints: ["pemimpin", "wirausaha"], insight: "Posisi terdepan bukan soal gengsi — kamu genuinely merasa paling efektif ketika punya kewenangan untuk mengarahkan dan bertanggung jawab atas keputusan." },
-      { text: "Yang eksekusi: yang turun tangan dan selesaikan pekerjaan.", points: { ksrpmi: 5, mapala: 4, taekwondo: 3, pramuka: 3 }, personalityHints: ["humanis", "atlet"], insight: "Kamu adalah orang yang membuat sesuatu benar-benar terjadi. Kamu tidak butuh sorotan — kepuasanmu datang dari melihat hasil nyata dari tanganmu sendiri." },
-      { text: "Yang kreatif: bikin konten, desain, atau menyusun konsep acara.", points: { bahana: 5, sanggarmusik: 4, sslk: 4, lpmsukma: 3 }, personalityHints: ["seniman", "intelektual"], insight: "Kamu melihat organisasi sebagai kanvas — tempatmu menuangkan ide dan estetika. Peranmu adalah membuat kegiatan menjadi lebih bermakna dan berkesan bagi semua orang." },
-      { text: "Yang di balik layar: riset, analisis, atau jadi penasihat.", points: { cendekia: 5, lppq: 4, annisa: 3 }, personalityHints: ["intelektual", "spiritual"], insight: "Kamu adalah otak yang bekerja diam-diam. Kamu tahu bahwa keputusan terbaik lahir dari data dan refleksi — bukan dari siapa yang paling keras bersuara." },
+      { text: "Di lini depan: koordinator, ketua, atau representasi publik.", points: { menwa: 5, pramuka: 4, olahraga: 3, kopma: 3 }, personalityHints: ["pemimpin", "wirausaha"], insight: "Kamu nyaman memegang tanggung jawab kepemimpinan dan mengarahkan kerja tim." },
+      { text: "Di lini operasional: mengeksekusi langsung tugas di lapangan.", points: { ksrpmi: 5, mapala: 4, taekwondo: 3, pramuka: 3 }, personalityHints: ["humanis", "atlet"], insight: "Kamu adalah motor penggerak yang memastikan rencana benar-benar terwujud secara nyata." },
+      { text: "Di lini kreatif: menyusun konsep kegiatan, publikasi, dan materi visual.", points: { bahana: 5, sanggarmusik: 4, sslk: 4, lpmsukma: 3 }, personalityHints: ["seniman", "intelektual"], insight: "Kamu berperan memperkaya nilai estetika dan kemasan pesan agar menarik bagi audiens." },
+      { text: "Di lini analisis: riset dokumen, penulisan, dan pertimbangan strategis.", points: { cendekia: 5, lppq: 4, annisa: 3 }, personalityHints: ["intelektual", "spiritual"], insight: "Kamu mengandalkan data dan pertimbangan matang untuk mendukung keputusan organisasi." },
     ],
   },
   {
     id: 8,
-    leadIn: "Itu gambaran peranmu. Sekarang satu pertanyaan yang lebih personal:",
-    text: "Selama ini, teman-teman atau orang terdekat biasanya mengandalkan kamu untuk hal apa?",
+    leadIn: "Interaksi sosial",
+    text: "Rekan-rekan terdekat biasanya paling mengandalkan dirimu dalam hal apa?",
     options: [
-      { text: "Jadi tempat curhat atau sandaran saat mereka lagi down.", points: { ksrpmi: 5, ldkamal: 4, annisa: 4, lppq: 3 }, personalityHints: ["humanis", "spiritual"], insight: "Orang-orang di sekitarmu secara naluriah merasakanmu sebagai zona aman. Ini bukan kebetulan — kamu memancarkan kehangatan dan penerimaan yang membuat orang ingin terbuka." },
-      { text: "Ngambil keputusan atau nenangin situasi yang kacau.", points: { menwa: 5, pramuka: 4, mapala: 3 }, personalityHints: ["pemimpin"], insight: "Di tengah chaos, kamu adalah titik tenang. Kemampuan untuk tetap jernih dan terarah saat semua orang panik adalah tanda kepemimpinan alami yang tidak bisa dipelajari di buku." },
-      { text: "Bikin sesuatu jadi lebih menarik: ide segar, konten, atau kreativitas.", points: { bahana: 5, sanggarmusik: 4, lpmsukma: 3, kopma: 3 }, personalityHints: ["seniman", "wirausaha"], insight: "Kamu adalah sumber energi kreatif bagi orang-orang sekitarmu. Ketika ide macet, semua orang menoleh ke kamu — karena kamu selalu punya perspektif yang segar dan tidak biasa." },
-      { text: "Cari fakta, kasih analisis, atau jelasin sesuatu yang rumit.", points: { cendekia: 5, lpmsukma: 4 }, personalityHints: ["intelektual"], insight: "Kamu adalah rujukan intelektual dalam lingkaran pertemananmu. Orang percaya pada penalaranmu — dan itu adalah modal sosial yang sangat berharga di dunia organisasi." },
+      { text: "Tempat bercerita yang menjaga kerahasiaan dan ketenangan.", points: { ksrpmi: 5, ldkamal: 4, annisa: 4, lppq: 3 }, personalityHints: ["humanis", "spiritual"], insight: "Kehangatan dan kepekaanmu membuat orang lain merasa dihargai dan aman untuk terbuka." },
+      { text: "Mengambil keputusan tegas saat situasi mendesak.", points: { menwa: 5, pramuka: 4, mapala: 3 }, personalityHints: ["pemimpin"], insight: "Kemampuan berpikir tenang saat kondisi genting adalah modal kepemimpinan yang berharga." },
+      { text: "Memberikan ide-ide kreatif baru yang memecah kebuntuan.", points: { bahana: 5, sanggarmusik: 4, lpmsukma: 3, kopma: 3 }, personalityHints: ["seniman", "wirausaha"], insight: "Kamu memiliki cara pandang unik yang menyegarkan diskusi dan memicu solusi baru." },
+      { text: "Mencari fakta dan memberikan telaah logis terhadap suatu persoalan.", points: { cendekia: 5, lpmsukma: 4 }, personalityHints: ["intelektual"], insight: "Penalaranmu yang terstruktur menjadikannya rujukan terpercaya saat dibutuhkan keputusan berbasis fakta." },
     ],
   },
   {
     id: 9,
-    leadIn: "Keren, itu kekuatan nyatamu!",
-    text: "Kalau kamu harus pilih antara dua jenis kegiatan kampus ini, kamu lebih tertarik ke mana?",
+    leadIn: "Preferensi lingkungan",
+    text: "Antara dua bentuk aktivitas berikut, mana yang lebih menarik minatmu?",
     options: [
-      { text: "Kegiatan lapangan: kemah, latihan fisik, ekspedisi, atau operasi kemanusiaan.", points: { mapala: 5, menwa: 4, ksrpmi: 4, pramuka: 4 }, personalityHints: ["pemimpin", "atlet", "humanis"], insight: "Tubuh dan lingkungan adalah mediamu. Kamu belajar dan berkembang paling cepat ketika ada tantangan fisik yang nyata — bukan dari slide presentasi, tapi dari pengalaman langsung di lapangan." },
-      { text: "Kegiatan dalam ruangan: diskusi, kajian, riset, atau produksi karya.", points: { cendekia: 5, lppq: 4, lpmsukma: 4, bahana: 3, sslk: 3 }, personalityHints: ["intelektual", "spiritual", "seniman"], insight: "Kamu adalah pemikir dan pencipta. Ruang yang kondusif untuk merenung dan berkarya adalah habitat terbaikmu — di situlah kamu menghasilkan kontribusi paling bermakna." },
+      { text: "Aktivitas lapangan: penjelajahan alam, latihan fisik, atau bakti sosial terbuka.", points: { mapala: 5, menwa: 4, ksrpmi: 4, pramuka: 4 }, personalityHints: ["pemimpin", "atlet", "humanis"], insight: "Kamu berkembang optimal melalui aksi fisik langsung dan pengalaman nyata di luar ruangan." },
+      { text: "Aktivitas dalam ruangan: diskusi panel, kajian literasi, riset, atau produksi karya.", points: { cendekia: 5, lppq: 4, lpmsukma: 4, bahana: 3, sslk: 3 }, personalityHints: ["intelektual", "spiritual", "seniman"], insight: "Ruang yang tenang dan kondusif untuk menelaah ide adalah habitat terbaik bagi kreativitasmu." },
     ],
   },
   {
     id: 10,
-    leadIn: "Sudah mulai terpetakan nih!",
-    text: "Dari semua hal tadi, apa yang paling kamu harapkan bisa kamu dapatkan dari pengalaman berorganisasi di kuliah?",
+    leadIn: "Harapan pribadi",
+    text: "Apa capaian terbesar yang ingin kamu bawa dari perjalanan berorganisasi?",
     options: [
-      { text: "Jaringan pertemanan dan relasi yang luas untuk karir ke depan.", points: { kopma: 5, menwa: 3, olahraga: 3 }, personalityHints: ["wirausaha", "pemimpin"], insight: "Kamu berpikir strategis — kamu sadar bahwa siapa yang kamu kenal sama pentingnya dengan apa yang kamu tahu. Ini bukan oportunisme, tapi kecerdasan sosial yang dewasa." },
-      { text: "Kemampuan teknis atau skill baru yang benar-benar berguna.", points: { cendekia: 4, lpmsukma: 4, taekwondo: 3, mapala: 3, pramuka: 3 }, personalityHints: ["intelektual", "atlet"], insight: "Kamu tidak mau berorganisasi hanya untuk foto dan sertifikat. Kamu datang untuk belajar hal yang nyata dan terasa — dan itu membuat kamu jadi anggota yang serius dan berkualitas." },
-      { text: "Pengalaman berkontribusi nyata untuk orang lain dan lingkungan sekitar.", points: { ksrpmi: 5, ldkamal: 4, lppq: 4, annisa: 4 }, personalityHints: ["humanis", "spiritual"], insight: "Motivasimu berakar dari makna, bukan prestise. Kamu akan bekerja paling keras bukan ketika ada hadiah, tapi ketika kamu tahu ada orang yang hidupnya terbantu karena kamu." },
-      { text: "Panggung untuk mengekspresikan bakat dan karya yang selama ini tersimpan.", points: { bahana: 5, sanggarmusik: 5, sslk: 4 }, personalityHints: ["seniman"], insight: "Di dalam dirimu ada sesuatu yang ingin dikeluarkan dan dibagikan ke dunia. Kamu mencari ekosistem yang cukup aman dan cukup berani untuk menampung ekspresimu yang sesungguhnya." },
+      { text: "Jejaring relasi yang luas dan bermanfaat untuk masa depan.", points: { kopma: 5, menwa: 3, olahraga: 3 }, personalityHints: ["wirausaha", "pemimpin"], insight: "Kamu memandang relasi sosial sebagai investasi jangka panjang yang bermakna." },
+      { text: "Keahlian teknis praktis yang benar-benar dapat diaplikasikan.", points: { cendekia: 4, lpmsukma: 4, taekwondo: 3, mapala: 3, pramuka: 3 }, personalityHints: ["intelektual", "atlet"], insight: "Penguasaan keterampilan konkret adalah tujuan utamamu dalam mengikuti kegiatan kampus." },
+      { text: "Dampak sosial langsung yang meringankan beban orang lain.", points: { ksrpmi: 5, ldkamal: 4, lppq: 4, annisa: 4 }, personalityHints: ["humanis", "spiritual"], insight: "Kebermaknaan kontribusi sosial adalah kompas utama dalam setiap langkah pengabdianmu." },
+      { text: "Panggung apresiasi untuk karya dan bakat terbaikmu.", points: { bahana: 5, sanggarmusik: 5, sslk: 4 }, personalityHints: ["seniman"], insight: "Kamu termotivasi untuk berbagi karya inspiratif yang meninggalkan kesan mendalam bagi audiens." },
     ],
   },
   {
     id: 11,
-    leadIn: "Oke kita mengerucut —",
-    text: "Kalau kamu lihat ada masalah nyata di kampus atau lingkunganmu, cara kamu meresponsnya yang paling natural itu gimana?",
+    leadIn: "Respon atas masalah",
+    text: "Ketika menemui persoalan nyata di kampus, pendekatan mana yang pertama kamu ambil?",
     options: [
-      { text: "Turun langsung, bantu selesaikan, dan pastikan orang yang terdampak aman.", points: { ksrpmi: 6, menwa: 4, pramuka: 4 }, personalityHints: ["humanis", "pemimpin"], insight: "Naluri pertamamu adalah bertindak, bukan menonton. Kamu tidak nyaman menjadi penonton penderitaan — ada dorongan dalam dirimu untuk segera menjadi bagian dari solusi." },
-      { text: "Dokumentasikan, investigasi, lalu suarakan lewat tulisan atau media.", points: { lpmsukma: 6, cendekia: 5 }, personalityHints: ["intelektual"], insight: "Kamu percaya bahwa informasi yang benar adalah senjata paling efektif. Sebelum bertindak, kamu ingin memastikan narasi yang tersebar adalah narasi yang akurat dan berdasar fakta." },
-      { text: "Kumpulkan orang-orang yang peduli, susun strategi, dan gerakkan bersama.", points: { menwa: 6, kopma: 4, ldkamal: 4 }, personalityHints: ["pemimpin", "wirausaha"], insight: "Kamu berpikir dalam skala — satu orang tidak cukup untuk mengubah sistem. Kamu secara naluriah mencari cara untuk menggerakkan banyak orang ke satu tujuan yang sama." },
-      { text: "Cari akar masalah dari perspektif nilai dan ajak refleksi bersama.", points: { lppq: 6, annisa: 5, ldkamal: 4 }, personalityHints: ["spiritual"], insight: "Kamu percaya bahwa solusi terbaik lahir dari perubahan kesadaran, bukan sekadar perubahan perilaku. Pendekatan kamu adalah mendalam, bukan hanya memperbaiki gejala permukaan." },
+      { text: "Terjun langsung membantu penanganan di lokasi.", points: { ksrpmi: 6, menwa: 4, pramuka: 4 }, personalityHints: ["humanis", "pemimpin"], insight: "Nalurimu adalah mengambil tindakan cepat untuk memberi pertolongan langsung." },
+      { text: "Melakukan verifikasi fakta lalu menyuarakannya melalui kanal informasi resmi.", points: { lpmsukma: 6, cendekia: 5 }, personalityHints: ["intelektual"], insight: "Kamu meyakini transparansi informasi terverifikasi adalah instrumen penyelesaian yang ampuh." },
+      { text: "Mengonsolidasikan kelompok untuk merumuskan langkah bersama secara terorganisir.", points: { menwa: 6, kopma: 4, ldkamal: 4 }, personalityHints: ["pemimpin", "wirausaha"], insight: "Kamu mengutamakan kekuatan koordinasi terpadu untuk mencapai solusi yang berkelanjutan." },
+      { text: "Mengkaji akar permasalahan dari sudut pandang nilai moral dan etika.", points: { lppq: 6, annisa: 5, ldkamal: 4 }, personalityHints: ["spiritual"], insight: "Kamu menekankan pembenahan mendasar pada kesadaran etika dan integritas nilai." },
     ],
   },
   {
     id: 12,
-    leadIn: "Cara responmu itu cukup revealing! Nah lanjut —",
-    text: "Kamu pernah nggak kepikiran untuk tampil di depan banyak orang — entah itu pentas, lomba, atau pidato?",
+    leadIn: "Kepercayaan diri publik",
+    text: "Bagaimana pandanganmu tentang tampil di hadapan publik (lomba, panggung, atau orasi)?",
     options: [
-      { text: "Sering! Itu justru sesuatu yang saya inginkan.", points: { bahana: 5, sanggarmusik: 5, menwa: 4, olahraga: 4 }, personalityHints: ["seniman", "pemimpin", "atlet"], insight: "Kamu menikmati visibilitas — bukan karena narsis, tapi karena kamu percaya bahwa penampilan yang baik bisa menginspirasi dan menggerakkan orang lain. Panggung adalah ruang pengaruhmu." },
-      { text: "Pernah, tapi lebih ke konteks lomba atau kompetisi akademik/fisik.", points: { cendekia: 5, taekwondo: 5, lpmsukma: 3 }, personalityHints: ["intelektual", "atlet"], insight: "Kamu tidak takut tampil, tapi kamu butuh alasan yang kuat — kamu tampil untuk membuktikan sesuatu, bukan sekadar dilihat. Itu menunjukkan integritas yang solid dalam berkompetisi." },
-      { text: "Kalau perlu ya mau, tapi bukan itu tujuan utamaku ikut organisasi.", points: { ksrpmi: 4, pramuka: 4, lppq: 4 }, personalityHints: ["humanis", "spiritual"], insight: "Kamu bergerak karena dampak, bukan spotlight. Kamu tidak butuh tepuk tangan untuk tahu bahwa kamu sudah melakukan hal yang benar — itu ketenangan batin yang tidak semua orang punya." },
-      { text: "Nggak terlalu, lebih nyaman kerja di balik layar atau dalam lingkup kecil.", points: { sslk: 5, cendekia: 4, annisa: 4 }, personalityHints: ["seniman", "intelektual"], insight: "Kamu tahu bahwa pengaruh terbesar tidak selalu datang dari panggung yang paling besar. Karya yang dikerjakan dengan sunyi seringkali punya daya tahan lebih lama dari sorot lampu panggung." },
+      { text: "Sangat tertarik karena panggung adalah sarana berbagi inspirasi.", points: { bahana: 5, sanggarmusik: 5, menwa: 4, olahraga: 4 }, personalityHints: ["seniman", "pemimpin", "atlet"], insight: "Kamu percaya komunikasi publik yang baik adalah sarana efektif menggerakkan masyarakat." },
+      { text: "Nyaman bila dalam konteks kompetisi akademik atau adu ketangkasan resmi.", points: { cendekia: 5, taekwondo: 5, lpmsukma: 3 }, personalityHints: ["intelektual", "atlet"], insight: "Kamu termotivasi membuktikan kapasitas dan sportivitas dalam ajang yang terukur." },
+      { text: "Bersedia jika dibutuhkan, namun fokus utamaku adalah hasil kerja nyata.", points: { ksrpmi: 4, pramuka: 4, lppq: 4 }, personalityHints: ["humanis", "spiritual"], insight: "Kamu menilai keberhasilan dari substansi dampak, bukan semata sorotan panggung." },
+      { text: "Lebih memilih peran strategis di balik layar.", points: { sslk: 5, cendekia: 4, annisa: 4 }, personalityHints: ["seniman", "intelektual"], insight: "Karya yang disiapkan secara tekun di balik layar seringkali memegang pengaruh paling kokoh." },
     ],
   },
   {
     id: 13,
-    leadIn: "Nah ini penting banget buat kamu pertimbangin —",
-    text: "Seberapa siap kamu untuk punya komitmen latihan atau kegiatan rutin setiap minggu?",
+    leadIn: "Komitmen waktu",
+    text: "Seberapa siap kamu menjalankan ritme kegiatan berkala setiap pekan?",
     options: [
-      { text: "Sangat siap. Rutinitas itu justru yang saya butuhkan.", points: { menwa: 5, taekwondo: 5, psht: 5, pramuka: 4, olahraga: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Kamu adalah tipe yang berkembang dalam struktur. Rutinitas bukan kebosanan bagimu — justru itu fondasi yang membuat kamu bisa meningkat secara konsisten dari waktu ke waktu." },
-      { text: "Siap, selama kegiatannya bermakna dan progresnya terasa.", points: { mapala: 4, ksrpmi: 4, lppq: 4, cendekia: 4 }, personalityHints: ["humanis", "spiritual", "intelektual"], insight: "Kamu bisa sangat disiplin, asalkan kamu paham alasannya. Kamu bukan tipe yang ikut arus — kamu butuh tujuan yang jelas sebelum mau meluangkan waktu dan energimu secara rutin." },
-      { text: "Agak fleksibel — saya butuh ruang sesuai mood dan energi.", points: { bahana: 4, sanggarmusik: 4, sslk: 3, kopma: 3, lpmsukma: 3 }, personalityHints: ["seniman", "wirausaha"], insight: "Kreativitasmu tidak bisa dijadwal. Kamu paling produktif ketika ada kebebasan untuk memilih kapan dan bagaimana kamu berkontribusi — dan organisasi yang tepat akan menghargai itu." },
+      { text: "Sangat siap karena rutinitas teratur membangun disiplin diri.", points: { menwa: 5, taekwondo: 5, psht: 5, pramuka: 4, olahraga: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Struktur latihan teratur adalah fondasi kemajuan bertahap yang paling kamu sukai." },
+      { text: "Siap selama sasaran kegiatannya jelas dan terarah.", points: { mapala: 4, ksrpmi: 4, lppq: 4, cendekia: 4 }, personalityHints: ["humanis", "spiritual", "intelektual"], insight: "Kamu berkomitmen penuh jika tujuan dan nilai manfaat kegiatannya terbukti nyata." },
+      { text: "Lebih nyaman dengan ritme yang fleksibel berbasis penyelesaian target.", points: { bahana: 4, sanggarmusik: 4, sslk: 3, kopma: 3, lpmsukma: 3 }, personalityHints: ["seniman", "wirausaha"], insight: "Kreativitasmu berkembang baik saat diberi kepercayaan mengelola waktu secara mandiri." },
     ],
   },
   {
     id: 14,
-    leadIn: "Hampir selesai, pertanyaan ini yang paling penting:",
-    text: "Lima tahun setelah lulus, kamu ingin orang-orang mengenalmu sebagai seseorang yang...?",
+    leadIn: "Visi masa depan",
+    text: "Setelah menyelesaikan studi, kamu ingin dikenal sebagai sosok yang seperti apa?",
     options: [
-      { text: "Berhasil membangun sesuatu — bisnis, program, atau perubahan sistem.", points: { kopma: 6, cendekia: 5, menwa: 4 }, personalityHints: ["wirausaha", "intelektual", "pemimpin"], insight: "Warisanmu berbentuk sistem, bukan sertifikat. Kamu ingin meninggalkan sesuatu yang tetap berjalan bahkan setelah kamu pergi — dan itu butuh kombinasi antara visi, ketekunan, dan kemampuan memimpin." },
-      { text: "Dikenal karena karya seni, tulisan, atau ekspresi yang menginspirasi.", points: { bahana: 6, sanggarmusik: 6, sslk: 5, lpmsukma: 5 }, personalityHints: ["seniman", "intelektual"], insight: "Kamu ingin diingat lewat sesuatu yang bisa dirasakan — bukan gelar atau jabatan, tapi karya yang menyentuh. Ini menunjukkan bahwa makna lebih penting bagimu daripada ukuran kesuksesan konvensional." },
-      { text: "Selalu ada untuk orang lain — tangan pertama yang hadir saat dibutuhkan.", points: { ksrpmi: 6, ldkamal: 5, lppq: 5, annisa: 5 }, personalityHints: ["humanis", "spiritual"], insight: "Kamu mendefinisikan kesuksesan lewat kualitas hubungan dan dampak personalmu. Dikenal sebagai orang yang bisa diandalkan — itu lebih berharga bagimu dari penghargaan apapun." },
-      { text: "Petarung tangguh yang nggak pernah menyerah dan selalu jadi yang terdepan.", points: { menwa: 6, mapala: 5, taekwondo: 5, psht: 5, olahraga: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Reputasimu dibangun di atas konsistensi dan keberanian. Kamu ingin dikenal sebagai orang yang tidak mundur dari tantangan — dan itu membutuhkan komitmen jangka panjang yang jauh melampaui satu semester." },
+      { text: "Mampu merintis sistem, organisasi, atau inisiatif mandiri yang berkelanjutan.", points: { kopma: 6, cendekia: 5, menwa: 4 }, personalityHints: ["wirausaha", "intelektual", "pemimpin"], insight: "Kamu berorientasi membangun ekosistem kerja yang terus berjalan dan memberi manfaat panjang." },
+      { text: "Dikenal atas karya seni, literasi, atau inovasi yang menginspirasi banyak orang.", points: { bahana: 6, sanggarmusik: 6, sslk: 5, lpmsukma: 5 }, personalityHints: ["seniman", "intelektual"], insight: "Karya bermakna yang menyentuh nilai kemanusiaan adalah legasi terbaik menurutmu." },
+      { text: "Sosok yang selalu sigap membantu dan dapat diandalkan oleh masyarakat.", points: { ksrpmi: 6, ldkamal: 5, lppq: 5, annisa: 5 }, personalityHints: ["humanis", "spiritual"], insight: "Ketulusan pengabdian dan integritas pribadi adalah tolak ukur keberhasilan utamamu." },
+      { text: "Pribadi tangguh, berpendirian teguh, dan berani menghadapi tantangan.", points: { menwa: 6, mapala: 5, taekwondo: 5, psht: 5, olahraga: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Karakter pantang menyerah dan konsistensi adalah reputasi utama yang kamu bangun." },
     ],
   },
   {
     id: 15,
-    leadIn: "Satu pertanyaan terakhir — dan ini yang paling jujur:",
-    text: "Kalau kamu bayangkan versi terbaik dirimu setelah aktif berorganisasi, pengalaman konkret apa yang paling kamu inginkan pernah kamu jalani?",
+    leadIn: "Pengalaman berharga",
+    text: "Pengalaman organisasi mana yang paling ingin kamu abadikan dalam portofoliomu?",
     options: [
-      { text: "Pernah mendaki gunung atau ekspedisi alam bersama tim yang solid.", points: { mapala: 8, pramuka: 6, menwa: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Mimpimu adalah momen di mana fisik, mental, dan persaudaraan diuji sekaligus. Pengalaman seperti ini mengubah orang secara fundamental — dan kamu tahu itu, makanya kamu menginginkannya." },
-      { text: "Pernah melihat tulisan atau risetku mengubah cara orang melihat sesuatu.", points: { lpmsukma: 8, cendekia: 7, bahana: 4 }, personalityHints: ["intelektual", "seniman"], insight: "Kekuatanmu ada di narasi dan gagasan. Momen tertinggimu bukan di podium, tapi ketika kamu sadar bahwa kata-katamu menggerakkan pikiran orang lain — itu pengaruh yang paling bertahan lama." },
-      { text: "Pernah jadi orang pertama yang menolong seseorang di saat kritis.", points: { ksrpmi: 8, ldkamal: 6, lppq: 5 }, personalityHints: ["humanis", "spiritual"], insight: "Kamu membayangkan momen di mana kehadiranmu benar-benar membuat perbedaan hidup seseorang. Ini bukan romantisme belaka — ini gambaran dari nilai yang paling dalam yang kamu pegang." },
-      { text: "Pernah tampil di panggung atau arena kompetisi dan memberikan yang terbaik.", points: { bahana: 7, sanggarmusik: 7, olahraga: 7, taekwondo: 6, sslk: 5 }, personalityHints: ["seniman", "atlet"], insight: "Puncak pengalamanmu adalah momen puncak performa — di mana semua latihan, semua persiapan, bertemu dengan satu kesempatan. Kamu bergerak menuju momen itu, dan kamu tahu kamu siap." },
-      { text: "Pernah membangun sesuatu dari nol — event, produk, atau komunitas — dan berhasil.", points: { kopma: 8, menwa: 5, ldkamal: 4 }, personalityHints: ["wirausaha", "pemimpin"], insight: "Kepuasan terbesarmu adalah melihat sesuatu yang tadinya hanya ada di kepala kamu, kemudian menjadi nyata dan bermanfaat bagi banyak orang. Itu dopamin dari seorang builder sejati." },
+      { text: "Ekspedisi lapangan dan bertahan bersama tim dalam medan menantang.", points: { mapala: 8, pramuka: 6, menwa: 4 }, personalityHints: ["pemimpin", "atlet"], insight: "Tantangan fisik dan kerja tim solid membentuk ketangguhan mental yang membekas kuat." },
+      { text: "Karya tulis, advokasi, atau riset yang berhasil memperbarui cara pandang publik.", points: { lpmsukma: 8, cendekia: 7, bahana: 4 }, personalityHints: ["intelektual", "seniman"], insight: "Pengaruh pemikiran teruji adalah jejak intelektual yang membanggakan bagimu." },
+      { text: "Layanan kemanusiaan yang langsung meringankan beban sesama di saat genting.", points: { ksrpmi: 8, ldkamal: 6, lppq: 5 }, personalityHints: ["humanis", "spiritual"], insight: "Pertolongan nyata pada momen krusial menjadi bukti nilai kepedulian yang kamu junjung." },
+      { text: "Tampil di arena kompetisi resmi dan mempersembahkan performa terbaik.", points: { bahana: 7, sanggarmusik: 7, olahraga: 7, taekwondo: 6, sslk: 5 }, personalityHints: ["seniman", "atlet"], insight: "Momen puncak saat latihan panjang terbayar oleh pencapaian terbaik di depan publik." },
+      { text: "Membangun program kerja dari nol hingga berhasil memberi manfaat mandiri.", points: { kopma: 8, menwa: 5, ldkamal: 4 }, personalityHints: ["wirausaha", "pemimpin"], insight: "Kepuasan saat melihat gagasan inovatif terwujud nyata menjadi solusi bagi banyak pihak." },
     ],
   },
 ];
 
-// ─────────────────────────────────────────────────────────
-//  ACCORDION ITEM UNTUK PENJABARAN JAWABAN
-// ─────────────────────────────────────────────────────────
 function InsightItem({ record, index }: { record: AnswerRecord; index: number }) {
   const [open, setOpen] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -302,7 +286,7 @@ function InsightItem({ record, index }: { record: AnswerRecord; index: number })
       </button>
       <div ref={bodyRef} style={{ height: 0, overflow: "hidden", opacity: 0 }}>
         <div className="px-4 pb-4 pl-12">
-          <p className="text-[11px] sm:text-xs text-neutral-500 leading-relaxed border-l-2 border-brand-secondary/40 pl-3">
+          <p className="text-[11px] sm:text-xs text-neutral-600 leading-relaxed border-l-2 border-brand-secondary/40 pl-3">
             {record.insight}
           </p>
         </div>
@@ -311,9 +295,6 @@ function InsightItem({ record, index }: { record: AnswerRecord; index: number })
   );
 }
 
-// ─────────────────────────────────────────────────────────
-//  KOMPONEN UTAMA
-// ─────────────────────────────────────────────────────────
 export default function MatchmakerQuiz() {
   const TOTAL = QUESTIONS.length;
 
@@ -356,7 +337,6 @@ export default function MatchmakerQuiz() {
   const handleSelect = (option: Option) => {
     const q = QUESTIONS[currentIdx];
 
-    // Akumulasi skor
     const newOrgScores = { ...scores };
     Object.entries(option.points).forEach(([key, val]) => {
       if (newOrgScores[key] !== undefined) newOrgScores[key] += val;
@@ -367,7 +347,6 @@ export default function MatchmakerQuiz() {
       if (newPersonalityScores[hint] !== undefined) newPersonalityScores[hint] += 5;
     });
 
-    // Simpan rekaman jawaban untuk penjabaran
     const newHistory: AnswerRecord[] = [
       ...answerHistory,
       {
@@ -378,7 +357,6 @@ export default function MatchmakerQuiz() {
       },
     ];
 
-    // Animasi GSAP swipe out
     if (cardRef.current) {
       const dir = Math.random() > 0.5 ? 460 : -460;
       const rot = dir > 0 ? 16 : -16;
@@ -402,7 +380,6 @@ export default function MatchmakerQuiz() {
       });
     }
 
-    // Progress bar
     if (progressRef.current) {
       gsap.to(progressRef.current, {
         width: `${((currentIdx + 1) / TOTAL) * 100}%`,
@@ -447,11 +424,8 @@ export default function MatchmakerQuiz() {
     if (!personality || top.length === 0) return "";
     const org1 = ORGS[top[0]]?.name ?? "";
     const org2 = ORGS[top[1]]?.name ?? "";
-    return `Dari 15 pertanyaan tadi, pola jawabanmu konsisten menunjukkan karakter seorang "${personality.label}". ${personality.description} Itulah kenapa ${org1} muncul sebagai pilihan utama — nilai-nilai dan gaya keterlibatan yang ditawarkan organisasi ini paling selaras dengan cara kamu bergerak. ${org2} menjadi alternatif kuat yang melengkapi sisi lain dari kepribadianmu.`;
+    return `Dari 15 pertanyaan tadi, pola jawabanmu konsisten menunjukkan karakter seorang "${personality.label}". ${personality.description} Oleh karena itu, ${org1} hadir sebagai pilihan yang selaras dengan caramu bergerak. Sementara ${org2} menjadi alternatif yang melengkapi aspek potensimu yang lain.`;
   };
-
-  const q = QUESTIONS[currentIdx];
-  const progressPercent = (currentIdx / TOTAL) * 100;
 
   const rankDeco = (idx: number) => {
     if (idx === 0) return { Icon: Trophy, bg: "bg-amber-50 border-amber-200", iconColor: "text-amber-500", label: "Paling Cocok" };
@@ -459,44 +433,40 @@ export default function MatchmakerQuiz() {
     return { Icon: Medal, bg: "bg-orange-50 border-orange-100", iconColor: "text-orange-400", label: "Minat Pendukung" };
   };
 
+  const q = QUESTIONS[currentIdx];
+  const progressPercent = Math.round(((currentIdx + 1) / TOTAL) * 100);
+
   return (
     <div className="w-full max-w-2xl mx-auto px-4 select-none">
-
-      {/* ── INTRO ── */}
       {!started ? (
         <div className="bg-white border border-neutral-100 rounded-3xl p-8 sm:p-10 text-center shadow-sm relative overflow-hidden">
-          <div className="absolute -top-10 -left-10 h-28 w-28 rounded-full bg-brand-secondary/10 blur-2xl" />
-          <div className="absolute -bottom-14 -right-14 h-32 w-32 rounded-full bg-brand-primary/5 blur-2xl" />
           <div className="relative z-10 flex flex-col items-center gap-4">
             <div className="h-16 w-16 rounded-2xl bg-brand-background flex items-center justify-center shadow-sm">
-              <Sparkles className="h-8 w-8 text-brand-primary stroke-[1.5]" />
+              <Compass className="h-8 w-8 text-brand-primary stroke-[1.5]" />
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 font-poppins">UKM & UKK Matchmaker</h2>
-              <p className="mt-3 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
-                Kita ngobrol santai lewat <strong className="text-neutral-700">15 pertanyaan yang saling menyambung</strong>. Di akhir, kamu dapat <strong className="text-neutral-700">tipe kepribadian, alasan rekomendasi, Top 3 organisasi, dan penjabaran dari setiap jawabanmu</strong>.
+              <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto leading-relaxed">
+                Eksplorasi minatmu melalui <strong className="text-neutral-800">15 pertanyaan terstruktur</strong>. Kamu akan memperoleh profil tipe kepribadian, rekomendasi Top 3 organisasi, serta penjabaran reflektif dari pilihanmu.
               </p>
             </div>
-            <div className="flex items-center gap-4 text-[10px] text-neutral-400 font-semibold">
+            <div className="flex items-center gap-4 text-[10px] text-neutral-500 font-semibold">
               <span className="flex items-center gap-1"><Brain className="h-3.5 w-3.5" /> 15 Pertanyaan</span>
               <span className="text-neutral-200">|</span>
               <span className="flex items-center gap-1"><Target className="h-3.5 w-3.5" /> Top 3 Hasil</span>
               <span className="text-neutral-200">|</span>
-              <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5" /> ~5 Menit</span>
+              <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5" /> Sekitar 5 Menit</span>
             </div>
-            <button onClick={startQuiz}
-              className="mt-2 inline-flex items-center gap-2 rounded-2xl bg-brand-primary hover:bg-brand-accent text-white px-7 py-3.5 text-xs font-bold tracking-wide transition-all shadow-md cursor-pointer group">
-              Mulai Ngobrol
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <button
+              onClick={startQuiz}
+              className="mt-2 inline-flex items-center justify-center rounded-2xl bg-brand-primary hover:bg-brand-accent text-white px-7 py-3.5 text-xs font-bold tracking-wide transition-all shadow-sm hover:shadow-md cursor-pointer"
+            >
+              Mulai Kuis
             </button>
           </div>
         </div>
-
       ) : showResult ? (
-        /* ── HALAMAN HASIL ── */
         <div ref={resultRef} className="space-y-4 pb-16">
-
-          {/* 1. Tipe Kepribadian */}
           {dominantPersonality && (
             <div className={`result-personality opacity-0 bg-white border rounded-3xl p-6 shadow-sm relative overflow-hidden ${dominantPersonality.color}`}>
               <div className="absolute top-0 inset-x-0 h-1 bg-brand-primary rounded-t-3xl" />
@@ -505,32 +475,32 @@ export default function MatchmakerQuiz() {
                   <dominantPersonality.icon className="h-5 w-5 stroke-[1.8]" />
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-400">Tipe Kepribadianmu</p>
+                  <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Tipe Karakter Dominan</p>
                   <h2 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins mt-0.5">
                     {dominantPersonality.emoji} {dominantPersonality.label}
                   </h2>
-                  <p className="text-[11px] text-neutral-500 mt-1 italic">"{dominantPersonality.tagline}"</p>
+                  <p className="text-[11px] text-neutral-600 mt-1 italic">"{dominantPersonality.tagline}"</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 2. Alasan Rekomendasi */}
           <div className="result-reason opacity-0 bg-white border border-neutral-100 rounded-3xl p-5 shadow-xs">
-            <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-2">Kenapa organisasi ini cocok buat kamu?</p>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 mb-2">Mengapa rekomendasi ini relevan bagimu?</p>
             <p className="text-[11px] sm:text-xs text-neutral-600 leading-relaxed">{buildReason(dominantPersonality, topOrgs)}</p>
           </div>
 
-          {/* 3. Top 3 Organisasi */}
           <div className="space-y-3">
-            <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-400 px-1">Rekomendasi Organisasi Untukmu</p>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 px-1">Rekomendasi Organisasi</p>
             {topOrgs.map((orgKey, idx) => {
               const org = ORGS[orgKey];
               if (!org) return null;
               const { Icon, bg, iconColor, label } = rankDeco(idx);
               return (
-                <div key={orgKey}
-                  className="result-orgcard opacity-0 bg-white border border-neutral-100 rounded-3xl p-5 shadow-xs flex flex-col sm:flex-row sm:items-center gap-5 hover:border-brand-primary/10 transition-colors relative overflow-hidden">
+                <div
+                  key={orgKey}
+                  className="result-orgcard opacity-0 bg-white border border-neutral-100 rounded-3xl p-5 shadow-xs flex flex-col sm:flex-row sm:items-center gap-5 hover:border-brand-primary/10 transition-colors relative overflow-hidden"
+                >
                   <div className="absolute top-0 right-0 rounded-bl-2xl bg-neutral-900 text-white px-3 py-1 text-[8px] font-bold uppercase tracking-wider">
                     #{idx + 1} {label}
                   </div>
@@ -540,18 +510,24 @@ export default function MatchmakerQuiz() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-xs sm:text-sm font-bold text-neutral-900 font-poppins leading-snug">{org.name}</h4>
-                      <p className="text-[10px] sm:text-xs text-neutral-500 mt-1.5 leading-relaxed">{org.description}</p>
-                      <span className="inline-flex items-center rounded-full bg-brand-secondary/10 px-2 py-0.5 text-[8px] font-semibold text-neutral-500 mt-2">{org.cluster}</span>
+                      <p className="text-[10px] sm:text-xs text-neutral-600 mt-1.5 leading-relaxed">{org.description}</p>
+                      <span className="inline-flex items-center rounded-full bg-brand-secondary/15 px-2 py-0.5 text-[8px] font-semibold text-neutral-700 mt-2">{org.cluster}</span>
                     </div>
                   </div>
                   <div className="flex sm:flex-col gap-2 shrink-0 border-t sm:border-t-0 sm:border-l border-neutral-50 pt-3 sm:pt-0 sm:pl-4">
-                    <a href={org.formLink} target="_blank" rel="noopener noreferrer"
-                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-primary hover:bg-brand-accent text-white px-4 py-2 text-xs font-bold transition-all">
-                      <FileText className="h-3.5 w-3.5" /> Daftar
+                    <a
+                      href={org.formLink}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-primary hover:bg-brand-accent text-white px-4 py-2 text-xs font-bold transition-all"
+                    >
+                      <FileText className="h-3.5 w-3.5" /> Info Layanan
                     </a>
-                    <a href={org.waLink} target="_blank" rel="noopener noreferrer"
-                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border border-neutral-200 hover:bg-emerald-50 hover:border-emerald-200 text-neutral-600 hover:text-emerald-700 px-4 py-2 text-xs font-bold transition-all">
-                      <MessageCircle className="h-3.5 w-3.5 text-emerald-500" /> Hubungi
+                    <a
+                      href={org.waLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border border-neutral-200 hover:bg-emerald-50 hover:border-emerald-200 text-neutral-700 hover:text-emerald-700 px-4 py-2 text-xs font-bold transition-all"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600" /> Hubungi
                     </a>
                   </div>
                 </div>
@@ -559,14 +535,13 @@ export default function MatchmakerQuiz() {
             })}
           </div>
 
-          {/* 4. Penjabaran Setiap Jawaban (Accordion) */}
           <div className="result-breakdown opacity-0 bg-white border border-neutral-100 rounded-3xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 mb-3">
-              <Brain className="h-4 w-4 text-brand-primary/60" />
-              <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-400">Penjabaran dari Setiap Jawabanmu</p>
+              <Brain className="h-4 w-4 text-brand-primary/70" />
+              <p className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Penjabaran Reflektif Jawaban</p>
             </div>
-            <p className="text-[10px] text-neutral-400 leading-relaxed -mt-1 mb-3">
-              Setiap jawaban yang kamu pilih tadi mengungkap sesuatu tentang dirimu. Klik masing-masing untuk membaca penjabarannya.
+            <p className="text-[10px] text-neutral-500 leading-relaxed -mt-1 mb-3">
+              Setiap opsi pilihan yang kamu ambil memberikan gambaran kecenderungan minat dan karaktermu. Klik tiap pertanyaan untuk membaca catatannya.
             </p>
             <div className="space-y-2">
               {answerHistory.map((record, idx) => (
@@ -575,49 +550,53 @@ export default function MatchmakerQuiz() {
             </div>
           </div>
 
-          {/* Ulangi */}
           <div className="flex justify-center pt-1">
-            <button onClick={startQuiz}
-              className="inline-flex items-center gap-2 rounded-xl border border-neutral-200 hover:border-brand-primary/20 hover:bg-neutral-50 px-5 py-2.5 text-xs font-bold text-neutral-600 transition-all cursor-pointer">
+            <button
+              onClick={startQuiz}
+              className="inline-flex items-center gap-2 rounded-xl border border-neutral-200 hover:border-brand-primary/20 hover:bg-neutral-50 px-5 py-2.5 text-xs font-bold text-neutral-700 transition-all cursor-pointer"
+            >
               <RotateCcw className="h-3.5 w-3.5 text-neutral-400" /> Ulangi Kuis
             </button>
           </div>
         </div>
-
       ) : (
-        /* ── SOAL ── */
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs font-semibold text-neutral-400 font-poppins px-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-neutral-500 font-poppins px-1">
             <span className="text-[10px]">
-              {currentIdx < 5 ? "Perkenalan Awal" : currentIdx < 10 ? "Mengerucut..." : "Hampir Selesai!"}
+              {currentIdx < 5 ? "Bagian Awal" : currentIdx < 10 ? "Pendalaman Karakter" : "Penyelarasan Akhir"}
             </span>
-            <span className="text-neutral-700 font-bold text-[11px]">{currentIdx + 1} / {TOTAL}</span>
+            <span className="text-neutral-800 font-bold text-[11px]">{currentIdx + 1} / {TOTAL}</span>
           </div>
           <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
             <div ref={progressRef} className="h-full bg-brand-primary rounded-full" style={{ width: `${progressPercent}%` }} />
           </div>
 
-          <div className="relative w-full min-h-[370px] flex items-center justify-center">
-            <div className="absolute inset-0 m-auto bg-neutral-50 border border-neutral-100 rounded-3xl -rotate-3 scale-[0.96] translate-y-3 z-0" />
-            <div className="absolute inset-0 m-auto bg-white/80 border border-neutral-100 rounded-3xl rotate-[1.5deg] scale-[0.98] translate-y-1.5 z-10" />
-            <div ref={cardRef}
-              className="absolute inset-0 m-auto bg-white border border-neutral-100 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-5 z-20">
+          <div className="relative w-full min-h-[420px] sm:min-h-[380px] flex items-center justify-center">
+            <div className="absolute inset-0 m-auto bg-neutral-50 border border-neutral-100 rounded-3xl -rotate-2 sm:-rotate-3 scale-[0.97] sm:scale-[0.96] translate-y-2 sm:translate-y-3 z-0 pointer-events-none" />
+            <div className="absolute inset-0 m-auto bg-white/80 border border-neutral-100 rounded-3xl rotate-[1deg] sm:rotate-[1.5deg] scale-[0.99] sm:scale-[0.98] translate-y-1 sm:translate-y-1.5 z-10 pointer-events-none" />
+            <div
+              ref={cardRef}
+              className="absolute inset-0 m-auto bg-white border border-neutral-100 rounded-3xl p-5 sm:p-8 shadow-sm flex flex-col justify-between gap-4 sm:gap-5 z-20"
+            >
               <div>
                 {q.leadIn && (
-                  <p className="text-[10px] text-brand-primary font-semibold mb-2 font-poppins">{q.leadIn}</p>
+                  <p className="text-[10px] text-brand-primary font-semibold mb-1.5 sm:mb-2 font-poppins">{q.leadIn}</p>
                 )}
-                <h3 className={`font-bold text-neutral-900 font-poppins leading-relaxed ${q.short ? "text-sm sm:text-[15px]" : "text-xs sm:text-sm"}`}>
+                <h3 className={`font-bold text-neutral-900 font-poppins leading-relaxed ${q.short ? "text-xs sm:text-[15px]" : "text-xs sm:text-sm"}`}>
                   {q.text}
                 </h3>
                 {q.short && (
-                  <p className="text-[9px] text-neutral-400 mt-1 font-medium">Pilih yang paling mendekati dirimu.</p>
+                  <p className="text-[9px] text-neutral-500 mt-1 font-medium">Pilih opsi yang paling sesuai dengan dirimu.</p>
                 )}
               </div>
-              <div className="space-y-2.5 mt-auto">
+              <div className="space-y-2 sm:space-y-2.5 mt-auto">
                 {q.options.map((opt, oi) => (
-                  <button key={oi} onClick={() => handleSelect(opt)}
-                    className={`w-full text-left rounded-xl border border-neutral-200 hover:border-brand-primary/25 hover:bg-brand-background/60 transition-all cursor-pointer focus:outline-none active:scale-[0.99] ${q.short ? "px-4 py-2.5 text-[11px] sm:text-xs font-semibold text-neutral-700" : "px-4 py-3 text-[10px] sm:text-[11px] font-medium text-neutral-700 leading-relaxed"}`}>
-                    {opt.text}
+                  <button
+                    key={oi}
+                    onClick={() => handleSelect(opt)}
+                    className={`w-full text-left rounded-xl border border-neutral-200 hover:border-brand-primary/25 hover:bg-brand-background/60 transition-all cursor-pointer focus:outline-none min-h-[44px] flex items-center active:scale-[0.98] ${q.short ? "px-3.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-semibold text-neutral-800" : "px-3.5 sm:px-4 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-medium text-neutral-800 leading-relaxed"}`}
+                  >
+                    <span>{opt.text}</span>
                   </button>
                 ))}
               </div>

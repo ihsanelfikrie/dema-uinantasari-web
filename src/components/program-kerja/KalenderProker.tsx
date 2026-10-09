@@ -59,15 +59,22 @@ export default function KalenderProker({ kegiatanList }: KalenderProkerProps) {
   };
 
   return (
-    <div className="w-full bg-white border border-neutral-100 rounded-2xl p-6 shadow-sm mb-12">
-      {/* Calendar Grid wrapper */}
-      <div className="h-[600px] text-sm">
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: "100%" }}
+    <div className="w-full bg-white border border-neutral-100 rounded-2xl p-4 sm:p-6 shadow-sm mb-12">
+      {/* Mobile Swipe Hint */}
+      <div className="sm:hidden flex items-center justify-between text-[10px] text-neutral-400 font-poppins mb-2 px-1">
+        <span>Kalender Bulanan DEMA</span>
+        <span>Geser ke samping &rarr;</span>
+      </div>
+
+      {/* Calendar Grid wrapper with responsive horizontal scroll on mobile */}
+      <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0 scrollbar-none">
+        <div className="h-[480px] sm:h-[600px] min-w-[520px] sm:min-w-0 text-xs sm:text-sm">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: "100%" }}
           onSelectEvent={handleSelectEvent}
           eventPropGetter={eventPropGetter}
           views={["month", "agenda"]}
@@ -82,6 +89,7 @@ export default function KalenderProker({ kegiatanList }: KalenderProkerProps) {
             noEventsInRange: "Tidak ada kegiatan dalam periode ini.",
           }}
         />
+        </div>
       </div>
 
       {/* Pop-up Event Details Modal */}

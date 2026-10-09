@@ -5,7 +5,6 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ArrowRight } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -16,7 +15,7 @@ export default function HeroSection() {
 
   useGSAP(
     () => {
-      // ── Entrance animation timeline ─────────────────────────────────────────
+      // Entrance animation timeline
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
       });
@@ -36,12 +35,6 @@ export default function HeroSection() {
           ".hero-title-sans",
           { opacity: 0, y: 24 },
           { opacity: 1, y: 0, duration: 0.8 },
-          "-=0.5"
-        )
-        .fromTo(
-          ".hero-title-year",
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6 },
           "-=0.5"
         )
         .fromTo(
@@ -69,7 +62,7 @@ export default function HeroSection() {
           "-=0.5"
         );
 
-      // ── Subtle scroll parallax ─────────────────────────────────────────────
+      // Subtle scroll parallax
       if (typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         gsap.to(".hero-bg", {
           yPercent: 10,
@@ -100,7 +93,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-brand-background pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-neutral-200/60 min-h-[85vh] flex items-center"
+      className="relative overflow-hidden bg-brand-background pt-24 sm:pt-36 lg:pt-44 pb-12 sm:pb-20 lg:pb-24 px-4 sm:px-6 lg:px-8 border-b border-neutral-200/60 min-h-[85vh] flex items-center"
     >
       {/* Background authentic graphic with subtle overlay */}
       <div
@@ -108,50 +101,42 @@ export default function HeroSection() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-center">
           
-          {/* ── LEFT COLUMN: Typography, Tagline & CTAs ────────────────────────── */}
+          {/* LEFT COLUMN: Typography, Tagline & CTAs */}
           <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col items-start">
             
-            {/* Editorial Headline with Golden Ratio (φ = 1.618) Typography & Font Pairing */}
-            <h1 className="flex flex-col items-start select-none text-left leading-none mb-3">
-              {/* Golden Ratio Level 2 (~42px): Times New Roman Condensed Italic */}
-              <span className="hero-title-serif opacity-0 font-times italic font-normal text-[26px] sm:text-[34px] lg:text-[42px] text-neutral-800 tracking-normal block z-10 leading-none">
-                Laskar Purnama Antasari
-              </span>
+            {/* Editorial Headline */}
+            <div className="flex flex-col items-start select-none text-left mb-2">
+              <div className="hero-title-serif opacity-0 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-semibold mb-3">
+                <span>KABINET LASKAR PURNAMA ANTASARI • 2026/2027</span>
+              </div>
 
-              {/* Golden Ratio Level 3 (~68px): Akzidenz-Grotesk Black Italic Uppercase — Rapat proporsional (-0.02em) & tidak bertumpuk */}
-              <span className="hero-title-sans opacity-0 font-akzidenz font-black italic text-[28px] xs:text-[34px] sm:text-[48px] lg:text-[68px] whitespace-nowrap tracking-[-0.02em] uppercase text-neutral-950 block mt-1 sm:mt-1.5 lg:mt-2 leading-none">
-                DEMA UIN ANTASARI
-              </span>
-
-              {/* Golden Ratio Level 1 (~26px): Tahun 2026/2027 tepat di bawah DEMA UIN ANTASARI */}
-              <span className="hero-title-year opacity-0 font-akzidenz font-bold text-[16px] sm:text-[20px] lg:text-[26px] tracking-normal uppercase text-brand-primary block mt-2.5 sm:mt-3 lg:mt-3.5 leading-none">
-                2026/2027
-              </span>
-            </h1>
+              <h1 className="hero-title-sans opacity-0 font-poppins font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 leading-[1.15] text-left">
+                Dewan Eksekutif Mahasiswa UIN Antasari
+              </h1>
+            </div>
 
             {/* Minimal thin accent line */}
-            <div className="hero-line w-16 sm:w-20 h-[2px] bg-brand-primary/70 rounded-full my-5 origin-left scale-x-0" />
+            <div className="hero-line w-16 sm:w-20 h-[2px] bg-brand-primary/70 rounded-full my-4 sm:my-5 origin-left scale-x-0" />
 
-            {/* Philosophy Tagline (Golden Ratio Level 0: 16px, line-height φ = 1.618) */}
-            <p className="hero-tagline opacity-0 text-[15px] sm:text-[16px] leading-[1.618] text-neutral-600 max-w-xl font-normal font-poppins text-left">
+            {/* Philosophy Tagline */}
+            <p className="hero-tagline opacity-0 text-[14px] sm:text-[16px] leading-relaxed text-neutral-600 max-w-xl font-normal font-poppins text-left">
               Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="hero-cta opacity-0 mt-7 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* CTA Buttons with responsive full-width touch area on mobile */}
+            <div className="hero-cta opacity-0 mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <Link
                 href="/profil"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+                className="inline-flex items-center justify-center min-h-[46px] px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer text-center"
               >
                 <span>Profil Kabinet</span>
-                <ArrowRight className="w-4 h-4" />
               </Link>
 
               <Link
                 href="/layanan"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 bg-white hover:bg-neutral-50 border border-neutral-200/90 hover:border-neutral-300 shadow-xs hover:shadow-sm transition-all active:scale-[0.98]"
+                className="inline-flex items-center justify-center min-h-[46px] px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 bg-white hover:bg-neutral-50 border border-neutral-200/90 hover:border-neutral-300 shadow-2xs hover:shadow-sm transition-all active:scale-[0.98] cursor-pointer text-center"
               >
                 <span>Layanan Mahasiswa</span>
               </Link>
@@ -159,49 +144,49 @@ export default function HeroSection() {
 
           </div>
 
-          {/* ── RIGHT COLUMN: Duo Leadership Presentation (Tanpa Box) ─────────── */}
+          {/* RIGHT COLUMN: Duo Leadership Presentation */}
           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end">
-            <div className="hero-leaders opacity-0 relative w-full max-w-[480px] lg:max-w-[520px] flex flex-col items-center justify-end mt-6 lg:mt-0">
+            <div className="hero-leaders opacity-0 relative w-full max-w-[420px] lg:max-w-[520px] flex flex-col items-center justify-end mt-4 lg:mt-0">
               
-              {/* Duo Leadership Cutouts — Berdiri bebas tanpa box */}
+              {/* Duo Leadership Cutouts with mobile-safe proportional width */}
               <div className="relative flex items-end justify-center w-full pt-4">
-                {/* Ahmad Munawir Sazali — Ketua Umum */}
-                <div className="relative -mr-6 sm:-mr-8 z-10 flex-1 max-w-[240px] sm:max-w-[270px]">
+                {/* Ahmad Munawir Sazali: Ketua Umum */}
+                <div className="relative -mr-4 sm:-mr-8 z-10 flex-1 max-w-[170px] xs:max-w-[210px] sm:max-w-[270px]">
                   <img
                     src="/images/kabinet/munawir-ketua.png"
                     alt="Ahmad Munawir Sazali - Ketua Umum DEMA UIN Antasari"
-                    className="w-full h-auto max-h-[460px] sm:max-h-[520px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
+                    className="w-full h-auto max-h-[360px] sm:max-h-[520px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
                 </div>
 
-                {/* Khairul Fikri — Wakil Ketua Umum */}
-                <div className="relative z-0 flex-1 max-w-[230px] sm:max-w-[255px]">
+                {/* Khairul Fikri: Wakil Ketua Umum */}
+                <div className="relative z-0 flex-1 max-w-[160px] xs:max-w-[195px] sm:max-w-[255px]">
                   <img
                     src="/images/kabinet/fikri-wakil.png"
                     alt="Khairul Fikri - Wakil Ketua Umum DEMA UIN Antasari"
-                    className="w-full h-auto max-h-[440px] sm:max-h-[495px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
+                    className="w-full h-auto max-h-[340px] sm:max-h-[495px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
                 </div>
               </div>
 
-              {/* Label Nama Minimalis — Langsung di atas latar tanpa box */}
-              <div className="mt-4 w-full flex items-center justify-between px-3 sm:px-6">
-                <div className="text-left">
-                  <span className="block text-sm sm:text-base font-bold text-neutral-900 font-poppins leading-snug">
+              {/* Label Nama Minimalis */}
+              <div className="mt-4 w-full grid grid-cols-2 gap-3 px-2">
+                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2.5 shadow-xs text-left">
+                  <span className="block text-xs sm:text-sm font-bold text-neutral-900 font-poppins truncate">
                     Ahmad Munawir Sazali
                   </span>
-                  <span className="block text-xs font-semibold text-brand-primary font-poppins">
+                  <span className="block text-[11px] font-semibold text-brand-primary font-poppins">
                     Ketua Umum DEMA
                   </span>
                 </div>
 
-                <div className="text-right">
-                  <span className="block text-sm sm:text-base font-bold text-neutral-900 font-poppins leading-snug">
+                <div className="bg-white/95 border border-neutral-200/80 rounded-xl p-2.5 shadow-xs text-left">
+                  <span className="block text-xs sm:text-sm font-bold text-neutral-900 font-poppins truncate">
                     Khairul Fikri
                   </span>
-                  <span className="block text-xs font-semibold text-brand-primary font-poppins">
+                  <span className="block text-[11px] font-semibold text-brand-primary font-poppins">
                     Wakil Ketua Umum DEMA
                   </span>
                 </div>

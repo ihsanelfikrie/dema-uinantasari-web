@@ -56,14 +56,12 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ─────────────────────────────────────────────────────────────
-          1. DESKTOP SIDEBAR (Visible only on lg: screens and above)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 bg-white border-r border-neutral-100 flex-col justify-between shrink-0 h-screen sticky top-0 z-30">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
-            <span className="h-2 w-2 rounded-full bg-brand-primary animate-pulse" />
-            <span className="text-xs font-bold font-poppins uppercase tracking-wider text-neutral-400">
+            <span className="h-2 w-2 rounded-full bg-brand-primary" />
+            <span className="text-xs font-semibold font-poppins uppercase tracking-wider text-neutral-500">
               Admin Panel DEMA
             </span>
           </div>
@@ -81,7 +79,7 @@ export default function Sidebar() {
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                     isActive
                       ? "bg-brand-primary/5 text-brand-primary"
-                      : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                      : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -89,7 +87,7 @@ export default function Sidebar() {
                     <span>{item.name}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                    <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-neutral-100 text-neutral-800">
                       {item.badge}
                     </span>
                   )}
@@ -103,7 +101,7 @@ export default function Sidebar() {
         <div className="p-6 border-t border-neutral-100">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide text-neutral-500 hover:bg-red-50 hover:text-brand-primary transition-all cursor-pointer border-0 bg-transparent"
+            className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide text-neutral-600 hover:bg-red-50 hover:text-brand-primary transition-all cursor-pointer border-0 bg-transparent"
           >
             <LogOut className="h-4.5 w-4.5 stroke-[1.8]" />
             <span>Keluar</span>
@@ -111,9 +109,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* ─────────────────────────────────────────────────────────────
-          2. MOBILE TOPBAR (Visible only on mobile/tablet < lg)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Mobile Topbar */}
       <header className="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 px-4 py-3 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-2.5">
           <button
@@ -126,8 +122,8 @@ export default function Sidebar() {
           </button>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-brand-primary animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 font-poppins">
+              <span className="h-2 w-2 rounded-full bg-brand-primary" />
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500 font-poppins">
                 DEMA UIN Antasari
               </span>
             </div>
@@ -142,7 +138,7 @@ export default function Sidebar() {
           {pathname !== "/admin/presensi" && (
             <Link
               href="/admin/presensi"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-brand-primary hover:bg-brand-accent shadow-xs transition-colors"
             >
               <QrCode className="w-3.5 h-3.5" />
               <span>Scan QR</span>
@@ -160,9 +156,7 @@ export default function Sidebar() {
         </div>
       </header>
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. MOBILE SLIDE-OUT DRAWER
-      ───────────────────────────────────────────────────────────── */}
+      {/* Mobile Drawer */}
       {mobileDrawerOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           {/* Backdrop */}
@@ -179,7 +173,7 @@ export default function Sidebar() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-brand-primary" />
-                    <span className="text-xs font-bold font-poppins uppercase tracking-wider text-neutral-400">
+                    <span className="text-xs font-semibold font-poppins uppercase tracking-wider text-neutral-500">
                       Menu Navigasi
                     </span>
                   </div>
@@ -237,15 +231,13 @@ export default function Sidebar() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
-          4. MOBILE BOTTOM NAVIGATION BAR (Thumb-friendly on phones)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Mobile Bottom Navigation Bar */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 px-3 py-1.5 flex items-center justify-around shadow-lg pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {/* Dashboard */}
         <Link
           href="/admin"
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10px] font-semibold transition-colors ${
-            pathname === "/admin" ? "text-[#1C4BBC] font-bold" : "text-neutral-500 hover:text-neutral-900"
+            pathname === "/admin" ? "text-brand-primary font-bold" : "text-neutral-600 hover:text-neutral-900"
           }`}
         >
           <LayoutDashboard className="w-4 h-4 mb-0.5" />
@@ -256,7 +248,7 @@ export default function Sidebar() {
         <Link
           href="/admin/peserta"
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10px] font-semibold transition-colors ${
-            pathname.startsWith("/admin/peserta") ? "text-[#1C4BBC] font-bold" : "text-neutral-500 hover:text-neutral-900"
+            pathname.startsWith("/admin/peserta") ? "text-brand-primary font-bold" : "text-neutral-600 hover:text-neutral-900"
           }`}
         >
           <Users className="w-4 h-4 mb-0.5" />
@@ -268,8 +260,8 @@ export default function Sidebar() {
           href="/admin/presensi"
           className={`flex flex-col items-center justify-center -mt-4 px-3 py-1.5 rounded-2xl shadow-md transition-all active:scale-95 ${
             pathname.startsWith("/admin/presensi")
-              ? "bg-emerald-600 text-white shadow-emerald-600/30 scale-105"
-              : "bg-emerald-600 text-white shadow-emerald-600/20"
+              ? "bg-brand-primary text-white shadow-brand-primary/30 scale-105"
+              : "bg-brand-primary text-white shadow-brand-primary/20"
           }`}
         >
           <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
@@ -282,7 +274,7 @@ export default function Sidebar() {
         <button
           type="button"
           onClick={() => setMobileDrawerOpen(true)}
-          className="flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10px] font-semibold text-neutral-500 hover:text-neutral-900 cursor-pointer"
+          className="flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10px] font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
         >
           <Menu className="w-4 h-4 mb-0.5" />
           <span>Menu</span>

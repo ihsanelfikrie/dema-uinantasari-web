@@ -213,7 +213,7 @@ export default function AdminPesertaPage() {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
           <Link
             href="/admin/presensi"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-xs whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-brand-primary hover:bg-brand-accent shadow-xs whitespace-nowrap shrink-0 transition-colors"
           >
             <QrCode className="w-3.5 h-3.5" />
             <span>Scan QR</span>
@@ -264,7 +264,7 @@ export default function AdminPesertaPage() {
             <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 uppercase tracking-wider truncate">
               Total
             </span>
-            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#1C4BBC]/10 text-[#1C4BBC] flex items-center justify-center shrink-0">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
               <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function AdminPesertaPage() {
             <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 uppercase tracking-wider truncate">
               Delegasi
             </span>
-            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#82BE3B]/15 text-[#82BE3B] flex items-center justify-center shrink-0">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-brand-secondary/20 text-neutral-800 flex items-center justify-center shrink-0">
               <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
@@ -320,7 +320,7 @@ export default function AdminPesertaPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari berdasarkan nama, NIM, delegasi, email, atau ID tiket..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50/50 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] focus:border-transparent transition-all"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50/50 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
           />
         </div>
 
@@ -328,7 +328,7 @@ export default function AdminPesertaPage() {
           <select
             value={eventFilter}
             onChange={(e) => setEventFilter(e.target.value)}
-            className="px-3.5 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50/50 text-xs text-neutral-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#1C4BBC] transition-all cursor-pointer"
+            className="px-3.5 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50/50 text-xs text-neutral-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all cursor-pointer"
           >
             <option value="all">Semua Event</option>
             <option value="antasari-media-lab">Antasari Media Lab</option>
@@ -343,7 +343,7 @@ export default function AdminPesertaPage() {
           {isLoading ? (
             <div className="py-12 text-center text-neutral-400">
               <div className="flex flex-col items-center justify-center gap-2">
-                <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
                 <span className="text-xs">Memuat data peserta...</span>
               </div>
             </div>
@@ -363,7 +363,7 @@ export default function AdminPesertaPage() {
                     <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-800 font-mono text-[10px] font-bold">
                       {peserta.ticket_id}
                     </span>
-                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-[#1C4BBC] truncate max-w-[140px]">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-800 truncate max-w-[140px]">
                       {peserta.delegasi}
                     </span>
                   </div>
@@ -415,7 +415,7 @@ export default function AdminPesertaPage() {
                         setSelectedPeserta(peserta);
                         setActiveProofTab("ig");
                       }}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:text-[#1C4BBC] text-[11px] font-semibold"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:text-brand-primary text-[11px] font-semibold"
                     >
                       <Eye className="w-3 h-3" />
                       <span>Bukti</span>
@@ -456,7 +456,7 @@ export default function AdminPesertaPage() {
                 <tr>
                   <td colSpan={9} className="py-12 text-center text-neutral-400">
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin" />
+                      <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
                       <span>Memuat data peserta...</span>
                     </div>
                   </td>
@@ -509,7 +509,7 @@ export default function AdminPesertaPage() {
                     </td>
 
                     <td className="py-3 px-4 text-neutral-700">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-[#1C4BBC]">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-800">
                         {peserta.delegasi}
                       </span>
                     </td>
@@ -525,7 +525,7 @@ export default function AdminPesertaPage() {
                           setSelectedPeserta(peserta);
                           setActiveProofTab("ig");
                         }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:border-[#1C4BBC] hover:text-[#1C4BBC] transition-colors text-[11px] font-semibold cursor-pointer shadow-xs"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:border-brand-primary hover:text-brand-primary transition-colors text-[11px] font-semibold cursor-pointer shadow-xs"
                       >
                         <Eye className="w-3 h-3" />
                         <span>Lihat Bukti</span>
@@ -567,7 +567,7 @@ export default function AdminPesertaPage() {
             <select
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
-              className="px-2 py-1 bg-white border border-neutral-200 rounded-lg text-[11px] font-semibold text-neutral-800 focus:outline-none focus:ring-1 focus:ring-[#1C4BBC] cursor-pointer"
+              className="px-2 py-1 bg-white border border-neutral-200 rounded-lg text-[11px] font-semibold text-neutral-800 focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
             >
               <option value={25}>25 per halaman</option>
               <option value={50}>50 per halaman</option>
@@ -636,7 +636,7 @@ export default function AdminPesertaPage() {
                 onClick={() => setActiveProofTab("ig")}
                 className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   activeProofTab === "ig"
-                    ? "bg-white text-[#1C4BBC] shadow-xs"
+                    ? "bg-white text-brand-primary shadow-xs"
                     : "text-neutral-500 hover:text-neutral-800"
                 }`}
               >
@@ -669,7 +669,7 @@ export default function AdminPesertaPage() {
                       href={selectedPeserta.ig_screenshot_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1C4BBC] hover:underline"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary hover:underline"
                     >
                       Buka Gambar Asli Resolusi Penuh
                       <ExternalLink className="w-3.5 h-3.5" />

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sambat } from "@/types";
 import SambatBoard from "@/components/layanan/SambatBoard";
-import { MessageSquare, ArrowLeft, Send, Sparkles, Loader2, AlertCircle } from "lucide-react";
+import { MessageSquare, ArrowLeft, Send, Loader2, AlertCircle } from "lucide-react";
 
 const PASTEL_COLORS = [
   { hex: "#FFF9A6", name: "Kuning" },
@@ -92,13 +92,13 @@ export default function SambatPage() {
   };
 
   return (
-    <main className="min-h-screen bg-brand-background py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-brand-background py-8 sm:py-12 px-3.5 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Navigation back */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link
             href="/layanan"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-500 hover:text-brand-primary transition-colors font-poppins"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-500 hover:text-brand-primary min-h-[44px] py-1 transition-colors font-poppins active:scale-98"
           >
             <ArrowLeft className="h-4 w-4" />
             Kembali ke Layanan
@@ -106,18 +106,17 @@ export default function SambatPage() {
         </div>
 
         {/* Title Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 mb-8 sm:mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-brand-secondary/15 px-3 py-1 text-[10px] font-bold text-neutral-600 mb-3">
-              <Sparkles className="h-3 w-3 text-brand-primary" />
+            <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
               Dinding Aspirasi Mahasiswa
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-neutral-900 font-poppins">
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 font-poppins">
               Sambat DEMA
             </h1>
-            <p className="mt-2 text-xs sm:text-sm text-neutral-500 max-w-xl leading-relaxed">
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl leading-relaxed">
               Dinding aspirasi interaktif berbasis sticky notes digital. Silakan sampaikan keluh
-              kesah, keluhan, kritik, atau saran Anda secara anonim. Tekan & geser kertas sesukamu!
+              kesah, keluhan, kritik, atau saran Anda secara anonim. Tekan &amp; geser kertas sesukamu!
             </p>
           </div>
 
@@ -127,7 +126,7 @@ export default function SambatPage() {
               setSubmitError("");
               setSubmitSuccess(false);
             }}
-            className="w-full md:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-primary hover:bg-brand-accent text-white px-5 py-3 text-xs font-bold tracking-wide transition-all shadow-sm cursor-pointer"
+            className="w-full md:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-primary hover:bg-brand-accent text-white px-5 py-3 text-xs font-bold tracking-wide transition-all shadow-sm cursor-pointer min-h-[44px] active:scale-95"
           >
             <MessageSquare className="h-4.5 w-4.5 stroke-[1.8]" />
             Tulis Sambatan Baru

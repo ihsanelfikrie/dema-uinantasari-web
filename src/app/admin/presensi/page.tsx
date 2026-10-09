@@ -22,8 +22,7 @@ import {
   Copy, 
   Check, 
   FlipHorizontal,
-  ChevronDown,
-  ArrowRight
+  ChevronDown
 } from "lucide-react";
 
 interface Peserta {
@@ -812,31 +811,29 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-7xl mx-auto">
-      {/* ─────────────────────────────────────────────────────────────
-          1. HEADER & EVENT SELECTOR (Responsive Stack on Mobile)
-      ───────────────────────────────────────────────────────────── */}
-      <div className="bg-white dark:bg-[#160808] p-4 sm:p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+      {/* 1. Header & Event Selector */}
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <h1 className="text-lg sm:text-2xl font-bold text-neutral-900 dark:text-white font-poppins">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <h1 className="text-lg sm:text-2xl font-bold text-neutral-900 font-poppins">
               Presensi & Verifikasi QR Code
             </h1>
           </div>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+          <p className="text-xs text-neutral-500 mt-0.5">
             Pindai tiket peserta langsung lewat kamera HP atau barcode reader.
           </p>
         </div>
 
         {/* Event Selector Dropdown */}
-        <div className="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-neutral-800">
-          <label className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 shrink-0">
+        <div className="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100">
+          <label className="text-xs font-semibold text-neutral-600 shrink-0">
             Event:
           </label>
           <select
             value={eventSlug}
             onChange={(e) => setEventSlug(e.target.value)}
-            className="flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-300 bg-neutral-50 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <option value="antasari-media-lab">Antasari Media Lab 2026</option>
             <option value="all">Semua Event</option>
@@ -846,19 +843,19 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
 
       {/* Database Assistant Banner (if SQL hasn't been run yet) */}
       {tableMissing && (
-        <div className="rounded-2xl border border-amber-300 bg-amber-50 dark:bg-amber-950/30 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5">
           <div className="flex items-start gap-3">
             <Database className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-xs sm:text-sm font-bold text-amber-950 dark:text-amber-200 font-poppins">
+                <h4 className="text-xs sm:text-sm font-bold text-amber-950 font-poppins">
                   Mode Presensi Aktif (Penyimpanan Lokal Aktif)
                 </h4>
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200/80 text-amber-900">
                   Siap Digunakan
                 </span>
               </div>
-              <p className="text-xs text-amber-800 dark:text-amber-300/90 mt-0.5 leading-relaxed">
+              <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
                 Anda sudah bisa langsung scan dan mencoba fitur presensi di HP sekarang. Untuk sinkronisasi database permanen di Supabase, cukup jalankan script SQL sekali di SQL Editor.
               </p>
             </div>
@@ -876,7 +873,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               href="https://supabase.com/dashboard/project/rifcawifuojzercjauhy/sql/new"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-xs cursor-pointer transition-colors"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-xs cursor-pointer transition-colors"
             >
               <span>Buka SQL Editor</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -885,20 +882,18 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
-          2. KELOLA SESI ABSENSI (Admin adds/chooses session first)
-      ───────────────────────────────────────────────────────────── */}
-      <div className="bg-white dark:bg-[#160808] p-4 sm:p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+      {/* 2. Kelola Sesi Absensi */}
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-neutral-200/80 shadow-xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
           <div>
-            <h2 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white font-poppins flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-[#1C4BBC]" />
+            <h2 className="text-xs sm:text-sm font-bold text-neutral-900 font-poppins flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-brand-primary" />
               <span>Sesi Absensi:</span>
-              <span className="text-[#1C4BBC] dark:text-[#82BE3B] underline underline-offset-2">
+              <span className="text-brand-primary underline underline-offset-2">
                 {currentSesiName}
               </span>
             </h2>
-            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className="text-[11px] text-neutral-500 mt-0.5">
               Pilih sesi aktif untuk verifikasi atau tambah sesi baru:
             </p>
           </div>
@@ -906,25 +901,25 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
           <button
             type="button"
             onClick={() => setShowAddSesiModal(true)}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] shadow-sm transition-all cursor-pointer shrink-0 w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-brand-primary hover:bg-brand-accent shadow-sm transition-all cursor-pointer shrink-0 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             <span>+ Tambah Jenis Absen</span>
           </button>
         </div>
 
-        {/* Sesi Scrollable Pills (Horizontal Touch Scroll on Phone) */}
+        {/* Sesi Scrollable Pills */}
         {isLoadingSesi ? (
           <div className="py-2 text-xs text-neutral-400">Memuat sesi absensi...</div>
         ) : sesiList.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 p-4 text-center space-y-2">
-            <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+          <div className="rounded-xl border border-dashed border-neutral-300 p-4 text-center space-y-2">
+            <p className="text-xs font-semibold text-neutral-700">
               Belum Ada Sesi Absensi
             </p>
             <button
               type="button"
               onClick={() => setShowAddSesiModal(true)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-[#1C4BBC] bg-[#1C4BBC]/10"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-brand-primary bg-brand-primary/10"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Buat Sesi Pertama</span>
@@ -941,15 +936,15 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                   key={sesi.id}
                   className={`shrink-0 inline-flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                     isActive
-                      ? "bg-[#1C4BBC] text-white border-[#1C4BBC] shadow-sm shadow-[#1C4BBC]/20"
-                      : "bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:border-[#1C4BBC]"
+                      ? "bg-brand-primary text-white border-brand-primary shadow-sm"
+                      : "bg-neutral-50 text-neutral-700 border-neutral-200 hover:border-brand-primary"
                   }`}
                   onClick={() => setActiveSesiId(sesi.id)}
                 >
                   <span className="whitespace-nowrap">{sesi.nama_sesi}</span>
                   <span
                     className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                      isActive ? "bg-white/20 text-white" : "bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                      isActive ? "bg-white/20 text-white" : "bg-neutral-200 text-neutral-600"
                     }`}
                   >
                     {sessionAttCount}
@@ -974,9 +969,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         )}
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          2.1 MOBILE SEGMENTED CONTROL (< lg)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Mobile Segmented Control (< lg) */}
       <div className="lg:hidden grid grid-cols-2 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs">
         <button
           type="button"
@@ -999,14 +992,12 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
           }`}
         >
-          <Users className="w-4 h-4 text-[#1C4BBC]" />
+          <Users className="w-4 h-4 text-brand-primary" />
           <span>Daftar Peserta ({stats.hadir}/{stats.total})</span>
         </button>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. SCANNER & STATUS GRID (Optimized for Mobile Screens)
-      ───────────────────────────────────────────────────────────── */}
+      {/* 3. Scanner & Status Grid */}
       <div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 ${mobileTab === "rekap" ? "hidden lg:grid" : ""}`}>
         {/* Left Column: Camera Viewport & Controls (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
@@ -1163,12 +1154,12 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                     onChange={(e) => setManualCode(e.target.value)}
                     placeholder="Ketik NIM lalu tekan Enter..."
                     disabled={!activeSesiId || isVerifying}
-                    className="flex-1 px-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+                    className="flex-1 px-3 py-2 rounded-xl text-xs border border-neutral-200 bg-neutral-50 text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary"
                   />
                   <button
                     type="submit"
                     disabled={!manualCode.trim() || isVerifying || !activeSesiId}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] transition-colors disabled:opacity-50 cursor-pointer shrink-0"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-brand-primary hover:bg-brand-accent transition-colors disabled:opacity-50 cursor-pointer shrink-0"
                   >
                     {isVerifying ? "Cek..." : "Hadir"}
                   </button>
@@ -1177,19 +1168,19 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
             </div>
 
             {/* Mobile Quick Counters under Camera & Manual Input */}
-            <div className="lg:hidden pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2.5">
+            <div className="lg:hidden pt-3 border-t border-neutral-100 space-y-2.5">
               <div className="grid grid-cols-3 gap-2">
-                <div className="bg-neutral-50 dark:bg-neutral-900 p-2 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-center">
+                <div className="bg-neutral-50 p-2 rounded-xl border border-neutral-200/80 text-center">
                   <span className="text-[9px] text-neutral-500 uppercase tracking-wider block">Total</span>
-                  <strong className="text-sm font-bold font-mono text-neutral-900 dark:text-white">{stats.total}</strong>
+                  <strong className="text-sm font-bold font-mono text-neutral-900">{stats.total}</strong>
                 </div>
-                <div className="bg-emerald-50 dark:bg-emerald-950/30 p-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800 text-center">
-                  <span className="text-[9px] text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider block">Hadir</span>
-                  <strong className="text-sm font-bold font-mono text-emerald-700 dark:text-emerald-300">{stats.hadir}</strong>
+                <div className="bg-emerald-50 p-2 rounded-xl border border-emerald-200/80 text-center">
+                  <span className="text-[9px] text-emerald-700 font-bold uppercase tracking-wider block">Hadir</span>
+                  <strong className="text-sm font-bold font-mono text-emerald-700">{stats.hadir}</strong>
                 </div>
-                <div className="bg-neutral-50 dark:bg-neutral-900 p-2 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-center">
+                <div className="bg-neutral-50 p-2 rounded-xl border border-neutral-200/80 text-center">
                   <span className="text-[9px] text-neutral-500 uppercase tracking-wider block">Belum</span>
-                  <strong className="text-sm font-bold font-mono text-neutral-600 dark:text-neutral-400">{stats.belum}</strong>
+                  <strong className="text-sm font-bold font-mono text-neutral-600">{stats.belum}</strong>
                 </div>
               </div>
 
@@ -1197,13 +1188,12 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               <button
                 type="button"
                 onClick={() => setMobileTab("rekap")}
-                className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs font-bold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 flex items-center justify-between shadow-2xs cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 bg-white text-xs font-semibold text-neutral-800 hover:bg-neutral-50 flex items-center justify-between shadow-2xs cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-[#1C4BBC]" />
+                  <Users className="w-3.5 h-3.5 text-brand-primary" />
                   <span>Lihat Daftar Peserta ({stats.hadir} Hadir)</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
               </button>
             </div>
           </div>
@@ -1307,7 +1297,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
 
             <div className="bg-white dark:bg-[#160808] p-3.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs flex flex-col justify-center">
               <span className="text-[10px] text-neutral-500 font-medium block">Sesi Terpilih</span>
-              <span className="text-xs font-bold text-[#1C4BBC] dark:text-[#82BE3B] truncate" title={currentSesiName}>
+              <span className="text-xs font-bold text-brand-primary dark:text-[#82BE3B] truncate" title={currentSesiName}>
                 {currentSesiName}
               </span>
             </div>
@@ -1315,9 +1305,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          4. REKAP KEHADIRAN (Desktop Table + Mobile Touch Card List)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Rekap Kehadiran (Desktop Table + Mobile Touch Card List) */}
       <div className={`bg-white dark:bg-[#160808] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4 p-4 sm:p-6 ${mobileTab === "scanner" ? "hidden lg:block" : "block"}`}>
         {/* Mobile Header in Rekap Tab: Quick Back to Scanner */}
         <div className="lg:hidden flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
@@ -1379,7 +1367,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari nama / NIM..."
-                className="w-full pl-8 pr-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+                className="w-full pl-8 pr-3 py-2 rounded-xl text-xs border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary"
               />
             </div>
 
@@ -1406,13 +1394,11 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
           </div>
         </div>
 
-        {/* ─────────────────────────────────────────────────────────
-            A. MOBILE CARD VIEW (< 640px) — Super comfortable on phone
-        ───────────────────────────────────────────────────────── */}
+        {/* Mobile Card View (< 640px) */}
         <div className="sm:hidden space-y-2.5">
           {isLoadingData ? (
             <div className="py-10 text-center text-xs text-neutral-400">
-              <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               Memuat data peserta...
             </div>
           ) : filteredPeserta.length === 0 ? (
@@ -1493,7 +1479,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                   <button
                     type="button"
                     onClick={() => setMobileLimit((prev) => prev + 25)}
-                    className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-bold text-[#1C4BBC] hover:bg-neutral-100 transition-colors cursor-pointer"
+                    className="w-full py-2.5 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-bold text-brand-primary hover:bg-neutral-100 transition-colors cursor-pointer"
                   >
                     Tampilkan 25 Peserta Lagi ({filteredPeserta.length - mobileLimit} tersisa)
                   </button>
@@ -1503,9 +1489,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
           )}
         </div>
 
-        {/* ─────────────────────────────────────────────────────────
-            B. DESKTOP TABLE VIEW (>= 640px)
-        ───────────────────────────────────────────────────────── */}
+        {/* Desktop Table View (>= 640px) */}
         <div className="hidden sm:block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-neutral-50 dark:bg-neutral-900/80 text-neutral-500 font-semibold border-b border-neutral-200 dark:border-neutral-800">
@@ -1522,7 +1506,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
               {isLoadingData ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-neutral-400">
-                    <div className="w-6 h-6 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                     Memuat data presensi peserta...
                   </td>
                 </tr>
@@ -1644,7 +1628,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                   value={newSesiName}
                   onChange={(e) => setNewSesiName(e.target.value)}
                   placeholder="Contoh: Absensi Datang / Pagi"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-sm bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-sm bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 />
               </div>
 
@@ -1676,7 +1660,7 @@ CREATE POLICY "Akses penuh event_absensi" ON event_absensi FOR ALL USING (true);
                 <button
                   type="submit"
                   disabled={isCreatingSesi || !newSesiName.trim()}
-                  className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#1C4BBC] hover:bg-[#153a99] transition-colors disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-brand-primary hover:bg-brand-accent transition-colors disabled:opacity-50"
                 >
                   {isCreatingSesi ? "Menyimpan..." : "Simpan Sesi"}
                 </button>

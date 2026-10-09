@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, Send, CheckCircle2, MessageSquare, Sparkles } from "lucide-react";
+import { Star, Send, CheckCircle2, MessageSquare } from "lucide-react";
 
 interface FeedbackCardProps {
   nim: string;
@@ -66,12 +66,12 @@ export default function FeedbackCard({
 
   if (isSuccess) {
     return (
-      <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center space-y-2 animate-fadeIn">
+      <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-2 animate-fadeIn">
         <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
-        <h4 className="text-sm font-bold text-emerald-900 dark:text-emerald-200">
+        <h4 className="text-sm font-bold text-emerald-900">
           Terima Kasih Banyak atas Masukan Anda!
         </h4>
-        <p className="text-xs text-emerald-700 dark:text-emerald-400">
+        <p className="text-xs text-emerald-700">
           Ulasan Anda sangat berharga bagi peningkatan program-program DEMA UIN Antasari berikutnya.
         </p>
       </div>
@@ -79,17 +79,17 @@ export default function FeedbackCard({
   }
 
   return (
-    <div className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-sm space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+    <div className="bg-white rounded-2xl border border-neutral-200/80 p-5 sm:p-6 shadow-sm space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600">
-            <Sparkles className="w-4 h-4" />
+          <div className="p-1.5 rounded-lg bg-neutral-100 text-neutral-700">
+            <MessageSquare className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white font-poppins">
+            <h4 className="text-xs sm:text-sm font-bold text-neutral-900 font-poppins">
               Kuesioner Evaluasi & Kepuasan Peserta
             </h4>
-            <span className="text-[11px] text-neutral-400">
+            <span className="text-[11px] text-neutral-500">
               Bantu kami menilai kualitas acara (hanya butuh 1 menit)
             </span>
           </div>
@@ -99,7 +99,7 @@ export default function FeedbackCard({
           <button
             type="button"
             onClick={onSkip}
-            className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 cursor-pointer underline"
+            className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-800 cursor-pointer underline"
           >
             Lewati
           </button>
@@ -109,7 +109,7 @@ export default function FeedbackCard({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Rating Bintang */}
         <div className="space-y-1.5 text-center sm:text-left">
-          <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block">
+          <label className="text-xs font-semibold text-neutral-800 block">
             Bagaimana kepuasan Anda terhadap penyelenggaraan Antasari Media Lab?
           </label>
           <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
@@ -129,13 +129,13 @@ export default function FeedbackCard({
                     className={`w-7 h-7 ${
                       active
                         ? "fill-amber-400 text-amber-400"
-                        : "text-neutral-300 dark:text-neutral-700"
+                        : "text-neutral-300"
                     }`}
                   />
                 </button>
               );
             })}
-            <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300 ml-2">
+            <span className="text-xs font-bold text-neutral-800 ml-2">
               {rating === 5 ? "Sangat Puas ⭐ 5/5" : `${rating}/5`}
             </span>
           </div>
@@ -143,7 +143,7 @@ export default function FeedbackCard({
 
         {/* Pilihan Materi Paling Bermanfaat */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block">
+          <label className="text-xs font-semibold text-neutral-800 block">
             Materi mana yang dirasa paling bermanfaat untuk organisasi Anda?
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -153,7 +153,7 @@ export default function FeedbackCard({
                 className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
                   materiFavorit === item
                     ? "border-[#1C4BBC] bg-[#1C4BBC]/5 text-[#1C4BBC] font-bold"
-                    : "border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 text-neutral-600 dark:text-neutral-400"
+                    : "border-neutral-200 hover:bg-neutral-50 text-neutral-700"
                 }`}
               >
                 <input
@@ -171,7 +171,7 @@ export default function FeedbackCard({
 
         {/* Textarea Saran & Kritik */}
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block">
+          <label className="text-xs font-semibold text-neutral-800 block">
             Kritik, Saran, atau Pesan untuk DEMA UIN Antasari (Opsional):
           </label>
           <textarea
@@ -179,13 +179,13 @@ export default function FeedbackCard({
             value={saran}
             onChange={(e) => setSaran(e.target.value)}
             placeholder="Tuliskan pengalaman Anda, materi yang ingin dipelajari selanjutnya, atau kritik membangun..."
-            className="w-full p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
+            className="w-full p-3 rounded-xl border border-neutral-200 bg-neutral-50/50 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[#1C4BBC]"
           />
         </div>
 
         {/* Action Button */}
         <div className="flex items-center justify-between gap-3 pt-1">
-          <span className="text-[11px] text-neutral-400">
+          <span className="text-[11px] text-neutral-500">
             Penilaian Anda bersifat rahasia dan untuk evaluasi internal.
           </span>
           <button

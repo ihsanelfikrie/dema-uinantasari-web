@@ -6,7 +6,6 @@ import {
   FileText, 
   ExternalLink, 
   Download, 
-  Sparkles, 
   Clock, 
   RefreshCw, 
   Link2, 
@@ -96,13 +95,13 @@ export default function MateriSection() {
   return (
     <div className="space-y-6">
       {/* Header Banner Modul */}
-      <div className="bg-white dark:bg-[#140606] p-6 sm:p-7 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-3">
+      <div className="bg-white p-6 sm:p-7 rounded-2xl border border-neutral-200/80 shadow-xs space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC] dark:text-[#CAD3E6]">
+            <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC]">
               <FolderDown className="w-5 h-5" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC] dark:text-[#CAD3E6]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC]">
               Modul & Toolkit Digital
             </span>
           </div>
@@ -111,7 +110,7 @@ export default function MateriSection() {
             type="button"
             onClick={fetchMateri}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 transition-colors cursor-pointer"
             title="Muat ulang materi"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#1C4BBC]" : ""}`} />
@@ -119,10 +118,10 @@ export default function MateriSection() {
           </button>
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-900 dark:text-white font-poppins">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-900 font-poppins">
           Materi Pelatihan Antasari Media Lab
         </h2>
-        <p className="text-xs text-neutral-500 max-w-2xl leading-relaxed">
+        <p className="text-xs text-neutral-600 max-w-2xl leading-relaxed">
           Kumpulan slide presentasi narasumber, template desain, aset grafis, dan toolkit penunjang pengelolaan media sosial ormawa.
         </p>
       </div>
@@ -131,11 +130,11 @@ export default function MateriSection() {
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="p-6 rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 animate-pulse space-y-4">
-              <div className="h-5 bg-neutral-200 dark:bg-neutral-800 rounded w-1/3" />
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-2/3" />
-              <div className="h-16 bg-neutral-100 dark:bg-neutral-800/60 rounded-xl" />
-              <div className="h-10 bg-neutral-200 dark:bg-neutral-800 rounded-xl" />
+            <div key={i} className="p-6 rounded-2xl bg-white border border-neutral-200/80 animate-pulse space-y-4">
+              <div className="h-5 bg-neutral-200 rounded w-1/3" />
+              <div className="h-4 bg-neutral-200 rounded w-2/3" />
+              <div className="h-16 bg-neutral-100 rounded-xl" />
+              <div className="h-10 bg-neutral-200 rounded-xl" />
             </div>
           ))}
         </div>
@@ -143,37 +142,34 @@ export default function MateriSection() {
 
       {/* STATE 1: MODUL BELUM TERSEDIA (KONDISI AWAL SEBELUM DIISI ADMIN) */}
       {!loading && materiList.length === 0 && (
-        <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#140606] border border-neutral-200/80 dark:border-neutral-800 p-8 sm:p-12 text-center shadow-xs space-y-5">
-          {/* Subtle Glow Background */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-36 bg-[#1C4BBC]/5 rounded-full blur-3xl pointer-events-none" />
-
+        <div className="relative overflow-hidden rounded-2xl bg-white border border-neutral-200/80 p-8 sm:p-12 text-center shadow-xs space-y-5">
           {/* Icon Badge */}
-          <div className="inline-flex p-4 rounded-3xl bg-neutral-100 dark:bg-neutral-800 text-neutral-500 mx-auto">
-            <Clock className="w-8 h-8 text-[#1C4BBC] dark:text-[#CAD3E6]" />
+          <div className="inline-flex p-4 rounded-3xl bg-neutral-100 text-neutral-600 mx-auto">
+            <Clock className="w-8 h-8 text-[#1C4BBC]" />
           </div>
 
           <div className="space-y-2 max-w-md mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 text-xs font-bold border border-amber-200/60">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-700 text-xs font-semibold border border-neutral-200">
+              <Clock className="w-3.5 h-3.5 text-neutral-600" />
               <span>Modul Belum Tersedia</span>
             </div>
 
-            <h3 className="text-lg sm:text-xl font-extrabold text-neutral-900 dark:text-white font-poppins">
+            <h3 className="text-lg sm:text-xl font-extrabold text-neutral-900 font-poppins">
               Materi Pelatihan Segera Hadir
             </h3>
 
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            <p className="text-xs text-neutral-600 leading-relaxed">
               Materi slide presentasi, template kerja, dan toolkit pelatihan saat ini sedang disiapkan oleh narasumber dan panitia pelaksana.
             </p>
           </div>
 
           {/* Info Card Peserta */}
-          <div className="max-w-lg mx-auto p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 text-left text-xs space-y-1.5">
-            <div className="font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
+          <div className="max-w-lg mx-auto p-4 rounded-xl bg-neutral-50 border border-neutral-200/70 text-left text-xs space-y-1.5">
+            <div className="font-semibold text-neutral-800 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#1C4BBC]" />
               <span>Informasi Akses Materi</span>
             </div>
-            <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed text-[11px]">
+            <p className="text-neutral-600 leading-relaxed text-[11px]">
               Tautan unduhan dan modul pelatihan akan diaktifkan di halaman ini secara bertahap saat sesi pelatihan berlangsung pada <strong>Sabtu, 3 Oktober 2026</strong>. Peserta terdaftar dapat menyegarkan halaman ini saat sesi dimulai.
             </p>
           </div>
@@ -197,16 +193,16 @@ export default function MateriSection() {
           {materiList.map((item) => (
             <div
               key={item.id}
-              className="bg-white dark:bg-[#140606] rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-[#1C4BBC] hover:shadow-md transition-all group"
+              className="bg-white rounded-2xl border border-neutral-200/80 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-[#1C4BBC] hover:shadow-md transition-all group"
             >
               <div className="space-y-3">
                 {/* Header Card: Icon + Category + Badge */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800">
+                    <span className="p-2 rounded-xl bg-neutral-100">
                       {renderTypeIcon(item.tipe)}
                     </span>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-600">
                       {item.sesi || "Materi Pelatihan"}
                     </span>
                   </div>
@@ -215,11 +211,11 @@ export default function MateriSection() {
 
                 {/* Title & Speaker */}
                 <div>
-                  <h3 className="text-base font-bold text-neutral-900 dark:text-white font-poppins leading-snug group-hover:text-[#1C4BBC] transition-colors">
+                  <h3 className="text-base font-bold text-neutral-900 font-poppins leading-snug group-hover:text-[#1C4BBC] transition-colors">
                     {item.judul}
                   </h3>
                   {item.pemateri && (
-                    <span className="text-xs font-semibold text-[#1C4BBC] dark:text-[#CAD3E6] block mt-1">
+                    <span className="text-xs font-semibold text-[#1C4BBC] block mt-1">
                       {item.pemateri}
                     </span>
                   )}
@@ -227,18 +223,18 @@ export default function MateriSection() {
 
                 {/* Description */}
                 {item.deskripsi && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-neutral-600 leading-relaxed line-clamp-3">
                     {item.deskripsi}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-neutral-100 flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => handleCopyLink(item)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
                   title="Salin Tautan Materi"
                 >
                   {copiedId === item.id ? (

@@ -18,7 +18,6 @@ import {
   Search,
   Printer,
   FileCheck,
-  Sparkles,
   Info
 } from "lucide-react";
 import Link from "next/link";
@@ -218,7 +217,7 @@ export default function AdminSertifikatPage() {
         // --- 2. Draw Nama Peserta dengan Auto-Scale ---
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = isVector ? "#1C4BBC" : (config.nama_color || "#FFFFFF");
+        ctx.fillStyle = isVector ? "#990808" : (config.nama_color || "#FFFFFF");
         let effNamaSize = isVector ? 84 : (config.nama_font_size || 130);
         ctx.font = `700 ${effNamaSize}px Caveat, cursive`;
 
@@ -232,7 +231,7 @@ export default function AdminSertifikatPage() {
 
         // Underline aksen hanya saat fallback vector
         if (isVector) {
-          ctx.strokeStyle = (config.nama_color || "#1C4BBC") + "55";
+          ctx.strokeStyle = (config.nama_color || "#990808") + "55";
           ctx.lineWidth = Math.max(3, Math.round(effNamaSize * 0.05));
           const textWidth = ctx.measureText(sampleNama).width;
           ctx.beginPath();
@@ -247,16 +246,16 @@ export default function AdminSertifikatPage() {
         ctx.fillStyle = "#FBFBFA";
         ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        ctx.strokeStyle = "#1C4BBC";
+        ctx.strokeStyle = "#990808";
         ctx.lineWidth = 24;
         ctx.strokeRect(60, 60, CANVAS_WIDTH - 120, CANVAS_HEIGHT - 120);
 
-        ctx.strokeStyle = "#82BE3B";
+        ctx.strokeStyle = "#EDC537";
         ctx.lineWidth = 8;
         ctx.strokeRect(95, 95, CANVAS_WIDTH - 190, CANVAS_HEIGHT - 190);
 
         ctx.textAlign = "center";
-        ctx.fillStyle = "#1C4BBC";
+        ctx.fillStyle = "#990808";
         ctx.font = "bold 64px Poppins, sans-serif";
         ctx.fillText("DEWAN EKSEKUTIF MAHASISWA", CANVAS_WIDTH / 2, 380);
 
@@ -264,7 +263,7 @@ export default function AdminSertifikatPage() {
         ctx.font = "500 46px Poppins, sans-serif";
         ctx.fillText("UNIVERSITAS ISLAM NEGERI ANTASARI BANJARMASIN", CANVAS_WIDTH / 2, 450);
 
-        ctx.fillStyle = "#82BE3B";
+        ctx.fillStyle = "#EDC537";
         ctx.font = "bold 96px Poppins, sans-serif";
         ctx.fillText("SERTIFIKAT PENGHARGAAN", CANVAS_WIDTH / 2, 640);
 
@@ -280,7 +279,7 @@ export default function AdminSertifikatPage() {
           1380
         );
 
-        ctx.fillStyle = "#1C4BBC";
+        ctx.fillStyle = "#990808";
         ctx.font = "bold 68px Poppins, sans-serif";
         ctx.fillText("ANTASARI MEDIA LAB 2026", CANVAS_WIDTH / 2, 1480);
 
@@ -429,17 +428,17 @@ export default function AdminSertifikatPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-neutral-100 shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC]">
+            <span className="p-1.5 rounded-lg bg-brand-primary/10 text-brand-primary">
               <Award className="w-5 h-5" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC]">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">
               Modul E-Sertifikat Digital
             </span>
           </div>
           <h1 className="text-2xl font-extrabold text-neutral-900 font-poppins">
             Pengaturan Sertifikat Antasari Media Lab
           </h1>
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-xs text-neutral-600 mt-1">
             Unggah template A4 Landscape, atur format penomoran surat, koordinat teks, serta aktivasi unduh untuk peserta.
           </p>
         </div>
@@ -499,7 +498,7 @@ export default function AdminSertifikatPage() {
           onClick={() => setActiveTab("design")}
           className={`flex items-center gap-2 px-5 py-3 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
             activeTab === "design"
-              ? "border-[#1C4BBC] text-[#1C4BBC]"
+              ? "border-brand-primary text-brand-primary"
               : "border-transparent text-neutral-500 hover:text-neutral-900"
           }`}
         >
@@ -512,7 +511,7 @@ export default function AdminSertifikatPage() {
           onClick={() => setActiveTab("peserta")}
           className={`flex items-center gap-2 px-5 py-3 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
             activeTab === "peserta"
-              ? "border-[#1C4BBC] text-[#1C4BBC]"
+              ? "border-brand-primary text-brand-primary"
               : "border-transparent text-neutral-500 hover:text-neutral-900"
           }`}
         >
@@ -526,9 +525,7 @@ export default function AdminSertifikatPage() {
         </button>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          TAB 1: STUDIO DESAIN & PENGATURAN KANVAS
-      ───────────────────────────────────────────────────────────── */}
+      {/* Tab 1: Studio Desain & Pengaturan Kanvas */}
       {activeTab === "design" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Controls Panel (Left Column) */}
@@ -548,9 +545,9 @@ export default function AdminSertifikatPage() {
                   type="file"
                   accept="image/png, image/jpeg, image/webp"
                   onChange={handleFileChange}
-                  className="w-full text-xs text-neutral-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C4BBC] file:text-white hover:file:bg-[#153a99] cursor-pointer"
+                  className="w-full text-xs text-neutral-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white hover:file:bg-brand-accent cursor-pointer"
                 />
-                <span className="text-[11px] text-neutral-400 block mt-1.5">
+                <span className="text-[11px] text-neutral-500 block mt-1.5">
                   Format: PNG/JPG beresolusi tinggi (A4 landscape polos tanpa nama & tanpa nomor surat).
                 </span>
               </div>
@@ -564,14 +561,14 @@ export default function AdminSertifikatPage() {
 
               <div className="space-y-1">
                 <label className="text-[11px] font-medium text-neutral-600 block">
-                  Pola Format Nomor (gunakan tag <code className="text-[#1C4BBC] font-bold">{"{nomor}"}</code>)
+                  Pola Format Nomor (gunakan tag <code className="text-brand-primary font-bold">{"{nomor}"}</code>)
                 </label>
                 <input
                   type="text"
                   value={config.nomor_format}
                   onChange={(e) => setConfig({ ...config, nomor_format: e.target.value })}
                   placeholder="{nomor}/DEMA-UIN/AML/X/2026"
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-primary outline-none"
                 />
               </div>
 
@@ -584,7 +581,7 @@ export default function AdminSertifikatPage() {
                     type="number"
                     value={config.nomor_start}
                     onChange={(e) => setConfig({ ...config, nomor_start: parseInt(e.target.value) || 1 })}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-primary outline-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -595,7 +592,7 @@ export default function AdminSertifikatPage() {
                     type="number"
                     value={config.nomor_font_size}
                     onChange={(e) => setConfig({ ...config, nomor_font_size: parseInt(e.target.value) || 36 })}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-primary outline-none"
                   />
                 </div>
               </div>
@@ -605,7 +602,7 @@ export default function AdminSertifikatPage() {
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px] text-neutral-600">
                     <span>Posisi X Nomor</span>
-                    <span className="font-mono font-bold text-[#1C4BBC]">{config.nomor_pos_x}px</span>
+                    <span className="font-mono font-bold text-brand-primary">{config.nomor_pos_x}px</span>
                   </div>
                   <input
                     type="range"
@@ -614,14 +611,14 @@ export default function AdminSertifikatPage() {
                     step="10"
                     value={config.nomor_pos_x}
                     onChange={(e) => setConfig({ ...config, nomor_pos_x: parseInt(e.target.value) })}
-                    className="w-full accent-[#1C4BBC] cursor-pointer"
+                    className="w-full accent-brand-primary cursor-pointer"
                   />
                 </div>
 
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px] text-neutral-600">
                     <span>Posisi Y Nomor</span>
-                    <span className="font-mono font-bold text-[#1C4BBC]">{config.nomor_pos_y}px</span>
+                    <span className="font-mono font-bold text-brand-primary">{config.nomor_pos_y}px</span>
                   </div>
                   <input
                     type="range"
@@ -630,7 +627,7 @@ export default function AdminSertifikatPage() {
                     step="10"
                     value={config.nomor_pos_y}
                     onChange={(e) => setConfig({ ...config, nomor_pos_y: parseInt(e.target.value) })}
-                    className="w-full accent-[#1C4BBC] cursor-pointer"
+                    className="w-full accent-brand-primary cursor-pointer"
                   />
                 </div>
               </div>
@@ -651,7 +648,7 @@ export default function AdminSertifikatPage() {
                     type="number"
                     value={config.nama_font_size}
                     onChange={(e) => setConfig({ ...config, nama_font_size: parseInt(e.target.value) || 80 })}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-primary outline-none"
                   />
                 </div>
 
@@ -680,7 +677,7 @@ export default function AdminSertifikatPage() {
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px] text-neutral-600">
                   <span>Posisi Y Nama Peserta</span>
-                  <span className="font-mono font-bold text-[#1C4BBC]">{config.nama_pos_y}px</span>
+                  <span className="font-mono font-bold text-brand-primary">{config.nama_pos_y}px</span>
                 </div>
                 <input
                   type="range"
@@ -689,7 +686,7 @@ export default function AdminSertifikatPage() {
                   step="10"
                   value={config.nama_pos_y}
                   onChange={(e) => setConfig({ ...config, nama_pos_y: parseInt(e.target.value) })}
-                  className="w-full accent-[#1C4BBC] cursor-pointer"
+                  className="w-full accent-brand-primary cursor-pointer"
                 />
               </div>
 
@@ -702,7 +699,7 @@ export default function AdminSertifikatPage() {
                   value={sampleNama}
                   onChange={(e) => setSampleNama(e.target.value)}
                   placeholder="Ketik nama untuk tes pratinjau..."
-                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs focus:ring-2 focus:ring-brand-primary outline-none"
                 />
               </div>
             </div>
@@ -721,7 +718,7 @@ export default function AdminSertifikatPage() {
                 type="checkbox"
                 checked={config.require_presensi}
                 onChange={(e) => setConfig({ ...config, require_presensi: e.target.checked })}
-                className="w-4 h-4 accent-[#1C4BBC] cursor-pointer"
+                className="w-4 h-4 accent-brand-primary cursor-pointer"
               />
             </div>
 
@@ -731,7 +728,7 @@ export default function AdminSertifikatPage() {
                 type="button"
                 onClick={handleSaveConfig}
                 disabled={saving}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#1C4BBC] hover:bg-[#153a99] text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-accent text-white text-xs font-semibold transition-all shadow-xs disabled:opacity-50 cursor-pointer"
               >
                 {saving ? (
                   <RefreshCw className="w-4 h-4 animate-spin" />
@@ -795,9 +792,7 @@ export default function AdminSertifikatPage() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
-          TAB 2: DATA PESERTA & REKAP KELAYAKAN
-      ───────────────────────────────────────────────────────────── */}
+      {/* Tab 2: Data Peserta & Rekap Kelayakan */}
       {activeTab === "peserta" && (
         <div className="space-y-4 bg-white p-5 rounded-2xl border border-neutral-100 shadow-xs">
           {/* Header & Filter Controls */}
@@ -809,7 +804,7 @@ export default function AdminSertifikatPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Cari nama, NIM, atau delegasi..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-[#1C4BBC] outline-none"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-brand-primary outline-none"
               />
             </div>
 
@@ -818,7 +813,7 @@ export default function AdminSertifikatPage() {
               <select
                 value={filterPresensi}
                 onChange={(e: any) => setFilterPresensi(e.target.value)}
-                className="px-3 py-1.5 rounded-lg border border-neutral-200 text-xs bg-white focus:ring-2 focus:ring-[#1C4BBC] outline-none cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-neutral-200 text-xs bg-white focus:ring-2 focus:ring-brand-primary outline-none cursor-pointer"
               >
                 <option value="all">Semua Peserta ({totalPeserta})</option>
                 <option value="hadir">Sudah Hadir ({totalHadir})</option>
@@ -830,7 +825,7 @@ export default function AdminSertifikatPage() {
           {/* Table */}
           {loadingPeserta ? (
             <div className="py-12 flex flex-col items-center justify-center gap-2 text-neutral-400">
-              <RefreshCw className="w-6 h-6 animate-spin text-[#1C4BBC]" />
+              <RefreshCw className="w-6 h-6 animate-spin text-brand-primary" />
               <span className="text-xs">Memuat data pendaftar & presensi...</span>
             </div>
           ) : filteredPeserta.length === 0 ? (
@@ -889,7 +884,7 @@ export default function AdminSertifikatPage() {
                                 setSampleNama(peserta.nama);
                                 setActiveTab("design");
                               }}
-                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-[#1C4BBC] hover:underline cursor-pointer"
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-brand-primary hover:underline cursor-pointer"
                               title="Uji nama di studio kanvas"
                             >
                               <span>Uji Studio</span>
@@ -916,7 +911,7 @@ export default function AdminSertifikatPage() {
                                   },
                                 });
                               }}
-                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-[#1C4BBC]/10 text-[#1C4BBC] hover:bg-[#1C4BBC] hover:text-white transition-colors cursor-pointer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-brand-primary/10 text-brand-primary hover:bg-brand-primary hover:text-white transition-colors cursor-pointer"
                               title="Lihat / download sertifikat resmi peserta ini"
                             >
                               <Award className="w-3.5 h-3.5" />

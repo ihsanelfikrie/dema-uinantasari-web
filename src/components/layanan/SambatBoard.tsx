@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { formatDistanceToNow } from "date-fns";
 import { id } from "date-fns/locale";
+import { MessageSquare } from "lucide-react";
 
 // Registrasi GSAP Draggable pada client-side saja
 if (typeof window !== "undefined") {
@@ -142,7 +143,7 @@ export default function SambatBoard({ sambatList }: SambatBoardProps) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[650px] bg-[#E5DCD3] rounded-[2.5rem] border-[10px] border-[#C8B195] overflow-hidden shadow-2xl p-6 select-none touch-none"
+      className="relative w-full h-[520px] sm:h-[650px] bg-[#E5DCD3] rounded-3xl sm:rounded-[2.5rem] border-4 sm:border-[10px] border-[#C8B195] overflow-hidden shadow-2xl p-4 sm:p-6 select-none touch-none"
       style={{
         // Kombinasi tekstur papan mading (corkboard) yang berkelas
         backgroundImage: `
@@ -162,8 +163,8 @@ export default function SambatBoard({ sambatList }: SambatBoardProps) {
 
       {sambatList.length === 0 ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-0">
-          <div className="w-16 h-16 rounded-full bg-white/40 flex items-center justify-center mb-4 backdrop-blur-xs">
-            <span className="text-2xl animate-pulse">📝</span>
+          <div className="w-14 h-14 rounded-2xl bg-white/60 border border-neutral-200/50 flex items-center justify-center mb-3">
+            <MessageSquare className="w-6 h-6 text-neutral-600 stroke-[1.5]" />
           </div>
           <p className="text-sm font-semibold font-poppins text-neutral-800">
             Papan Sambat masih kosong

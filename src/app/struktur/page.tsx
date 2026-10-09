@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import BaganOrganisasi from "@/components/struktur/BaganOrganisasi";
 import { bph, kementerianList } from "@/data/struktur";
 import FadeInSection from "@/components/animations/FadeInSection";
+import MinistryLogo from "@/components/ui/MinistryLogo";
+import MinistryLogoShowcase from "@/components/struktur/MinistryLogoShowcase";
+import FungsionarisIdCard from "@/components/struktur/FungsionarisIdCard";
 
 export const metadata: Metadata = {
   title: "Struktur Organisasi - DEMA UIN Antasari",
@@ -29,6 +32,92 @@ export default function StrukturPage() {
     );
   };
 
+  const renderAvatar = (
+    fotoUrl?: string,
+    nama?: string,
+    size: "square" | "circle-lg" | "circle-md" | "circle-sm" = "square"
+  ) => {
+    if (fotoUrl && fotoUrl.trim() !== "" && fotoUrl !== "/images/kabinet/placeholder.png") {
+      if (size === "circle-lg") {
+        return (
+          <div className="h-20 w-20 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 mb-4 shrink-0 shadow-2xs">
+            <img
+              src={fotoUrl}
+              alt={nama || "Foto Pengurus"}
+              className="h-full w-full object-cover object-top"
+              loading="lazy"
+            />
+          </div>
+        );
+      }
+      if (size === "circle-md") {
+        return (
+          <div className="h-16 w-16 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 mb-3 shrink-0 shadow-2xs">
+            <img
+              src={fotoUrl}
+              alt={nama || "Foto Pengurus"}
+              className="h-full w-full object-cover object-top"
+              loading="lazy"
+            />
+          </div>
+        );
+      }
+      if (size === "circle-sm") {
+        return (
+          <div className="h-10 w-10 shrink-0 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 shadow-2xs">
+            <img
+              src={fotoUrl}
+              alt={nama || "Foto Pengurus"}
+              className="h-full w-full object-cover object-top"
+              loading="lazy"
+            />
+          </div>
+        );
+      }
+      // Square for BPH
+      return (
+        <div className="aspect-square w-full overflow-hidden bg-neutral-100 border-b border-neutral-100 relative group/img">
+          <img
+            src={fotoUrl}
+            alt={nama || "Foto Pengurus"}
+            className="h-full w-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out"
+            loading="lazy"
+          />
+        </div>
+      );
+    }
+
+    if (size === "circle-lg") {
+      return (
+        <div className="h-20 w-20 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-4 shrink-0">
+          <svg className="h-10 w-10 stroke-[1.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+      );
+    }
+    if (size === "circle-md") {
+      return (
+        <div className="h-16 w-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-3 shrink-0">
+          <svg className="h-8 w-8 stroke-[1.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+      );
+    }
+    if (size === "circle-sm") {
+      return (
+        <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200">
+          <svg className="h-5 w-5 stroke-[1.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+      );
+    }
+
+    return renderAvatarPlaceholder();
+  };
+
   const bphMembers = [
     bph.ketua,
     bph.wakilKetua,
@@ -39,14 +128,14 @@ export default function StrukturPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-brand-background py-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-brand-background py-10 sm:py-16 px-3.5 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Title */}
-        <div className="text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-5xl font-poppins">
+        <div className="text-center mb-10 sm:mb-16">
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-4xl md:text-5xl font-poppins">
             Struktur Organisasi
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-neutral-500 max-w-md mx-auto">
+          <p className="mt-2.5 sm:mt-4 text-xs sm:text-base text-neutral-500 max-w-md mx-auto leading-relaxed">
             Fungsionaris Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari
             Banjarmasin Periode 2026/2027.
           </p>
@@ -59,41 +148,21 @@ export default function StrukturPage() {
 
         {/* BPH Section */}
         <FadeInSection>
-          <section className="mb-20">
-            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-10 text-center">
+          <section className="mb-12 sm:mb-20">
+            <h2 className="text-lg font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 sm:mb-10 text-center">
               Badan Pengurus Harian
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 sm:gap-8 pt-2">
               {bphMembers.map((member) => (
-                <div
+                <FungsionarisIdCard
                   key={member.id}
-                  className="bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:border-brand-primary/10 transition-colors flex flex-col justify-between"
-                >
-                  <div>
-                    {renderAvatarPlaceholder()}
-                    <div className="p-5">
-                      <h3 className="text-sm font-semibold text-neutral-900 font-poppins line-clamp-1">
-                        {member.nama}
-                      </h3>
-                      {member.nim && (
-                        <span className="text-[10px] text-neutral-400 block font-poppins mt-0.5">
-                          NIM. {member.nim}
-                        </span>
-                      )}
-                      <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-wider block mt-2">
-                        {member.jabatan}
-                      </span>
-                      {member.fakultas && (
-                        <span className="text-[10px] text-neutral-500 block mt-1 font-poppins font-light leading-snug">
-                          {member.fakultas}
-                        </span>
-                      )}
-                      <p className="mt-3 text-xs leading-relaxed text-neutral-500 font-normal">
-                        {member.tupoksi}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  nama={member.nama}
+                  jabatan={member.jabatan}
+                  fotoUrl={member.fotoUrl}
+                  nim={member.nim}
+                  fakultas={member.fakultas}
+                  subBranding="BPH DEMA UIN Antasari"
+                />
               ))}
             </div>
           </section>
@@ -102,10 +171,10 @@ export default function StrukturPage() {
         {/* Jajaran Kementerian Section */}
         <FadeInSection>
           <section>
-            <h2 className="text-xl font-bold text-neutral-900 sm:text-2xl font-poppins mb-10 text-center">
+            <h2 className="text-lg font-bold text-neutral-900 sm:text-2xl font-poppins mb-6 sm:mb-10 text-center">
               Jajaran Kementerian
             </h2>
-            <div className="space-y-16">
+            <div className="space-y-8 sm:space-y-16">
               {kementerianList.map((kemen) => {
                 const isCoordinating = kemen.menteri.jabatan === "Menteri Koordinator";
                 const coordinators = isCoordinating ? [kemen.menteri, ...kemen.anggota] : [];
@@ -113,98 +182,60 @@ export default function StrukturPage() {
                 return (
                   <div
                     key={kemen.id}
-                    className="bg-white border border-neutral-100 rounded-2xl p-6 sm:p-8 shadow-sm"
+                    className="bg-white border border-neutral-100 rounded-2xl p-4 sm:p-8 shadow-sm"
                   >
-                    <div className="border-b border-neutral-100 pb-4 mb-8">
-                      <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins">
-                        {kemen.nama}
-                      </h3>
+                    <div className="border-b border-neutral-100 pb-3 sm:pb-4 mb-6 sm:mb-8 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/15 flex items-center justify-center shrink-0">
+                          <MinistryLogo kementerianId={kemen.id} className="w-6 h-6 text-brand-primary" />
+                        </div>
+                        <h3 className="text-sm sm:text-lg font-bold text-neutral-900 font-poppins">
+                          {kemen.nama}
+                        </h3>
+                      </div>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-brand-primary bg-brand-primary/5 px-2.5 py-1 rounded-full border border-brand-primary/10 hidden sm:inline-block font-poppins">
+                        Kabinet Laskar Purnama
+                      </span>
                     </div>
 
                     {isCoordinating ? (
-                      /* Coordinating Ministry: Uniform grid for all coordinators */
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                      /* Coordinating Ministry: Uniform ID Card grid for all coordinators */
+                      <div
+                        className={
+                          coordinators.length <= 2
+                            ? "grid grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto gap-6 sm:gap-8 pt-2"
+                            : coordinators.length === 3
+                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto gap-6 sm:gap-8 pt-2"
+                            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2"
+                        }
+                      >
                         {coordinators.map((coord) => (
-                          <div
+                          <FungsionarisIdCard
                             key={coord.id}
-                            className="bg-brand-background/40 border border-neutral-100 rounded-xl overflow-hidden p-5 flex flex-col items-center text-center justify-between min-h-[250px]"
-                          >
-                            <div className="flex flex-col items-center">
-                              <div className="h-16 w-16 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-3">
-                                <svg
-                                  className="h-8 w-8 stroke-[1.2]"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                                  />
-                                </svg>
-                              </div>
-                              <h4 className="text-xs sm:text-sm font-semibold text-neutral-900 font-poppins line-clamp-1">
-                                {coord.nama}
-                              </h4>
-                              {coord.nim && (
-                                <span className="text-[9px] text-neutral-400 block font-poppins mt-0.5">
-                                  NIM. {coord.nim}
-                                </span>
-                              )}
-                              <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-wider mt-2 block">
-                                {coord.jabatan}
-                              </span>
-                              {coord.fakultas && (
-                                <span className="text-[10px] text-neutral-500 block mt-1 font-poppins font-light leading-snug">
-                                  {coord.fakultas}
-                                </span>
-                              )}
-                            </div>
-                            <p className="mt-3 text-xs leading-relaxed text-neutral-500 font-normal">
-                              {coord.tupoksi}
-                            </p>
-                          </div>
+                            nama={coord.nama}
+                            jabatan={coord.jabatan}
+                            fotoUrl={coord.fotoUrl}
+                            nim={coord.nim}
+                            fakultas={coord.fakultas}
+                            kementerianId={kemen.id}
+                            subBranding={kemen.nama}
+                          />
                         ))}
                       </div>
                     ) : (
-                      /* Regular Ministry: Hierarchical layout (Menteri + Staff List) */
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      /* Regular Ministry: Hierarchical layout (Menteri ID Card + Staff List) */
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                         {/* Menteri Card */}
-                        <div className="lg:col-span-1 bg-brand-background/40 border border-neutral-100 rounded-xl overflow-hidden p-5 flex flex-col items-center text-center">
-                          <div className="h-20 w-20 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200 mb-4">
-                            <svg
-                              className="h-10 w-10 stroke-[1.2]"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                              />
-                            </svg>
-                          </div>
-                          <h4 className="text-sm font-semibold text-neutral-900 font-poppins">
-                            {kemen.menteri.nama}
-                          </h4>
-                          {kemen.menteri.nim && (
-                            <span className="text-[9px] text-neutral-400 block font-poppins mt-0.5">
-                              NIM. {kemen.menteri.nim}
-                            </span>
-                          )}
-                          <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-wider mt-2 block">
-                            {kemen.menteri.jabatan}
-                          </span>
-                          {kemen.menteri.fakultas && (
-                            <span className="text-[10px] text-neutral-500 block mt-1 font-poppins font-light leading-snug">
-                              {kemen.menteri.fakultas}
-                            </span>
-                          )}
-                          <p className="mt-3 text-xs leading-relaxed text-neutral-500 font-normal">
-                            {kemen.menteri.tupoksi}
-                          </p>
+                        <div className="lg:col-span-1 flex justify-center pt-2">
+                          <FungsionarisIdCard
+                            nama={kemen.menteri.nama}
+                            jabatan={kemen.menteri.jabatan}
+                            fotoUrl={kemen.menteri.fotoUrl}
+                            nim={kemen.menteri.nim}
+                            fakultas={kemen.menteri.fakultas}
+                            kementerianId={kemen.id}
+                            subBranding={kemen.nama}
+                          />
                         </div>
 
                         {/* Staff List */}
@@ -216,20 +247,7 @@ export default function StrukturPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               {kemen.sekretaris && (
                                 <div className="flex items-center gap-4 p-4 border border-brand-primary/10 rounded-xl bg-brand-background/30">
-                                  <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200">
-                                    <svg
-                                      className="h-5 w-5 stroke-[1.2]"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                                      />
-                                    </svg>
-                                  </div>
+                                  {renderAvatar(kemen.sekretaris.fotoUrl, kemen.sekretaris.nama, "circle-sm")}
                                   <div className="min-w-0">
                                     <h5 className="text-xs font-semibold text-neutral-900 truncate">
                                       {kemen.sekretaris.nama}
@@ -255,20 +273,7 @@ export default function StrukturPage() {
                                   key={staf.id}
                                   className="flex items-center gap-4 p-4 border border-neutral-100 rounded-xl bg-brand-background/20"
                                 >
-                                  <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 border border-neutral-200">
-                                    <svg
-                                      className="h-5 w-5 stroke-[1.2]"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                                      />
-                                    </svg>
-                                  </div>
+                                  {renderAvatar(staf.fotoUrl, staf.nama, "circle-sm")}
                                   <div className="min-w-0">
                                     <h5 className="text-xs font-semibold text-neutral-900 truncate">
                                       {staf.nama}
@@ -303,6 +308,11 @@ export default function StrukturPage() {
               })}
             </div>
           </section>
+        </FadeInSection>
+
+        {/* Galeri Logo Kementerian Adaptif */}
+        <FadeInSection>
+          <MinistryLogoShowcase />
         </FadeInSection>
       </div>
     </main>

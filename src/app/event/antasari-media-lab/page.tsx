@@ -19,7 +19,6 @@ import {
   Check,
   ChevronRight,
   ShieldCheck,
-  Sparkles,
   FolderDown
 } from "lucide-react";
 import TicketCard, { TicketData } from "@/components/event/TicketCard";
@@ -513,9 +512,7 @@ export default function AntasariMediaLabPage() {
           </div>
         </div>
 
-        {/* ─────────────────────────────────────────────────────────────
-            SECTION NAVIGATION TABS (Sticky on mobile & desktop)
-        ───────────────────────────────────────────────────────────── */}
+        {/* Section Navigation Tabs (Sticky on mobile & desktop) */}
         <div className="bg-white/95 dark:bg-[#140606]/95 backdrop-blur-md p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-1.5 sticky top-16 md:top-20 z-20">
           <button
             type="button"
@@ -571,9 +568,7 @@ export default function AntasariMediaLabPage() {
           </button>
         </div>
 
-        {/* ─────────────────────────────────────────────────────────────
-            TAB 1: PENDAFTARAN & TIKET PESERTA
-        ───────────────────────────────────────────────────────────── */}
+        {/* Tab 1: Pendaftaran & Tiket Peserta */}
         {activeSection === "pendaftaran" && (
           <div className="space-y-6">
             {isMounted && ticketData ? (
@@ -960,9 +955,7 @@ export default function AntasariMediaLabPage() {
           </div>
         )}
 
-        {/* ─────────────────────────────────────────────────────────────
-            TAB 2: LOKASI & RUTE KEGIATAN
-        ───────────────────────────────────────────────────────────── */}
+        {/* Tab 2: Lokasi & Rute Kegiatan */}
         {activeSection === "lokasi" && (
           <div className="space-y-6">
             {/* Venue Location Hero Card */}
@@ -1043,16 +1036,12 @@ export default function AntasariMediaLabPage() {
           </div>
         )}
 
-        {/* ─────────────────────────────────────────────────────────────
-            TAB 3: MATERI & MODUL PELATIHAN
-        ───────────────────────────────────────────────────────────── */}
+        {/* Tab 3: Materi & Modul Pelatihan */}
         {activeSection === "materi" && (
           <MateriSection />
         )}
 
-        {/* ─────────────────────────────────────────────────────────────
-            TAB 4: E-SERTIFIKAT DIGITAL
-        ───────────────────────────────────────────────────────────── */}
+        {/* Tab 4: E-Sertifikat Digital */}
         {activeSection === "sertifikat" && (
           <div className="space-y-6">
             {/* Header Sertifikat Hub */}

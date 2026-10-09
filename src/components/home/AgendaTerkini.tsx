@@ -13,182 +13,65 @@ if (typeof window !== "undefined") {
 
 export default function AgendaTerkini() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   const portals = [
     {
       id: "p3",
       title: "Layanan P3",
-      desc: "Pelaporan Penanganan Kekerasan Seksual & Perundungan di kampus dengan privasi terjaga penuh.",
+      kicker: "Pencegahan & Penanganan",
+      desc: "Pelaporan Penanganan Kekerasan Seksual & Perundungan di lingkungan kampus dengan jaminan kerahasiaan identitas.",
       href: "/layanan/p3",
       icon: AlertCircle,
-      color: "bg-brand-accent/20 border-brand-accent/30 text-brand-accent hover:bg-brand-accent/30",
+      highlights: ["100% Rahasia", "Satgas Khusus", "Pendampingan"],
+      badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
+      iconColor: "text-brand-primary bg-brand-primary/10",
     },
     {
       id: "advokasi",
       title: "Advokasi Mahasiswa",
-      desc: "Pengaduan kendala akademik, keringanan UKT, maupun pelaporan fasilitas kampus.",
+      kicker: "Bantuan & Pengaduan",
+      desc: "Pengaduan kendala akademik, keringanan UKT, serta penyampaian aspirasi perbaikan fasilitas perkuliahan.",
       href: "/layanan/advokasi",
       icon: HeartHandshake,
-      color: "bg-brand-secondary/20 border-brand-secondary/30 text-brand-secondary hover:bg-brand-secondary/30",
+      highlights: ["Banding UKT", "Kendala Kuliah", "Fasilitas Kampus"],
+      badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
+      iconColor: "text-amber-700 bg-amber-500/10",
     },
     {
       id: "persuratan",
       title: "Persuratan & Kerja Sama",
-      desc: "Pengajuan surat rekomendasi, surat keterangan ORMAWA, serta pengajuan kerja sama media partner.",
+      kicker: "Administrasi Resmi",
+      desc: "Pengajuan surat rekomendasi, surat keterangan aktif ORMAWA, serta pengajuan kerja sama media partner.",
       href: "/layanan/persuratan",
       icon: FileText,
-      color: "bg-emerald-500/20 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30",
+      highlights: ["Rekomendasi DEMA", "Media Partner", "Disposisi Cepat"],
+      badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
+      iconColor: "text-emerald-700 bg-emerald-600/10",
     },
   ];
 
   useGSAP(
     () => {
-      // ── Animate heading on scroll ──────────────────────────────────────────
+      // Animate portals cards staggered on scroll
       gsap.fromTo(
-        ".agenda-heading",
+        ".portal-card-item",
         {
           opacity: 0,
-          y: 30,
+          y: 35,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 0.7,
+          stagger: 0.12,
           ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
           },
         }
       );
-
-      // ── Animate portals cards staggered on scroll ─────────────────────────
-      gsap.fromTo(
-        ".agenda-portal-card",
-        {
-          opacity: 0,
-          y: 40,
-          scale: 0.96,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: cardsContainerRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
-
-      // ── 3D Hover Tilt & Parallax on Service Portal Cards ──────────────────
-      const cards = cardsContainerRef.current?.querySelectorAll(".agenda-portal-card");
-      const tiltHandlers: Array<{ el: Element; move: (e: Event) => void; leave: () => void }> = [];
-
-      if (cards) {
-        cards.forEach((card) => {
-          const iconWrapper = card.querySelector(".agenda-icon-wrapper");
-          const title = card.querySelector(".agenda-card-title");
-
-          const handleMove = (e: Event) => {
-            const mouseEvent = e as MouseEvent;
-            const rect = card.getBoundingClientRect();
-            const relX = (mouseEvent.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-            const relY = (mouseEvent.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
-
-            // Perform 3D rotation tilt
-            gsap.to(card, {
-              rotationY: relX * 18,
-              rotationX: relY * -18,
-              scale: 1.025,
-              borderColor: "rgba(255, 255, 255, 0.25)",
-              backgroundColor: "rgba(0, 0, 0, 0.28)",
-              boxShadow: "0 20px 30px -10px rgba(0, 0, 0, 0.25)",
-              duration: 0.35,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-
-            // Parallax shift on icon
-            if (iconWrapper) {
-              gsap.to(iconWrapper, {
-                x: relX * -12,
-                y: relY * -12,
-                scale: 1.08,
-                duration: 0.35,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-
-            // Parallax shift on title
-            if (title) {
-              gsap.to(title, {
-                x: relX * -6,
-                y: relY * -6,
-                duration: 0.35,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-          };
-
-          const handleLeave = () => {
-            // Reset card rotation
-            gsap.to(card, {
-              rotationY: 0,
-              rotationX: 0,
-              scale: 1,
-              borderColor: "rgba(255, 255, 255, 0.1)",
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
-              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-              duration: 0.7,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-
-            if (iconWrapper) {
-              gsap.to(iconWrapper, {
-                x: 0,
-                y: 0,
-                scale: 1,
-                duration: 0.7,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-
-            if (title) {
-              gsap.to(title, {
-                x: 0,
-                y: 0,
-                duration: 0.7,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-          };
-
-          card.addEventListener("mousemove", handleMove);
-          card.addEventListener("mouseleave", handleLeave);
-          tiltHandlers.push({ el: card, move: handleMove, leave: handleLeave });
-        });
-      }
-
-      return () => {
-        tiltHandlers.forEach(({ el, move, leave }) => {
-          el.removeEventListener("mousemove", move);
-          el.removeEventListener("mouseleave", leave);
-        });
-      };
     },
     { scope: sectionRef }
   );
@@ -196,88 +79,96 @@ export default function AgendaTerkini() {
   return (
     <section
       ref={sectionRef}
-      className="bg-brand-background dark:bg-brand-dark-bg py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-100 dark:border-red-950/20 transition-colors duration-300 overflow-hidden"
+      className="bg-brand-background py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      {/* Curved Container with flat brand color */}
-      <div className="bg-brand-primary rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden shadow-xl border border-white/5">
-        {/* Background grid texture */}
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none select-none flex items-center justify-center">
-          <svg className="w-full h-full" viewBox="0 0 100 100" fill="currentColor">
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5" />
-            </pattern>
-            <rect width="100" height="100" fill="url(#grid)" />
-          </svg>
-        </div>
-
-        {/* Floating Minimalist Coordinates / Accent lines */}
-        <div className="absolute top-6 right-8 text-white/10 text-xs font-mono font-light select-none pointer-events-none hidden sm:block">
-          SYS.PORTAL // LAT: -3.32 // LONG: 114.59
-        </div>
-
-        <div className="agenda-heading opacity-0 relative z-10 max-w-2xl">
-          <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-wider block mb-2">
-            Aspirasi & Advokasi Digital
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 gap-4">
+        <div>
+          <span className="text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-2 font-poppins">
+            Aspirasi &amp; Advokasi Digital
           </span>
-          <h2 className="text-3xl font-extrabold text-white font-poppins tracking-tight uppercase leading-none">
-            Agenda Layanan Mahasiswa
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
+            Layanan Mahasiswa Terpadu
           </h2>
-          <p className="mt-4 text-sm text-neutral-200 leading-relaxed font-poppins font-light max-w-xl">
+          <p className="mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
             DEMA UIN Antasari Banjarmasin menyediakan portal terintegrasi untuk melayani pengaduan,
-            penanganan kekerasan, dan permohonan persuratan secara digital.
+            penanganan kasus, dan permohonan persuratan secara langsung.
           </p>
         </div>
 
-        {/* 3-Column sub-grid for portals */}
-        <div
-          ref={cardsContainerRef}
-          className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 perspective-1000"
+        <Link
+          href="/layanan"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0"
         >
-          {portals.map((portal) => {
-            const Icon = portal.icon;
-            return (
-              <div
-                key={portal.id}
-                className="agenda-portal-card opacity-0 bg-black/20 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-lg group cursor-pointer"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <div>
-                  <div
-                    className={`agenda-icon-wrapper inline-flex p-3 rounded-xl border ${portal.color} mb-6`}
-                    style={{ transform: "translateZ(25px)", transformStyle: "preserve-3d" }}
-                  >
-                    <Icon className="h-6 w-6 transition-transform duration-300" />
+          <span>Buka Semua Layanan</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+
+      {/* 3-Column Grid for portals */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+        {portals.map((portal, index) => {
+          const Icon = portal.icon;
+          return (
+            <div
+              key={portal.id}
+              className="portal-card-item opacity-0 group relative bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-3 rounded-xl ${portal.iconColor} transition-transform duration-300 group-hover:scale-105`}>
+                      <Icon className="h-6 w-6 stroke-[1.5]" />
+                    </div>
+                    <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors">
+                      0{index + 1}
+                    </span>
                   </div>
-                  <h3 
-                    className="agenda-card-title text-base sm:text-lg font-bold text-white font-poppins transition-colors duration-200"
-                    style={{ transform: "translateZ(15px)" }}
-                  >
-                    {portal.title}
-                  </h3>
-                  <p 
-                    className="mt-2 text-xs sm:text-sm text-neutral-300 leading-relaxed font-poppins font-light"
-                    style={{ transform: "translateZ(10px)" }}
-                  >
-                    {portal.desc}
-                  </p>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${portal.badgeColor}`}>
+                    {portal.kicker}
+                  </span>
                 </div>
 
-                <div 
-                  className="mt-6 pt-4 border-t border-white/5"
-                  style={{ transform: "translateZ(10px)" }}
-                >
-                  <Link
-                    href={portal.href}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-secondary hover:text-white transition-colors duration-200 group-hover:translate-x-1 transition-transform"
-                  >
-                    Kunjungi Portal
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                <h3 className="text-base sm:text-lg font-bold text-neutral-900 font-poppins mb-2 group-hover:text-brand-primary transition-colors">
+                  {portal.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-poppins mb-4">
+                  {portal.desc}
+                </p>
+
+                {/* Highlights chips */}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {portal.highlights.map((chip) => (
+                    <span
+                      key={chip}
+                      className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-neutral-100 text-neutral-600 font-poppins"
+                    >
+                      {chip}
+                    </span>
+                  ))}
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
+                <Link
+                  href={portal.href}
+                  className="text-xs font-bold text-brand-primary group-hover:text-brand-accent transition-colors cursor-pointer font-poppins min-h-[44px] flex items-center"
+                >
+                  Akses Layanan
+                </Link>
+                <Link
+                  href={portal.href}
+                  aria-label={`Akses ${portal.title}`}
+                  className="w-11 h-11 rounded-full bg-brand-background group-hover:bg-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs active:scale-95"
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              {/* Bottom Accent Line */}
+              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-brand-primary via-brand-accent to-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+          );
+        })}
       </div>
     </section>
   );

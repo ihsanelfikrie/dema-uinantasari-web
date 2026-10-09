@@ -3,9 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Lock } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import { createClient } from "@/lib/supabase/client";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,16 +42,6 @@ export default function Navbar() {
       setIsSecretLoggingIn(true);
 
       try {
-        // 1. Client-side login ke Supabase
-        const supabase = createClient();
-        if (supabase) {
-          await supabase.auth.signInWithPassword({
-            email: "komvigi@demauin.com",
-            password: "komvigi4321",
-          });
-        }
-
-        // 2. Server-side session sync via API
         await fetch("/api/admin/quick-login", { method: "POST" });
       } catch (err) {
         console.error("Quick login error:", err);
@@ -251,9 +240,10 @@ export default function Navbar() {
         {/* Mobile Action Area */}
         <div className="flex md:hidden items-center gap-2 ml-auto" suppressHydrationWarning>
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg text-neutral-600 hover:bg-neutral-200/50 hover:text-neutral-900 focus:outline-none transition-colors"
-            aria-label="Toggle menu"
+            className="w-11 h-11 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors focus:outline-none active:scale-95"
+            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -272,7 +262,7 @@ export default function Navbar() {
       {isSecretLoggingIn && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white dark:bg-[#140606] px-6 py-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-2xl flex items-center gap-3">
-            <div className="w-5 h-5 border-2 border-[#1C4BBC] border-t-transparent rounded-full animate-spin shrink-0" />
+            <div className="w-5 h-5 border-2 border-brand-primary border-t-transparent rounded-full animate-spin shrink-0" />
             <div className="text-left">
               <span className="text-xs font-bold text-neutral-900 dark:text-white block font-poppins">
                 Mengakses Panel Admin...

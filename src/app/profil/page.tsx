@@ -73,13 +73,13 @@ export default function ProfilPage() {
     },
     {
       title: "Harmonis",
-      desc: "Menjaga keberlangsungan organisasi sebagai ruang kolektif. Perbedaan dirawat melalui dialog dan musyawarah — mengelola perbedaan secara dewasa.",
+      desc: "Menjaga keberlangsungan organisasi sebagai ruang kolektif. Perbedaan dirawat melalui dialog dan musyawarah, mengelola perbedaan secara dewasa.",
       icon: Handshake,
       color: "from-[#990808] to-[#EDC537]",
     },
     {
       title: "Dinamis",
-      desc: "Organisasi mampu bergerak, beradaptasi, dan berkembang. Terbuka terhadap inovasi, kolaborasi, dan pendekatan baru — terus hidup sebagai ruang belajar.",
+      desc: "Organisasi mampu bergerak, beradaptasi, dan berkembang. Terbuka terhadap inovasi, kolaborasi, dan pendekatan baru, terus hidup sebagai ruang belajar.",
       icon: Lightbulb,
       color: "from-[#F44027] to-[#990808]",
     },
@@ -129,7 +129,7 @@ export default function ProfilPage() {
 
   useGSAP(
     () => {
-      // ── 1. Hero Entrance & Scroll Parallax ──────────────────────────────
+      // 1. Hero Entrance & Scroll Parallax
       gsap.fromTo(
         ".hero-title-word",
         { y: "110%" },
@@ -160,7 +160,7 @@ export default function ProfilPage() {
         }
       });
 
-      // ── 2. Tentang: Stagger Fade Up + Clip Path Photo Slot ───────────────
+      // 2. Tentang: Stagger Fade Up + Clip Path Photo Slot
       gsap.fromTo(
         ".tentang-para",
         { y: 30, opacity: 0 },
@@ -195,7 +195,7 @@ export default function ProfilPage() {
         }
       );
 
-      // ── 3. Filosofi: Stagger Card Reveal ───────────────────────────────
+      // 3. Filosofi: Stagger Card Reveal
       gsap.fromTo(
         ".filosofi-card",
         { opacity: 0, y: 50 },
@@ -214,7 +214,7 @@ export default function ProfilPage() {
         }
       );
 
-      // ── 4. Visi & Misi: Drawing line & Stagger Items ───────────────────
+      // 4. Visi & Misi: Drawing line & Stagger Items
       gsap.fromTo(
         ".visi-line",
         { width: "0%" },
@@ -266,7 +266,7 @@ export default function ProfilPage() {
         }
       );
 
-      // ── 5. Nilai Dasar: Clean reveal ────────────────────────────────────
+      // 5. Nilai Dasar: Clean reveal
       gsap.fromTo(
         ".nilai-card",
         { opacity: 0, y: 40 },
@@ -285,7 +285,7 @@ export default function ProfilPage() {
         }
       );
 
-      // ── 6. Budaya Organisasi: Stagger items + Drawing Quote border ────────
+      // 6. Budaya Organisasi: Stagger items + Drawing Quote border
       gsap.fromTo(
         ".budaya-quote",
         { borderLeftWidth: "0px", opacity: 0 },
@@ -321,7 +321,7 @@ export default function ProfilPage() {
         }
       );
 
-      // ── 7. Global Left Progress Line ────────────────────────────────────
+      // 7. Global Left Progress Line
       gsap.to(".deco-line-left", {
         height: "100%",
         ease: "none",
@@ -343,8 +343,8 @@ export default function ProfilPage() {
         <div className="deco-line-left w-full bg-brand-primary" style={{ height: "0%" }} />
       </div>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="profil-hero relative h-screen flex items-center justify-center overflow-hidden bg-white border-b border-neutral-100">
+      {/* Hero */}
+      <section className="profil-hero relative min-h-[85vh] sm:min-h-screen py-16 sm:py-0 flex items-center justify-center overflow-hidden bg-white border-b border-neutral-100">
         {/* Technical architectural grid background texture */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -364,48 +364,48 @@ export default function ProfilPage() {
         </div>
 
         <div className="hero-content-wrapper relative z-10 text-center px-4">
-          <span className="inline-block text-brand-primary text-xs font-bold uppercase tracking-[0.4em] mb-6 font-akzidenz">
+          <span className="inline-block text-brand-primary text-xs font-bold uppercase tracking-[0.4em] mb-4 sm:mb-6 font-poppins">
             Dewan Eksekutif Mahasiswa
           </span>
           
-          <h1 className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-6 overflow-hidden py-2">
+          <h1 className="flex flex-wrap justify-center gap-x-3 sm:gap-x-4 gap-y-1 sm:gap-y-2 mb-4 sm:mb-6 overflow-hidden py-2">
             {["Profil", "DEMA", "UIN", "Antasari"].map((word, i) => (
               <span key={i} className="inline-block overflow-hidden py-1">
-                <span className="hero-title-word block text-4xl sm:text-6xl md:text-8xl font-bold text-neutral-900 leading-none uppercase tracking-tight font-times">
+                <span className="hero-title-word block text-3xl sm:text-6xl md:text-8xl font-bold text-neutral-900 leading-none uppercase tracking-tight font-poppins">
                   {word}
                 </span>
               </span>
             ))}
           </h1>
           
-          <p className="hero-subtitle text-neutral-500 text-sm sm:text-base max-w-md mx-auto leading-relaxed font-poppins">
+          <p className="hero-subtitle text-neutral-500 text-xs sm:text-base max-w-md mx-auto leading-relaxed font-poppins">
             Kabinet{" "}
             <strong className="text-brand-primary font-bold">Laskar Purnama Antasari</strong>
-            {" "}— Tumbuh Berdampak, Bersama Antasari
+            : Tumbuh Berdampak, Bersama Antasari
           </p>
           
-          <div className="hero-scroll-hint mt-16 flex flex-col items-center gap-2 text-neutral-400 text-xs font-mono">
+          <div className="hero-scroll-hint mt-10 sm:mt-16 flex flex-col items-center gap-2 text-neutral-400 text-xs font-mono">
             <span>Scroll untuk menjelajahi</span>
             <ChevronDown className="w-4 h-4 text-brand-primary animate-bounce" />
           </div>
         </div>
       </section>
 
-      {/* ── TENTANG ──────────────────────────────────────────────────────── */}
-      <section className="bg-white border-b border-neutral-100 py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      {/* Tentang Kami Section */}
+      <section className="bg-white border-b border-neutral-100 py-14 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <div className="tentang-section grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
-              01 — Tentang Kami
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-poppins">
+              01. Tentang Kami
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 leading-snug uppercase font-times">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 leading-snug uppercase font-poppins">
               Tentang Organisasi
             </h2>
             <div className="mt-6 space-y-4">
               <p className="tentang-para text-sm leading-relaxed text-neutral-600">
                 Dewan Eksekutif Mahasiswa (DEMA) UIN Antasari Banjarmasin merupakan lembaga
                 eksekutif tertinggi di tingkat universitas yang berfungsi sebagai wadah representasi
-                resmi mahasiswa — mengoordinasikan kegiatan kemahasiswaan, menyalurkan aspirasi,
+                resmi mahasiswa untuk mengoordinasikan kegiatan kemahasiswaan, menyalurkan aspirasi,
                 serta melakukan advokasi hak-hak mahasiswa.
               </p>
               <p className="tentang-para text-sm leading-relaxed text-neutral-600">
@@ -415,7 +415,7 @@ export default function ProfilPage() {
               </p>
               <p className="tentang-para text-sm leading-relaxed text-neutral-600">
                 Melalui proses pembenahan yang berkesinambungan, penguatan solidaritas, serta dialog
-                yang inklusif — kami berkomitmen menghadirkan kebermanfaatan nyata yang melampaui
+                yang inklusif, kami berkomitmen menghadirkan kebermanfaatan nyata yang melampaui
                 batas institusional.
               </p>
             </div>
@@ -461,39 +461,39 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      {/* ── FILOSOFI ─────────────────────────────────────────────────────── */}
-      <section className="filosofi-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
+      {/* Filosofi */}
+      <section className="filosofi-section py-14 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
-          <div className="filosofi-label text-center mb-16">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
-              02 — Filosofi Kabinet
+          <div className="filosofi-label text-center mb-10 sm:mb-16">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-poppins">
+              02. Filosofi Kabinet
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-poppins">
               Laskar Purnama Antasari
             </h2>
-            <p className="mt-3 text-sm text-neutral-500 max-w-md mx-auto">
+            <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto">
               Setiap kata dalam nama kabinet membawa makna mendalam yang melandasi seluruh gerak langkah kepengurusan.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
             {filosofi.map((item) => (
               <div
                 key={item.title}
-                className="filosofi-card relative overflow-hidden rounded-none bg-white border border-neutral-200 p-8 group hover:border-brand-primary/30 transition-colors duration-300"
+                className="filosofi-card relative overflow-hidden rounded-2xl sm:rounded-none bg-white border border-neutral-200 p-6 sm:p-8 group hover:border-brand-primary/30 transition-colors duration-300 shadow-2xs"
               >
                 {/* Big background numeral */}
-                <span className="absolute top-4 right-6 text-7xl font-bold text-neutral-100 select-none group-hover:text-brand-primary/10 transition-colors duration-500 font-times">
+                <span className="absolute top-4 right-6 text-6xl sm:text-7xl font-bold text-neutral-100 select-none group-hover:text-brand-primary/10 transition-colors duration-500 font-poppins">
                   {item.num}
                 </span>
-                <span className="relative z-10 text-[10px] font-bold text-brand-primary uppercase tracking-widest font-akzidenz">
+                <span className="relative z-10 text-[10px] font-bold text-brand-primary uppercase tracking-widest font-poppins">
                   {item.meaning}
                 </span>
-                <h3 className="relative z-10 mt-2 text-xl font-bold text-neutral-900 uppercase font-times">
+                <h3 className="relative z-10 mt-2 text-lg sm:text-xl font-bold text-neutral-900 uppercase font-poppins">
                   {item.title}
                 </h3>
-                <div className="relative z-10 mt-4 w-8 h-0.5 bg-brand-secondary group-hover:w-16 transition-all duration-500" />
-                <p className="relative z-10 mt-4 text-xs leading-relaxed text-neutral-500 font-normal">
+                <div className="relative z-10 mt-3 sm:mt-4 w-8 h-0.5 bg-brand-secondary group-hover:w-16 transition-all duration-500" />
+                <p className="relative z-10 mt-3 sm:mt-4 text-xs leading-relaxed text-neutral-600 font-normal">
                   {item.desc}
                 </p>
               </div>
@@ -502,51 +502,53 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      <section className="visi-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
+      <section className="visi-section py-14 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
-          <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
-            03 — Visi &amp; Misi
+          <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-poppins">
+            03. Visi &amp; Misi
           </span>
 
           {/* Visi */}
-          <div className="mt-8 mb-20">
-            <div className="visi-line h-px bg-brand-primary mb-8" style={{ width: "0%" }} />
+          <div className="mt-6 sm:mt-8 mb-12 sm:mb-20">
+            <div className="visi-line h-px bg-brand-primary mb-6 sm:mb-8" style={{ width: "0%" }} />
             <blockquote className="visi-text">
-              <span className="block text-4xl sm:text-5xl font-black text-brand-primary/10 leading-none -mb-4 select-none">&ldquo;</span>
-              <p className="text-lg sm:text-2xl font-bold text-neutral-800 leading-relaxed max-w-3xl font-times">
+              <span className="block text-3xl sm:text-5xl font-black text-brand-primary/10 leading-none -mb-3 sm:-mb-4 select-none">&ldquo;</span>
+              <p className="text-base sm:text-2xl font-bold text-neutral-800 leading-relaxed max-w-3xl font-poppins">
                 {visi}
               </p>
-              <span className="block text-4xl sm:text-5xl font-black text-brand-primary/10 leading-none mt-0 text-right max-w-3xl select-none">&rdquo;</span>
+              <span className="block text-3xl sm:text-5xl font-black text-brand-primary/10 leading-none mt-0 text-right max-w-3xl select-none">&rdquo;</span>
             </blockquote>
           </div>
 
           {/* Misi */}
-          <div className="misi-container space-y-4">
-            <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-8 font-akzidenz">
+          <div className="misi-container space-y-3 sm:space-y-4">
+            <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-widest mb-6 sm:mb-8 font-poppins">
               Misi Strategis
             </h3>
-            {misi.map((item, index) => {
+            {misi.map((item) => {
               const IconComponent = item.icon;
               return (
                 <div
                   key={item.title}
-                  className="misi-item group flex items-center gap-6 rounded-none bg-white border border-neutral-200 px-6 py-5 hover:bg-neutral-50 hover:border-brand-primary/30 transition-all duration-300"
+                  className="misi-item group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 rounded-2xl sm:rounded-none bg-white border border-neutral-200 p-5 sm:px-6 sm:py-5 hover:bg-neutral-50 hover:border-brand-primary/30 transition-all duration-300 shadow-2xs"
                 >
-                  <span className="text-3xl font-bold text-neutral-200 group-hover:text-brand-primary/20 transition-colors duration-300 w-10 shrink-0 font-times">
-                    {item.no}
-                  </span>
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
-                    <IconComponent className="h-5 w-5 stroke-[1.2]" />
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <span className="text-2xl sm:text-3xl font-bold text-neutral-300 group-hover:text-brand-primary/40 transition-colors duration-300 w-8 sm:w-10 shrink-0 font-poppins">
+                      {item.no}
+                    </span>
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl sm:rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
+                      <IconComponent className="h-4.5 w-4.5 sm:h-5 sm:w-5 stroke-[1.2]" />
+                    </div>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm sm:text-base font-semibold text-neutral-900">
+                    <h4 className="text-sm sm:text-base font-semibold text-neutral-900 font-poppins">
                       {item.title}
                     </h4>
-                    <p className="mt-1 text-xs sm:text-sm leading-relaxed text-neutral-555">
+                    <p className="mt-1 text-xs sm:text-sm leading-relaxed text-neutral-600">
                       {item.desc}
                     </p>
                   </div>
-                  <div className="shrink-0 w-1 h-10 bg-neutral-200 group-hover:bg-brand-accent transition-colors duration-300" />
+                  <div className="hidden sm:block shrink-0 w-1 h-10 bg-neutral-200 group-hover:bg-brand-accent transition-colors duration-300" />
                 </div>
               );
             })}
@@ -554,35 +556,35 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      <section className="nilai-section py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
+      <section className="nilai-section py-14 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
         <div className="max-w-6xl mx-auto">
-          <div className="nilai-label text-center mb-16">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
-              04 — Nilai Dasar
+          <div className="nilai-label text-center mb-10 sm:mb-16">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-poppins">
+              04. Nilai Dasar
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-poppins">
               Nilai Dasar Organisasi
             </h2>
-            <p className="mt-3 text-sm text-neutral-500 max-w-md mx-auto">
+            <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto">
               Empat nilai yang menjadi pondasi gerak dan sikap seluruh pengurus DEMA UIN Antasari.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
             {nilaiDasar.map((nilai) => {
               const IconComponent = nilai.icon;
               return (
                 <div
                   key={nilai.title}
-                  className="nilai-card relative overflow-hidden rounded-none bg-white border border-neutral-200 p-8 group hover:border-brand-primary/30 transition-all duration-300"
+                  className="nilai-card relative overflow-hidden rounded-2xl sm:rounded-none bg-white border border-neutral-200 p-6 sm:p-8 group hover:border-brand-primary/30 transition-all duration-300 shadow-2xs"
                 >
-                  <div className="relative z-10 flex items-start gap-5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
-                      <IconComponent className="h-6 w-6 stroke-[1.2]" />
+                  <div className="relative z-10 flex items-start gap-4 sm:gap-5">
+                    <div className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
+                      <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 stroke-[1.2]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200 font-times">{nilai.title}</h3>
-                      <p className="mt-2 text-xs leading-relaxed text-neutral-500">{nilai.desc}</p>
+                      <h3 className="text-base sm:text-lg font-bold text-neutral-900 group-hover:text-brand-primary transition-colors duration-200 font-poppins">{nilai.title}</h3>
+                      <p className="mt-2 text-xs leading-relaxed text-neutral-600">{nilai.desc}</p>
                     </div>
                   </div>
                 </div>
@@ -592,54 +594,54 @@ export default function ProfilPage() {
         </div>
       </section>
 
-      <section className="budaya-section py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="budaya-section py-14 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="budaya-label text-center mb-12">
-            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-akzidenz">
-              05 — Budaya Organisasi
+          <div className="budaya-label text-center mb-10 sm:mb-12">
+            <span className="text-xs font-semibold text-brand-primary uppercase tracking-widest font-poppins">
+              05. Budaya Organisasi
             </span>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-times">
+            <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-neutral-900 uppercase font-poppins">
               Falsafah Gerak Bersama
             </h2>
           </div>
 
           {/* Pinned quote */}
-          <div className="budaya-quote mb-16 rounded-none border-l-4 border-brand-primary bg-neutral-50 p-10 text-left">
-            <p className="text-lg sm:text-2xl font-bold text-neutral-900 italic leading-relaxed font-times">
+          <div className="budaya-quote mb-12 sm:mb-16 rounded-2xl sm:rounded-none border-l-4 border-brand-primary bg-neutral-50 p-6 sm:p-10 text-left shadow-2xs">
+            <p className="text-base sm:text-2xl font-bold text-neutral-900 italic leading-relaxed font-poppins">
               &ldquo;Ing ngarso sung tulodo, ing madya mangun karso, tut wuri handayani&rdquo;
             </p>
-            <p className="mt-3 text-xs text-neutral-500 font-mono">— Falsafah Ki Hajar Dewantara</p>
+            <p className="mt-3 text-xs text-neutral-600 font-mono">(Falsafah Ki Hajar Dewantara)</p>
           </div>
 
-          <div className="budaya-items-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="budaya-items-grid grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
             {budayaItems.map((item, i) => {
               const IconComponent = item.icon;
               return (
                 <div
                   key={i}
-                  className="budaya-item relative rounded-none border border-neutral-200 bg-white p-7 group hover:border-brand-primary/30 transition-all duration-300"
+                  className="budaya-item relative rounded-2xl sm:rounded-none border border-neutral-200 bg-white p-6 sm:p-7 group hover:border-brand-primary/30 transition-all duration-300 shadow-2xs"
                 >
                   {/* Step number top */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
-                      <IconComponent className="h-5 w-5 stroke-[1.2]" />
+                  <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl sm:rounded-none border border-neutral-200 text-neutral-600 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
+                      <IconComponent className="h-4.5 w-4.5 sm:h-5 sm:w-5 stroke-[1.2]" />
                     </div>
-                    <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider font-akzidenz">
+                    <span className="text-xs text-neutral-500 font-medium uppercase tracking-wider font-poppins">
                       Prinsip {i + 1}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-neutral-900 mb-1 font-times">{item.label}</h3>
-                  <p className="text-xs font-semibold text-brand-primary mb-3 font-akzidenz">{item.sub}</p>
-                  <p className="text-xs leading-relaxed text-neutral-500">{item.desc}</p>
+                  <h3 className="text-sm sm:text-base font-bold text-neutral-900 mb-1 font-poppins">{item.label}</h3>
+                  <p className="text-xs font-semibold text-brand-primary mb-2.5 sm:mb-3 font-poppins">{item.sub}</p>
+                  <p className="text-xs leading-relaxed text-neutral-600">{item.desc}</p>
                 </div>
               );
             })}
           </div>
 
           {/* Closing quote */}
-          <div className="mt-12 p-7 rounded-none bg-neutral-50 border border-neutral-200 text-center">
-            <p className="text-sm leading-relaxed text-neutral-500 italic max-w-3xl mx-auto font-poppins">
-              Kepemimpinan tidak diwariskan, tetapi ditumbuhkan — tidak dipaksakan, tetapi dihidupkan
+          <div className="mt-10 sm:mt-12 p-6 sm:p-7 rounded-2xl sm:rounded-none bg-neutral-50 border border-neutral-200 text-center shadow-2xs">
+            <p className="text-xs sm:text-sm leading-relaxed text-neutral-600 italic max-w-3xl mx-auto font-poppins">
+              Kepemimpinan tidak diwariskan, tetapi ditumbuhkan, tidak dipaksakan, tetapi dihidupkan
               melalui proses yang jujur dan berkelanjutan. Organisasi tidak berjalan dengan logika
               kekuasaan, melainkan dengan etika kebersamaan.
             </p>

@@ -4,7 +4,6 @@ import {
   Newspaper,
   Calendar,
   FileText,
-  ArrowRight,
   PlusCircle,
   UploadCloud,
   Inbox,
@@ -12,7 +11,6 @@ import {
   Users,
   QrCode,
   ExternalLink,
-  Sparkles,
 } from "lucide-react";
 
 export const revalidate = 0; // Always load latest statistics
@@ -84,15 +82,13 @@ export default async function AdminDashboardPage() {
       subtext: "Mahasiswa terdaftar",
       icon: Users,
       href: "/admin/peserta",
-      color: "bg-emerald-50 text-emerald-600 border-emerald-100",
     },
     {
       title: "Info & Berita",
       value: stats.beritaPublished + stats.beritaDraft,
-      subtext: `${stats.beritaPublished} rilis · ${stats.beritaDraft} draf`,
+      subtext: `${stats.beritaPublished} rilis, ${stats.beritaDraft} draf`,
       icon: Newspaper,
       href: "/admin/berita",
-      color: "bg-blue-50 text-blue-600 border-blue-100",
     },
     {
       title: "Kegiatan Proker",
@@ -100,7 +96,6 @@ export default async function AdminDashboardPage() {
       subtext: "Agenda terdaftar",
       icon: Calendar,
       href: "/admin/kegiatan",
-      color: "bg-teal-50 text-teal-600 border-teal-100",
     },
     {
       title: "Dokumen Resmi",
@@ -108,7 +103,6 @@ export default async function AdminDashboardPage() {
       subtext: "Surat & arsip PDF",
       icon: FileText,
       href: "/admin/dokumen",
-      color: "bg-amber-50 text-amber-600 border-amber-100",
     },
     {
       title: "Surat Masuk",
@@ -116,7 +110,6 @@ export default async function AdminDashboardPage() {
       subtext: "Permohonan baru",
       icon: Inbox,
       href: "/admin/permohonan",
-      color: "bg-red-50 text-brand-primary border-red-100",
     },
     {
       title: "Antrean Sambat",
@@ -124,58 +117,55 @@ export default async function AdminDashboardPage() {
       subtext: "Aspirasi masuk",
       icon: MessageSquare,
       href: "/admin/sambat",
-      color: "bg-purple-50 text-purple-600 border-purple-100",
     },
   ];
 
   const quickActions = [
     {
       title: "Scan Presensi QR",
-      desc: "Verifikasi kehadiran tiket",
+      desc: "Verifikasi tiket dan kehadiran peserta",
       icon: QrCode,
       href: "/admin/presensi",
-      badge: "LIVE",
-      highlight: true,
     },
     {
       title: "Data Peserta Event",
-      desc: "Lihat 100+ pendaftar & bukti",
+      desc: "Daftar pendaftar dan bukti pembayaran",
       icon: Users,
       href: "/admin/peserta",
     },
     {
-      title: "Tulis Informasi Baru",
-      desc: "Buat berita & kajian DEMA",
+      title: "Tulis Berita",
+      desc: "Publikasi rilis berita dan rilis pers",
       icon: PlusCircle,
       href: "/admin/berita/tambah",
     },
     {
-      title: "Kelola Proker",
+      title: "Kelola Agenda Proker",
       desc: "Jadwal kegiatan kementerian",
       icon: Calendar,
       href: "/admin/kegiatan",
     },
     {
-      title: "Upload Dokumen",
-      desc: "Arsip surat keputusan & PDF",
+      title: "Arsip Dokumen",
+      desc: "Upload surat keputusan dan berkas PDF",
       icon: UploadCloud,
       href: "/admin/dokumen",
     },
     {
-      title: "Surat Masuk",
-      desc: "Cek permohonan kerjasama",
+      title: "Disposisi Surat Masuk",
+      desc: "Tinjau permohonan kerjasama",
       icon: Inbox,
       href: "/admin/permohonan",
     },
     {
-      title: "Moderasi Sambat",
-      desc: "Tinjau aspirasi mahasiswa",
+      title: "Moderasi Suara Mahasiswa",
+      desc: "Tinjau aspirasi sambat masuk",
       icon: MessageSquare,
       href: "/admin/sambat",
     },
     {
-      title: "Lihat Web Utama",
-      desc: "Tampilan publik portal DEMA",
+      title: "Portal Publik DEMA",
+      desc: "Buka beranda utama situs",
       icon: ExternalLink,
       href: "/",
       external: true,
@@ -183,82 +173,72 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
-      {/* ─────────────────────────────────────────────────────────────
-          1. HEADER (Ultra-compact on Mobile)
-      ───────────────────────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl p-4 sm:p-6 border border-neutral-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-xl p-5 sm:p-6 border border-neutral-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 font-poppins">
-              Admin Workspace
-            </span>
-          </div>
-          <h1 className="text-lg sm:text-2xl font-bold font-poppins text-neutral-900 mt-0.5">
-            Selamat Datang, Admin
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 font-poppins">
+            Panel Administrasi
+          </span>
+          <h1 className="text-xl sm:text-2xl font-bold font-poppins text-neutral-900 mt-1">
+            Ringkasan Operasional
           </h1>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            Kelola event, publikasi berita, arsip dokumen, dan layanan mahasiswa UIN Antasari.
+          <p className="text-xs sm:text-sm text-neutral-600 mt-1">
+            Pusat pengelolaan publikasi, agenda kementerian, permohonan surat, dan layanan mahasiswa.
           </p>
         </div>
 
-        {/* Quick Launch Buttons on Header */}
-        <div className="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-neutral-100">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2.5 pt-3 sm:pt-0 border-t sm:border-t-0 border-neutral-100">
           <Link
             href="/admin/presensi"
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold text-white bg-brand-primary hover:bg-brand-accent shadow-xs transition-colors"
           >
-            <QrCode className="w-3.5 h-3.5" />
+            <QrCode className="w-4 h-4 stroke-[1.5]" />
             <span>Scan Presensi</span>
           </Link>
           <Link
             href="/admin/peserta"
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold text-neutral-800 bg-white border border-neutral-200 hover:bg-neutral-50 transition-colors"
           >
-            <Users className="w-3.5 h-3.5" />
-            <span>Peserta</span>
+            <Users className="w-4 h-4 stroke-[1.5]" />
+            <span>Data Peserta</span>
           </Link>
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          2. COMPACT STATS GRID (2 cols on phone, 3 on tablet, 6 on desktop)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Ringkasan Statistik */}
       <div>
-        <div className="flex items-center justify-between mb-2 sm:mb-3">
-          <h2 className="text-xs font-bold font-poppins uppercase tracking-wider text-neutral-400">
-            Ringkasan Statistik Real-Time
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs font-semibold font-poppins uppercase tracking-wider text-neutral-600">
+            Metrik Data Real-Time
           </h2>
-          <span className="text-[10px] text-neutral-400 font-medium">Otomatis sinkron</span>
+          <span className="text-[11px] text-neutral-500 font-medium">Sinkron otomatis</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {statCards.map((card) => {
             const Icon = card.icon;
             return (
               <Link
                 key={card.title}
                 href={card.href}
-                className="bg-white border border-neutral-200/80 hover:border-neutral-300 rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between group active:scale-[0.98]"
+                className="bg-white border border-neutral-200 hover:border-brand-primary/40 rounded-xl p-4 shadow-xs hover:shadow transition-all flex flex-col justify-between group active:scale-[0.99]"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div
-                    className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center shrink-0 ${card.color}`}
-                  >
-                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[2]" />
+                <div className="flex items-center justify-between mb-3">
+                  <div className="h-8 w-8 rounded-lg bg-neutral-100 text-neutral-700 group-hover:bg-brand-primary/10 group-hover:text-brand-primary flex items-center justify-center shrink-0 transition-colors">
+                    <Icon className="h-4 w-4 stroke-[1.5]" />
                   </div>
-                  <ArrowRight className="h-3 w-3 text-neutral-300 group-hover:text-neutral-500 group-hover:translate-x-0.5 transition-all" />
                 </div>
 
                 <div>
-                  <span className="text-[9px] font-bold text-neutral-500 uppercase tracking-wider block truncate">
+                  <span className="text-[11px] font-medium text-neutral-600 block truncate">
                     {card.title}
                   </span>
-                  <p className="text-lg sm:text-2xl font-bold font-mono text-neutral-900 mt-0.5 leading-none">
+                  <p className="text-2xl font-bold font-poppins text-neutral-900 mt-0.5 leading-none">
                     {card.value}
                   </p>
-                  <p className="text-[10px] text-neutral-400 font-medium mt-1 truncate">
+                  <p className="text-[11px] text-neutral-500 font-normal mt-1 truncate">
                     {card.subtext}
                   </p>
                 </div>
@@ -268,19 +248,18 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. PINTASAN AKSI CEPAT (Compact 2-col on Mobile, 4-col on Desktop)
-      ───────────────────────────────────────────────────────────── */}
-      <div className="bg-white border border-neutral-200/80 rounded-2xl p-4 sm:p-6 shadow-xs">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h2 className="text-xs sm:text-sm font-bold text-neutral-900 font-poppins flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-brand-primary" />
-            <span>Pintasan Menu Cepat</span>
+      {/* Pintasan Menu Manajemen */}
+      <div className="bg-white border border-neutral-200 rounded-xl p-5 sm:p-6 shadow-xs">
+        <div className="mb-4">
+          <h2 className="text-sm font-bold text-neutral-900 font-poppins">
+            Pintasan Menu Manajemen
           </h2>
-          <span className="text-[10px] text-neutral-400">Akses langsung fitur utama</span>
+          <p className="text-xs text-neutral-600 mt-0.5">
+            Akses langsung modul administrasi dan layanan organisasi
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
@@ -288,37 +267,17 @@ export default async function AdminDashboardPage() {
                 key={action.title}
                 href={action.href}
                 target={action.external ? "_blank" : undefined}
-                className={`p-3 rounded-xl border transition-all flex flex-col justify-between group active:scale-[0.98] ${
-                  action.highlight
-                    ? "bg-emerald-50/70 border-emerald-300 hover:bg-emerald-50 text-emerald-950"
-                    : "border-neutral-200/80 hover:border-brand-primary/30 hover:bg-neutral-50/80 text-neutral-800"
-                }`}
+                className="p-3.5 rounded-xl border border-neutral-200 bg-white hover:border-brand-primary/40 hover:bg-neutral-50/60 transition-all flex items-start gap-3 group active:scale-[0.99]"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      action.highlight
-                        ? "bg-emerald-600 text-white"
-                        : "bg-neutral-100 text-neutral-700 group-hover:bg-brand-primary/10 group-hover:text-brand-primary"
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5 stroke-[2]" />
-                  </div>
-                  {action.badge && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-600 text-white animate-pulse">
-                      {action.badge}
-                    </span>
-                  )}
-                  {!action.badge && (
-                    <ArrowRight className="w-3.5 h-3.5 text-neutral-300 group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
-                  )}
+                <div className="w-8 h-8 rounded-lg bg-neutral-100 text-neutral-700 group-hover:bg-brand-primary group-hover:text-white flex items-center justify-center shrink-0 transition-colors mt-0.5">
+                  <Icon className="w-4 h-4 stroke-[1.5]" />
                 </div>
 
-                <div>
-                  <h3 className="text-xs font-bold font-poppins leading-tight truncate">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-xs font-semibold font-poppins text-neutral-900 truncate group-hover:text-brand-primary transition-colors">
                     {action.title}
                   </h3>
-                  <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-1">
+                  <p className="text-[11px] text-neutral-600 mt-0.5 line-clamp-1">
                     {action.desc}
                   </p>
                 </div>

@@ -43,9 +43,27 @@ body {
   font-family: var(--font-poppins);
 }
 
+/* Prevent accidental horizontal overflow leaks on mobile */
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
 /* Compensate inner pages for the fixed transparent-to-sticky navbar */
 main.min-h-screen.bg-brand-background {
-  padding-top: 7.5rem !important; /* ~120px offset to allow breathing room under fixed navbar */
+  padding-top: 5.25rem !important; /* ~84px offset on mobile under 64px navbar */
+}
+
+@media (min-width: 640px) {
+  main.min-h-screen.bg-brand-background {
+    padding-top: 6.5rem !important;
+  }
+}
+
+@media (min-width: 768px) {
+  main.min-h-screen.bg-brand-background {
+    padding-top: 7.5rem !important; /* ~120px on desktop with pill navbar */
+  }
 }
 @font-face {
   font-family: "Caveat";

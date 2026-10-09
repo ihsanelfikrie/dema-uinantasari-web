@@ -19,8 +19,7 @@ import {
   Eye, 
   EyeOff, 
   Check, 
-  ArrowLeft,
-  Sparkles
+  ArrowLeft
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -310,17 +309,17 @@ export default function AdminMateriPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-100 pb-5">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-[#1C4BBC]/10 text-[#1C4BBC]">
+            <span className="p-1.5 rounded-lg bg-brand-primary/10 text-brand-primary">
               <FolderDown className="w-5 h-5" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#1C4BBC]">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">
               Antasari Media Lab
             </span>
           </div>
           <h1 className="text-2xl font-extrabold text-neutral-900 font-poppins">
             Kelola Modul & Materi Event
           </h1>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-neutral-600">
             Unggah dan atur berbagai format modul (slide PDF/PPT, link Canva, infografis gambar, folder Drive) yang dapat diakses peserta.
           </p>
         </div>
@@ -329,7 +328,7 @@ export default function AdminMateriPage() {
           <Link
             href="/event/antasari-media-lab?tab=materi"
             target="_blank"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-neutral-200 text-neutral-700 hover:bg-neutral-50 text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-neutral-200 text-neutral-700 hover:bg-neutral-50 text-xs font-semibold transition-colors"
           >
             <Eye className="w-4 h-4" />
             <span>Lihat Halaman Publik</span>
@@ -338,7 +337,7 @@ export default function AdminMateriPage() {
           <button
             type="button"
             onClick={openAddModal}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1C4BBC] hover:bg-[#153a99] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-accent text-white text-xs font-semibold transition-all shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Modul Baru</span>
@@ -398,25 +397,25 @@ export default function AdminMateriPage() {
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-xs text-neutral-400 space-y-2">
-            <RefreshCw className="w-5 h-5 animate-spin mx-auto text-[#1C4BBC]" />
+          <div className="p-12 text-center text-xs text-neutral-500 space-y-2">
+            <RefreshCw className="w-5 h-5 animate-spin mx-auto text-brand-primary" />
             <p>Memuat daftar materi...</p>
           </div>
         ) : materiList.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-neutral-100 text-neutral-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-neutral-100 text-neutral-500 flex items-center justify-center mx-auto">
               <FolderDown className="w-6 h-6" />
             </div>
             <div className="space-y-1 max-w-sm mx-auto">
               <h3 className="text-sm font-bold text-neutral-800">Belum Ada Modul Ditambahkan</h3>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <p className="text-xs text-neutral-600 leading-relaxed">
                 Di halaman publik, peserta saat ini melihat tampilan <strong>&ldquo;Modul Belum Tersedia / Segera Hadir&rdquo;</strong>. Klik tombol di bawah untuk menambahkan modul pertama.
               </p>
             </div>
             <button
               type="button"
               onClick={openAddModal}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1C4BBC] hover:bg-[#153a99] text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-primary hover:bg-brand-accent text-white text-xs font-semibold transition-all shadow-xs cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Tambah Modul Sekarang</span>
@@ -446,12 +445,12 @@ export default function AdminMateriPage() {
                     <td className="py-3.5 px-4 space-y-0.5 max-w-xs">
                       <span className="font-bold text-neutral-900 block">{item.judul}</span>
                       {item.pemateri && (
-                        <span className="text-[11px] text-[#1C4BBC] font-medium block">
+                        <span className="text-[11px] text-brand-primary font-medium block">
                           {item.pemateri}
                         </span>
                       )}
                       {item.deskripsi && (
-                        <span className="text-[10px] text-neutral-400 line-clamp-1 block">
+                        <span className="text-[10px] text-neutral-500 line-clamp-1 block">
                           {item.deskripsi}
                         </span>
                       )}
@@ -495,7 +494,7 @@ export default function AdminMateriPage() {
                         href={item.file_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[#1C4BBC] hover:underline font-medium truncate max-w-[180px]"
+                        className="inline-flex items-center gap-1 text-brand-primary hover:underline font-medium truncate max-w-[180px]"
                         title={item.file_url}
                       >
                         <span className="truncate">{item.button_label || "Buka"}</span>
@@ -533,7 +532,7 @@ export default function AdminMateriPage() {
                         <button
                           type="button"
                           onClick={() => openEditModal(item)}
-                          className="p-1.5 rounded-lg text-neutral-500 hover:text-[#1C4BBC] hover:bg-neutral-100 transition-colors"
+                          className="p-1.5 rounded-lg text-neutral-500 hover:text-brand-primary hover:bg-neutral-100 transition-colors"
                           title="Edit Modul"
                         >
                           <Edit className="w-4 h-4" />
@@ -556,16 +555,14 @@ export default function AdminMateriPage() {
         )}
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          MODAL TAMBAH / EDIT MODUL
-      ───────────────────────────────────────────────────────────── */}
+      {/* Modal Tambah / Edit Modul */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn overflow-y-auto">
           <div className="bg-white rounded-3xl border border-neutral-100 shadow-2xl w-full max-w-xl p-6 sm:p-7 space-y-5 my-8 max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
               <div className="space-y-0.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#1C4BBC]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary">
                   {editingId ? "Perbarui Materi" : "Modul Baru"}
                 </span>
                 <h3 className="text-lg font-extrabold text-neutral-900 font-poppins">
@@ -593,7 +590,7 @@ export default function AdminMateriPage() {
                   placeholder="Contoh: Slide PPT Desain Grafis & Identitas Visual"
                   value={formJudul}
                   onChange={(e) => setFormJudul(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                 />
               </div>
 
@@ -606,7 +603,7 @@ export default function AdminMateriPage() {
                   <select
                     value={formSesi}
                     onChange={(e) => setFormSesi(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs bg-white"
+                    className="w-full px-3 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs bg-white"
                   >
                     <option value="Sesi 1: Desain Grafis">Sesi 1: Desain Grafis</option>
                     <option value="Sesi 2: Fotografi & Reels">Sesi 2: Fotografi & Reels</option>
@@ -626,7 +623,7 @@ export default function AdminMateriPage() {
                       placeholder="Contoh: Sesi Bonus / Workshop"
                       value={customSesi}
                       onChange={(e) => setCustomSesi(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                     />
                   </div>
                 ) : (
@@ -639,7 +636,7 @@ export default function AdminMateriPage() {
                       placeholder="Contoh: Ihsan El Fikrie / Graphic Designer"
                       value={formPemateri}
                       onChange={(e) => setFormPemateri(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                     />
                   </div>
                 )}
@@ -655,7 +652,7 @@ export default function AdminMateriPage() {
                     placeholder="Contoh: Ihsan El Fikrie / Graphic Designer"
                     value={formPemateri}
                     onChange={(e) => setFormPemateri(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                   />
                 </div>
               )}
@@ -670,7 +667,7 @@ export default function AdminMateriPage() {
                   placeholder="Ringkasan poin materi atau panduan penggunaan modul..."
                   value={formDeskripsi}
                   onChange={(e) => setFormDeskripsi(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                 />
               </div>
 
@@ -685,7 +682,7 @@ export default function AdminMateriPage() {
                     onClick={() => handleTipeChange("link")}
                     className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                       formTipe === "link"
-                        ? "border-[#1C4BBC] bg-[#1C4BBC]/5 text-[#1C4BBC] font-bold"
+                        ? "border-brand-primary bg-brand-primary/5 text-brand-primary font-bold"
                         : "border-neutral-200 text-neutral-600 hover:bg-neutral-50"
                     }`}
                   >
@@ -734,19 +731,19 @@ export default function AdminMateriPage() {
                 </div>
               </div>
 
-              {/* Upload File Langsung (Opsional / Praktis) */}
+              {/* Upload File Langsung */}
               <div className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-neutral-800 text-[11px]">
                     Unggah File Langsung ke Storage (PDF, PPT, Gambar, ZIP)
                   </span>
-                  {uploading && <span className="text-[10px] text-[#1C4BBC] font-bold animate-pulse">Mengunggah...</span>}
+                  {uploading && <span className="text-[10px] text-brand-primary font-bold">Mengunggah...</span>}
                 </div>
                 <input
                   type="file"
                   disabled={uploading}
                   onChange={handleFileUpload}
-                  className="w-full text-xs text-neutral-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C4BBC] file:text-white hover:file:bg-[#153a99] cursor-pointer"
+                  className="w-full text-xs text-neutral-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white hover:file:bg-brand-accent cursor-pointer"
                 />
               </div>
 
@@ -761,9 +758,9 @@ export default function AdminMateriPage() {
                   placeholder="https://drive.google.com/... atau https://canva.com/..."
                   value={formFileUrl}
                   onChange={(e) => setFormFileUrl(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs font-mono"
                 />
-                <span className="text-[10px] text-neutral-400 block mt-1">
+                <span className="text-[10px] text-neutral-500 block mt-1">
                   Bisa berupa link Google Drive, Canva Template, YouTube, atau URL file yang otomatis terisi dari tombol unggah di atas.
                 </span>
               </div>
@@ -779,7 +776,7 @@ export default function AdminMateriPage() {
                     placeholder="Contoh: Download PDF Materi"
                     value={formButtonLabel}
                     onChange={(e) => setFormButtonLabel(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                   />
                 </div>
 
@@ -792,7 +789,7 @@ export default function AdminMateriPage() {
                     min={1}
                     value={formUrutan}
                     onChange={(e) => setFormUrutan(Number(e.target.value))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#1C4BBC] text-neutral-800 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-brand-primary text-neutral-800 text-xs"
                   />
                 </div>
               </div>
@@ -804,7 +801,7 @@ export default function AdminMateriPage() {
                     type="checkbox"
                     checked={formIsPublished}
                     onChange={(e) => setFormIsPublished(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#1C4BBC] focus:ring-[#1C4BBC]"
+                    className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary"
                   />
                   <span className="font-bold text-neutral-800 text-xs">
                     Publikasikan ke Halaman Peserta Sekarang
@@ -824,7 +821,7 @@ export default function AdminMateriPage() {
                 <button
                   type="submit"
                   disabled={saving || uploading}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1C4BBC] hover:bg-[#153a99] text-white font-bold transition-all shadow-xs cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-accent text-white font-semibold transition-all shadow-xs cursor-pointer"
                 >
                   {saving ? (
                     <>

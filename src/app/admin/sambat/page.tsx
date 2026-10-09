@@ -106,7 +106,7 @@ export default function AdminSambatPage() {
         >
           Antrean Approval ({pendingNotes.length})
           {pendingNotes.length > 0 && (
-            <span className="absolute top-0.5 -right-2 h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
+            <span className="absolute top-0.5 -right-2 h-1.5 w-1.5 rounded-full bg-brand-primary" />
           )}
         </button>
         <button

@@ -29,7 +29,7 @@ export default function EventPage() {
         {/* Section 1: Upcoming Event */}
         <section className="mb-10 sm:mb-12">
           <div className="flex items-center gap-2 mb-3.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-brand-primary animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-brand-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white font-poppins">
               Agenda Mendatang (Upcoming Event)
             </span>

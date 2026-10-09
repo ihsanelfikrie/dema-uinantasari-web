@@ -149,23 +149,23 @@ export default function LayananPersuratanPage() {
   };
 
   const inputBase =
-    "w-full rounded-xl border bg-white dark:bg-brand-darkCard px-4 py-3 text-sm font-normal text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary dark:focus:ring-brand-secondary/30 dark:focus:border-brand-secondary";
+    "w-full rounded-xl border bg-white dark:bg-brand-darkCard px-4 py-3 text-base sm:text-sm font-normal text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary dark:focus:ring-brand-secondary/30 dark:focus:border-brand-secondary min-h-[46px]";
   const inputNormal = `${inputBase} border-neutral-200 dark:border-red-950/20`;
   const inputError = `${inputBase} border-red-400 dark:border-red-500`;
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center font-poppins">
+      <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center font-poppins">
         <div className="max-w-md w-full text-center space-y-6">
           <div className="flex justify-center">
             <div className="h-20 w-20 rounded-full bg-brand-primary/10 dark:bg-brand-secondary/10 flex items-center justify-center">
               <CheckCircle2 className="h-10 w-10 text-brand-primary dark:text-brand-secondary" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">
             Permohonan Terkirim!
           </h1>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
             Terima kasih, <strong>{formData.namaLengkap}</strong>. Permohonan
             Anda telah kami terima dan akan diproses oleh Sekretaris Jenderal
             DEMA dalam waktu{" "}
@@ -185,7 +185,7 @@ export default function LayananPersuratanPage() {
                 berkas: null,
               });
             }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-accent transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-accent transition-colors min-h-[44px] active:scale-95"
           >
             Ajukan Permohonan Baru
           </button>
@@ -195,18 +195,18 @@ export default function LayananPersuratanPage() {
   }
 
   return (
-    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 font-poppins transition-colors duration-300">
+    <main className="min-h-screen bg-brand-background dark:bg-brand-dark-bg py-10 sm:py-16 px-3.5 sm:px-6 lg:px-8 font-poppins transition-colors duration-300">
       <div className="mx-auto max-w-4xl">
         {/* Page Header */}
         <FadeInSection>
-          <div className="text-center mb-14 pt-8">
-            <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-3">
+          <div className="text-center mb-10 sm:mb-14 pt-2 sm:pt-8">
+            <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 sm:mb-3">
               Administrasi & Kerja Sama
             </span>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white">
               Layanan Persuratan
             </h1>
-            <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400 max-w-lg mx-auto leading-relaxed">
+            <p className="mt-2.5 sm:mt-4 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-lg mx-auto leading-relaxed">
               Ajukan permohonan surat resmi, kerja sama, media partner, atau
               kebutuhan administrasi kemahasiswaan lainnya kepada DEMA UIN
               Antasari Banjarmasin.
@@ -400,8 +400,8 @@ export default function LayananPersuratanPage() {
                 <label className="flex items-center gap-1.5 text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                   <Paperclip className="h-3.5 w-3.5 text-brand-primary dark:text-brand-secondary" />
                   Berkas Pendukung{" "}
-                  <span className="text-neutral-400 font-normal normal-case tracking-normal ml-1">
-                    (opsional — PDF / JPG / PNG, maks. 10MB)
+                  <span className="text-neutral-500 font-normal normal-case tracking-normal ml-1">
+                    (opsional, PDF / JPG / PNG, maks. 10MB)
                   </span>
                 </label>
                 <label

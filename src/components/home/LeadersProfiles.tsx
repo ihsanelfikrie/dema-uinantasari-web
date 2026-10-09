@@ -2,11 +2,15 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, UserCheck } from "lucide-react";
+import { UserCheck, ArrowUpRight } from "lucide-react";
 import { bph } from "@/data/struktur";
 import gsap from "gsap";
-import { Draggable } from "gsap/Draggable";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function LeadersProfiles() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,267 +24,169 @@ export default function LeadersProfiles() {
     bph.bendum,
   ];
 
-  // Repeat fungsionaris list so we have enough cards (12 items) to loop seamlessly
-  const duplicatedBph = [...bphMembers, ...bphMembers];
-
   useGSAP(
     () => {
-      // Register GSAP Draggable plugin
-      gsap.registerPlugin(Draggable);
-
-      const cards = gsap.utils.toArray<HTMLElement>(".bph-card-item");
-      if (cards.length === 0) return;
-
-      // Set initial hidden state of elements
-      gsap.set(cards, { xPercent: 260, opacity: 0, scale: 0 });
-
-      const spacing = 0.08; // spacing of the cards (stagger)
-      const snapTime = gsap.utils.snap(spacing);
-
-      // Card animation timeline segment
-      const animateFunc = (element: HTMLElement) => {
-        const tl = gsap.timeline();
-        tl.fromTo(
-          element,
-          { scale: 0, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            zIndex: 100,
-            duration: 0.5,
-            yoyo: true,
-            repeat: 1,
-            ease: "power1.in",
-            immediateRender: false,
-          }
-        ).fromTo(
-          element,
-          { xPercent: 260 },
-          { xPercent: -260, duration: 1, ease: "none", immediateRender: false },
-          0
-        );
-        return tl;
-      };
-
-      const seamlessLoop = buildSeamlessLoop(cards, spacing, animateFunc);
-      
-      const startTime = cards.length * spacing + 0.5;
-      const playhead = { offset: startTime };
-      const wrapTime = gsap.utils.wrap(0, seamlessLoop.duration());
-
-      // Set initial playhead time position
-      seamlessLoop.time(wrapTime(startTime));
-
-      // Reusable tween to smoothly scrub in-place
-      const scrubToOffset = (targetOffset: number, duration = 0.5) => {
-        gsap.to(playhead, {
-          offset: targetOffset,
-          duration: duration,
-          ease: "power3.out",
-          onUpdate() {
-            seamlessLoop.time(wrapTime(playhead.offset));
+      // Stagger entrance of BPH cards on scroll
+      gsap.fromTo(
+        ".bph-card-item",
+        {
+          opacity: 0,
+          y: 35,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
-          overwrite: "auto",
-        });
-      };
-
-      // Prev & Next click handlers (in-place animation)
-      const handleNext = () => {
-        scrubToOffset(playhead.offset + spacing);
-      };
-
-      const handlePrev = () => {
-        scrubToOffset(playhead.offset - spacing);
-      };
-
-      const nextBtn = containerRef.current?.querySelector(".bph-next-btn");
-      const prevBtn = containerRef.current?.querySelector(".bph-prev-btn");
-
-      if (nextBtn) nextBtn.addEventListener("click", handleNext);
-      if (prevBtn) prevBtn.addEventListener("click", handlePrev);
-
-      // Mobile swipe dragging proxy functionality
-      const dragProxy = containerRef.current?.querySelector(".bph-drag-proxy");
-      let startOffset = 0;
-      let dragInstance: any = null;
-
-      if (dragProxy) {
-        const draggableArray = Draggable.create(dragProxy, {
-          type: "x",
-          trigger: ".bph-cards-container",
-          onPress() {
-            startOffset = playhead.offset;
-          },
-          onDrag() {
-            const deltaX = this.startX - this.x;
-            playhead.offset = startOffset + deltaX * 0.0015; // drag sensitivity tuning
-            seamlessLoop.time(wrapTime(playhead.offset));
-          },
-          onDragEnd() {
-            const snappedOffset = snapTime(playhead.offset);
-            scrubToOffset(snappedOffset, 0.4);
-          },
-        });
-        dragInstance = draggableArray[0];
-      }
-
-      return () => {
-        if (nextBtn) nextBtn.removeEventListener("click", handleNext);
-        if (prevBtn) prevBtn.removeEventListener("click", handlePrev);
-        if (dragInstance) dragInstance.kill();
-        seamlessLoop.kill();
-      };
+        }
+      );
     },
     { scope: containerRef }
   );
-
-  // Core seamless loop calculation engine
-  function buildSeamlessLoop(
-    items: HTMLElement[],
-    spacing: number,
-    animateFunc: (el: HTMLElement) => gsap.core.Timeline
-  ) {
-    const overlap = Math.ceil(1 / spacing);
-    const startTime = items.length * spacing + 0.5;
-    const loopTime = (items.length + overlap) * spacing + 1;
-    const rawSequence = gsap.timeline({ paused: true });
-    const seamlessLoop = gsap.timeline({
-      paused: true,
-      repeat: -1,
-      onRepeat(this: any) {
-        if (this._time === this._dur) {
-          this._tTime += this._dur - 0.01;
-        }
-      },
-    });
-    const l = items.length + overlap * 2;
-    let time, i, index;
-
-    for (i = 0; i < l; i++) {
-      index = i % items.length;
-      time = i * spacing;
-      rawSequence.add(animateFunc(items[index]), time);
-    }
-
-    rawSequence.time(startTime);
-    seamlessLoop
-      .to(rawSequence, {
-        time: loopTime,
-        duration: loopTime - startTime,
-        ease: "none",
-      })
-      .fromTo(
-        rawSequence,
-        { time: overlap * spacing + 1 },
-        {
-          time: startTime,
-          duration: startTime - (overlap * spacing + 1),
-          immediateRender: false,
-          ease: "none",
-        }
-      );
-    return seamlessLoop;
-  }
 
   return (
     <section
       ref={containerRef}
       id="bph-gallery-section"
-      className="relative bg-brand-background dark:bg-brand-dark-bg py-16 px-4 sm:px-6 lg:px-8 w-full overflow-hidden flex flex-col justify-between items-center transition-colors duration-300 min-h-[620px]"
+      className="bg-brand-background py-10 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      {/* Decorative background grid and crosses */}
-      <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none select-none">
-        <div className="absolute top-10 left-10 text-brand-primary font-poppins text-xs">+</div>
-        <div className="absolute top-10 right-10 text-brand-primary font-poppins text-xs">+</div>
-        <div className="absolute bottom-10 left-10 text-brand-primary font-poppins text-xs">+</div>
-        <div className="absolute bottom-10 right-10 text-brand-primary font-poppins text-xs">+</div>
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-px h-32 bg-brand-primary" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-px h-32 bg-brand-primary" />
-      </div>
       {/* Section Heading */}
-      <div className="text-center mb-6 z-30 relative select-none">
-        <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-widest block mb-2 font-poppins">
-          Fungsionaris Inti Organisasi
-        </span>
-        <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl font-poppins">
-          Badan Pengurus Harian (BPH)
-        </h2>
-        <p className="mt-2 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto font-poppins font-normal">
-          Geser kartu atau gunakan tombol navigasi di bawah untuk menjelajahi fungsionaris inti Kabinet Laskar Purnama Antasari.
-        </p>
-      </div>
-
-      {/* Cards 3D Gallery viewport */}
-      <div className="relative w-full h-[400px] flex items-center justify-center select-none overflow-hidden z-20">
-        <ul className="bph-cards-container absolute w-[290px] sm:w-[325px] h-[360px] top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 list-none p-0 m-0">
-          {duplicatedBph.map((member, index) => (
-            <li
-              key={`${member.id}-${index}`}
-              className="bph-card-item absolute top-0 left-0 w-[290px] sm:w-[325px] h-[360px] list-none p-0 m-0"
-            >
-              <div className="w-full h-full bg-white dark:bg-brand-darkCard border border-neutral-100 dark:border-red-950/20 rounded-2xl p-6 shadow-md hover:border-brand-primary/20 dark:hover:border-red-950/50 hover:shadow-lg transition-all duration-200 flex flex-col justify-between text-left">
-                <div>
-                  {/* Header with avatar */}
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="h-12 w-12 rounded-full bg-brand-primary/10 dark:bg-brand-secondary/10 flex items-center justify-center text-brand-primary dark:text-brand-secondary shrink-0">
-                      <UserCheck className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 font-poppins line-clamp-1 leading-snug">
-                        {member.nama}
-                      </h3>
-                      {member.nim && (
-                        <span className="text-[10px] text-neutral-400 dark:text-neutral-500 block font-poppins">
-                          NIM. {member.nim}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Position and Faculty */}
-                  <div className="space-y-1.5 border-t border-b border-neutral-100 dark:border-red-950/15 py-3 my-4">
-                    <span className="text-[10px] font-bold text-brand-primary dark:text-brand-secondary uppercase tracking-wider block">
-                      {member.jabatan}
-                    </span>
-                    {member.fakultas && (
-                      <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-poppins leading-tight">
-                        {member.fakultas}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Tupoksi details */}
-                  <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 font-poppins line-clamp-4">
-                    {member.tupoksi}
-                  </p>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Navigation and CTA links */}
-      <div className="w-full flex flex-col items-center gap-6 mt-4 z-30">
-        <div className="flex items-center gap-4 select-none">
-          <button className="bph-prev-btn px-4 py-2 border border-neutral-300 dark:border-red-950/40 rounded-full font-bold text-[10px] uppercase tracking-wider bg-white dark:bg-brand-darkCard text-neutral-700 dark:text-neutral-200 hover:bg-brand-primary hover:text-white dark:hover:bg-brand-secondary dark:hover:text-neutral-950 hover:border-transparent transition-all duration-200 shadow-sm cursor-pointer font-poppins">
-            Prev
-          </button>
-          <button className="bph-next-btn px-4 py-2 border border-neutral-300 dark:border-red-950/40 rounded-full font-bold text-[10px] uppercase tracking-wider bg-white dark:bg-brand-darkCard text-neutral-700 dark:text-neutral-200 hover:bg-brand-primary hover:text-white dark:hover:bg-brand-secondary dark:hover:text-neutral-950 hover:border-transparent transition-all duration-200 shadow-sm cursor-pointer font-poppins">
-            Next
-          </button>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3 sm:gap-4">
+        <div>
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+            Fungsionaris Inti Organisasi
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-poppins tracking-tight">
+            Badan Pengurus Harian (BPH)
+          </h2>
+          <p className="mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
+            Jajaran kepemimpinan inti Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin Periode 2026/2027.
+          </p>
         </div>
 
         <Link
           href="/struktur"
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-primary dark:bg-brand-secondary text-white dark:text-neutral-950 font-semibold px-6 py-3 text-sm hover:bg-brand-accent dark:hover:bg-yellow-400 transition-colors duration-200 shadow-md font-poppins"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-brand-primary hover:text-brand-accent transition-colors self-start sm:self-auto shrink-0"
         >
-          Lihat Selengkapnya Kepengurusan DEMA
-          <ArrowRight className="h-4 w-4" />
+          <span>Lihat Semua Struktur Organisasi</span>
+          <ArrowUpRight className="w-4 h-4" />
         </Link>
       </div>
 
-      <div className="bph-drag-proxy hidden absolute"></div>
+      {/* Responsive Grid of 6 BPH Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 sm:gap-8 pt-4">
+        {bphMembers.map((member) => (
+          <div
+            key={member.id}
+            className="bph-card-item opacity-0 flex flex-col items-center group"
+          >
+            {/* Lanyard Ribbon & Metallic Clasp Hook */}
+            <div className="flex flex-col items-center -mb-3 z-10 relative pointer-events-none group-hover:-translate-y-1 transition-transform duration-300">
+              {/* Maroon Ribbon Strap */}
+              <div className="w-10 sm:w-12 h-6 bg-gradient-to-b from-[#6b0505] via-[#990808] to-[#800606] shadow-xs relative overflow-hidden rounded-t-xs">
+                {/* Ribbon texture lines */}
+                <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,#fff_2px,#fff_4px)]" />
+                {/* Stitch borders */}
+                <div className="absolute inset-y-0 left-1 w-px border-l border-dashed border-white/40" />
+                <div className="absolute inset-y-0 right-1 w-px border-r border-dashed border-white/40" />
+                <div className="absolute bottom-0 inset-x-0 h-1 bg-black/25" />
+              </div>
+
+              {/* Silver Metallic Ring & Hook */}
+              <div className="flex flex-col items-center -mt-0.5">
+                <div className="w-6 h-2 rounded-t-sm bg-gradient-to-r from-neutral-300 via-white to-neutral-300 border border-neutral-400 shadow-2xs" />
+                <div className="w-3 h-3.5 bg-gradient-to-r from-neutral-200 via-white to-neutral-400 border border-neutral-400 rounded-b-xs shadow-xs -mt-0.5" />
+              </div>
+            </div>
+
+            {/* ID Card Badge Base */}
+            <div className="w-full bg-white dark:bg-[#140606] border border-neutral-200/90 dark:border-neutral-800 rounded-[28px] p-4 sm:p-5 pt-3.5 shadow-md group-hover:shadow-2xl group-hover:shadow-brand-primary/10 group-hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative overflow-hidden">
+              <div>
+                {/* Top Header: Badge Slot & DEMA Branding */}
+                <div className="flex items-center justify-between gap-2 mb-3.5 pt-0.5">
+                  <div className="w-16 hidden sm:block" />
+
+                  {/* Lanyard Punch Hole Cutout */}
+                  <div className="w-12 sm:w-14 h-3 rounded-full bg-neutral-200/90 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 shadow-inner flex items-center justify-center">
+                    <div className="w-8 h-1 rounded-full bg-neutral-300/80 dark:bg-neutral-900" />
+                  </div>
+
+                  {/* Organization Logo/Text (Top Right) */}
+                  <div className="text-right">
+                    <span className="text-[11px] sm:text-xs font-black tracking-tight text-brand-primary font-poppins block leading-none">
+                      DEMA UIN
+                    </span>
+                    <span className="text-[8px] font-bold tracking-widest text-neutral-400 dark:text-neutral-500 uppercase block font-poppins mt-0.5">
+                      ANTASARI
+                    </span>
+                  </div>
+                </div>
+
+                {/* Photo Container (Inset with Rounded Frame) */}
+                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 shadow-2xs group-hover:shadow-sm transition-shadow">
+                  {member.fotoUrl && member.fotoUrl.trim() !== "" ? (
+                    <img
+                      src={member.fotoUrl}
+                      alt={member.nama}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 bg-neutral-50 dark:bg-neutral-900/60 p-6 text-center">
+                      <div className="w-16 h-16 rounded-full bg-neutral-200/80 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500 mb-3 shadow-inner">
+                        <UserCheck className="w-8 h-8 stroke-[1.5]" />
+                      </div>
+                      <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 font-poppins">
+                        Foto Dalam Pembaruan
+                      </span>
+                      <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-poppins mt-0.5">
+                        DEMA UIN Antasari
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Subtle Sheen Highlight */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                </div>
+
+                {/* Name & Role (Typography matching the reference) */}
+                <div className="pt-4 pb-1">
+                  <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.15]">
+                    {member.nama}
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-brand-primary/90 dark:text-brand-accent font-poppins mt-1">
+                    {member.jabatan}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                {/* Red Horizontal Divider Line */}
+                <div className="h-[2px] bg-brand-primary/85 dark:bg-brand-accent/85 w-full my-3" />
+
+                {/* Footer Credentials */}
+                <div className="flex items-center justify-between text-[11px] font-poppins">
+                  <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-[60%]">
+                    {member.fakultas || "UIN Antasari"}
+                  </span>
+                  <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0">
+                    {member.nim ? `NIM. ${member.nim}` : "Periode 2026/2027"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Micro Accent Line */}
+              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-brand-primary via-brand-accent to-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

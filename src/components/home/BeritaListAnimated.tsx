@@ -37,8 +37,7 @@ export default function BeritaListAnimated({ beritaList }: BeritaListAnimatedPro
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
           },
         }
       );

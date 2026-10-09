@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Clock, Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
+import { Clock, Calendar, MapPin } from "lucide-react";
 
 interface TimeLeft {
   days: number;
@@ -76,18 +76,13 @@ export default function EventCountdown() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#990808] via-[#750606] to-[#450303] text-white p-6 sm:p-8 shadow-xl border border-red-500/20 mb-8">
-      {/* Subtle decorative background circles */}
-      <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-[#EDC537]/15 blur-2xl pointer-events-none" />
-
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#990808] via-[#750606] to-[#450303] text-white p-6 sm:p-8 shadow-md border border-red-500/20 mb-8">
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left Information */}
         <div className="space-y-2 max-w-lg">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-xs font-semibold border border-white/15">
-            <Sparkles className="w-3.5 h-3.5 text-[#EDC537]" />
-            <span>Hitung Mundur Festival Akbar</span>
-          </div>
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#EDC537] block font-poppins">
+            Hitung Mundur Festival Akbar
+          </span>
 
           <h3 className="text-xl sm:text-2xl font-extrabold font-poppins tracking-tight">
             Festival Antasari 2026
@@ -109,28 +104,28 @@ export default function EventCountdown() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:gap-6">
           {!timeLeft.isExpired ? (
             <div className="grid grid-cols-4 gap-2.5 sm:gap-3 text-center">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
+              <div className="bg-white/10 rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
                 <span className="block text-xl sm:text-2xl font-black font-poppins text-white leading-none">
                   {timeLeft.days.toString().padStart(2, "0")}
                 </span>
                 <span className="block text-[10px] uppercase font-semibold text-red-200 mt-1">Hari</span>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
+              <div className="bg-white/10 rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
                 <span className="block text-xl sm:text-2xl font-black font-poppins text-white leading-none">
                   {timeLeft.hours.toString().padStart(2, "0")}
                 </span>
                 <span className="block text-[10px] uppercase font-semibold text-red-200 mt-1">Jam</span>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
+              <div className="bg-white/10 rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
                 <span className="block text-xl sm:text-2xl font-black font-poppins text-white leading-none">
                   {timeLeft.minutes.toString().padStart(2, "0")}
                 </span>
                 <span className="block text-[10px] uppercase font-semibold text-red-200 mt-1">Menit</span>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
+              <div className="bg-white/10 rounded-xl p-2.5 sm:p-3 border border-white/15 min-w-[60px] sm:min-w-[70px]">
                 <span className="block text-xl sm:text-2xl font-black font-poppins text-[#EDC537] leading-none">
                   {timeLeft.seconds.toString().padStart(2, "0")}
                 </span>
@@ -146,10 +141,9 @@ export default function EventCountdown() {
           {/* Quick CTA Button */}
           <Link
             href="/event"
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-white text-[#990808] hover:bg-neutral-100 transition-all shadow-md active:scale-95 shrink-0"
+            className="inline-flex items-center justify-center px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-white text-[#990808] hover:bg-neutral-100 transition-all shadow-sm active:scale-95 shrink-0"
           >
-            <span>Lihat Agenda Event</span>
-            <ArrowRight className="w-4 h-4" />
+            Lihat Agenda Event
           </Link>
         </div>
       </div>

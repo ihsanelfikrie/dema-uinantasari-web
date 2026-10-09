@@ -25,7 +25,7 @@ export const bph = {
     jabatan: "Ketua Umum DEMA",
     tupoksi:
       "Memimpin, mengoordinasikan, dan mengendalikan seluruh aktivitas organisasi DEMA UIN Antasari secara internal maupun eksternal.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "/images/kabinet/ketua.jpg",
   },
   wakilKetua: {
     id: "wakil-ketua",
@@ -35,7 +35,7 @@ export const bph = {
     jabatan: "Wakil Ketua Umum DEMA",
     tupoksi:
       "Membantu Ketua Umum dalam memimpin organisasi, mengoordinasikan kementerian, dan mewakili Ketua Umum jika berhalangan.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "/images/kabinet/wakil-ketua.jpg",
   },
   sekjen: {
     id: "sekjen",
@@ -45,7 +45,7 @@ export const bph = {
     jabatan: "Sekretaris Jenderal",
     tupoksi:
       "Mengelola seluruh administrasi, tata kelola organisasi, persuratan, dan koordinasi sekretariatan DEMA.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "/images/kabinet/sekjen.jpg",
   },
   wakilSekjen: {
     id: "wakil-sekjen",
@@ -55,7 +55,7 @@ export const bph = {
     jabatan: "Wakil Sekretaris Jenderal",
     tupoksi:
       "Membantu Sekretaris Jenderal dalam mengelola administrasi, tata kelola organisasi, persuratan, dan koordinasi sekretariatan DEMA.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "",
   },
   sekkab: {
     id: "sekkab",
@@ -65,7 +65,7 @@ export const bph = {
     jabatan: "Sekretaris Kabinet",
     tupoksi:
       "Mendokumentasikan seluruh kebijakan kabinet, menyusun risalah rapat kabinet, dan mengelola alur kerja internal kabinet DEMA.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "/images/kabinet/sekkab.jpg",
   },
   bendum: {
     id: "bendum",
@@ -75,7 +75,7 @@ export const bph = {
     jabatan: "Bendahara Umum",
     tupoksi:
       "Mengelola keuangan, anggaran belanja, administrasi keuangan, dan pembukuan keuangan DEMA.",
-    fotoUrl: "/images/kabinet/placeholder.png",
+    fotoUrl: "/images/kabinet/bendum.jpg",
   },
 };
 
@@ -91,7 +91,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Melakukan pengawasan internal terhadap pelaksanaan kebijakan dan program kerja Dewan Eksekutif Mahasiswa.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-spi-1.jpg",
     },
     anggota: [
       {
@@ -102,7 +102,7 @@ export const kementerianList: Kementerian[] = [
         jabatan: "Menteri Koordinator",
         tupoksi:
           "Melakukan pengawasan internal terhadap pelaksanaan kebijakan dan program kerja Dewan Eksekutif Mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-spi-2.jpg",
       },
       {
         id: "menko-spi-3",
@@ -112,7 +112,7 @@ export const kementerianList: Kementerian[] = [
         jabatan: "Menteri Koordinator",
         tupoksi:
           "Melakukan pengawasan internal terhadap pelaksanaan kebijakan dan program kerja Dewan Eksekutif Mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-spi-3.jpg",
       },
       {
         id: "menko-spi-4",
@@ -122,7 +122,7 @@ export const kementerianList: Kementerian[] = [
         jabatan: "Menteri Koordinator",
         tupoksi:
           "Melakukan pengawasan internal terhadap pelaksanaan kebijakan dan program kerja Dewan Eksekutif Mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-spi-4.jpg",
       },
     ],
   },
@@ -137,7 +137,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri PSDMO",
       tupoksi:
         "Fokus pada pemberdayaan kapasitas kepemimpinan mahasiswa and pengembangan kualitas organisasi kemahasiswaan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-psdmo.jpg",
     },
     sekretaris: {
       id: "sekmen-psdmo",
@@ -146,7 +146,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ekonomi dan Bisnis Islam",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi dan alur kerja internal kementerian PSDMO.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-psdmo.jpg",
     },
     anggota: [
       {
@@ -156,7 +156,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-psdmo-1.jpg",
       },
       {
         id: "staf-psdmo-2",
@@ -165,7 +165,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-psdmo-2.jpg",
       },
       {
         id: "staf-psdmo-3",
@@ -174,7 +174,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-psdmo-4",
@@ -183,7 +183,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-psdmo-4.jpg",
       },
       {
         id: "staf-psdmo-5",
@@ -192,7 +192,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-psdmo-5.jpg",
       },
       {
         id: "staf-psdmo-6",
@@ -201,7 +201,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah Ilmu dan Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-psdmo-7",
@@ -210,7 +210,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kerja pemberdayaan sumber daya mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-psdmo-7.jpg",
       },
     ],
   },
@@ -225,7 +225,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri KVD",
       tupoksi:
         "Mengelola branding visual, konten media sosial, publikasi digital, dan infrastruktur komunikasi digital DEMA.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     sekretaris: {
       id: "sekmen-kvd",
@@ -234,7 +234,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ekonomi dan Bisnis Islam",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi dan alur kerja internal kementerian KVD.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     anggota: [
       {
@@ -244,7 +244,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-1.jpg",
       },
       {
         id: "staf-kvd-2",
@@ -253,7 +253,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-2.jpg",
       },
       {
         id: "staf-kvd-3",
@@ -262,7 +262,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-3.jpg",
       },
       {
         id: "staf-kvd-4",
@@ -271,7 +271,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-4.jpg",
       },
       {
         id: "staf-kvd-5",
@@ -280,7 +280,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-kvd-6",
@@ -289,7 +289,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-6.jpg",
       },
       {
         id: "staf-kvd-7",
@@ -298,7 +298,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-7.jpg",
       },
       {
         id: "staf-kvd-8",
@@ -307,7 +307,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-8.jpg",
       },
       {
         id: "staf-kvd-9",
@@ -316,7 +316,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kvd-9.jpg",
       },
       {
         id: "staf-kvd-10",
@@ -325,7 +325,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-kvd-11",
@@ -334,7 +334,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu visualisasi desain dan publikasi media DEMA.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -349,7 +349,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Mengoordinasikan kementerian di lingkup kemahasiswaan, minat, bakat, serta ekonomi kreatif.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-koma-1.jpg",
     },
     anggota: [
       {
@@ -359,7 +359,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan urusan internal serta kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-koma-2.jpg",
       },
       {
         id: "menko-koma-3",
@@ -368,7 +368,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan urusan internal serta kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-koma-3.jpg",
       },
     ],
   },
@@ -383,7 +383,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Pemuda & Olahraga",
       tupoksi:
         "Mengembangkan potensi kepemudaan, minat olahraga, serta pembinaan prestasi atlet mahasiswa UIN Antasari.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-pora.jpg",
     },
     sekretaris: {
       id: "sekmen-pora",
@@ -392,7 +392,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Tarbiyah dan Keguruan",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi dan program olahraga/kepemudaan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-pora.jpg",
     },
     anggota: [
       {
@@ -402,7 +402,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-1.jpg",
       },
       {
         id: "staf-pora-2",
@@ -411,7 +411,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-2.jpg",
       },
       {
         id: "staf-pora-3",
@@ -420,7 +420,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-3.jpg",
       },
       {
         id: "staf-pora-4",
@@ -429,7 +429,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-4.jpg",
       },
       {
         id: "staf-pora-5",
@@ -438,7 +438,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-5.jpg",
       },
       {
         id: "staf-pora-6",
@@ -447,7 +447,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi kegiatan olahraga dan kepemudaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pora-6.jpg",
       },
     ],
   },
@@ -462,7 +462,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Ekraf",
       tupoksi:
         "Menumbuhkan jiwa kewirausahaan mahasiswa, ekonomi kreatif, serta inkubasi bisnis rintisan mahasiswa.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-ekraf.jpg",
     },
     sekretaris: {
       id: "sekmen-ekraf",
@@ -471,7 +471,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Tarbiyah dan Keguruan",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata usaha kementerian ekonomi kreatif.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-ekraf.jpg",
     },
     anggota: [
       {
@@ -481,7 +481,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-1.jpg",
       },
       {
         id: "staf-ekraf-2",
@@ -490,7 +490,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-2.jpg",
       },
       {
         id: "staf-ekraf-3",
@@ -499,7 +499,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-3.jpg",
       },
       {
         id: "staf-ekraf-4",
@@ -508,7 +508,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-4.jpg",
       },
       {
         id: "staf-ekraf-5",
@@ -517,7 +517,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-5.jpg",
       },
       {
         id: "staf-ekraf-6",
@@ -526,7 +526,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ekraf-6.jpg",
       },
       {
         id: "staf-ekraf-7",
@@ -535,7 +535,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pengembangan ekonomi kreatif.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -550,7 +550,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Pendikbud",
       tupoksi:
         "Mendorong pengembangan iklim akademis, riset, pelestarian budaya lokal, serta edukasi di lingkungan kampus.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-pendikbud.jpg",
     },
     sekretaris: {
       id: "sekmen-pendikbud",
@@ -559,7 +559,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Tarbiyah dan Keguruan",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi bidang pendidikan dan kebudayaan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     anggota: [
       {
@@ -569,7 +569,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pendikbud-1.jpg",
       },
       {
         id: "staf-pendikbud-2",
@@ -578,7 +578,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pendikbud-2.jpg",
       },
       {
         id: "staf-pendikbud-3",
@@ -587,7 +587,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin Dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-pendikbud-4",
@@ -596,7 +596,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-pendikbud-5",
@@ -605,7 +605,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-pendikbud-6",
@@ -614,7 +614,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu program pendidikan dan kebudayaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-pendikbud-6.jpg",
       },
     ],
   },
@@ -629,7 +629,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Mengoordinasikan kementerian di bidang sosial, keagamaan, kemasyarakatan, dan lingkungan hidup.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-sos-1.jpg",
     },
     anggota: [
       {
@@ -639,7 +639,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan urusan sosial kemasyarakatan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-sos-2.jpg",
       },
       {
         id: "menko-sos-3",
@@ -648,7 +648,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan urusan sosial kemasyarakatan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-sos-3.jpg",
       },
     ],
   },
@@ -663,7 +663,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Sosmas",
       tupoksi:
         "Menjalankan fungsi pengabdian masyarakat, aksi tanggap bencana, dan pendampingan sosial mahasiswa kepada masyarakat.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-sosmas.jpg",
     },
     sekretaris: {
       id: "sekmen-sosmas",
@@ -672,7 +672,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Syariah",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata administrasi sosial kemasyarakatan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-sosmas.jpg",
     },
     anggota: [
       {
@@ -682,7 +682,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi pengabdian masyarakat.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-sosmas-1.jpg",
       },
       {
         id: "staf-sosmas-2",
@@ -691,7 +691,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi pengabdian masyarakat.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-sosmas-2.jpg",
       },
       {
         id: "staf-sosmas-3",
@@ -700,7 +700,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi pengabdian masyarakat.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-sosmas-3.jpg",
       },
       {
         id: "staf-sosmas-4",
@@ -709,7 +709,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi pengabdian masyarakat.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-sosmas-4.jpg",
       },
       {
         id: "staf-sosmas-5",
@@ -718,7 +718,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi pengabdian masyarakat.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-sosmas-5.jpg",
       },
     ],
   },
@@ -733,7 +733,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Keagamaan",
       tupoksi:
         "Mengembangkan iklim spiritual religius di kampus, pembinaan akhlak, serta peringatan hari besar keagamaan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-agama.jpg",
     },
     sekretaris: {
       id: "sekmen-agama",
@@ -742,7 +742,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi kegiatan keagamaan kampus.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-agama.jpg",
     },
     anggota: [
       {
@@ -752,7 +752,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-agama-1.jpg",
       },
       {
         id: "staf-agama-2",
@@ -761,7 +761,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-agama-2.jpg",
       },
       {
         id: "staf-agama-3",
@@ -770,7 +770,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin Dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-agama-4",
@@ -779,7 +779,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-agama-4.jpg",
       },
       {
         id: "staf-agama-5",
@@ -788,7 +788,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-agama-5.jpg",
       },
       {
         id: "staf-agama-6",
@@ -797,7 +797,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu kegiatan keagamaan dan pembinaan moral mahasiswa.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-agama-6.jpg",
       },
     ],
   },
@@ -812,7 +812,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri LH",
       tupoksi:
         "Mempromosikan kelestarian lingkungan kampus, kampanye go-green, serta aksi nyata penyelamatan lingkungan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-lh.jpg",
     },
     sekretaris: {
       id: "sekmen-lh",
@@ -821,7 +821,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Dakwah Dan Ilmu Komunikasi",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata administrasi isu pelestarian lingkungan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-lh.jpg",
     },
     anggota: [
       {
@@ -831,7 +831,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kampanye lingkungan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-lh-1.jpg",
       },
       {
         id: "staf-lh-2",
@@ -840,7 +840,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kampanye lingkungan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-lh-2.jpg",
       },
       {
         id: "staf-lh-3",
@@ -849,7 +849,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kampanye lingkungan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-lh-3.jpg",
       },
       {
         id: "staf-lh-4",
@@ -858,7 +858,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kampanye lingkungan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-lh-4.jpg",
       },
       {
         id: "staf-lh-5",
@@ -867,7 +867,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program kampanye lingkungan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-lh-5.jpg",
       },
     ],
   },
@@ -882,7 +882,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Mengoordinasikan pergerakan mahasiswa, aksi demonstrasi, propaganda isu, serta kajian isu strategis.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-ap-1.jpg",
     },
     anggota: [
       {
@@ -892,7 +892,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan pergerakan dan kajian strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-ap-2.jpg",
       },
       {
         id: "menko-ap-3",
@@ -901,7 +901,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan pergerakan dan kajian strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/menko-ap-3.jpg",
       },
     ],
   },
@@ -916,7 +916,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Aksi & Propaganda",
       tupoksi:
         "Mengorganisir aksi-aksi pergerakan mahasiswa, merancang propaganda positif, dan mengawal isu eksternal.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     sekretaris: {
       id: "sekmen-aksi",
@@ -925,7 +925,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Tarbiyah dan Keguruan",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi taktis aksi dan propaganda.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-aksi.jpg",
     },
     anggota: [
       {
@@ -935,7 +935,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu merancang aksi gerakan dan propaganda kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-aksi-1.jpg",
       },
       {
         id: "staf-aksi-2",
@@ -944,7 +944,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu merancang aksi gerakan dan propaganda kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-aksi-2.jpg",
       },
       {
         id: "staf-aksi-3",
@@ -953,7 +953,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu merancang aksi gerakan dan propaganda kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-aksi-3.jpg",
       },
       {
         id: "staf-aksi-4",
@@ -962,7 +962,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu merancang aksi gerakan dan propaganda kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-aksi-4.jpg",
       },
       {
         id: "staf-aksi-5",
@@ -971,7 +971,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu merancang aksi gerakan dan propaganda kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-aksi-5.jpg",
       },
     ],
   },
@@ -986,7 +986,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri KIS",
       tupoksi:
         "Melakukan kajian berkala, bedah isu strategis daerah maupun nasional, dan menyediakan data rekomendasi kebijakan.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-kis.jpg",
     },
     sekretaris: {
       id: "sekmen-kis",
@@ -995,7 +995,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ushuluddin dan Humaniora",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata persuratan dan berkas kajian strategis.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     anggota: [
       {
@@ -1005,7 +1005,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-1.jpg",
       },
       {
         id: "staf-kis-2",
@@ -1014,7 +1014,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-kis-3",
@@ -1023,7 +1023,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-3.jpg",
       },
       {
         id: "staf-kis-4",
@@ -1032,7 +1032,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-4.jpg",
       },
       {
         id: "staf-kis-5",
@@ -1041,7 +1041,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-5.jpg",
       },
       {
         id: "staf-kis-6",
@@ -1050,7 +1050,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-6.jpg",
       },
       {
         id: "staf-kis-7",
@@ -1059,7 +1059,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-kis-7.jpg",
       },
       {
         id: "staf-kis-8",
@@ -1068,7 +1068,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu melakukan kajian dan bedah isu strategis.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -1083,7 +1083,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Mengoordinasikan pergerakan di bidang hukum, pemberdayaan perempuan, advokasi hak mahasiswa, serta relasi eksternal.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-phk-1.jpg",
     },
     anggota: [
       {
@@ -1093,7 +1093,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan kajian hukum dan advokasi kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -1108,7 +1108,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri PPP",
       tupoksi:
         "Menyelenggarakan kajian gender, perlindungan hak-hak perempuan, serta program pemberdayaan mahasiswi.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-ppp.jpg",
     },
     sekretaris: {
       id: "sekmen-ppp",
@@ -1117,7 +1117,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Tarbiyah Dan Keguruan",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola administrasi pemberdayaan perempuan kampus.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-ppp.jpg",
     },
     anggota: [
       {
@@ -1127,7 +1127,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program perlindungan dan pemberdayaan perempuan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ppp-1.jpg",
       },
       {
         id: "staf-ppp-2",
@@ -1136,7 +1136,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program perlindungan dan pemberdayaan perempuan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ppp-2.jpg",
       },
       {
         id: "staf-ppp-3",
@@ -1145,7 +1145,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program perlindungan dan pemberdayaan perempuan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ppp-3.jpg",
       },
       {
         id: "staf-ppp-4",
@@ -1154,7 +1154,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pelaksanaan program perlindungan dan pemberdayaan perempuan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-ppp-4.jpg",
       },
     ],
   },
@@ -1169,7 +1169,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Advokasi & HAM",
       tupoksi:
         "Melakukan pendampingan hukum, mengawal advokasi akademik & UKT mahasiswa, serta edukasi hak asasi manusia.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-advokasi.jpg",
     },
     sekretaris: {
       id: "sekmen-advokasi",
@@ -1178,7 +1178,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Syariah",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata administrasi advokasi dan hukum mahasiswa.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-advokasi.jpg",
     },
     anggota: [
       {
@@ -1188,7 +1188,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-advokasi-1.jpg",
       },
       {
         id: "staf-advokasi-2",
@@ -1197,7 +1197,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-advokasi-2.jpg",
       },
       {
         id: "staf-advokasi-3",
@@ -1206,7 +1206,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-advokasi-3.jpg",
       },
       {
         id: "staf-advokasi-4",
@@ -1215,7 +1215,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-advokasi-5",
@@ -1224,7 +1224,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-advokasi-6",
@@ -1233,7 +1233,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah Dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu pendampingan advokasi masalah akademik & kemahasiswaan.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-advokasi-6.jpg",
       },
     ],
   },
@@ -1248,7 +1248,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Koordinator",
       tupoksi:
         "Mengoordinasikan kerja sama strategis dengan instansi pemerintahan, mitra swasta, dan organisasi dalam & luar kampus.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menko-mitra-1.jpg",
     },
     anggota: [
       {
@@ -1258,7 +1258,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Menteri Koordinator",
         tupoksi: "Mengoordinasikan urusan kemitraan dan diplomasi.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -1273,7 +1273,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Dalam Negeri",
       tupoksi:
         "Membangun komunikasi dan konsolidasi aktif dengan organisasi internal kampus UIN Antasari Banjarmasin.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/menteri-dagri.jpg",
     },
     sekretaris: {
       id: "sekmen-dagri",
@@ -1282,7 +1282,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ushuluddin dan Humaniora",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata usaha kementerian dalam negeri.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-dagri.jpg",
     },
     anggota: [
       {
@@ -1292,7 +1292,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-dagri-2",
@@ -1301,7 +1301,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-dagri-2.jpg",
       },
       {
         id: "staf-dagri-3",
@@ -1310,7 +1310,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-dagri-4",
@@ -1319,7 +1319,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-dagri-4.jpg",
       },
       {
         id: "staf-dagri-5",
@@ -1328,7 +1328,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-dagri-6",
@@ -1337,7 +1337,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-dagri-7",
@@ -1346,7 +1346,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu koordinasi dengan UKM/UKK dan ORMAWA internal.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },
@@ -1361,7 +1361,7 @@ export const kementerianList: Kementerian[] = [
       jabatan: "Menteri Luar Negeri",
       tupoksi:
         "Menjalin hubungan diplomasi, kerja sama luar kampus, dan peningkatan citra positif DEMA di tingkat nasional.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "",
     },
     sekretaris: {
       id: "sekmen-luar",
@@ -1370,7 +1370,7 @@ export const kementerianList: Kementerian[] = [
       fakultas: "Fakultas Ushuluddin dan Humaniora",
       jabatan: "Sekretaris Kementerian",
       tupoksi: "Mengelola tata administrasi kerja sama eksternal.",
-      fotoUrl: "/images/kabinet/placeholder.png",
+      fotoUrl: "/images/kabinet/sekmen-luar.jpg",
     },
     anggota: [
       {
@@ -1380,7 +1380,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-luar-1.jpg",
       },
       {
         id: "staf-luar-2",
@@ -1389,7 +1389,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ekonomi Dan Bisnis Islam",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-luar-2.jpg",
       },
       {
         id: "staf-luar-3",
@@ -1398,7 +1398,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Tarbiyah dan Keguruan",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-luar-3.jpg",
       },
       {
         id: "staf-luar-4",
@@ -1407,7 +1407,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Ushuluddin dan Humaniora",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-luar-4.jpg",
       },
       {
         id: "staf-luar-5",
@@ -1416,7 +1416,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "/images/kabinet/staf-luar-5.jpg",
       },
       {
         id: "staf-luar-6",
@@ -1425,7 +1425,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Dakwah Dan Ilmu Komunikasi",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
       {
         id: "staf-luar-7",
@@ -1434,7 +1434,7 @@ export const kementerianList: Kementerian[] = [
         fakultas: "Fakultas Syariah",
         jabatan: "Staff Menteri",
         tupoksi: "Membantu hubungan eksternal dan komunikasi antar kampus.",
-        fotoUrl: "/images/kabinet/placeholder.png",
+        fotoUrl: "",
       },
     ],
   },

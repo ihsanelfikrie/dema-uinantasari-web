@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import MatchmakerQuiz from "@/components/layanan/MatchmakerQuiz";
 
 export const metadata: Metadata = {
@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export default function MatchmakerQuizPage() {
   return (
-    <main className="min-h-screen bg-brand-background py-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* Navigation back */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link
             href="/layanan"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-500 hover:text-brand-primary transition-colors font-poppins"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 hover:text-brand-primary min-h-[44px] py-1 transition-colors font-poppins active:scale-98"
           >
             <ArrowLeft className="h-4 w-4" />
             Kembali ke Layanan
@@ -25,17 +25,16 @@ export default function MatchmakerQuizPage() {
         </div>
 
         {/* Title Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-brand-secondary/15 px-3 py-1 text-[10px] font-bold text-neutral-600 mb-3">
-            <Sparkles className="h-3.5 w-3.5 text-brand-primary" />
-            Pencarian Bakat & Minat Mahasiswa
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl font-poppins">
+        <div className="text-center mb-8 sm:mb-12">
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+            Pencarian Bakat &amp; Minat Mahasiswa
+          </span>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 font-poppins">
             Matchmaker Quiz
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-neutral-500 max-w-md mx-auto leading-relaxed">
+          <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-neutral-600 max-w-md mx-auto leading-relaxed">
             Asah minatmu, temukan bakatmu. Jawab pertanyaan tes kepribadian organisasi untuk
-            merekomendasikan UKM & UKK terbaik untukmu!
+            merekomendasikan UKM &amp; UKK terbaik untukmu.
           </p>
         </div>
 
