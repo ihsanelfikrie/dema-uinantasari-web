@@ -52,26 +52,19 @@ export default function AgendaTerkini() {
 
   useGSAP(
     () => {
-      // Animate portals cards staggered on scroll
-      gsap.fromTo(
-        ".portal-card-item",
-        {
-          opacity: 0,
-          y: 35,
+      // Animate portals cards staggered on scroll safely with gsap.from
+      gsap.from(".portal-card-item", {
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 92%",
+          once: true,
         },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.12,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
     },
     { scope: sectionRef }
   );
@@ -79,9 +72,9 @@ export default function AgendaTerkini() {
   return (
     <section
       ref={sectionRef}
-      className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
+      className="bg-brand-background py-6 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60"
     >
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-5 sm:mb-12 gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-10 gap-3 sm:gap-4">
         <div>
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Aspirasi &amp; Advokasi Digital
@@ -118,7 +111,7 @@ export default function AgendaTerkini() {
             <Link
               key={portal.id}
               href={portal.href}
-              className="portal-card-item opacity-0 group relative bg-white border border-neutral-200/80 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
+              className="portal-card-item group relative bg-white border border-neutral-200/80 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-7 flex flex-col justify-between shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-0.5 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden w-full md:w-auto"
             >
               <div>
                 {/* Header Row: Compact on mobile, spacious on desktop */}

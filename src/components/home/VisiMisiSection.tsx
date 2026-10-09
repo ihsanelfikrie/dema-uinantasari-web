@@ -59,47 +59,33 @@ export default function VisiMisiSection() {
 
   useGSAP(
     () => {
-      // Animate left side content on scroll
-      gsap.fromTo(
-        ".visi-misi-text",
-        {
-          opacity: 0,
-          y: 25,
+      // Animate left side content on scroll safely
+      gsap.from(".visi-misi-text", {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 88%",
+          once: true,
         },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
 
       // Animate mission cards on scroll for desktop
       if (scrollRef.current) {
-        gsap.fromTo(
-          ".mission-card",
-          {
-            opacity: 0,
-            y: 30,
+        gsap.from(".mission-card", {
+          opacity: 0,
+          y: 25,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            once: true,
           },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 75%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
+        });
       }
     },
     { scope: containerRef }
@@ -112,7 +98,7 @@ export default function VisiMisiSection() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-10 lg:gap-12 items-center relative z-10">
         {/* Left Column (Heading, Visi, & Mobile Stack) */}
-        <div className="lg:col-span-4 space-y-3.5 sm:space-y-6 visi-misi-text opacity-0">
+        <div className="lg:col-span-4 space-y-3.5 sm:space-y-6 visi-misi-text">
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1 font-poppins">

@@ -49,25 +49,18 @@ export default function PilarSection() {
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        ".animate-pilar-card",
-        {
-          opacity: 0,
-          y: 30,
+      gsap.from(".animate-pilar-card", {
+        opacity: 0,
+        y: 25,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+          once: true,
         },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
     },
     { scope: containerRef }
   );
@@ -96,7 +89,7 @@ export default function PilarSection() {
             <Link
               key={pilar.href}
               href={pilar.href}
-              className="animate-pilar-card opacity-0 group relative flex flex-col justify-between p-5 sm:p-7 bg-white border border-neutral-200/80 rounded-2xl shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="animate-pilar-card group relative flex flex-col justify-between p-5 sm:p-7 bg-white border border-neutral-200/80 rounded-2xl shadow-xs hover:border-brand-primary/40 hover:shadow-xl hover:shadow-brand-primary/5 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <div>
                 {/* Header: Icon container and Index Stamp */}

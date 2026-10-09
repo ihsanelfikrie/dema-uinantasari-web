@@ -21,27 +21,19 @@ export default function BeritaListAnimated({ beritaList }: BeritaListAnimatedPro
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        ".news-card-wrapper",
-        {
-          opacity: 0,
-          y: 35,
-          scale: 0.98,
+      gsap.from(".news-card-wrapper", {
+        opacity: 0,
+        y: 25,
+        scale: 0.98,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 88%",
+          once: true,
         },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
     },
     { scope: containerRef }
   );
@@ -105,7 +97,7 @@ export default function BeritaListAnimated({ beritaList }: BeritaListAnimatedPro
         {beritaList.slice(0, 6).map((berita) => (
           <div
             key={berita.id}
-            className="news-card-wrapper opacity-0 flex flex-col h-full"
+            className="news-card-wrapper flex flex-col h-full"
           >
             <BeritaCard berita={berita} />
           </div>

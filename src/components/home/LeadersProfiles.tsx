@@ -32,7 +32,7 @@ function BphCardItem({
     <div
       className={`flex flex-col items-center group select-none ${
         isDesktop
-          ? "bph-card-desktop opacity-0 w-full"
+          ? "bph-card-desktop w-full"
           : "w-[72vw] max-w-[270px] shrink-0"
       }`}
     >
@@ -144,26 +144,19 @@ export default function LeadersProfiles() {
 
   useGSAP(
     () => {
-      // Stagger entrance of BPH cards on scroll for desktop
-      gsap.fromTo(
-        ".bph-card-desktop",
-        {
-          opacity: 0,
-          y: 35,
+      // Stagger entrance of BPH cards on scroll for desktop safely
+      gsap.from(".bph-card-desktop", {
+        opacity: 0,
+        y: 25,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+          once: true,
         },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
     },
     { scope: containerRef }
   );
