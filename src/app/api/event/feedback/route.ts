@@ -19,6 +19,15 @@ async function getAdminSupabase() {
 // GET: Ambil ringkasan kepuasan peserta (untuk panel admin)
 export async function GET(request: Request) {
   try {
+    const authClient = await createClient();
+    const {
+      data: { user },
+    } = await authClient.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized. Sesi admin diperlukan." }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const eventSlug = searchParams.get("event") || "antasari-media-lab";
     const supabase = await getAdminSupabase();
@@ -79,6 +88,19 @@ export async function POST(request: Request) {
     }
 
     const cleanNim = (nim || "").trim().replace(/\s+/g, "");
+    if (!cleanNim) {
+      return NextResponse.json(
+        { error: "NIM wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    if (cleanNim.length > 30 || (nama && nama.length > 100) || (saran && saran.length > 500)) {
+      return NextResponse.json(
+        { error: "Panjang karakter melebihi batas yang diizinkan." },
+        { status: 400 }
+      );
+    }
     const supabase = await getAdminSupabase();
 
     const payload = {

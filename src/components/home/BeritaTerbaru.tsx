@@ -10,7 +10,7 @@ export default async function BeritaTerbaru() {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("berita")
-      .select("*")
+      .select("id, judul, slug, kategori, cover_url, isi, status, created_at, updated_at")
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .limit(3);

@@ -123,10 +123,24 @@ export async function POST(request: Request) {
 
     const cleanNim = nim.trim().replace(/\s+/g, "");
 
+    const allowedImageExts = ["jpg", "jpeg", "png", "webp"];
+    const maxImageSize = 5 * 1024 * 1024; // 5MB
+
+    // Validasi ukuran file
+    if (igFile && typeof igFile !== "string" && igFile.size > maxImageSize) {
+      return NextResponse.json({ error: "Ukuran screenshot Instagram melebihi batas 5MB." }, { status: 400 });
+    }
+    if (tiktokFile && typeof tiktokFile !== "string" && tiktokFile.size > maxImageSize) {
+      return NextResponse.json({ error: "Ukuran screenshot TikTok melebihi batas 5MB." }, { status: 400 });
+    }
+
     // Upload IG file if exists and not already uploaded via client
     if (!igScreenshotUrl && igFile && typeof igFile !== "string" && igFile.size > 0) {
       try {
-        const ext = igFile.name.split(".").pop() || "jpg";
+        const ext = (igFile.name.split(".").pop() || "jpg").toLowerCase();
+        if (!allowedImageExts.includes(ext)) {
+          return NextResponse.json({ error: "Format screenshot Instagram tidak valid (hanya JPG, PNG, WEBP)." }, { status: 400 });
+        }
         const fileName = `${cleanNim}-ig-${Date.now()}.${ext}`;
         const buffer = Buffer.from(await igFile.arrayBuffer());
 
@@ -153,7 +167,10 @@ export async function POST(request: Request) {
     // Upload TikTok file if exists and not already uploaded via client
     if (!tiktokScreenshotUrl && tiktokFile && typeof tiktokFile !== "string" && tiktokFile.size > 0) {
       try {
-        const ext = tiktokFile.name.split(".").pop() || "jpg";
+        const ext = (tiktokFile.name.split(".").pop() || "jpg").toLowerCase();
+        if (!allowedImageExts.includes(ext)) {
+          return NextResponse.json({ error: "Format screenshot TikTok tidak valid (hanya JPG, PNG, WEBP)." }, { status: 400 });
+        }
         const fileName = `${cleanNim}-tiktok-${Date.now()}.${ext}`;
         const buffer = Buffer.from(await tiktokFile.arrayBuffer());
 

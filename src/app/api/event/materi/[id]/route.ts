@@ -22,6 +22,18 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authClient = await createClient();
+    const {
+      data: { user },
+    } = await authClient.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized access. Sesi admin diperlukan." },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -64,6 +76,18 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authClient = await createClient();
+    const {
+      data: { user },
+    } = await authClient.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized access. Sesi admin diperlukan." },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     const supabase = await getAdminSupabase();
 

@@ -4,6 +4,21 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const supabase = await createClient();
+
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized. Sesi admin diperlukan untuk mengakses dokumen privat." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { data: docs, error } = await supabase
       .from("dokumen")
       .select("*")
@@ -76,6 +91,23 @@ export async function POST(request: Request) {
     if (!nama || !kategori || !file_url) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const validKategori = ["Surat Keluar", "Surat Masuk", "SK", "Notulensi", "Lainnya"];
+    if (!validKategori.includes(kategori)) {
+      return NextResponse.json(
+        { error: "Kategori dokumen tidak valid." },
+        { status: 400 }
+      );
+    }
+
+    const allowedExtensions = ["pdf", "jpg", "jpeg", "png", "webp"];
+    const fileExt = file_url.split(".").pop()?.toLowerCase()?.split("?")[0];
+    if (!fileExt || !allowedExtensions.includes(fileExt)) {
+      return NextResponse.json(
+        { error: "Format file tidak didukung. Harap upload PDF atau Gambar (JPG, PNG, WEBP)." },
         { status: 400 }
       );
     }

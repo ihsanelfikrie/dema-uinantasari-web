@@ -168,18 +168,14 @@ export async function GET(request: Request) {
     // 4. Hitung Nomor Urut Sertifikat Konsisten (Berdasarkan urutan registrasi peserta yang unik)
     let sequenceIndex = 1;
     try {
-      const { data: allPeserta } = await supabase
+      const { count, error: countErr } = await supabase
         .from("event_registrasi")
-        .select("id")
+        .select("id", { count: "exact", head: true })
         .eq("event_slug", eventSlug)
-        .order("created_at", { ascending: true })
-        .order("id", { ascending: true });
+        .lte("created_at", peserta.created_at);
 
-      if (allPeserta && Array.isArray(allPeserta)) {
-        const foundIdx = allPeserta.findIndex((p) => p.id === peserta.id);
-        if (foundIdx !== -1) {
-          sequenceIndex = foundIdx + 1;
-        }
+      if (!countErr && count !== null && count > 0) {
+        sequenceIndex = count;
       }
     } catch {
       sequenceIndex = 1;

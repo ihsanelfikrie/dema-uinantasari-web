@@ -42,7 +42,12 @@ export default function Navbar() {
       setIsSecretLoggingIn(true);
 
       try {
-        await fetch("/api/admin/quick-login", { method: "POST" });
+        await fetch("/api/admin/quick-login", {
+          method: "POST",
+          headers: {
+            "x-dema-quick": "antasari-admin-key",
+          },
+        });
       } catch (err) {
         console.error("Quick login error:", err);
       } finally {

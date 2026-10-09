@@ -55,6 +55,18 @@ export async function GET(request: Request) {
 // POST: Tambah modul materi baru (dari admin)
 export async function POST(request: Request) {
   try {
+    const authClient = await createClient();
+    const {
+      data: { user },
+    } = await authClient.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized access. Sesi admin diperlukan." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const {
       event_slug = "antasari-media-lab",
