@@ -13,7 +13,7 @@ export default async function BeritaTerbaru() {
       .select("id, judul, slug, kategori, cover_url, isi, status, created_at, updated_at")
       .eq("status", "published")
       .order("created_at", { ascending: false })
-      .limit(3);
+      .limit(6);
 
     if (data && !error) {
       beritaList = data as Berita[];
@@ -23,17 +23,12 @@ export default async function BeritaTerbaru() {
   }
 
   return (
-    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 sm:mb-12 gap-3 sm:gap-4">
+    <section className="bg-brand-background py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-neutral-200/60 overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-5 sm:mb-12 gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
-              Warta &amp; Publikasi
-            </span>
-            <span className="sm:hidden text-[11px] text-neutral-400 font-medium font-poppins flex items-center gap-1">
-              Geser ke samping &rarr;
-            </span>
-          </div>
+          <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
+            Warta &amp; Publikasi
+          </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 font-poppins">
             Kabar &amp; Kegiatan Terbaru
           </h2>

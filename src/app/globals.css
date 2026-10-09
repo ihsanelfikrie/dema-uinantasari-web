@@ -94,8 +94,31 @@ main.min-h-screen.bg-brand-background {
   animation-play-state: paused;
 }
 
+/* Infinite Marquee Animation untuk Kabar & Kegiatan Terbaru di Mobile */
+@keyframes news-marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-news-marquee {
+  display: flex;
+  width: max-content;
+  animation: news-marquee-left 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-news-marquee:hover,
+.animate-news-marquee:active {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-bph-marquee {
+  .animate-bph-marquee,
+  .animate-news-marquee {
     animation: none;
   }
 }
