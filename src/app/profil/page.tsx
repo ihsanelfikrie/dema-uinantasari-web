@@ -421,41 +421,24 @@ export default function ProfilPage() {
             </div>
           </div>
 
-          {/* Photo Slot Placeholder Column */}
-          <div className="photo-slot-container flex items-center justify-center w-full max-w-sm mx-auto aspect-[4/5] bg-neutral-50 border border-neutral-200 relative p-6 font-mono group hover:border-brand-primary/40 transition-colors duration-300">
-            {/* Technical grid corners */}
-            <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-neutral-300" />
-            <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-neutral-300" />
-            <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-neutral-300" />
-            <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-neutral-300" />
-            
-            {/* Technical labeling */}
-            <div className="absolute top-4 left-4 text-[9px] text-neutral-400 uppercase tracking-wider">
-              SYS.IMG_SLOT // ID: KABINET_MAIN
-            </div>
-            <div className="absolute top-4 right-4 text-[9px] text-neutral-400 font-bold uppercase">
-              4 : 5
-            </div>
-
-            {/* Central content */}
-            <div className="flex flex-col items-center justify-center text-center space-y-4">
-              <div className="h-14 w-14 border border-dashed border-neutral-300 flex items-center justify-center text-neutral-400 group-hover:text-brand-primary group-hover:border-brand-primary/30 transition-colors duration-300">
-                <Users className="h-6 w-6 stroke-[1.2]" />
-              </div>
-              <div className="space-y-1">
-                <span className="text-xs font-bold text-neutral-800 uppercase tracking-widest block font-poppins">
-                  Slot Foto Utama
+          {/* Photo Column with IMG_8267.JPG */}
+          <div className="photo-slot-container w-full max-w-lg mx-auto relative group">
+            <div className="relative overflow-hidden rounded-3xl border border-neutral-200/90 shadow-md bg-neutral-100">
+              <img
+                src="/images/kabinet/kabinet-utama.jpg"
+                alt="Foto Utama Kabinet Laskar Purnama Antasari DEMA UIN Antasari Banjarmasin"
+                className="w-full h-auto aspect-[16/10] sm:aspect-[4/3] object-cover object-center group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-70" />
+              <div className="absolute bottom-3.5 sm:bottom-4 left-4 right-4 flex items-center justify-between text-white text-[11px] sm:text-xs font-poppins">
+                <span className="font-semibold drop-shadow-sm">
+                  Kabinet Laskar Purnama Antasari
                 </span>
-                <span className="text-[10px] text-neutral-400 block max-w-[200px] leading-relaxed">
-                  Tempat foto kabinet Laskar Purnama Antasari. Dimensi rekomendasi: 4:5 (800x1000px)
+                <span className="text-[10px] text-white/85 font-mono drop-shadow-sm bg-black/30 px-2 py-0.5 rounded-full border border-white/20">
+                  2026/2027
                 </span>
               </div>
-            </div>
-
-            {/* Bottom details */}
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between text-[8px] text-neutral-400 uppercase tracking-wider">
-              <span>DEMA UIN ANTASARI</span>
-              <span>EST. 2026</span>
             </div>
           </div>
         </div>
