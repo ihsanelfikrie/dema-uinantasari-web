@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { UserCheck, ArrowUpRight } from "lucide-react";
 import { bph } from "@/data/struktur";
@@ -23,19 +23,11 @@ const bphMembers = [
 
 function BphCardItem({
   member,
-  isDesktop = false,
 }: {
   member: (typeof bphMembers)[0];
-  isDesktop?: boolean;
 }) {
   return (
-    <div
-      className={`flex flex-col items-center group select-none ${
-        isDesktop
-          ? "bph-card-desktop w-full"
-          : "w-[72vw] max-w-[270px] shrink-0"
-      }`}
-    >
+    <div className="w-[260px] sm:w-[290px] md:w-[310px] shrink-0 flex flex-col items-center group select-none">
       {/* Lanyard Ribbon & Metallic Clasp Hook */}
       <div className="flex flex-col items-center -mb-3 z-10 relative pointer-events-none group-hover:-translate-y-1 transition-transform duration-300">
         {/* Maroon Ribbon Strap */}
@@ -60,7 +52,7 @@ function BphCardItem({
         <div>
           {/* Top Header: Badge Slot & DEMA Branding */}
           <div className="flex items-center justify-between gap-2 mb-3.5 pt-0.5">
-            <div className="w-16 hidden sm:block" />
+            <div className="w-14 sm:w-16" />
 
             {/* Lanyard Punch Hole Cutout */}
             <div className="w-12 sm:w-14 h-3 rounded-full bg-neutral-200/90 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 shadow-inner flex items-center justify-center">
@@ -105,12 +97,12 @@ function BphCardItem({
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </div>
 
-          {/* Name & Role (Center on Mobile, Left on Desktop) */}
-          <div className={`pt-4 pb-1 ${isDesktop ? "text-left" : "text-center"}`}>
-            <h3 className={`text-lg sm:text-xl font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.15] ${isDesktop ? "text-left" : "text-center"}`}>
+          {/* Name & Role */}
+          <div className="pt-4 pb-1 text-center sm:text-left">
+            <h3 className="text-base sm:text-lg font-black uppercase tracking-tight text-brand-primary dark:text-[#ff4d4d] font-poppins leading-[1.2] line-clamp-2">
               {member.nama}
             </h3>
-            <p className={`text-xs sm:text-sm font-semibold text-brand-primary/90 dark:text-brand-accent font-poppins mt-1 ${isDesktop ? "text-left" : "text-center"}`}>
+            <p className="text-xs sm:text-sm font-semibold text-brand-primary/90 dark:text-brand-accent font-poppins mt-1">
               {member.jabatan}
             </p>
           </div>
@@ -118,28 +110,17 @@ function BphCardItem({
 
         <div>
           {/* Red Horizontal Divider Line */}
-          <div className={`h-[2px] bg-brand-primary/85 dark:bg-brand-accent/85 ${isDesktop ? "w-full my-3" : "w-16 mx-auto my-3 rounded-full"}`} />
+          <div className="h-[2px] bg-brand-primary/85 dark:bg-brand-accent/85 w-full my-3" />
 
           {/* Footer Credentials */}
-          {isDesktop ? (
-            <div className="flex items-center justify-between text-[11px] font-poppins">
-              <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-[60%]">
-                {member.fakultas || "UIN Antasari"}
-              </span>
-              <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0">
-                {member.nim ? `NIM. ${member.nim}` : "Periode 2026/2027"}
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center text-[11px] font-poppins text-center gap-0.5">
-              <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-full text-center">
-                {member.fakultas || "UIN Antasari"}
-              </span>
-              <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0 text-center">
-                {member.nim ? `NIM. ${member.nim}` : "Periode 2026/2027"}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center justify-between text-[11px] font-poppins">
+            <span className="font-semibold text-neutral-600 dark:text-neutral-400 truncate max-w-[58%]">
+              {member.fakultas || "UIN Antasari"}
+            </span>
+            <span className="font-bold text-brand-primary dark:text-brand-accent shrink-0">
+              {member.nim ? `NIM. ${member.nim}` : "Periode 2026/2027"}
+            </span>
+          </div>
         </div>
 
         {/* Micro Accent Line */}
@@ -151,23 +132,32 @@ function BphCardItem({
 
 export default function LeadersProfiles() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
 
   useGSAP(
     () => {
-      // Stagger entrance of BPH cards on scroll for desktop safely
-      gsap.from(".bph-card-desktop", {
-        opacity: 0,
-        y: 25,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 85%",
-          once: true,
-        },
-      });
+      // Respect prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        gsap.set("#bph-marquee-container", { opacity: 1, y: 0 });
+        return;
+      }
+
+      // Smooth entrance of BPH marquee on scroll
+      gsap.fromTo(
+        "#bph-marquee-container",
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
     },
     { scope: containerRef }
   );
@@ -179,7 +169,7 @@ export default function LeadersProfiles() {
       className="bg-brand-background py-8 sm:py-20 px-3.5 sm:px-6 lg:px-8 w-full max-w-full sm:max-w-7xl min-w-0 mx-auto border-b border-neutral-200/60 overflow-hidden box-border"
     >
       {/* Section Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-3 sm:gap-4 w-full text-center sm:text-left items-center sm:items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-3 sm:gap-4 w-full text-center sm:text-left items-center sm:items-end">
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full sm:w-auto">
           <span className="text-[11px] sm:text-xs font-semibold text-brand-primary uppercase tracking-wider block mb-1.5 sm:mb-2 font-poppins">
             Fungsionaris Inti Organisasi
@@ -190,21 +180,6 @@ export default function LeadersProfiles() {
           <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-600 max-w-xl font-poppins">
             Jajaran kepemimpinan inti Dewan Eksekutif Mahasiswa UIN Antasari Banjarmasin Periode 2026/2027.
           </p>
-
-          {/* Mobile Status Bar & Pause Toggle */}
-          <div className="flex sm:hidden items-center justify-center gap-3 mt-3 pt-2 text-[11px] font-semibold font-poppins text-center">
-            <span className="text-brand-primary flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-              6 Fungsionaris • Gerak Otomatis
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsPaused((prev) => !prev)}
-              className="text-neutral-600 hover:text-brand-primary flex items-center gap-1 bg-white border border-neutral-200/80 px-2.5 py-1 rounded-full shadow-2xs active:scale-95 transition-all cursor-pointer"
-            >
-              <span>{isPaused ? "▶ Lanjutkan" : "⏸ Jeda"}</span>
-            </button>
-          </div>
         </div>
 
         <Link
@@ -216,43 +191,24 @@ export default function LeadersProfiles() {
         </Link>
       </div>
 
-      {/* MOBILE INFINITE MARQUEE TO THE LEFT (< sm screens) */}
-      <div className="sm:hidden relative w-full max-w-full overflow-hidden py-2 select-none">
+      {/* INFINITE MARQUEE TO THE LEFT (Mobile & Desktop) */}
+      <div
+        id="bph-marquee-container"
+        className="relative w-full max-w-full overflow-hidden py-3 sm:py-6 select-none"
+      >
         {/* Left & Right Subtle Gradient Edge Fades */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-20 bg-gradient-to-r from-brand-background to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-20 bg-gradient-to-l from-brand-background to-transparent" />
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 z-20 bg-gradient-to-r from-brand-background to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 z-20 bg-gradient-to-l from-brand-background to-transparent" />
 
-        <div
-          className="animate-bph-marquee flex gap-4 items-stretch"
-          style={{ animationPlayState: isPaused ? "paused" : "running" }}
-        >
+        <div className="animate-bph-marquee flex gap-4 sm:gap-6 items-stretch">
           {/* Duplikasi data 6 fungsionaris untuk perulangan mulus tanpa putus (infinite seamless loop) */}
           {[...bphMembers, ...bphMembers].map((member, idx) => (
             <BphCardItem
               key={`marquee-${member.id}-${idx}`}
               member={member}
-              isDesktop={false}
             />
           ))}
         </div>
-      </div>
-
-      {/* DESKTOP/TABLET GRID (sm: and up screens) */}
-      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 pt-4">
-        {bphMembers.map((member) => (
-          <BphCardItem
-            key={`desktop-${member.id}`}
-            member={member}
-            isDesktop={true}
-          />
-        ))}
-      </div>
-
-      {/* Mobile Subtle Hint */}
-      <div className="flex sm:hidden justify-center items-center gap-1.5 mt-3">
-        <span className="text-[10px] text-neutral-400 font-poppins">
-          Sentuh / tahan kartu untuk menjeda gerak
-        </span>
       </div>
     </section>
   );
