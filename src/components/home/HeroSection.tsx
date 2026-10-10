@@ -103,7 +103,7 @@ export default function HeroSection() {
             {/* Editorial Headline */}
             <div className="flex flex-col items-center lg:items-start select-none text-center lg:text-left mb-1.5 sm:mb-2 w-full lg:w-auto">
               <h1 className="hero-title-sans opacity-0 font-poppins font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 leading-[1.18] sm:leading-[1.15] text-center lg:text-left mx-auto lg:mx-0">
-                Dewan Eksekutif Mahasiswa UIN Antasari
+                DEMA UIN ANTASARI 2026/2027
               </h1>
             </div>
 
