@@ -103,8 +103,8 @@ export const MINISTRY_LOGOS: Record<string, MinistryLogoInfo> = {
   kemenppp: {
     id: "kemenppp",
     name: "Kementerian Perlindungan dan Pemberdayaan Perempuan",
-    src: "/images/logo/kementerian/kemenko-sos.png",
-    filename: "kemenko-sos.png",
+    src: "/images/logo/kementerian/kemenppp.png",
+    filename: "kemenppp.png",
   },
   kemenadvokasi: {
     id: "kemenadvokasi",

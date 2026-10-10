@@ -1,31 +1,32 @@
 import Link from "next/link";
-import { ShieldAlert, HeartHandshake, FileText, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import MinistryLogo from "@/components/ui/MinistryLogo";
 
 export default function AgendaTerkini() {
   const portals = [
     {
       id: "p3",
+      kementerianId: "kemenppp",
       title: "Layanan P3",
       kicker: "Pencegahan & Penanganan",
       desc: "Ruang aman penanganan kekerasan seksual dan perundungan di lingkungan kampus dengan jaminan kerahasiaan identitas dan pendampingan khusus.",
       href: "/layanan/p3",
-      icon: ShieldAlert,
     },
     {
       id: "advokasi",
+      kementerianId: "kemenadvokasi",
       title: "Advokasi Mahasiswa",
       kicker: "Bantuan & Pengaduan",
       desc: "Pengawalan kendala perkuliahan, pengajuan permohonan keringanan atau banding UKT, serta penyampaian aspirasi fasilitas kampus.",
       href: "/layanan/advokasi",
-      icon: HeartHandshake,
     },
     {
       id: "persuratan",
+      kementerianId: "kemendagri",
       title: "Persuratan & Kerja Sama",
       kicker: "Administrasi Resmi",
       desc: "Pengajuan surat rekomendasi kegiatan, legalitas surat keterangan aktif ORMAWA, serta pengajuan kemitraan media partner.",
       href: "/layanan/persuratan",
-      icon: FileText,
     },
   ];
 
@@ -58,7 +59,6 @@ export default function AgendaTerkini() {
       {/* Cards: Compact horizontal on mobile, spacious 3-column on desktop */}
       <div className="flex flex-col md:grid md:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6 items-stretch">
         {portals.map((portal) => {
-          const Icon = portal.icon;
           return (
             <Link
               key={portal.id}
@@ -68,7 +68,11 @@ export default function AgendaTerkini() {
               {/* Mobile: Left Icon | Desktop: Top Icon */}
               <div className="flex items-center md:justify-between gap-3 md:mb-5 shrink-0 md:w-full">
                 <div className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-brand-background dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800 text-brand-primary flex items-center justify-center transition-all duration-300 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary shrink-0">
-                  <Icon className="h-5 w-5 stroke-[1.5]" />
+                  <MinistryLogo
+                    kementerianId={portal.kementerianId}
+                    alt={portal.title}
+                    className="w-6 h-6 md:w-7 md:h-7 transition-transform duration-300 group-hover:scale-110"
+                  />
                 </div>
                 <span className="hidden md:inline text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-poppins">
                   {portal.kicker}

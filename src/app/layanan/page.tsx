@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldAlert, AlertCircle, FileText, MessageSquare, Compass, ArrowRight } from "lucide-react";
 import FadeInSection from "@/components/animations/FadeInSection";
+import MinistryLogo from "@/components/ui/MinistryLogo";
 
 export const metadata: Metadata = {
   title: "Portal Layanan Mahasiswa - DEMA UIN Antasari",
@@ -13,6 +14,7 @@ export default function LayananLandingPage() {
   const services = [
     {
       href: "/layanan/p3",
+      kementerianId: "kemenppp",
       title: "Ruang P3 (Perlindungan & Pemberdayaan Perempuan)",
       desc: "Platform ruang aman DEMA UIN Antasari Banjarmasin. Menyediakan Ruang Pengaduan (kekerasan, bullying, pelecehan, diskriminasi) dan Ruang Bercerita dengan empati serta kerahasiaan 100% terjamin.",
       icon: ShieldAlert,
@@ -22,6 +24,7 @@ export default function LayananLandingPage() {
     },
     {
       href: "/layanan/advokasi",
+      kementerianId: "kemenadvokasi",
       title: "Advokasi Mahasiswa",
       desc: "Pengaduan kendala akademik, permohonan keringanan/banding UKT, fasilitas kampus yang rusak/kurang memadai, serta permasalahan kesejahteraan mahasiswa melalui formulir advokasi resmi.",
       icon: AlertCircle,
@@ -31,6 +34,7 @@ export default function LayananLandingPage() {
     },
     {
       href: "/layanan/persuratan",
+      kementerianId: "kemendagri",
       title: "Persuratan & Kerja Sama",
       desc: "Layanan pengajuan surat resmi, permohonan disposisi, rekomendasi kegiatan DEMA, serta pengajuan kerja sama media partner (publikasi kegiatan).",
       icon: FileText,
@@ -85,7 +89,15 @@ export default function LayananLandingPage() {
                   {/* Left Column: Icon + Index Stamp */}
                   <div className="flex sm:flex-col items-center sm:items-start justify-between w-full sm:w-auto gap-4 shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brand-background border border-neutral-200/80 group-hover:bg-brand-primary group-hover:border-brand-primary text-brand-primary group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:scale-105">
-                      <Icon className="h-6 w-6 sm:h-7 sm:w-7 stroke-[1.5]" />
+                      {svc.kementerianId ? (
+                        <MinistryLogo
+                          kementerianId={svc.kementerianId}
+                          alt={svc.title}
+                          className="h-7 w-7 sm:h-8 sm:w-8 transition-transform duration-300"
+                        />
+                      ) : (
+                        <Icon className="h-6 w-6 sm:h-7 sm:w-7 stroke-[1.5]" />
+                      )}
                     </div>
                     <span className="font-mono text-xs font-bold text-neutral-400 group-hover:text-brand-primary transition-colors tracking-widest">
                       0{index + 1}
