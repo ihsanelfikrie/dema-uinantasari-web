@@ -415,7 +415,7 @@ export default function StrukturClient() {
               </div>
               <div className="stat-pill-item flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-neutral-200/80 shadow-2xs text-xs font-semibold text-neutral-800 font-poppins">
                 <Building2 className="w-4 h-4 text-brand-primary" />
-                <span>11 Kementerian Teknis</span>
+                <span>13 Kementerian Teknis</span>
               </div>
               <div className="stat-pill-item flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-neutral-200/80 shadow-2xs text-xs font-semibold text-neutral-800 font-poppins">
                 <Users className="w-4 h-4 text-emerald-600" />

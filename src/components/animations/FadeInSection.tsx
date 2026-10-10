@@ -22,13 +22,25 @@ export default function FadeInSection({
   children,
   delay = 0,
   direction = "up",
-  duration = 0.8,
-  distance = 30,
+  duration = 0.7,
+  distance = 24,
 }: FadeInSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
+      if (!containerRef.current) return;
+
+      // Respect prefers-reduced-motion
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (prefersReducedMotion) {
+        gsap.set(containerRef.current, { opacity: 1, x: 0, y: 0 });
+        return;
+      }
+
       let x = 0;
       let y = 0;
 
@@ -43,6 +55,7 @@ export default function FadeInSection({
           opacity: 0,
           x: x,
           y: y,
+          willChange: "transform, opacity",
         },
         {
           opacity: 1,
@@ -51,11 +64,15 @@ export default function FadeInSection({
           duration: duration,
           delay: delay,
           ease: "power2.out",
+          onComplete: () => {
+            if (containerRef.current) {
+              containerRef.current.style.willChange = "auto";
+            }
+          },
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            start: "top 88%",
+            once: true,
           },
         }
       );

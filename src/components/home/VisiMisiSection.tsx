@@ -49,7 +49,7 @@ export default function VisiMisiSection() {
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 300;
+      const scrollAmount = 320;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -59,33 +59,48 @@ export default function VisiMisiSection() {
 
   useGSAP(
     () => {
-      // Animate left side content on scroll safely
-      gsap.from(".visi-misi-text", {
-        opacity: 0,
-        y: 20,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 88%",
-          once: true,
-        },
-      });
+      // Respect prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        gsap.set([".visi-misi-text", ".mission-card"], { opacity: 1, y: 0 });
+        return;
+      }
 
-      // Animate mission cards on scroll for desktop
-      if (scrollRef.current) {
-        gsap.from(".mission-card", {
-          opacity: 0,
-          y: 25,
+      // Animate left side content on scroll safely
+      gsap.fromTo(
+        ".visi-misi-text",
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
           duration: 0.6,
-          stagger: 0.08,
           ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 80%",
+            start: "top 88%",
             once: true,
           },
-        });
+        }
+      );
+
+      // Animate mission cards on scroll for desktop with synchronized trigger
+      if (scrollRef.current) {
+        gsap.fromTo(
+          ".mission-card",
+          { opacity: 0, y: 25 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top 88%",
+              once: true,
+            },
+          }
+        );
       }
     },
     { scope: containerRef }

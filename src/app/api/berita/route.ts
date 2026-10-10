@@ -13,7 +13,11 @@ export async function GET() {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
@@ -49,8 +53,21 @@ export async function POST(request: Request) {
       );
     }
 
+    if (judul.length > 250 || kategori.length > 80) {
+      return NextResponse.json(
+        { error: "Panjang judul atau kategori melebihi batas." },
+        { status: 400 }
+      );
+    }
+
+    // Clean plain title from script tags
+    const cleanJudul = judul.replace(/<[^>]*>?/gm, "").trim();
+    if (!cleanJudul) {
+      return NextResponse.json({ error: "Judul tidak valid." }, { status: 400 });
+    }
+
     // Auto-generate slug
-    const baseSlug = slugify(judul);
+    const baseSlug = slugify(cleanJudul);
     let slug = baseSlug;
     let suffix = 1;
 

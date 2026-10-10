@@ -8,10 +8,25 @@ export const revalidate = 0;
 
 export async function GET(request: Request) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan untuk melihat data pendaftar." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { searchParams } = new URL(request.url);
     const lomba = searchParams.get("lomba") || "all";
 
-    const supabase = await createClient();
     let query = supabase
       .from("festival_pendaftar")
       .select("*")
@@ -66,9 +81,25 @@ export async function POST(request: Request) {
       custom_answers = {};
     }
 
-    if (!nama_ketua || !whatsapp) {
+    if (!nama_ketua.trim() || !whatsapp.trim()) {
       return NextResponse.json(
         { error: "Nama dan nomor WhatsApp wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    // Input length limits to prevent DoS or database abuse
+    if (
+      nama_ketua.length > 100 ||
+      whatsapp.length > 30 ||
+      nim_ketua.length > 30 ||
+      instansi.length > 150 ||
+      email.length > 100 ||
+      (nama_tim && nama_tim.length > 100) ||
+      (anggota_tim && anggota_tim.length > 1000)
+    ) {
+      return NextResponse.json(
+        { error: "Panjang karakter isian melebihi batas yang diizinkan." },
         { status: 400 }
       );
     }
@@ -92,11 +123,22 @@ export async function POST(request: Request) {
     const cleanNim = nim_ketua.trim().replace(/\s+/g, "");
     const supabase = await createClient();
 
-    // Helper for file upload to bucket 'festival-berkas'
+    const allowedExts = ["jpg", "jpeg", "png", "webp", "pdf"];
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+    // Helper for safe file upload to bucket 'festival-berkas'
     const uploadBerkas = async (file: File, prefix: string) => {
       try {
         if (!file || typeof file === "string" || file.size === 0) return null;
+        if (file.size > maxFileSize) {
+          console.warn(`File ${prefix} melebihi batas 5MB.`);
+          return null;
+        }
         const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        if (!allowedExts.includes(ext)) {
+          console.warn(`File extension .${ext} tidak diizinkan.`);
+          return null;
+        }
         const fileName = `${prefix}-${cleanNim}-${Date.now()}.${ext}`;
         const buffer = Buffer.from(await file.arrayBuffer());
 

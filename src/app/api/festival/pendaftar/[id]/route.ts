@@ -9,6 +9,22 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { status, catatan_admin } = body;
@@ -16,7 +32,6 @@ export async function PATCH(
     const updated = festivalStore.updatePendaftarStatus(id, status, catatan_admin);
 
     try {
-      const supabase = await createClient();
       await supabase
         .from("festival_pendaftar")
         .update({ status, catatan_admin })
@@ -40,11 +55,26 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { id } = await params;
     festivalStore.deletePendaftar(id);
 
     try {
-      const supabase = await createClient();
       await supabase.from("festival_pendaftar").delete().eq("id", id);
     } catch (e) {
       console.warn("Supabase pendaftar delete notice:", e);

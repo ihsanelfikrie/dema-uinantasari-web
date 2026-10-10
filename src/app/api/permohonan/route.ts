@@ -39,6 +39,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Semua field wajib diisi." }, { status: 400 });
     }
 
+    if (
+      nama_lengkap.length > 100 ||
+      organisasi.length > 150 ||
+      email.length > 100 ||
+      no_whatsapp.length > 30 ||
+      jenis_permohonan.length > 100 ||
+      keterangan.length > 2000
+    ) {
+      return NextResponse.json({ error: "Panjang karakter isian melebihi batas yang diizinkan." }, { status: 400 });
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Format email tidak valid." }, { status: 400 });
     }

@@ -63,6 +63,22 @@ export async function GET(request: Request) {
 // POST: Tambah cabang lomba baru dari Form Maker Admin
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan." },
+          { status: 401 }
+        );
+      }
+    }
+
     const body = await request.json();
     const {
       nama_lomba,

@@ -38,13 +38,28 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { id } = await params;
     const body = await request.json();
 
     const updated = festivalStore.updateLomba(id, body);
 
     try {
-      const supabase = await createClient();
       await supabase
         .from("festival_lomba")
         .update(body)
@@ -68,11 +83,26 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = await createClient();
+    const hasKeys = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    if (hasKeys) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json(
+          { error: "Unauthorized access. Sesi admin diperlukan." },
+          { status: 401 }
+        );
+      }
+    }
+
     const { id } = await params;
     festivalStore.deleteLomba(id);
 
     try {
-      const supabase = await createClient();
       await supabase.from("festival_lomba").delete().or(`id.eq.${id},slug.eq.${id}`);
     } catch (e) {
       console.warn("Supabase delete error:", e);

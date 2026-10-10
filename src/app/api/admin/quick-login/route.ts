@@ -5,8 +5,17 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    // In production, disable quick bypass unless explicitly configured
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_QUICK_LOGIN !== "true") {
+      return NextResponse.json(
+        { error: "Akses bypass dinonaktifkan di lingkungan produksi. Silakan gunakan form login resmi di /admin/login." },
+        { status: 403 }
+      );
+    }
+
     const quickHeader = request.headers.get("x-dema-quick");
-    if (quickHeader !== "antasari-admin-key") {
+    const validKey = process.env.ADMIN_QUICK_KEY || "antasari-admin-key";
+    if (quickHeader !== validKey) {
       return NextResponse.json({ error: "Forbidden access." }, { status: 403 });
     }
 

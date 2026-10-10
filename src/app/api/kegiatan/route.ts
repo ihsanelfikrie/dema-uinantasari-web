@@ -12,7 +12,11 @@ export async function GET() {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
@@ -57,6 +61,17 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      nama.length > 250 ||
+      kementerian.length > 150 ||
+      (lokasi && lokasi.length > 250)
+    ) {
+      return NextResponse.json(
+        { error: "Panjang karakter isian nama, kementerian, atau lokasi melebihi batas." },
         { status: 400 }
       );
     }

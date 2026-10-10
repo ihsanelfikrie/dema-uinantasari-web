@@ -64,16 +64,20 @@ export default function Navbar() {
       setIsSecretLoggingIn(true);
 
       try {
-        await fetch("/api/admin/quick-login", {
+        const res = await fetch("/api/admin/quick-login", {
           method: "POST",
           headers: {
             "x-dema-quick": "antasari-admin-key",
           },
         });
+        if (res.ok) {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/admin/login";
+        }
       } catch (err) {
         console.error("Quick login error:", err);
-      } finally {
-        window.location.href = "/admin";
+        window.location.href = "/admin/login";
       }
       return;
     }

@@ -84,7 +84,7 @@ export default function MobileMenu({
                   key={link.href}
                   href={link.href}
                   onClick={onClose}
-                  className={`min-h-[42px] px-3.5 py-2 rounded-xl flex items-center justify-between font-poppins transition-colors active:scale-[0.99] ${
+                  className={`min-h-[44px] px-3.5 py-2.5 rounded-xl flex items-center justify-between font-poppins transition-colors active:scale-[0.99] ${
                     isActive
                       ? "bg-brand-primary/10 text-brand-primary font-bold"
                       : "text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 font-medium"
@@ -124,7 +124,7 @@ export default function MobileMenu({
                     key={svc.href}
                     href={svc.href}
                     onClick={onClose}
-                    className={`flex flex-col items-center justify-center p-2 rounded-xl border text-center transition-all active:scale-[0.98] ${
+                    className={`min-h-[48px] flex flex-col items-center justify-center p-2 rounded-xl border text-center transition-all active:scale-[0.98] ${
                       isSvcActive
                         ? "bg-brand-primary/10 border-brand-primary/40 text-brand-primary font-bold"
                         : "bg-white dark:bg-[#1a0808] border-neutral-200/80 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:border-brand-primary/30"

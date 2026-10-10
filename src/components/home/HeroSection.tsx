@@ -26,16 +26,10 @@ export default function HeroSection() {
         { opacity: 0.25, scale: 1, duration: 1.2, ease: "power2.out" }
       )
         .fromTo(
-          ".hero-title-serif",
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.8"
-        )
-        .fromTo(
           ".hero-title-sans",
           { opacity: 0, y: 24 },
           { opacity: 1, y: 0, duration: 0.8 },
-          "-=0.5"
+          "-=0.7"
         )
         .fromTo(
           ".hero-line",
@@ -108,10 +102,6 @@ export default function HeroSection() {
             
             {/* Editorial Headline */}
             <div className="flex flex-col items-center lg:items-start select-none text-center lg:text-left mb-1.5 sm:mb-2 w-full lg:w-auto">
-              <div className="hero-title-serif opacity-0 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] sm:text-xs font-semibold mb-2.5 sm:mb-3 mx-auto lg:mx-0">
-                <span>KABINET LASKAR PURNAMA ANTASARI • 2026/2027</span>
-              </div>
-
               <h1 className="hero-title-sans opacity-0 font-poppins font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 leading-[1.18] sm:leading-[1.15] text-center lg:text-left mx-auto lg:mx-0">
                 Dewan Eksekutif Mahasiswa UIN Antasari
               </h1>
@@ -122,21 +112,21 @@ export default function HeroSection() {
 
             {/* Philosophy Tagline */}
             <p className="hero-tagline opacity-0 text-[13px] sm:text-[16px] leading-relaxed text-neutral-600 max-w-xl font-normal font-poppins text-center lg:text-left mx-auto lg:mx-0">
-              Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
+              <span className="font-semibold text-neutral-900">Kabinet Laskar Purnama Antasari</span> — Pusat pergerakan, wadah aspirasi, dan pelopor kepemimpinan mahasiswa yang berintegritas serta berdaya saing bagi seluruh civitas akademika UIN Antasari Banjarmasin.
             </p>
 
             {/* CTA Buttons with side-by-side layout on mobile to save vertical space */}
             <div className="hero-cta opacity-0 mt-5 sm:mt-8 flex flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-4 w-full sm:w-auto mx-auto lg:mx-0">
               <Link
                 href="/profil"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center min-h-[42px] sm:min-h-[46px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer text-center"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center min-h-[44px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-brand-primary hover:bg-brand-accent shadow-xs hover:shadow-md transition-all active:scale-[0.98] cursor-pointer text-center"
               >
                 <span>Profil Kabinet</span>
               </Link>
 
               <Link
                 href="/layanan"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center min-h-[42px] sm:min-h-[46px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 bg-white hover:bg-neutral-50 border border-neutral-200/90 hover:border-neutral-300 shadow-2xs hover:shadow-sm transition-all active:scale-[0.98] cursor-pointer text-center"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center min-h-[44px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-neutral-800 bg-white hover:bg-neutral-50 border border-neutral-200/90 hover:border-neutral-300 shadow-2xs hover:shadow-sm transition-all active:scale-[0.98] cursor-pointer text-center"
               >
                 <span>Layanan Mahasiswa</span>
               </Link>
@@ -155,6 +145,9 @@ export default function HeroSection() {
                   <img
                     src="/images/kabinet/munawir-ketua.png"
                     alt="Ahmad Munawir Sazali - Ketua Umum DEMA UIN Antasari"
+                    width={360}
+                    height={480}
+                    decoding="async"
                     className="w-full h-auto max-h-[250px] xs:max-h-[310px] sm:max-h-[520px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
@@ -165,6 +158,9 @@ export default function HeroSection() {
                   <img
                     src="/images/kabinet/fikri-wakil.png"
                     alt="Khairul Fikri - Wakil Ketua Umum DEMA UIN Antasari"
+                    width={340}
+                    height={460}
+                    decoding="async"
                     className="w-full h-auto max-h-[235px] xs:max-h-[295px] sm:max-h-[495px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_84%,transparent_100%)] select-none pointer-events-none drop-shadow-sm"
                     loading="eager"
                   />
